@@ -1,0 +1,18 @@
+#Habilito los bots de los navegadores para que rastreen mi web
+user-agent: *
+
+#Paginas inhabilitadas para los rastreadores
+disallow:/dashboard/
+disallow:/usuarios/
+disallow:/roles/
+disallow:/articulos/
+disallow:/categorias/
+disallow:/suscripciones/
+disallow:/contacto/
+disallow:/login/
+disallow:/publicaciones/contacto
+disallow:/publicaciones/mas
+disallow:/login/confirmUser
+
+#Mapa para que los rastreadores encuentre todas nuestras paginas
+Sitemap:https://digitalbell.com.co/sitemap.xml
