@@ -11,6 +11,20 @@ input::-webkit-inner-spin-button {
    margin: 0;
 }
 
+.accordion-button:not(.collapsed){
+    color:#10100D;
+}
+.list-group a{
+    text-decoration: none;
+    color: #10100D;
+    transition: 0.3s;
+}
+.list-group a:hover .list-group-item{
+    background-color: #E05A10;
+    color: #fff;
+    transition: 0.3s;
+}
+
 input[type=number] {
    -moz-appearance:textfield;
 }
@@ -33,7 +47,7 @@ input[type=number] {
 }
 .btn_content:hover{
     background-color:#E05A10;
-    border:none;
+    border: 2px solid #fff;
     color: #fff;
     transition: 0.3s;
 }
@@ -352,8 +366,8 @@ input[type=number] {
 }
 .catalog_product{
     text-align: center;
-    height: 550px;
-    width: 400px;
+    height: 450px;
+    width: 350px;
     padding: 5px;
     margin: 20px;
 }
@@ -363,7 +377,7 @@ input[type=number] {
 }
 .catalog_product_image img{
     filter: brightness(70%);
-    height: 400px;
+    height: 250px;
     width: 100%;
     object-fit: cover;
     transition: 0.5s all ease;
@@ -393,7 +407,7 @@ input[type=number] {
 .catalog_product_text h2{
     width: 100%;
     font-size: 20px;
-    overflow: hidden;
+    word-break: break-all;
     color: #E05A10;
 }
 .catalog_product_text h3{
@@ -419,7 +433,6 @@ input[type=number] {
 .product_left img{
     height: 100%;
     width: 100%;
-    object-fit: cover;
 }
 .product_right{
     height: 600px;
@@ -453,6 +466,29 @@ input[type=number] {
     width: 200px;
     height: 50px;
     margin: 5px;
+    border: 2px solid #676765;
+}
+#btn_increment{
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    border: 2px solid #676765;
+    font-size: 25px;
+    cursor: pointer;
+}
+#btn_decrement{
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    border: 2px solid #676765;
+    font-size: 25px;
+    cursor: pointer;
+}
+.btnHover:hover{
+    background-color:#E05A10;
+    border:none !important;
+    color: #fff;
+    transition: 0.3s;
 }
 .product_social{
     padding-top: 10px;
@@ -502,7 +538,7 @@ input[type=number] {
 }
 .confirm_product img{
     width: 100%;
-    height: 100%;
+    height: 150px;
     object-fit: cover;
 }
 .confirm_product .btn_del{
@@ -785,6 +821,13 @@ footer ul li a{
 
 
 @media (max-width: 575px) {
+    .product_left .carousel-item {
+        height: 450px;
+        width: 100%;
+    }
+    .product_slider .catalog_product:nth-child(2){
+        display: none;
+    }
     .navbar-brand p{
         display: none;
     }

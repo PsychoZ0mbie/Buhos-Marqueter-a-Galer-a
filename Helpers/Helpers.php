@@ -107,7 +107,7 @@
         //dep($idmodulo);exit;
         require_once("Models/PermisosModel.php");
         $objPermisos = new PermisosModel();
-        $idrol = intval($_SESSION['userData']['idrol']);
+        $idrol = intval($_SESSION['userData']['idrole']);
         $arrPermisos = $objPermisos->permisosModulo($idrol);
         //dep($arrPermisos);exit;
         $permisos = '';

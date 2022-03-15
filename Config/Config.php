@@ -1,35 +1,37 @@
 <?php
 
-    //const BASE_URL = "https://digitalbell.com.co";
-    const BASE_URL = "http://localhost/digitalbell";
+    const BASE_URL = "http://localhost/buhosmarqueteriaygaleria";
 
     const DB_HOST = "localhost";
 	//const DB_NAME = "u476527040_digitalbell";
 	//const DB_USER = "u476527040_David_sql_1970";
 	//const DB_PASSWORD = "Da.197023";
-	const DB_NAME = "db_blog";
+	const DB_NAME = "db_buhos";
 	const DB_USER = "root";
 	const DB_PASSWORD = "";
 	const DB_CHARSET = "utf8";
 	date_default_timezone_set('America/Bogota');
 
 	//Otros
-	const KEYWORDS ="Los mejores, top 10, tecnología, celulares, tablets, arte, belleza, estética, cómo hacer, por qué, qué es, qué significa, spa, baratos, calidad, precio, relación calidad-precio, barato
-	";
-	const CATEGORIA = '1,2,3,4,5';
-	const DESCRIPCION = "DigitalBell, publicaciones desde tecnología hasta belleza, videojuegos, ultimas noticas en consumo electrónico, novedades, tablets, estética, informática, arte y mucho más.";
-	const SHAREDHASH ="DigitalBell";
+	const KEYWORDS ="";
+	const MS = "$"; // Simbolo de moneda
+	const MD = " COP"; // Divisa
+	const DEC = ","; // Decimales;
+	const MIL = ".";//Millares;
+	const ENVIO =10000;
+	const DESCRIPCION = "";
+	const SHAREDHASH ="Buhos Marquetería & Galería";
 	//Datos envio de correo
-	const NOMBRE_REMITENTE= "DigitalBell";
-	const EMAIL_REMITENTE = "info@digitalbell.com.co";
-	const REMITENTE_PASSWORD = "Maricondemierda2";
+	const NOMBRE_REMITENTE= "Buhos Marquetería & Galería";
+	const EMAIL_REMITENTE = "davidstiven1999@hotmail.com";
+	const REMITENTE_PASSWORD = "da197023";
 	
-	const NOMBRE_EMPRESA = "DigitalBell";
+	const NOMBRE_EMPRESA = "Buhos Marquetería & Galería";
 	const DIRECCION = "Cra 36 N 15a - 03 Villavicencio/Meta";
-	const TELEFONO = "(+57)3193094264";
-	const EMAIL_CONTACTO = "info@digitalbell.com.co";
-	const CONTACTO_PASSWORD = "Maricondemierda2";
-	const WEB_EMPRESA = "https://digitalbell.com.co";
+	const TELEFONO = "(+57)3108714741";
+	const WEB_EMPRESA = "http://localhost/buhosmarqueteriaygaleria";
 
-	//Datos de contacto
+	//Encriptado
+	const KEY = "buhosmarqueteriaygaleria";
+	const ENCRIPTADO = "AES-128-ECB";
 ?>

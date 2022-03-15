@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded',function(){
             "dataSrc":""
         },
         "columns":[
-            {"data":"id_person"},
-            {"data":"first_name"},
+            {"data":"idperson"},
+            {"data":"firstname"},
+            {"data":"lastname"},
             {"data":"phone"},
             {"data":"email"},
-            {"data":"rolname"},
-            {"data":"status"},
+            {"data":"role"},
             {"data":"options"}
         ],
         'dom': 'lBfrtip',
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 "titleAttr":"Copiar",
                 "className": "btn btn-secondary",
                 "exportOptions": { 
-                    "columns": [ 0, 1, 2, 3, 4,5,6] 
+                    "columns": [ 0, 1, 2, 3, 4,5] 
                 }
             },{
                 "extend": "excelHtml5",
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 "titleAttr":"Esportar a Excel",
                 "className": "btn btn-success",
                 "exportOptions": { 
-                    "columns": [ 0, 1, 2, 3, 4,5,6] 
+                    "columns": [ 0, 1, 2, 3, 4,5] 
                 }
             },{
                 "extend": "pdfHtml5",
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 "titleAttr":"Esportar a PDF",
                 "className": "btn btn-danger",
                 "exportOptions": { 
-                    "columns": [ 0, 1, 2, 3, 4,5,6] 
+                    "columns": [ 0, 1, 2, 3, 4,5] 
                 }
             },{
                 "extend": "csvHtml5",
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 "titleAttr":"Esportar a CSV",
                 "className": "btn btn-info",
                 "exportOptions": { 
-                    "columns": [ 0, 1, 2, 3, 4,5,6] 
+                    "columns": [ 0, 1, 2, 3, 4,5] 
                 }
             }
         ],
@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded',function(){
             let intTelefono = document.querySelector('#txtTelefono').value;
             let intTipousuario = document.querySelector('#listRolid').value;
             let strPassword = document.querySelector('#txtPassword').value;
-            let intStatus = document.querySelector('#listStatus').value;
 
             if(strApellido == '' || strNombre == '' || strEmail == '' || intTelefono == '' || intTipousuario == '')
             {
@@ -115,16 +114,12 @@ document.addEventListener('DOMContentLoaded',function(){
                         if(rowTable == ""){
                             tableUsuarios.api().ajax.reload();
                         }else{
-                            htmlStatus = intStatus ==1 ?
-                            '<span class="badge badge-success">Activo</span>':
-                            '<span class="badge badge-danger">Inactivo</span>';
 
                             rowTable.cells[1].textContent = strNombre;
                             rowTable.cells[2].textContent = strApellido;
                             rowTable.cells[3].textContent = intTelefono;
                             rowTable.cells[4].textContent = strEmail;
                             rowTable.cells[5].textContent = document.querySelector("#listRolid").selectedOptions[0].text;
-                            rowTable.cells[6].innerHTML = htmlStatus;
                             rowTable = "";
                         }
                         $('#modalFormUsuario').modal("hide");
@@ -167,17 +162,17 @@ document.addEventListener('DOMContentLoaded',function(){
         formPerfil.onsubmit = function(e) {
             e.preventDefault();
             let strNombre = document.querySelector('#txtNombre').value;
+            let strApellido = document.querySelector('#txtApellido').value;
             let intDepartamento = document.querySelector("#listDepartamento").value;
             let intCiudad = document.querySelector("#listCiudad").value;
             let strDireccion = document.querySelector('#txtDir').value;
-            let intTipoId = document.querySelector("#listId").value;
             let strId = document.querySelector("#txtId").value;
             let intTelefono = document.querySelector('#txtTelefono').value;
             let strPassword = document.querySelector('#txtPassword').value;
             let strPasswordConfirm = document.querySelector('#txtPasswordConfirm').value;
             let fileimg = document.querySelector("#profile-img").files;
 
-            if(strDireccion == '' || strNombre == '' || intTelefono == '' || strId == '')
+            if(strDireccion == '' || strNombre == '' || strApellido == '' || intTelefono == '' || strId == '')
             {
                 swal("Atención", "Todos los campos son obligatorios." , "error");
                 return false;
@@ -264,42 +259,8 @@ window.addEventListener('load',function(){
         }
     }
     fntRolesUsuario();
-    fntId();
     fntDepartamento();
-    //fntViewUsuario();
-    //fntEditUsuario();
-    //fntDelUsuario();
 },false);
-
-function fntViewUsuario(idpersona){
-            let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            let ajaxUrl  = base_url+'/Usuarios/getUsuario/'+idpersona;
-            request.open("GET",ajaxUrl ,true);
-            request.send();
-            request.onreadystatechange = function(){
-                if(request.readyState == 4 && request.status == 200){
-                    let objData = JSON.parse(request.responseText);
-        
-                    if(objData.status)
-                    {
-                       let estadoUsuario = objData.data.status == 1 ? 
-                        '<span class="badge badge-success">Activo</span>' : 
-                        '<span class="badge badge-danger">Inactivo</span>';
-        
-                        document.querySelector("#celNombre").innerHTML = objData.data.first_name;
-                        document.querySelector("#celApellido").innerHTML = objData.data.last_name;
-                        document.querySelector("#celTelefono").innerHTML = objData.data.phone;
-                        document.querySelector("#celEmail").innerHTML = objData.data.email;
-                        document.querySelector("#celTipoUsuario").innerHTML = objData.data.rolname;
-                        document.querySelector("#celEstado").innerHTML = estadoUsuario;
-                        document.querySelector("#celFechaRegistro").innerHTML = objData.data.fechaRegistro; 
-                        $('#modalViewUser').modal('show');
-                    }else{
-                        swal("Error", objData.msg , "error");
-                    }
-                }
-            }
-}
 
 function fntEditUsuario(element,idpersona){
     rowTable = element.parentNode.parentNode.parentNode;
@@ -320,20 +281,13 @@ function fntEditUsuario(element,idpersona){
 
             if(objData.status)
             {
-                document.querySelector("#idUsuario").value = objData.data.id_person;
-                document.querySelector("#txtNombre").value = objData.data.first_name;
-                document.querySelector("#txtApellido").value = objData.data.last_name;
+                document.querySelector("#idUsuario").value = objData.data.idperson;
+                document.querySelector("#txtNombre").value = objData.data.firstname;
+                document.querySelector("#txtApellido").value = objData.data.lastname;
                 document.querySelector("#txtTelefono").value = objData.data.phone;
                 document.querySelector("#txtEmail").value = objData.data.email;
-                document.querySelector("#listRolid").value =objData.data.idrol;
+                document.querySelector("#listRolid").value =objData.data.idrole;
                 $('#listRolid').selectpicker('render');
-
-                if(objData.data.status == 1){
-                    document.querySelector("#listStatus").value = 1;
-                }else{
-                    document.querySelector("#listStatus").value = 2;
-                }
-                $('#listStatus').selectpicker('render');
             }
         }
     
@@ -359,22 +313,7 @@ function fntRolesUsuario(){
         }
     }
 }
-function fntId(){
-    if(document.querySelector('#listId')){
 
-        let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-        let ajaxUrl  = base_url+'/Usuarios/getSelectId';
-        request.open("GET",ajaxUrl ,true);
-        request.send(); 
-    
-        request.onreadystatechange = function(){
-            if(request.readyState ==4 && request.status ==200){
-                document.querySelector('#listId').innerHTML = request.responseText;
-                $('#listId').selectpicker('render');
-            }
-        }
-    }
-}
 function fntDepartamento(){
     if(document.querySelector('#listDepartamento')){
 

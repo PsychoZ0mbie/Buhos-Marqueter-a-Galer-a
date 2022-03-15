@@ -58,7 +58,7 @@
         </div>
       </nav>
    </header> 
-   <main>
+    <main>
        <section>
         <div class="container mt-4" >
           <div class="container mt-4">
@@ -111,11 +111,6 @@
                     <li><i class="fas fa-times-circle text-danger"></i></i>Envio:<span>A todo el país</span></li>
                   </ul>
                 </div>
-                <div class="product_purchase">
-                  <input type="number" value="1">
-                  <button type="button" class="btn_content">Agregar</button>
-                  <button type="button" class="btn_content">Realizar pedido</button>
-                </div>
                 <div class="product_social">
                   <p><strong>Compartir en:</strong></p>
                   <ul>
@@ -129,11 +124,53 @@
               </div>
             </div>
           </div>
+          <div class="row mb-5">
+            <div class="col-lg-6 order-lg-1 order-md-5 order-sm-5">
+                <div class="accordion pt-4" id="accordionExample">
+                    <p><strong>Información adicional de medidas y entrega</strong></p>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Tiempos de producción
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                            3 a 4 días hábiles después de confirmado el pago y las medidas, si tienes alguna solicitud con algún producto en especial, háznoslo saber para que podamos confirmarte si podemos entregarte antes.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Tiempos de entrega
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                            Realizamos envíos directos en Villavicencio. Para zonas no cubiertas, realizamos envíos con diferentes transportadoras del país, buscando siempre la mejor opción para nuestros clientes, los tiempos pueden variar desde 1 día hábil hasta 5 días hábiles según la ciudad o municipio destino, normalmente en ciudades principales las transportadoras entregan máximo en 3 días hábiles.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-5 order-md-1 order-sm-1 ">
+              <div class="product_purchase flex-column align-items-center">
+                <div class="d-flex align-items-center pr-2">
+                  <div id="btn_decrement" class="btnHover">-</div>
+                  <input type="number" value="1">
+                  <div id="btn_increment" class="btnHover">+</div>
+                </div>
+                <button type="button" class="btn_content">Agregar</button>
+              </div>
+            </div>
+          </div>
+    </div>
         </div>
        </section>
        <section>
         <div class="container text-center mt-5 cover_presentation">
-          <h2><strong>Productos relacionados</strong></h2>
+          <h2><strong>También te puede interesar</strong></h2>
         </div>
         <div id="carouselframe" class="carousel slide product_slider" data-bs-ride="carousel">
           <div class="carousel-inner">

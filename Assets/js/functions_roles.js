@@ -12,10 +12,8 @@ document.addEventListener('DOMContentLoaded',function(){
             "dataSrc":""
         },
         "columns":[
-            {"data":"idrol"},
-            {"data":"rolname"},
-            {"data":"description"},
-            {"data":"status"},
+            {"data":"idrole"},
+            {"data":"role"},
             {"data":"options"}
         ],
         "responsieve":"true",
@@ -31,10 +29,8 @@ document.addEventListener('DOMContentLoaded',function(){
         e.preventDefault();
 
         var intIdRol = document.querySelector('#idRol').value;
-        var strNombre = document.querySelector('#txtNombre').value;
-        var strDescripcion = document.querySelector('#txtDescripcion').value;
-        var intStatus = document.querySelector('#listStatus').value;        
-        if(strNombre == '' || strDescripcion == '' || intStatus == '')
+        var strNombre = document.querySelector('#txtNombre').value;       
+        if(strNombre =='')
         {
             swal("Atención", "Todos los campos son obligatorios." , "error");
             return false;
@@ -93,21 +89,8 @@ function fntEditRol(idrol){
             var objData = JSON.parse(request.responseText);
             if(objData.status)
             {
-                document.querySelector("#idRol").value = objData.data.idrol;
-                document.querySelector("#txtNombre").value = objData.data.rolname;
-                document.querySelector("#txtDescripcion").value = objData.data.description;
-
-                if(objData.data.status == 1)
-                {
-                    var optionSelect = '<option value="1" selected class="notBlock">Activo</option>';
-                }else{
-                    var optionSelect = '<option value="2" selected class="notBlock">Inactivo</option>';
-                }
-                var htmlSelect = `${optionSelect}
-                                  <option value="1">Activo</option>
-                                  <option value="2">Inactivo</option>
-                                `;
-                document.querySelector("#listStatus").innerHTML = htmlSelect;
+                document.querySelector("#idRol").value = objData.data.idrole;
+                document.querySelector("#txtNombre").value = objData.data.role;
                 $('#modalFormRol').modal('show');
             }else{
                 swal("Error", objData.msg , "error");
@@ -154,8 +137,8 @@ function fntDelRol(idrol){
     });
 }
 
-function fntPermisos(idrol){
-    var idrol = idrol;
+function fntPermisos(idrole){
+    var idrol = idrole;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     var ajaxUrl  = base_url+'/Permisos/getPermisosRol/'+idrol;
     request.open("GET",ajaxUrl ,true);
@@ -173,8 +156,9 @@ function fntPermisos(idrol){
 
 function fntSavePermisos(evnet){
     evnet.preventDefault();
+    var idrole= document.querySelector("#idrole").value;
     var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    var ajaxUrl  = base_url+'/Permisos/setPermisos/'+idrol;
+    var ajaxUrl  = base_url+'/Permisos/setPermisos/'+idrole;
     var formElement = document.querySelector("#formPermisos");
     var formData = new FormData(formElement);
     request.open("POST",ajaxUrl,true);
