@@ -79,14 +79,19 @@
                     if(!isset($arrInfoProducto['atributo'])){
                         $arrInfoProducto['atributo']="";
                     }
+                    if($arrInfoProducto['subtopicid'] == 6){
+                        $arrInfoProducto['subcategoria']="";
+                    }
                     if(!empty($arrInfoProducto)){
                         $arrProducto = array("idproducto"=>$idProducto,
                                             "idatributo" =>$intAtributo,
+                                            "idsubcategoria"=>$arrInfoProducto['subtopicid'],
                                             "nombre" =>$arrInfoProducto['title'], 
                                             "precio"=>$intPrice,
                                             "cantidad" =>$intCant,
                                             "largo"=>$intLargo,
                                             "ancho"=>$intAncho,
+                                            "subcategoria"=>$arrInfoProducto['subcategoria'],
                                             "tipo" =>$arrInfoProducto['atributo'],
                                             "imagen" =>$arrInfoProducto['imagen']
                                             );
@@ -124,6 +129,85 @@
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 die();
             }
+        }
+
+        public function updateCarrito(){
+            if($_POST){
+                $idProducto = openssl_decrypt($_POST['idproducto'],ENCRIPTADO,KEY);
+                $idAtributo = intval($_POST['idatributo']);
+                $intLargo = intval($_POST['largo']);
+                $intAncho = intval($_POST['ancho']);
+                $intCant = intval($_POST['intCant']);
+                $totalProducto =0;
+                $total =0;
+                $subtotal =0;
+
+                if(is_numeric($idProducto) && is_numeric($idAtributo) && is_numeric($intLargo) && is_numeric($intAncho) && $intCant > 0){
+                    $arrCarrito = $_SESSION['arrCarrito'];
+                    for ($i=0 ; $i < count($arrCarrito)  ; $i++ ) {
+
+                        if($arrCarrito[$i]["idproducto"] == $idProducto && $arrCarrito[$i]["idatributo"] ==$idAtributo 
+                            && $arrCarrito[$i]["largo"] == $intLargo && $arrCarrito[$i]["ancho"] == $intAncho){
+                            $arrCarrito[$i]["cantidad"] = $intCant;
+                            $totalProducto = $intCant * $arrCarrito[$i]['precio'];
+                            break;
+                        }
+                    }
+                    $_SESSION['arrCarrito'] = $arrCarrito;
+                    //dep($_SESSION['arrCarrito']);
+                    foreach($_SESSION['arrCarrito'] as $key){
+                        $subtotal += $key['cantidad'] * $key['precio'];
+                    }
+                    $arrResponse= array("status"=>true,
+                                        "msg"=>"Cantidad actualizada",
+                                        "totalproducto"=>MS.number_format($totalProducto,0,DEC,MIL),
+                                        "subtotal"=>MS.number_format($subtotal,0,DEC,MIL)." ".MD,
+                                        "envio"=>MS.number_format(ENVIO,0,DEC,MIL)." ".MD,
+                                        "total"=>MS.number_format($subtotal+ENVIO,0,DEC,MIL)." ".MD);
+                }else{
+                    $arrResponse = array("status"=>false,"msg"=>"Datos incorrectos");
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+
+        public function deleteCarrito(){
+            if($_POST){
+                $arrCarrito=array();
+                $idProducto = openssl_decrypt($_POST['idproducto'],ENCRIPTADO,KEY);
+                $idAtributo = intval($_POST['idatributo']);
+                $intLargo = intval($_POST['largo']);
+                $intAncho = intval($_POST['ancho']);
+                $intCant = 0;
+                $subtotal =0;
+                $total = 0;
+
+                if(is_numeric($idProducto) && is_numeric($idAtributo) && is_numeric($intLargo) && is_numeric($intAncho)){
+                    $arrCarrito = $_SESSION['arrCarrito'];
+                    for ($i=0; $i < count($arrCarrito) ; $i++) { 
+                        if($arrCarrito[$i]["idproducto"] == $idProducto && $arrCarrito[$i]["idatributo"] ==$idAtributo 
+                            && $arrCarrito[$i]["largo"] == $intLargo && $arrCarrito[$i]["ancho"] == $intAncho){
+                                unset($arrCarrito[$i]);
+                            }
+                    }
+                    sort($arrCarrito);
+                    $_SESSION['arrCarrito'] = $arrCarrito;
+                    foreach ($_SESSION['arrCarrito'] as $key) {
+                        $intCant += $key['cantidad'];
+                        $subtotal += $key['cantidad'] * $key['precio'];
+                    }
+                    $arrResponse = array("status"=>true,
+                                        "msg"=>"Producto eliminado",
+                                        "cantidad"=>$intCant,
+                                        "subtotal"=>MS.number_format($subtotal,0,DEC,MIL)." ".MD,
+                                        "total"=>MS.number_format($subtotal+ENVIO,0,DEC,MIL)." ".MD);
+                }else{
+                    $arrResponse=array("status"=>false,"msg"=>"Ha ocurrido un error, inténtelo de nuevo");
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
         }
     }
 ?>

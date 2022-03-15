@@ -646,6 +646,7 @@ input[type=number] {
 /*************************Footer**************************/
 footer{
     margin-top: 50px;
+    height: 100vh;
 }
 
 footer ul{
@@ -817,6 +818,12 @@ footer ul li a{
     .carousel-item{
         height: 450px;
     }
+    .confirm_product p{
+        font-size: 15px;
+    }
+    .confirm_price p{
+        font-size: 15px;
+    }
 }
 
 
@@ -830,6 +837,12 @@ footer ul li a{
     }
     .navbar-brand p{
         display: none;
+    }
+    .confirm_product p{
+        font-size: 14px;
+    }
+    .confirm_price p{
+        font-size: 14px;
     }
 }
 
