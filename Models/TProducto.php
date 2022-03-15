@@ -1,0 +1,245 @@
+<?php
+require_once("Libraries/Core/Mysql.php");
+
+    trait TProducto{
+        private $con;
+        private $intIdCategoria;
+        private $strRuta;
+        private $intIdProducto;
+
+        public function getProductosT(){
+            $this->con = new Mysql();
+            $sql = "SELECT s.idsubtopic,
+                            s.topicid, 
+                            s.title as categoria,
+                            t.idtechnique,
+                            t.topicid,
+                            t.title as subcategoria,
+                            p.idproduct,
+                            p.topicid,
+                            p.subtopicid,
+                            p.techniqueid,
+                            p.title,
+                            p.price,
+                            p.route,
+                            p.status
+                    FROM product p
+                    INNER JOIN techniques t, subtopics s
+                    WHERE s.topicid = p.topicid AND 
+                            t.topicid = p.topicid AND 
+                            s.idsubtopic = p.subtopicid AND
+                            t.idtechnique = p.techniqueid AND
+                            p.status != 0
+                    ORDER BY p.idproduct DESC limit 0,9";
+            $request = $this->con->select_all($sql);
+            if(count($request)){
+                for ($i=0; $i < count($request) ; $i++) { 
+                    $intProducto = $request[$i]['idproduct'];
+                    $sql ="SELECT * FROM productimage
+                            WHERE productid = $intProducto limit 1";
+                    $requestImage = $this->con->select_all($sql);
+                    $request[$i]['url_image'] = media()."/images/uploads/".$requestImage[0]['title'];
+                    $request[$i]['price'] = number_format($request[$i]['price'],0,DEC,MIL);
+                }
+            }
+            return $request;
+            
+        }
+        public function getProductosCategoriasT($categoria,$params){
+            $this->intIdCategoria = $categoria;
+            $this->strRuta = $params;
+            $this->con = new Mysql();
+            if($this->strRuta ==""){
+                $ruta = "";
+            }else{
+                $ruta = " AND s.route = '$this->strRuta' OR t.route = '$this->strRuta' AND
+                            s.topicid = p.topicid AND 
+                            t.topicid = p.topicid AND 
+                            s.idsubtopic = p.subtopicid AND
+                            t.idtechnique = p.techniqueid AND
+                            p.subtopicid != 6 AND
+                            p.status != 0 AND p.topicid = $this->intIdCategoria";
+            }   
+           
+            $sql = "SELECT s.idsubtopic,
+                            s.topicid,
+                            s.title as categoria,
+                            s.route,
+                            t.idtechnique,
+                            t.topicid,
+                            t.title as subcategoria,
+                            t.route,
+                            p.idproduct,
+                            p.topicid,
+                            p.subtopicid,
+                            p.techniqueid,
+                            p.title,
+                            p.price,
+                            p.route,
+                            p.status
+                    FROM product p
+                    INNER JOIN techniques t, subtopics s
+                    WHERE s.topicid = p.topicid AND 
+                            t.topicid = p.topicid AND 
+                            s.idsubtopic = p.subtopicid AND
+                            t.idtechnique = p.techniqueid AND
+                            p.status != 0 AND p.topicid = $this->intIdCategoria $ruta";
+            $request = $this->con->select_all($sql);
+            if(count($request)){
+                for ($i=0; $i < count($request) ; $i++) { 
+                    $intProducto = $request[$i]['idproduct'];
+                    $sql ="SELECT * FROM productimage
+                            WHERE productid = $intProducto limit 1";
+                    $requestImage = $this->con->select_all($sql);
+                    $request[$i]['url_image'] = media()."/images/uploads/".$requestImage[0]['title'];
+                    $request[$i]['price'] = number_format($request[$i]['price'],0,DEC,MIL);
+                }
+            }
+            return $request;
+        }
+        public function getProductosViewT($params){
+            $this->strRuta = $params;
+            $this->con = new Mysql();
+
+            $sql = "SELECT  c.idtopic,
+                            c.title as titulo,
+                            c.route as rutaC,
+                            s.idsubtopic,
+                            s.topicid,
+                            s.title as categoria,
+                            s.route as rutaS,
+                            t.idtechnique,
+                            t.topicid,
+                            t.title as subcategoria,
+                            p.idproduct,
+                            p.topicid,
+                            p.subtopicid,
+                            p.techniqueid,
+                            p.reference,
+                            p.title,
+                            p.description,
+                            p.length,
+                            p.width,
+                            p.price,
+                            p.route,
+                            p.status
+                    FROM product p
+                    INNER JOIN techniques t, subtopics s, topics c
+                    WHERE s.topicid = p.topicid AND 
+                            t.topicid = p.topicid AND 
+                            s.idsubtopic = p.subtopicid AND
+                            t.idtechnique = p.techniqueid AND
+                            c.idtopic = p.topicid AND
+                            p.status != 0 AND p.route = '$this->strRuta'";
+            $request = $this->con->select_all($sql);
+            if(count($request)>0){
+                for ($i=0; $i < count($request) ; $i++) { 
+                    $intProducto = $request[$i]['idproduct'];
+                    $sql ="SELECT * FROM productimage
+                            WHERE productid = $intProducto";
+                    $requestImage = $this->con->select_all($sql);
+                    
+                    if(count($requestImage)>0){
+                        for ($j=0; $j < count($requestImage) ; $j++) { 
+                            $requestImage[$j]['url_image'] = media()."/images/uploads/".$requestImage[$j]['title'];
+                        }
+                    }
+                    $request[$i]['price'] = number_format($request[$i]['price'],0,DEC,MIL);
+                    $request[$i]['image'] = $requestImage;
+                    
+                }
+            }
+            return $request;
+        }
+        public function getProductosAtt($categoria){
+            $this->con = new Mysql();
+            $sql = "SELECT s.idsubtopic,
+                    a.subtopicid,
+                    a.idattribute,
+                    a.title as atributo
+                    FROM attribute a
+                    INNER JOIN subtopics s
+                    WHERE s.idsubtopic = a.subtopicid AND s.topicid = 1 AND a.subtopicid = $categoria";
+
+            $request = $this->con->select_all($sql);
+            return $request;
+        }
+        public function getProductosAlT($categoria){
+            $this->con = new Mysql();
+            $sql = "SELECT s.idsubtopic,
+                            s.topicid, 
+                            s.title as categoria,
+                            t.idtechnique,
+                            t.topicid,
+                            t.title as subcategoria,
+                            p.idproduct,
+                            p.topicid,
+                            p.subtopicid,
+                            p.techniqueid,
+                            p.title,
+                            p.price,
+                            p.route,
+                            p.status
+                    FROM product p
+                    INNER JOIN techniques t, subtopics s
+                    WHERE s.topicid = p.topicid AND 
+                            t.topicid = p.topicid AND 
+                            s.idsubtopic = p.subtopicid AND
+                            t.idtechnique = p.techniqueid AND
+                            p.status != 0 AND p.topicid = $categoria
+                    ORDER BY RAND() limit 4";
+            $request = $this->con->select_all($sql);
+            if(count($request)){
+                for ($i=0; $i < count($request) ; $i++) { 
+                    $intProducto = $request[$i]['idproduct'];
+                    $sql ="SELECT * FROM productimage
+                            WHERE productid = $intProducto limit 1";
+                    $requestImage = $this->con->select_all($sql);
+                    $request[$i]['url_image'] = media()."/images/uploads/".$requestImage[0]['title'];
+                    $request[$i]['price'] = number_format($request[$i]['price'],0,DEC,MIL);
+                }
+            }
+            return $request;
+            
+        }
+        public function getProductInfo($idproducto,$atributo){
+            $this->intIdProducto = $idproducto;
+            $this->con = new Mysql();
+
+            $sql =  "SELECT s.idsubtopic,
+                            s.topicid, 
+                            s.title as categoria,
+                            t.idtechnique,
+                            t.topicid,
+                            t.title as subcategoria,
+                            p.idproduct,
+                            p.reference,
+                            p.topicid,
+                            p.subtopicid,
+                            p.techniqueid,
+                            p.title,
+                            p.price,
+                            p.route,
+                            p.status
+                    FROM product p
+                    INNER JOIN techniques t, subtopics s
+                    WHERE s.topicid = p.topicid AND 
+                            t.topicid = p.topicid AND 
+                            s.idsubtopic = p.subtopicid AND
+                            t.idtechnique = p.techniqueid AND
+                            p.status != 0 AND p.idproduct = $this->intIdProducto";
+            $request = $this->con->select($sql);
+            $sqlImg = "SELECT * FROM productimage WHERE productid = $request[idproduct]";
+            $img = $this->con->select($sqlImg);
+            $sqlAt="SELECT * FROM attribute WHERE idattribute = $atributo";
+            $att = $this->con->select($sqlAt);
+            if($att!=""){
+                $request['atributo'] = $att['title'];
+                $request['idatributo'] = $att['idattribute'];
+            }
+            $request['imagen'] = media()."/images/uploads/".$img['title'];
+            return $request;
+        }
+    }
+
+?>
