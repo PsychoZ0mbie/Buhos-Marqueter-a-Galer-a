@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="<?=media();?>/template/Assets/css/style.css">
 </head>
 <body>
+
    <header>
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">

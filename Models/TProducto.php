@@ -240,6 +240,22 @@ require_once("Libraries/Core/Mysql.php");
             $request['imagen'] = media()."/images/uploads/".$img['title'];
             return $request;
         }
+        public function selectAtributo(int $idAtributo){
+            $this->con = new Mysql();
+			$sql = "SELECT a.idattribute,
+                            a.topicid,
+                            a.subtopicid,
+                            a.title as titulo,
+                            a.price,
+                            t.idtopic,
+                            s.idsubtopic,
+                            s.title
+                    FROM attribute a
+                    INNER JOIN topics t, subtopics s
+                    WHERE a.topicid = t.idtopic AND a.subtopicid = s.idsubtopic AND a.idattribute=$idAtributo";
+			$request = $this->con->select($sql);
+			return $request;
+		}
     }
 
 ?>

@@ -48,8 +48,8 @@
 
         public function getUserEmail(string $email){
             $this->strUsuario = $email;
-            $sql = "SELECT idperson, firstname FROM person WHERE
-                    email='$this->strUsuario' and status=1";
+            $sql = "SELECT idperson, firstname, lastname FROM person WHERE
+                    email='$this->strUsuario'";
             $request = $this->select($sql);
             return $request;
         }
@@ -67,7 +67,7 @@
             $this->strUsuario=$email;
             $this->strToken = $token;
             $sql ="SELECT idperson FROM person WHERE
-                    email = '$this->strUsuario' and token= '$this->strToken' and status =1";
+                    email = '$this->strUsuario' and token= '$this->strToken'";
             $request =$this->select($sql);
             return $request;
         }

@@ -11,6 +11,17 @@ input::-webkit-inner-spin-button {
    margin: 0;
 }
 
+#divLoading{
+    position: absolute;
+    background: rgb(255, 255, 255,0.5);
+    height: 100%;
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+
 .accordion-button:not(.collapsed){
     color:#10100D;
 }
@@ -79,6 +90,9 @@ input[type=number] {
 .navbar-nav li{
     margin-right: 30px;
     position: relative;
+}
+.nav-link{
+    color:#10100D;
 }
 .nav-link:hover{
     color: #E05A10 !important;
@@ -642,11 +656,15 @@ input[type=number] {
     height: 400px;
     width: 100%;
 }
+/*************************Confirm Order**************************/
+.confirm_order h1{
+    color:#E05A10;
+}
 
 /*************************Footer**************************/
 footer{
     margin-top: 50px;
-    height: 100vh;
+    height: 100%;
 }
 
 footer ul{
@@ -655,6 +673,9 @@ footer ul{
 }
 footer ul li a{
     text-decoration: none;
+}
+.footer_description{
+    padding: 0;
 }
 .footer_description a{
     text-decoration: none;

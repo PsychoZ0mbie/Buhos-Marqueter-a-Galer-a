@@ -18,7 +18,7 @@
 	const MD = " COP"; // Divisa
 	const DEC = ","; // Decimales;
 	const MIL = ".";//Millares;
-	const ENVIO =10000;
+	const ENVIO =0;
 	const DESCRIPCION = "";
 	const SHAREDHASH ="Buhos Marquetería & Galería";
 	//Datos envio de correo

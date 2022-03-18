@@ -17,7 +17,7 @@
 			$data['page_tag'] = "Login";
 			$data['page_title'] = "Buhos marquetería y galeria";
 			$data['page_name'] = "login";
-			$data['page_functions_js'] = "functions_login.js";
+			$data['page_functions'] = "functions_login.js";
 			$this->views->getView($this,"login",$data);
 		}
 		
@@ -58,7 +58,6 @@
 					$token = token();
 					$strEmail = strtolower(strClean($_POST['txtEmailReset']));
 					$arrData = $this->model->getUserEmail($strEmail);
-
 					if(empty($arrData)){
 						$arrResponse = array('status' => false, 'msg' => 'El usuario no existe');
 					}else{
@@ -112,7 +111,7 @@
 					$data['email'] = $strEmail;
 					$data['token'] = $strToken;
 					$data['page_name'] = "cambiar_contraseña";
-					$data['id_person'] = $arrResponse['idperson'];
+					$data['idperson'] = $arrResponse['idperson'];
 					$data['page_functions'] = "functions_login.js";
 					$this->views->getView($this,"cambiar_password",$data);
 				}
@@ -121,14 +120,14 @@
 		}
 
 		public function setPassword(){
-			if(empty($_POST['idUsuario']) || empty($_POST['txtEmailRecuperar']) || empty($_POST['txtPasswordRecuperar']) || empty($_POST['txtToken']) || empty($_POST['txtPasswordConfirmRecuperar'])){
+			if(empty($_POST['idUsuario']) || empty($_POST['txtEmail']) || empty($_POST['txtPassword']) || empty($_POST['txtToken']) || empty($_POST['txtPasswordConfirm'])){
 				$arrResponse = array('status' => false,'msg' => 'Error de datos');
 			}else{
 				$intIdpersona = intval($_POST['idUsuario']);
-				$strPassword = $_POST['txtPasswordRecuperar'];
-				$strEmail = strClean($_POST['txtEmailRecuperar']);
+				$strPassword = $_POST['txtPassword'];
+				$strEmail = strClean($_POST['txtEmail']);
 				$strToken = strClean($_POST['txtToken']);
-				$strPasswordConfirm = $_POST['txtPasswordConfirmRecuperar'];
+				$strPasswordConfirm = $_POST['txtPasswordConfirm'];
 
 				if($strPassword != $strPasswordConfirm){
 					$arrResponse = array('status' => false,'msg'=>'Las contraseñas no coinciden');

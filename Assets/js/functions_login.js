@@ -1,8 +1,8 @@
-
 $('.login-content [data-toggle="flip"]').click(function() {
     $('.login-box').toggleClass('flipped');
     return false;
 });
+
 var divLoading = document.querySelector("#divLoading");
 document.addEventListener('DOMContentLoaded',function(){
     if(document.querySelector("#formLogin")){
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded',function(){
                             //window.location = base_url+'/dashboard';
                             window.location.reload(false);
                         }else{
-                            swal("Atención", objData.msg, "error");
+                            Swal.fire("Atención", objData.msg, "error");
                             document.querySelector('#txtPassword').value = "";
                         }
                     }else{
@@ -41,10 +41,10 @@ document.addEventListener('DOMContentLoaded',function(){
                     divLoading.style.display = "none";
                     return false;
                 }
-
             }
         }
     }
+    
     if(document.querySelector("#formResetPass")){
         let formResetPass = document.querySelector("#formResetPass");
         formResetPass.onsubmit = function(e){
@@ -70,13 +70,13 @@ document.addEventListener('DOMContentLoaded',function(){
                                 title: "Recuperar cuenta",
                                 text: objData.msg,
                                 icon: "success",
-                                buttons: {
-                                    value:"Ok"
+                                buttons: true,
+                              }, function(value){
+                                if(value){
+                                    window.location = base_url+"/login";
                                 }
-                            }) 
-                            .then((value)=>{
-                                window.location = base_url;
-                            });
+                              })
+                              
                         }else{
                             swal("Atención",objData.msg,"error");
                         }
@@ -88,16 +88,15 @@ document.addEventListener('DOMContentLoaded',function(){
         }
     }
 
-    //var divLoading = document.querySelector("#divLoading");
     if(document.querySelector("#formCambiarPass")){
+        
         let formCambiarPass = document.querySelector("#formCambiarPass");
         formCambiarPass.onsubmit = function(e){
             e.preventDefault();
-
-            let strPassword = document.querySelector("#txtPasswordRecuperar").value;
-            let strPasswordConfirm = document.querySelector("#txtPasswordConfirmRecuperar").value;
+            
+            let strPassword = document.querySelector("#txtPassword").value;
+            let strPasswordConfirm = document.querySelector("#txtPasswordConfirm").value;
             let idUsuario = document.querySelector("#idUsuario").value;
-            console.log(strPassword);
 
             if(strPassword == "" || strPasswordConfirm==""){
                 swal("Por favor", "Escribe la nueva contraseña.", "error");
@@ -122,16 +121,15 @@ document.addEventListener('DOMContentLoaded',function(){
                         var objData= JSON.parse(request.responseText);
                         if(objData.status){
                             swal({
-                                title: objData.msg,
-                                text: "Por favor, inicia sesión",
+                                title: "Por favor, inicia sesión",
+                                text: objData.msg,
                                 icon: "success",
-                                buttons: {
-                                    value:"Ok"
+                                buttons: true,
+                              }, function(value){
+                                if(value){
+                                    window.location = base_url+"/login";
                                 }
-                            }) 
-                            .then((value)=>{
-                                window.location = base_url;
-                            });
+                              })
                         }else{
                             swal("Atención",objData.msg,"error");
                         }

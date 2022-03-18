@@ -47,7 +47,7 @@
             <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN</button>
           </div>
         </form>
-        <form id="formRecetPass" name="formRecetPass" class="forget-form" action="">
+        <form id="formResetPass" name="formResetPass" class="forget-form" action="">
           <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>¿Olvidaste contraseña?</h3>
           <div class="form-group">
             <label class="control-label">EMAIL</label>
@@ -74,6 +74,6 @@
     <!-- The javascript plugin to display page loading on top-->
     <script src="<?= media(); ?>/js/plugins/pace.min.js"></script>
     <script type="text/javascript" src="<?= media();?>/js/plugins/sweetalert.min.js"></script>
-    <script src="<?= media(); ?>/js/<?= $data['page_functions_js']; ?>"></script>
+    <script src="<?= media(); ?>/js/<?= $data['page_functions']; ?>"></script>
   </body>
 </html>

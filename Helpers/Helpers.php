@@ -65,7 +65,10 @@
 
         $asunto = $data['asunto'];
         $emailDestino = $data['email_usuario'];
-        $nombre= $data['nombreUsuario'];
+        $nombre="";
+        if(!empty($data['nombreUsuario'])){
+            $nombre= $data['nombreUsuario'];
+        }
         $empresa = NOMBRE_REMITENTE;
         $remitente = $data['email_remitente'];
         ob_start();
@@ -75,18 +78,15 @@
         //Server settings
         $mail->SMTPDebug = 0;                      //Enable verbose debug output
         $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = 'smtp.hostinger.com';                     //Set the SMTP server to send through
+        $mail->Host       = 'smtp.office365.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true; 
         $mail->Username   = $remitente;
-        if($remitente == EMAIL_REMITENTE){
-            $mail->Password   = REMITENTE_PASSWORD;
-        }else{
-            $mail->Password   = CONTACTO_PASSWORD;
-        }                                  //Enable SMTP authentication
+        $mail->Password   = REMITENTE_PASSWORD;
+                                //Enable SMTP authentication
                              //SMTP username
                                        //SMTP password
-        $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
-        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+        $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         
         //Recipients
         $mail->setFrom($remitente,$empresa);

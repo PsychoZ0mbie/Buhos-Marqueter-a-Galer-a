@@ -1,4 +1,4 @@
-
+let divLoading = document.querySelector("#divLoading");
 $(function(){
     var gallery = new SimpleLightbox('.gallery a', { 
     });
@@ -13,6 +13,23 @@ document.addEventListener('DOMContentLoaded',function(){
 },false);
 
 window.addEventListener('load',function() {
+    if(document.querySelector("#listDepartamento")){
+        let dep = document.querySelector("#listDepartamento");
+        dep.onchange= function(){
+            let id = document.querySelector("#listDepartamento").value;
+            let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+            let ajaxUrl = base_url+"/Usuarios/getSelectCity/"+id;
+
+            request.open("GET",ajaxUrl,true);
+            request.send();
+            request.onreadystatechange = function(){
+                if(request.readyState == 4 && request.status == 200){
+                    document.querySelector("#listCiudad").innerHTML = request.responseText;
+                }
+            }
+        }
+    }
+    getDepartamento();
     newCant();
 })
 /******************************Total price************************************/
@@ -27,7 +44,7 @@ function totalPrice(){
                 let idAtributo = atributo.value;
                 if(idAtributo !="Seleccione un tipo"){
                     let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-                    let ajaxUrl = base_url+"/marqueteria/getAtributo/"+idAtributo;
+                    let ajaxUrl = base_url+"/catalogo/getProductAtributo/"+idAtributo;
         
                     request.open("GET",ajaxUrl,true);
                     request.send();
@@ -165,7 +182,7 @@ function addCar(){
             }
     
             
-    
+            divLoading.style.display = "flex";
             let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
             let ajaxUrl = base_url+"/catalogo/addCarrito";
             let formData = new FormData();
@@ -189,6 +206,7 @@ function addCar(){
                         Swal.fire("Error",objData.msg,"error");
                     }
                 }
+                divLoading.style.display = "none";
             }
     
             /*console.log(intPrice)+"<br>";
@@ -281,7 +299,7 @@ function updateCant(idproducto,idatributo,largo,ancho,cant){
                     document.querySelector("#resume_subtotal").innerHTML= objData.subtotal;
                     document.querySelector("#resume_envio").innerHTML = objData.envio;
                     document.querySelector("#resume_total").innerHTML = objData.total;*/
-                    location.reload();
+                    window.location.reload(false);
                 }else{
                     Swal.fire("",objData.msg,"error");
                 }
@@ -312,11 +330,130 @@ function deleteCar(element){
         if(request.readyState == 4 && request.status ==200){
             let objData = JSON.parse(request.responseText);
             if(objData.status){
-                location.reload();
+                window.location.reload(false);
             }
         }else{
             Swal.fire("",objData.msg,"error");
         }
     }
 }
+function getDepartamento(){
+    if(document.querySelector('#listDepartamento')){
 
+        let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        let ajaxUrl  = base_url+'/Usuarios/getSelectDepartamentos';
+        request.open("GET",ajaxUrl ,true);
+        request.send(); 
+        request.onreadystatechange = function(){
+            if(request.readyState ==4 && request.status ==200){
+                let objData = JSON.parse(request.responseText);
+                document.querySelector('#listDepartamento').innerHTML = objData.department;
+                document.querySelector('#listCiudad').innerHTML = objData.city;
+            }
+        }
+    }
+}
+/******************************Register************************************/
+if(document.querySelector("#formRegister")){
+    let formRegister = document.querySelector("#formRegister");
+    formRegister.onsubmit = function(e){
+        e.preventDefault();
+
+        let strNombre = document.querySelector("#txtNombreCliente").value;
+        let strApellido = document.querySelector("#txtApellidoCliente").value;
+        let strEmail = document.querySelector("#txtEmailCliente").value;
+        let strPassword = document.querySelector("#txtPasswordCliente").value;
+
+        if(strNombre == "" || strApellido == "" || strEmail == "" || strPassword == ""){
+            Swal.fire("Error","Todos los campos son obligatorios.","error");
+            return false;
+        }
+        if(!fntEmailValidate(strEmail)){
+            Swal.fire("Error","El correo electrónico ingresado no es valido.","error");
+            return false;
+        }
+        if(strPassword.length < 8){
+            Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres.","error");
+            return false;
+        }
+        divLoading.style.display = "flex";
+        let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        let ajaxUrl = base_url+"/Catalogo/setCliente";
+        let formData = new FormData(formRegister);
+
+        request.open("POST",ajaxUrl,true);
+        request.send(formData);
+
+        request.onreadystatechange = function(){
+            if(request.status == 200 && request.readyState == 4){
+                let objData = JSON.parse(request.responseText);
+                if(objData.status){
+                    Swal.fire({
+                        icon: 'success',
+                        title: objData.msg,
+                        confirmButtonText: 'Ok'
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload(false);
+                        }
+                      })
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                } 
+            }
+            divLoading.style.display = "none";
+        }
+
+    }
+}
+/******************************Form Order************************************/
+if(document.querySelector("#formOrden")){
+    let formOrden = document.querySelector("#formOrden");
+    formOrden.onsubmit = function(e){
+        e.preventDefault();
+
+        let strNombre = document.querySelector("#txtNombreOrden").value;
+        let strApellido = document.querySelector("#txtApellidoOrden").value;
+        let strIdentificacion = document.querySelector("#txtIdentificacion").value;
+        let strEmail = document.querySelector("#txtEmailOrden").value;
+        let intDepartamento = document.querySelector("#listDepartamento").value;
+        let intCiudad = document.querySelector("#listCiudad").value;
+        let strDireccion = document.querySelector("#txtDireccion").value;
+        let intTelefono = document.querySelector("#txtTelefono").value;
+        let strComentario = document.querySelector("#txtComentario").value;
+        let intTotal = document.querySelector("#txtPrecio").value;
+
+        if(strNombre == "" || strApellido == "" || strEmail == "" || strIdentificacion==""
+            || intDepartamento == "" || intCiudad == "" || strDireccion == "" || intTelefono==""){
+            Swal.fire("Error","Por favor, revisa los campos a completar.","error");
+            return false;
+        }
+        if(!fntEmailValidate(strEmail)){
+            Swal.fire("Error","El correo electrónico ingresado no es valido.","error");
+            return false;
+        }
+        if(intTelefono.length < 10){
+            Swal.fire("Error","El número de teléfono debe tener máximo 10 dígitos","error");
+            return false;
+        }
+        divLoading.style.display = "flex";
+        request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        ajaxUrl = base_url+"/catalogo/setPedido";
+        formData = new FormData(formOrden);
+
+        request.open("POST",ajaxUrl,true);
+        request.send(formData);
+        
+        request.onreadystatechange=function(){
+            if(request.status == 200 && request.readyState == 4){
+                let objData = JSON.parse(request.responseText);
+                if(objData.status){
+                    window.location = base_url+"/catalogo/confirmarPedido";
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                }
+            }
+            divLoading.style.display = "none";
+        }
+    }
+}

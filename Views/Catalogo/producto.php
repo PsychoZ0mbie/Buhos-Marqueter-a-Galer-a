@@ -27,6 +27,11 @@
     $urlProducto = base_url()."/catalogo/producto/";
 ?>
     <main>
+    <div id="divLoading">
+      <div>
+          <img src="<?= media(); ?>/images/loading/loading.svg" alt="Loading">
+      </div>
+    </div>
        <section>
         <div class="container mt-4" >
           <div class="container mt-4">
@@ -86,7 +91,7 @@
                 </div>
                 <hr>
                 <?php
-                    if($producto[0]['titulo']=="Marquetería"){ ?>
+                    if($producto[0]['topicid']==1){ ?>
                     <?php 
                         if(count($atributos)>0){
                       ?>
@@ -127,7 +132,29 @@
           <div class="row mb-5">
             <div class="col-lg-6 order-lg-1 order-md-5 order-sm-5">
                 <div class="accordion pt-4" id="accordionExample">
-                    <p><strong>Información adicional de medidas y entrega</strong></p>
+                    <p><strong>Información adicional</strong></p>
+                    <?php
+                      if($producto[0]['subtopicid'] != 5 && $producto[0]['subtopicid'] !=6 && $producto[0]['topicid']==1){
+
+                      
+                    ?>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Cómo son las medidas
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                            <strong>Medida Interna</strong>: Es la medida que normalmente se usa y hace referencia al tamaño total de la obra, imagen, afiche, o arte que vas a enmarcar.<br>
+                            <strong>Medida externa</strong>: En ciertas ocasiones el espacio disponible para exhibir nuestros cuadros son limitados y por esta razón se usa esta medida, la cual es el tamaño total que quieres que mida el marco por la parte externa del mismo.
+                            </div>
+                        </div>
+                    </div>
+                    <?php }?>
+                    <?php 
+                      if($producto[0]['topicid'] == 1){
+                    ?>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -136,10 +163,11 @@
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                            3 a 4 días hábiles después de confirmado el pago y las medidas, si tienes alguna solicitud con algún producto en especial, háznoslo saber para que podamos confirmarte si podemos entregarte antes.
+                            3 a 4 días hábiles después de confirmado el pago, si tienes alguna solicitud con algún producto en especial, háznoslo saber para que podamos confirmarte si podemos entregarte antes.
                             </div>
                         </div>
                     </div>
+                    <?php }?>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">

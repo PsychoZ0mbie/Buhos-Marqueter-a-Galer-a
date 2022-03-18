@@ -2,11 +2,16 @@
     
     require_once("Models/TProducto.php");
     require_once("Models/TCategorias.php");
+    require_once("Models/TClientes.php");
+    require_once("Models/LoginModel.php");
+
     Class Catalogo extends Controllers{
-        use TProducto, TCategorias;
+        use TProducto, TCategorias,TClientes;
+        public $login;
         public function __construct(){
             parent::__construct();
             session_start();
+            $this->login = new LoginModel();
         }
         
         /******************************Marquetería************************************/
@@ -60,6 +65,20 @@
 			$data['page_title'] = "Carrito | ".NOMBRE_EMPRESA;
 			$data['page_name'] = "carrito";
 			$this->views->getView($this,"carrito",$data);
+        }
+
+        public function procesarPedido(){
+            if(empty($_SESSION['arrCarrito'])){
+                header('location: '.base_url());
+                die();
+            }
+            if(isset($_SESSION['login'])){
+                $this->setDetalleTemp();
+            }
+            $data['page_tag'] = "Procesar Pedido | ".NOMBRE_EMPRESA;
+            $data['page_title'] = "Procesar Pedido | ".NOMBRE_EMPRESA;
+            $data['page_name'] = "procesar pedido";
+            $this->views->getView($this,"procesarpedido",$data);
         }
 
         public function addCarrito(){
@@ -207,6 +226,163 @@
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
+            die();
+        }
+        
+		public function setCliente(){
+			if($_POST){
+				if(empty($_POST['txtNombreCliente']) || empty($_POST['txtApellidoCliente']) || empty($_POST['txtEmailCliente']) || empty($_POST['txtPasswordCliente'])){
+                    $arrResponse=array("status" => false, "msg" => "Datos incorrectos");
+                }else{
+                    $strNombre = ucwords(strClean($_POST['txtNombreCliente']));
+                    $strApellido = ucwords(strClean($_POST['txtApellidoCliente']));
+                    $strEmail = strtolower(strClean($_POST['txtEmailCliente']));
+                    $strPassword = hash("SHA256",$_POST['txtPasswordCliente']);
+                    $rolid = 2;
+
+                    $request = $this->registroCliente($strNombre,$strApellido,$strEmail,$strPassword,$rolid);
+                    if($request > 0){
+                        
+						$_SESSION['idUser'] = $request;
+						$_SESSION['login'] = true;
+
+						$arrData = $this->login->sessionLogin($_SESSION['idUser']);
+						sessionUser($_SESSION['idUser']);
+
+                        $arrResponse = array("status" => true,"msg"=>"Te has registrado exitosamente.");
+                    }else if($request =="exist"){
+                        $arrResponse = array("status" => false,"msg"=>"El usuario ya existe, por favor inicia sesión.");
+                    }else{
+                        $arrResponse = array("status" => false,"msg"=>"No es posible almacenar datos, inténtelo más tarde");
+
+                    }
+
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+
+			}
+			die();
+		}
+        public function setDetalleTemp(){
+            $idsession = session_id();
+            $arrPedido = array("idcliente" =>$_SESSION['idUser'],
+                                "idtransaccion" => $idsession,
+                                "productos" => $_SESSION['arrCarrito']
+                                );
+            $this->insertDetalleTemp($arrPedido);
+        }
+
+        public function setPedido(){
+            if($_POST){
+                if(empty($_POST['txtNombreOrden']) || empty($_POST['txtApellidoOrden']) || empty($_POST['txtIdentificacion'])
+                || empty($_POST['txtEmailOrden']) || empty($_POST['listDepartamento']) || empty($_POST['listCiudad'])
+                || empty($_POST['txtDireccion']) || empty($_POST['txtTelefono']) || empty($_POST['txtPrecio'])){
+                    $arrResponse = array("status"=>true,"msg"=>"Datos incorrectos");
+                }else{
+
+
+                    $idUser = intval($_SESSION['idUser']);
+                    $strNombre = ucwords(strClean($_POST['txtNombreOrden']));
+                    $strApellido = ucwords(strClean($_POST['txtApellidoOrden']));
+                    $intIdentificacion = intval($_POST['txtIdentificacion']);
+                    $strEmail = strtolower(strClean($_POST['txtEmailOrden']));
+                    $intDepartamento = intval($_POST['listDepartamento']);
+                    $intCiudad = intval($_POST['listCiudad']);
+                    $strDireccion = strtolower(strClean($_POST['txtDireccion']));
+                    $strComentario = strClean($_POST['txtComentario']);
+                    $intTelefono = strClean($_POST['txtTelefono']);
+                    $intPrecio = intval($_POST['txtPrecio']);
+                    $status = "Pendiente";
+
+                    $request_pedido = $this->insertPedido($idUser,
+                                                    $strNombre,
+                                                    $strApellido,
+                                                    $intIdentificacion,
+                                                    $strEmail,
+                                                    $intDepartamento,
+                                                    $intCiudad,
+                                                    $strDireccion,
+                                                    $strComentario,
+                                                    $intTelefono,
+                                                    $intPrecio,
+                                                    $status
+                                                    );
+                    if($request_pedido>0){
+                        foreach ($_SESSION['arrCarrito'] as $producto) {
+                            $idUser = $_SESSION['idUser'];
+                            $idproducto = $producto['idproducto'];
+                            $nombre = $producto['nombre'];
+                            $precio = $producto['precio'];
+                            $cantidad = $producto['cantidad'];
+                            $largo = $producto['largo'];
+                            $ancho = $producto['ancho'];
+                            $subcategoria = $producto['subcategoria'];
+                            $tipo = $producto['tipo'];
+
+                            $request = $this->insertPedidoDetail($request_pedido,
+                                                                $idUser,
+                                                                $idproducto,
+                                                                $nombre,
+                                                                $precio,
+                                                                $cantidad,
+                                                                $largo,
+                                                                $ancho,
+                                                                $subcategoria,
+                                                                $tipo);
+                        }
+                        $pedidoInfo = $this->getPedido($request_pedido);
+                        $dataEmail = array('email_remitente' => EMAIL_REMITENTE, 
+                                            'email_usuario'=>$pedidoInfo['orden']['email'], 
+                                            'email_copia'=>EMAIL_REMITENTE,
+                                            'asunto' =>'Se ha creado la orden No - '.$request_pedido,
+                                            'pedido' =>$pedidoInfo);
+                        $sendEmail = sendEmail($dataEmail, 'email_notificacion_orden');
+                        $orden = openssl_encrypt($request_pedido,ENCRIPTADO,KEY);
+                        $arrResponse = array("status"=>true,"orden"=>$orden,"msg"=>"Pedido realizado");
+                        $_SESSION['ordendata'] = $arrResponse;
+                        unset($_SESSION['arrCarrito']);
+                        session_regenerate_id(true);
+                    }else{
+                        $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido");
+                    }
+                    
+                }
+                
+            }else{
+                $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido");
+            }
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
+        public function confirmarPedido(){
+            if(empty($_SESSION['ordendata'])){
+                header("location: ".base_url());
+            }else{
+                $dataorden = $_SESSION['ordendata'];
+				$idpedido = openssl_decrypt($dataorden['orden'], ENCRIPTADO, KEY);
+				$data['page_tag'] = "Confirmar Pedido";
+				$data['page_title'] = "Confirmar Pedido";
+				$data['page_name'] = "confirmarpedido";
+				$data['orden'] = $idpedido;
+				$this->views->getView($this,"confirmarpedido",$data);
+            }
+            unset($_SESSION['ordendata']);
+        }
+
+        public function getProductAtributo($idAtributo){
+            $intIdAtributo= intval($idAtributo);
+				if($intIdAtributo > 0){
+					$arrData = $this->selectAtributo($intIdAtributo);
+					if(empty($arrData)){
+					
+						$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
+					}else{
+                        //$arrData['url_portada'] = media().'/images/uploads/'.$arrData['image'];
+						$arrResponse = array('status' => true, 'data' => $arrData);
+					}
+					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+				}
             die();
         }
     }

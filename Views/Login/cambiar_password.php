@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Abel OSH">
     <meta name="theme-color" content="#009688">
-    <link rel="shortcut icon" href="<?= media();?>/images/favicon.ico">
+    <link rel="shortcut icon" href="<?= media();?>/images/uploads/icon.gif">
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/main.css">
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css">
@@ -24,11 +24,11 @@
       <div class="login-box flipped">
         <div id="divLoading" >
           <div>
-            <img src="<?= media(); ?>/images/loading.svg" alt="Loading">
+            <img src="<?= media(); ?>/images/loading/loading.svg" alt="Loading">
           </div>
         </div>
         <form id="formCambiarPass" name="formCambiarPass" class="forget-form" action="">
-          <input type="hidden" id="idUsuario" name="idUsuario" value="<?= $data['idpersona']; ?>" required >
+          <input type="hidden" id="idUsuario" name="idUsuario" value="<?= $data['idperson']; ?>" required >
           <input type="hidden" id="txtEmail" name="txtEmail" value="<?= $data['email']; ?>" required >
           <input type="hidden" id="txtToken" name="txtToken" value="<?= $data['token']; ?>" required >
           <h3 class="login-head"><i class="fas fa-key"></i> Cambiar contraseña</h3>
@@ -56,6 +56,6 @@
     <!-- The javascript plugin to display page loading on top-->
     <script src="<?= media(); ?>/js/plugins/pace.min.js"></script>
     <script type="text/javascript" src="<?= media();?>/js/plugins/sweetalert.min.js"></script>
-    <script src="<?= media(); ?>/js/<?= $data['page_functions_js']; ?>"></script>
+    <script src="<?= media(); ?>/js/<?= $data['page_functions']; ?>"></script>
   </body>
 </html>
