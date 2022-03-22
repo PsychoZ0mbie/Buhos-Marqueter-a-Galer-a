@@ -220,6 +220,21 @@
             }
             return $request;
         }
+
+        public function setMensaje($strNombre,$strApellido,$strEmail,$strTelefono,$mensaje,$ip,$dispositivo,$useragent){
+            $this->con = new Mysql();
+            $sql = "INSERT INTO contact(firstname,lastname,email,phone,message,ip,device,useragent) VALUE(?,?,?,?,?,?,?,?)";
+            $arrData = array($strNombre,
+                            $strApellido,
+                            $strEmail,
+                            $strTelefono,
+                            $mensaje,
+                            $ip,
+                            $dispositivo,
+                            $useragent);
+            $request = $this->con->insert($sql,$arrData);
+            return $request;
+        }
                                                                                       
     }   
 ?>

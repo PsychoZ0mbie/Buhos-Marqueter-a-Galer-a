@@ -41,7 +41,7 @@
                         <a class="nav-link active" aria-current="page" href="<?=base_url();?>">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Nosotros</a>
+                        <a class="nav-link" href="<?=base_url();?>/nosotros">Nosotros</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,10 +54,10 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Servicios</a>
+                        <a class="nav-link" href="<?=base_url();?>/servicios">Servicios</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contacto</a>
+                        <a class="nav-link" href="<?=base_url();?>/contacto">Contacto</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?=base_url();?>/catalogo/carrito" id="cantCarrito"><i class="fas fa-shopping-cart"> (<?=$cantCarrito?>)</i></a>

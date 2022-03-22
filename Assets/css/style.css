@@ -323,3 +323,28 @@ footer{
     margin: 0;
     cursor: pointer;
 }
+/* -------------x--Factura--x----------------*/
+.factura hr{
+    border:0; 
+    border-top: 1px solid #CCC;
+}
+.factura table{
+    width: 100%;  
+    margin: 10px auto; 
+    border: 1px solid #CCC; 
+    border-spacing: 0;
+}
+.factura table tr td, table tr th{
+    padding: 5px 10px;
+    font-family: arial; 
+    font-size: 15px;
+}
+.factura tbody tr td{
+    border: 1px solid #CCC;
+}
+
+@media screen and (max-width: 470px) {
+    .factura table tr td, table tr th{
+        font-size: 9px;
+    }
+}

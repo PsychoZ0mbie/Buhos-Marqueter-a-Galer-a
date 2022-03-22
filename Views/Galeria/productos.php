@@ -72,11 +72,11 @@
                     <input class="form-control" id="txtNombre" name="txtNombre" type="text"  required="">
                   </div>
                   <div class="form-group col-md-3">
-                    <label class="control-label">Largo (cm)</label>
+                    <label class="control-label">Alto (cm)</label>
                     <input class="form-control" id="txtLargo" name="txtLargo" type="text"  required="">
                   </div>
                   <div class="form-group col-md-3">
-                    <label class="control-label">Ancho (cm)</label>
+                    <label class="control-label">Largo (cm)</label>
                     <input class="form-control" id="txtAncho" name="txtAncho" type="text"  required="">
                   </div>
                 </div>

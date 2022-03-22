@@ -91,8 +91,9 @@
 			<tr>
 				<td>
 					<p>Datos del contacto.</p>
-					<p>Nombre: <strong><?= $data['nombreUsuario']; ?></strong></p>
+					<p>Nombre: <strong><?= $data['nombre'];?> <?= $data['apellido'];?></strong></p>
 					<p>Email: <strong><?= $data['email_usuario']; ?></strong></p>
+					<p>Telefono: <strong><?= $data['telefono']; ?></strong></p>
 					<p>Mensaje:</p>
 					<p><?= $data['mensaje']; ?></p>
 					<p class="x_title_gray"><a href="<?= WEB_EMPRESA; ?>" target="_blanck"><?= WEB_EMPRESA; ?></a></p>

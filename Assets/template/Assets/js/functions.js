@@ -457,3 +457,49 @@ if(document.querySelector("#formOrden")){
         }
     }
 }
+/******************************Contact************************************/
+if(document.querySelector("#formContacto")){
+    let formContacto = document.querySelector("#formContacto");
+    formContacto.onsubmit=function(e){
+        e.preventDefault();
+
+        let strNombre = document.querySelector("#txtNombre").value;
+        let strApellido = document.querySelector("#txtApellido").value;
+        let strEmail = document.querySelector("#txtEmail").value;
+        let intTelefono = document.querySelector("#txtTelefono").value;
+        let strComentario = document.querySelector("#txtComentario").value;
+
+        if(strNombre == "" || strApellido == "" || strEmail == "" || intTelefono=="" || strComentario==""){
+            Swal.fire("Error","Todos los campos son obligatorios","error");
+            return false;
+        }
+        if(!fntEmailValidate(strEmail)){
+            Swal.fire("Error","El correo electrónico ingresado no es valido.","error");
+            return false;
+        }
+        if(intTelefono.length < 10){
+            Swal.fire("Error","El número de teléfono debe tener máximo 10 dígitos","error");
+            return false;
+        }
+        divLoading.style.display = "flex";
+        request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        ajaxUrl = base_url+"/contacto/setContacto";
+        formData = new FormData(formContacto);
+
+        request.open("POST",ajaxUrl,true);
+        request.send(formData);
+        
+        request.onreadystatechange=function(){
+            if(request.status == 200 && request.readyState == 4){
+                let objData = JSON.parse(request.responseText);
+                if(objData.status){
+                    Swal.fire("",objData.msg,"success");
+                    formContacto.reset();
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                }
+            }
+            divLoading.style.display = "none";
+        }
+    }
+}

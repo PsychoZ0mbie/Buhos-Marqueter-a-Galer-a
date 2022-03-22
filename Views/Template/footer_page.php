@@ -20,15 +20,17 @@
                 <div class="col-lg-4 footer_map mt-4">
                     <h5 class="position-relative underline"><strong>Empresa</strong></h5>
                     <ul>
-                        <li><a href="">Inicio</a></li>
-                        <li><a href="">Nosotros</a></li>
-                        <li><a href="">Catálogo</a></li>
-                        <li><a href="">Servicios</a></li>
-                        <li><a href="">Contacto</a></li>
+                        <li><a href="<?=base_url();?>">Inicio</a></li>
+                        <li><a href="<?=base_url();?>/nosotros">Nosotros</a></li>
+                        <li><a href="<?=base_url();?>/catalogo/marqueteria">Marquetería</a></li>
+                        <li><a href="<?=base_url();?>/catalogo/galeria">Galería</a></li>
+                        <li><a href="<?=base_url();?>/servicios">Servicios</a></li>
+                        <li><a href="<?=base_url();?>/contacto">Contacto</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-12 footer_legal p-4">
+                <div class="col-lg-12 footer_legal p-4 d-flex flex-column">
                     <a href="">Politica de privacidad - Política de Cookies</a>
+                    <a href="">Términos y condiciones</a>
                     <p>Copyright 2022 / Buho's Marquetería & Galería - Todos los derechos reservados</p>
                 </div>
             </div>

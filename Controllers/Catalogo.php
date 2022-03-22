@@ -341,7 +341,7 @@
                         $arrResponse = array("status"=>true,"orden"=>$orden,"msg"=>"Pedido realizado");
                         $_SESSION['ordendata'] = $arrResponse;
                         unset($_SESSION['arrCarrito']);
-                        session_regenerate_id(true);
+                        //session_regenerate_id(true);
                     }else{
                         $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido");
                     }

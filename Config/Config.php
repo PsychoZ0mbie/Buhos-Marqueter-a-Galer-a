@@ -27,7 +27,7 @@
 	const REMITENTE_PASSWORD = "da197023";
 	
 	const NOMBRE_EMPRESA = "Buhos Marquetería & Galería";
-	const DIRECCION = "Cra 36 N 15a - 03 Villavicencio/Meta";
+	const DIRECCION = "Colombia, Villavicencio/Meta, Cra 36 #15a-03 Barrio Nuevo Ricaurte";
 	const TELEFONO = "(+57)3108714741";
 	const WEB_EMPRESA = "http://localhost/buhosmarqueteriaygaleria";
 
