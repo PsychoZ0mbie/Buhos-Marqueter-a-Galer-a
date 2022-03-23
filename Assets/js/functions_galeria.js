@@ -67,7 +67,7 @@ tableProductos = $('#tableProductos').dataTable( {
     "responsieve":"true",
     "bDestroy": true,
     "iDisplayLength": 10,
-    "order":[[3,"desc"]]  
+    "order":[[8,"desc"]]  
 });
 
 tablePapelera = $('#tablePaper').dataTable( {

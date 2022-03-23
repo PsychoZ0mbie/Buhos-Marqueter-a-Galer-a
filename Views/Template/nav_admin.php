@@ -49,12 +49,12 @@
             <li><a class="treeview-item" href="<?=base_url();?>/galeria/tecnicas"><i class="app-menu__icon far fa-circle"></i>Técnicas</li>
           </ul>
         </li>
-        <li><a class="app-menu__item" href="<?=base_url();?>/pedidos"><i class="app-menu__icon fa fa-truck"></i><span class="app-menu__label">Pedidos</span></a></li>
         <li><a class="app-menu__item" href="<?=base_url();?>/mensaje"><i class="app-menu__icon fa fa-envelope"></i><span class="app-menu__label">Mensajes</span></a></li>
-        <li><a class="app-menu__item mt-4" href="<?=base_url();?>/usuarios/perfil"><i class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Perfil</span></a></li>
         <?php
           }
         ?>
-        <li><a class="app-menu__item mt-4" href="<?= base_url();?>/logout"><i class="app-menu__icon fa fa-sign-out"></i><span class="app-menu__label">Cerrar sesión</span></a></li>
+        <li><a class="app-menu__item" href="<?=base_url();?>/pedidos"><i class="app-menu__icon fa fa-truck"></i><span class="app-menu__label">Pedidos</span></a></li>
+        <li><a class="app-menu__item mt-4" href="<?=base_url();?>/usuarios/perfil"><i class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Perfil</span></a></li>
+        <li><a class="app-menu__item" href="<?= base_url();?>/logout"><i class="app-menu__icon fa fa-sign-out"></i><span class="app-menu__label">Cerrar sesión</span></a></li>
       </ul>
     </aside>

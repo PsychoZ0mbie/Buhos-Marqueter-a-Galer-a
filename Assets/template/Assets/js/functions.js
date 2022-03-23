@@ -1,4 +1,4 @@
-let divLoading = document.querySelector("#divLoading");
+let divLoad = document.querySelector("#divLoading");
 $(function(){
     var gallery = new SimpleLightbox('.gallery a', { 
     });
@@ -70,11 +70,11 @@ function totalPrice(){
                                     let perimeter = arrDimensions[0];
                                     let area = arrDimensions[1];
     
-                                    total = (perimeter*price)+(area*attributePrice);
-                                    total = formatNum(total,".");
+                                    let total = (perimeter*price)+(area*attributePrice);
+                                    let totalFormat = formatNum(total,".");
     
     
-                                    let html =`<strong>Precio: </strong>${ms}${total} ${md}`;
+                                    let html =`<strong>Precio: </strong>${ms}${totalFormat} ${md}`;
                                     document.querySelector("#num_price").value = total;
                                     document.querySelector(".price").innerHTML = html;
                                 }
@@ -158,8 +158,9 @@ function addCar(){
             let intAncho=0;
             let idAtributo =0;
             let intCant = parseInt(document.querySelector("#num_cant").value);
+            
             let idProduct = this.getAttribute("id");
-            intPrice = parseInt(intPrice.replace(".",""));
+            intPrice = parseInt(intPrice);
     
             if(document.querySelector("#txtLargo") && document.querySelector("#txtAncho") && document.querySelector("#listAtributo")){
                 intLargo = parseInt(document.querySelector("#txtLargo").value);
@@ -182,7 +183,7 @@ function addCar(){
             }
     
             
-            divLoading.style.display = "flex";
+            divLoad.style.display = "flex";
             let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
             let ajaxUrl = base_url+"/catalogo/addCarrito";
             let formData = new FormData();
@@ -206,7 +207,7 @@ function addCar(){
                         Swal.fire("Error",objData.msg,"error");
                     }
                 }
-                divLoading.style.display = "none";
+                divLoad.style.display = "none";
             }
     
             /*console.log(intPrice)+"<br>";
@@ -376,7 +377,7 @@ if(document.querySelector("#formRegister")){
             Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres.","error");
             return false;
         }
-        divLoading.style.display = "flex";
+        divLoad.style.display = "flex";
         let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
         let ajaxUrl = base_url+"/Catalogo/setCliente";
         let formData = new FormData(formRegister);
@@ -401,7 +402,7 @@ if(document.querySelector("#formRegister")){
                     Swal.fire("Error",objData.msg,"error");
                 } 
             }
-            divLoading.style.display = "none";
+            divLoad.style.display = "none";
         }
 
     }
@@ -436,7 +437,7 @@ if(document.querySelector("#formOrden")){
             Swal.fire("Error","El número de teléfono debe tener máximo 10 dígitos","error");
             return false;
         }
-        divLoading.style.display = "flex";
+        divLoad.style.display = "flex";
         request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
         ajaxUrl = base_url+"/catalogo/setPedido";
         formData = new FormData(formOrden);
@@ -453,7 +454,7 @@ if(document.querySelector("#formOrden")){
                     Swal.fire("Error",objData.msg,"error");
                 }
             }
-            divLoading.style.display = "none";
+            divLoad.style.display = "none";
         }
     }
 }
@@ -481,7 +482,7 @@ if(document.querySelector("#formContacto")){
             Swal.fire("Error","El número de teléfono debe tener máximo 10 dígitos","error");
             return false;
         }
-        divLoading.style.display = "flex";
+        divLoad.style.display = "flex";
         request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
         ajaxUrl = base_url+"/contacto/setContacto";
         formData = new FormData(formContacto);
@@ -499,7 +500,7 @@ if(document.querySelector("#formContacto")){
                     Swal.fire("Error",objData.msg,"error");
                 }
             }
-            divLoading.style.display = "none";
+            divLoad.style.display = "none";
         }
     }
 }

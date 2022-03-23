@@ -12,8 +12,10 @@
         }
 
         public function dashboard(){
-            if(!empty($_SESSION['permisosMod']['r'])){
-            
+            if(empty($_SESSION['permisosMod']['r'])){
+                header("Location: ".base_url()."/usuarios/perfil");
+                die();
+            }
             
             $data['page_tag'] = "Dashboard";
 			$data['page_title'] = "Dashboard";
@@ -24,7 +26,6 @@
             $data['suscripciones'] = $this->model->selectSuscripciones();
             $data['contactos'] = $this->model->selectContactos();*/
             $this->views->getView($this,"dashboard",$data);
-            }
         }
     }
 ?>

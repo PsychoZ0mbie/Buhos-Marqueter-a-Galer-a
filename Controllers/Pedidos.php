@@ -25,7 +25,9 @@
 
         public function getPedidos(){
             if($_SESSION['permisosMod']['r']){
-                $arrData = $this->model->selectPedidos();
+                $idrol = $_SESSION['userData']['idrole'];
+                $idpersona = $_SESSION['userData']['idperson'];
+                $arrData = $this->model->selectPedidos($idpersona,$idrol);
                 for ($i=0; $i < count($arrData); $i++) { 
 					$btnView = "";
 					$btnEdit = "";
@@ -37,8 +39,8 @@
 						$btnView = "";
 					}
 
-					if($_SESSION['permisosMod']['u']){
-						$btnEdit = '<button class="btn btn-primary btn-sm " onClick="fntEditInfo('.$arrData[$i]['idorderdata'].')" title="Editar"><i class="fas fa-pencil-alt"></i></button>';
+					if($_SESSION['permisosMod']['u'] && $_SESSION['userData']['idrole']==1){
+						$btnEdit = '<button class="btn btn-primary btn-sm " onClick="fntEditInfo('.$arrData[$i]['idorderdata'].','.$arrData[$i]['personid'].')" title="Editar"><i class="fas fa-pencil-alt"></i></button>';
 					}else{
 						$btnEdit = "";
 					}
@@ -46,6 +48,46 @@
 					$arrData[$i]['options'] = '<div class="text-center">'.$btnView.' '.$btnEdit.'</div>';
 				}
 				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+
+        public function getPedido(){
+            if($_POST){
+                $idpedido = intval($_POST['idpedido']);
+                $idpersona = intval($_POST['idpersona']);
+                $arrEstado = array("Pendiente","En proceso","Terminado","Enviado");
+                $arrData = $this->model->selectPedido($idpedido,$idpersona);
+                $arrData['price'] = MS.number_format( $arrData['price'],0,DEC,MIL);
+                $html="";
+                for ($i=0; $i < count($arrEstado) ; $i++) { 
+                    if($arrData['status'] == $arrEstado[$i]){
+                        $html .='<option value="'.$i.'" selected>'.$arrEstado[$i].'</option>';
+                    }else{
+                        $html .='<option value="'.$i.'">'.$arrEstado[$i].'</option>';
+                    }
+                }
+                $arrResponse = array("orden" => $arrData,"estado"=>$html);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+
+        public function updatePedido(){
+            if($_POST){
+                if($_SESSION['permisosMod']['u']){
+                    $idpedido = intval($_POST['idpedido']);
+                    $idpersona = intval($_POST['idpersona']);
+                    $estado = strClean($_POST['estado']);
+
+                    $request = $this->model->updatePedido($idpedido,$idpersona,$estado);
+                    if($request>0){
+                        $arrResponse = array("status"=>true,"msg"=>"Se ha actualizado el pedido.");
+                    }else{
+                        $arrResponse = array("status"=>false,"msg"=>"No se ha podido actualizar, inténtelo más tarde");
+                    }
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }

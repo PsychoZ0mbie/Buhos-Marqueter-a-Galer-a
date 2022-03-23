@@ -2,11 +2,18 @@
     class PedidosModel extends Mysql{
         private $intIdpedido;
         private $intIdpersona;
+        private $strEstado;
         public function __construct(){
             parent::__construct();
         }
 
-        public function selectPedidos(){
+        public function selectPedidos($idpersona,$idrol){
+            $datos="";
+            if($idrol==1){
+                $datos="";
+            }else{
+                $datos=" WHERE personid = $idpersona";
+            }
             $sql = "SELECT idorderdata,
                             firstname,
                             lastname,
@@ -14,7 +21,7 @@
                             DATE_FORMAT(date, '%d-%m-%Y') as date,
                             price,
                             status
-                    FROM orderdata";
+                    FROM orderdata$datos";
 
             $request = $this->select_all($sql);
             return $request;
@@ -71,6 +78,18 @@
                     ON d.orderdataid = o.idorderdata AND d.personid = o.personid
                     WHERE d.orderdataid = $this->intIdpedido AND d.personid = $this->intIdpersona";
             $request = $this->select_all($sql);
+            return $request;
+        }
+
+        public function updatePedido($idpedido,$idpersona,$estado){
+            $this->intIdpedido = $idpedido;
+            $this->intIdpersona = $idpersona;
+            $this->strEstado = $estado;
+
+            $sql = "UPDATE orderdata SET status=? 
+                    WHERE idorderdata = $this->intIdpedido AND personid=$this->intIdpersona";
+            $arrData = array($this->strEstado);
+            $request = $this->update($sql,$arrData);
             return $request;
         }
     }

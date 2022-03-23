@@ -2,6 +2,7 @@
 <main class="app-content">
 
 <?php
+    getModal('modalPedido',$data);
     if(empty($_SESSION['permisosMod']['r'])){
 ?>
     <p>Acceso denegado</p>
@@ -10,7 +11,7 @@
     }else{?>
       <div class="app-title">
         <div>
-            <h1><i class="fa fa fa-crop"></i> <?= $data['page_title'] ?></h1>
+            <h1><i class="fa fa-truck"></i> <?= $data['page_title'] ?></h1>
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
@@ -21,7 +22,7 @@
         <li class="nav-item" role="presentation">
           <a class="nav-link active" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab" aria-controls="pills-products" aria-selected="true">Pedidos</a>
         </li>
-        <?php if($_SESSION['permisosMod']['w']){?>
+        <?php if($_SESSION['permisosMod']['r']){?>
         <li class="nav-item" role="presentation">
           <a class="nav-link" id="pills-make-tab" data-toggle="pill" href="#pills-make" role="tab" aria-controls="pills-make" aria-selected="false">Detalle del pedido</a>
         </li>
@@ -41,7 +42,7 @@
                             <th>Nombres</th>
                             <th>Apellidos</th>
                             <th>Fecha</th>
-                            <th>Precio</th>
+                            <th>Total</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                           </tr>

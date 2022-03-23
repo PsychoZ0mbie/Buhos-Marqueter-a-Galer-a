@@ -144,7 +144,7 @@ require_once("Libraries/Core/Mysql.php");
                             $requestImage[$j]['url_image'] = media()."/images/uploads/".$requestImage[$j]['title'];
                         }
                     }
-                    $request[$i]['price'] = number_format($request[$i]['price'],0,DEC,MIL);
+                    //$request[$i]['price'] = number_format($request[$i]['price'],0,DEC,MIL);
                     $request[$i]['image'] = $requestImage;
                     
                 }

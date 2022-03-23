@@ -83,6 +83,7 @@
 
         public function addCarrito(){
             if($_POST){
+                //dep($_POST);
                 //unset($_SESSION['arrCarrito']);exit;
                 $arrCarrito = array();
                 $cantCarrito = 0;

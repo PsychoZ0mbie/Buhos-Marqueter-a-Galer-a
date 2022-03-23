@@ -337,7 +337,6 @@ footer{
 .factura table tr td, table tr th{
     padding: 5px 10px;
     font-family: arial; 
-    font-size: 15px;
 }
 .factura tbody tr td{
     border: 1px solid #CCC;

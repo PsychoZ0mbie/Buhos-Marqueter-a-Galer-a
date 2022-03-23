@@ -80,7 +80,7 @@
                   <h1 class="position-relative underline"><strong><?=$producto[0]['title'];?></strong></h1>
                   <p class="mt-4 fs-5"><strong>Referencia:</strong> <?=$producto[0]['reference'];?></p>
                   <input type="hidden" id="num_price" value="<?=$producto[0]['price']?>">
-                  <p class="fs-5 price" ><strong>Precio:</strong> <?=MS.$producto[0]['price'].MD;?></p>
+                  <p class="fs-5 price" ><strong>Precio:</strong> <?=MS.number_format($producto[0]['price'],0,DEC,MIL).MD;?></p>
                   <h2>Descripción</h2>
                   <p><?=$producto[0]['description'];?></p>
                   <ul>

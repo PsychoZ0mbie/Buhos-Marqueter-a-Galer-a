@@ -3,7 +3,7 @@ $('.login-content [data-toggle="flip"]').click(function() {
     return false;
 });
 
-var divLoading = document.querySelector("#divLoading");
+let divLoading = document.querySelector("#divLoading");
 document.addEventListener('DOMContentLoaded',function(){
     if(document.querySelector("#formLogin")){
         let formLogin = document.querySelector("#formLogin");
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded',function(){
                             //window.location = base_url+'/dashboard';
                             window.location.reload(false);
                         }else{
-                            Swal.fire("Atención", objData.msg, "error");
+                            swal("Atención", objData.msg, "error");
                             document.querySelector('#txtPassword').value = "";
                         }
                     }else{

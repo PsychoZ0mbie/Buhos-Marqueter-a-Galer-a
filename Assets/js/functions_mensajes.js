@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded',function(){
         "responsieve":"true",
         "bDestroy": true,
         "iDisplayLength": 10,
-        "order":[[0,"desc"]]  
+        "order":[[6,"desc"]]  
     });
 
 },false);
