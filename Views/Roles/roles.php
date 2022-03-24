@@ -2,9 +2,13 @@
 <main class="app-content">
 <?php
     getModal('modalRoles',$data);
+    if(empty($_SESSION['permisosMod']['r'])){
+
+    
 ?>
   <div id="contentAjax"></div> 
     <p>Acceso denegado</p>
+    <?php }else{ ?>
       <div class="app-title">
         <div>
             <h1><i class="fas fa-user-tag"></i> <?= $data['page_title'] ?>
@@ -39,4 +43,5 @@
         </div>
         
     </main>
+    <?php }?>
 <?php footerAdmin($data); ?>

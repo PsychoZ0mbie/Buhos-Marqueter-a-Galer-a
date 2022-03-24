@@ -134,6 +134,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="checkBox" name="checkBox" checked>
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        He leido y acepto los <a href="<?= base_url()?>/terminos" target="_blank">Términos y Condiciones </a>y la<a href="<?= base_url()?>/politicas" target="_blank"> Política de Privacidad y de Cookies.</a>
+                                    </label>
+                                </div>
                                 <button type="submit" class="btn_content">Registrarse</button>
                             </form>
                         </div>

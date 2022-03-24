@@ -351,7 +351,7 @@
         public function deleteTecnica(int $idTecnica){
 		
 			$this->intIdTecnica = $idTecnica;
-			$sql = "SELECT * FROM product WHERE subtopicid = $this->intIdTecnica";
+			$sql = "SELECT * FROM product WHERE techniqueid = $this->intIdTecnica";
 			$request = $this->select_all($sql);
 			if(empty($request))
 			{

@@ -660,6 +660,29 @@ input[type=number] {
     color:#E05A10;
 }
 
+/*************************Account page**************************/
+.account i{
+    font-size: 200px;
+}
+/*************************policies page**************************/
+.cookiesTable hr{
+    border:0; 
+    border-top: 1px solid #CCC;
+}
+.cookiesTable table{
+    width: 100%;  
+    margin: 10px auto; 
+    border: 1px solid #CCC; 
+    border-spacing: 0;
+}
+.cookiesTable table tr td, table tr th{
+    padding: 5px 10px;
+    font-family: arial; 
+}
+.cookiesTable tbody tr td{
+    border: 1px solid #CCC;
+}
+
 /*************************Footer**************************/
 footer{
     margin-top: 50px;

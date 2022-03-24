@@ -2,9 +2,12 @@
 <main class="app-content">
 <?php
     getModal('modalUsuarios',$data);
+    if(empty($_SESSION['permisosMod']['r'])){
+
+   
 ?>
     <p>Acceso denegado</p>
-
+      <?php  }else{  ?>
       <div class="app-title">
         <div>
             <h1><i class="fa fa-user"></i> <?= $data['page_title'] ?>
@@ -42,5 +45,6 @@
             </div>
         </div>
     </main>
+    <?php }?>
 <?php footerAdmin($data); ?>
     

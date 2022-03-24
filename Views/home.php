@@ -85,7 +85,11 @@
                         ?>
                         <p><?= $productos[$i]['subcategoria']?></p>
                         <?php }?>
-                        <p><?= MS.$productos[$i]['price'].MD?></p>
+                        <?php if($productos[$i]['stock']==0){ ?>
+                        <p class="text-danger">Agotado</p>
+                        <?php }else{?>
+                            <p><?= MS.$productos[$i]['price'].MD?></p>
+                        <?php }?>
                     </div>
                 </div>
                 <?php }?>

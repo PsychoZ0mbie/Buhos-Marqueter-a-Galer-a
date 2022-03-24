@@ -5,6 +5,7 @@ $(function(){
 })
 
 document.addEventListener('DOMContentLoaded',function(){
+    
     totalPrice();
     btnIncrement();
     btnDecrement();
@@ -13,6 +14,13 @@ document.addEventListener('DOMContentLoaded',function(){
 },false);
 
 window.addEventListener('load',function() {
+    if(document.querySelector("#num_stock")){
+        let cantidad = document.querySelector("#num_stock").value;
+        if(cantidad == 0){
+            document.querySelector(".product_purchase").classList.add("d-none");
+            document.querySelector(".price").innerHTML =`<p class="text-danger"><strong>Agotado</strong></p>`;
+        }
+    }
     if(document.querySelector("#listDepartamento")){
         let dep = document.querySelector("#listDepartamento");
         dep.onchange= function(){
@@ -161,6 +169,8 @@ function addCar(){
             
             let idProduct = this.getAttribute("id");
             intPrice = parseInt(intPrice);
+
+            
     
             if(document.querySelector("#txtLargo") && document.querySelector("#txtAncho") && document.querySelector("#listAtributo")){
                 intLargo = parseInt(document.querySelector("#txtLargo").value);
@@ -364,6 +374,8 @@ if(document.querySelector("#formRegister")){
         let strApellido = document.querySelector("#txtApellidoCliente").value;
         let strEmail = document.querySelector("#txtEmailCliente").value;
         let strPassword = document.querySelector("#txtPasswordCliente").value;
+        let estado = document.querySelector("#checkBox").checked;
+        
 
         if(strNombre == "" || strApellido == "" || strEmail == "" || strPassword == ""){
             Swal.fire("Error","Todos los campos son obligatorios.","error");
@@ -375,6 +387,10 @@ if(document.querySelector("#formRegister")){
         }
         if(strPassword.length < 8){
             Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres.","error");
+            return false;
+        }
+        if(!estado){
+            Swal.fire("Error","Debes aceptar los términos y condiciones!","error");
             return false;
         }
         divLoad.style.display = "flex";

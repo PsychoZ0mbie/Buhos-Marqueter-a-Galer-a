@@ -22,6 +22,7 @@ require_once("Libraries/Core/Mysql.php");
                             p.title,
                             p.price,
                             p.route,
+                            p.stock,
                             p.status
                     FROM product p
                     INNER JOIN techniques t, subtopics s
@@ -30,7 +31,7 @@ require_once("Libraries/Core/Mysql.php");
                             s.idsubtopic = p.subtopicid AND
                             t.idtechnique = p.techniqueid AND
                             p.status != 0
-                    ORDER BY p.idproduct DESC limit 0,9";
+                    ORDER BY p.idproduct DESC limit 0,8";
             $request = $this->con->select_all($sql);
             if(count($request)){
                 for ($i=0; $i < count($request) ; $i++) { 
@@ -76,7 +77,8 @@ require_once("Libraries/Core/Mysql.php");
                             p.title,
                             p.price,
                             p.route,
-                            p.status
+                            p.status,
+                            p.stock
                     FROM product p
                     INNER JOIN techniques t, subtopics s
                     WHERE s.topicid = p.topicid AND 
@@ -122,6 +124,7 @@ require_once("Libraries/Core/Mysql.php");
                             p.width,
                             p.price,
                             p.route,
+                            p.stock,
                             p.status
                     FROM product p
                     INNER JOIN techniques t, subtopics s, topics c
@@ -179,6 +182,7 @@ require_once("Libraries/Core/Mysql.php");
                             p.title,
                             p.price,
                             p.route,
+                            p.stock,
                             p.status
                     FROM product p
                     INNER JOIN techniques t, subtopics s

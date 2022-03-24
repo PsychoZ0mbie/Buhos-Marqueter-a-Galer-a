@@ -80,6 +80,7 @@
                   <h1 class="position-relative underline"><strong><?=$producto[0]['title'];?></strong></h1>
                   <p class="mt-4 fs-5"><strong>Referencia:</strong> <?=$producto[0]['reference'];?></p>
                   <input type="hidden" id="num_price" value="<?=$producto[0]['price']?>">
+                  <input type="hidden" id="num_stock" value="<?=$producto[0]['stock']?>">
                   <p class="fs-5 price" ><strong>Precio:</strong> <?=MS.number_format($producto[0]['price'],0,DEC,MIL).MD;?></p>
                   <h2>Descripción</h2>
                   <p><?=$producto[0]['description'];?></p>
@@ -211,7 +212,11 @@
                     <div class="catalog_product_text">
                         <a href=""><h2><strong><?= $productosAl[$i]['title']?></strong></h2></a>
                         <h3><?= $productosAl[$i]['categoria']?></h3>
-                        <p><?= MS.$productosAl[$i]['price'].MD?></p>
+                        <?php if($productosAl[$i]['stock']==0){ ?>
+                        <p class="text-danger">Agotado</p>
+                        <?php }else{?>
+                            <p><?= MS.$productosAl[$i]['price'].MD?></p>
+                        <?php }?>
                     </div>
                 </div>
                 <?php }?>

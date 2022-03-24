@@ -59,6 +59,24 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?=base_url();?>/contacto">Contacto</a>
                     </li>
+                    <?php
+                        if(isset($_SESSION['login'])){
+                        
+                    ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Mi cuenta
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="<?=base_url();?>/usuarios/perfil">Perfil</a></li>
+                            <li><a class="dropdown-item" href="<?=base_url();?>/logout">Cerrar sesión</a></li>
+                        </ul>
+                    </li>
+                    <?php }else{?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?=base_url();?>/cuenta">Mi cuenta</a>
+                    </li>
+                    <?php }?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?=base_url();?>/catalogo/carrito" id="cantCarrito"><i class="fas fa-shopping-cart"> (<?=$cantCarrito?>)</i></a>
                     </li>

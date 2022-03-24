@@ -51,6 +51,7 @@
 					}
 					$arrData[$i]['options'] = '<div class="text-center">'.$btnView.' '.$btnEdit.' '.$btnDelete.'</div>';
 					$arrData[$i]['medidas'] = $arrData[$i]['length']."cm x ".$arrData[$i]['width']."cm";
+					$arrData[$i]['price'] = MS.number_format($arrData[$i]['price'],0,DEC,MIL);
 				}
 				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
 			}
@@ -62,7 +63,7 @@
 				if($_POST){
 					if(empty($_POST['txtNombre']) || empty($_POST['txtLargo']) || empty($_POST['txtAncho'])
 					|| empty($_POST['listCategoria']) || empty($_POST['listTecnica']) || empty($_POST['listStatus'])
-					|| empty($_POST['txtPrecio']) || empty($_POST['txtCantidad'])){
+					|| empty($_POST['txtPrecio'])){
 						
 						$arrResponse = array("status" =>false,"msg"=>"Datos incorrectos.");
 					}else{
@@ -398,11 +399,11 @@
 
 					$requestDelete = $this->model->deleteSubcategoria($intIdSubcategoria);
 					if($requestDelete == 'ok'){
-						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado la subcategoría');
+						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado');
 					}else if($requestDelete == 'exist'){
-						$arrResponse = array('status' => false, 'msg' => 'No es posible eliminar una subcategoría asociado a un producto.');
+						$arrResponse = array('status' => false, 'msg' => 'No es posible eliminar si está asociado a un producto.');
 					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar la subcategoría.');
+						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar.');
 					}
 					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 				}
@@ -533,11 +534,11 @@
 
 					$requestDelete = $this->model->deleteTecnica($intIdTecnica);
 					if($requestDelete == 'ok'){
-						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado la técnica');
+						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado');
 					}else if($requestDelete == 'exist'){
-						$arrResponse = array('status' => false, 'msg' => 'No es posible eliminar una técnica asociada a un producto.');
+						$arrResponse = array('status' => false, 'msg' => 'No es posible eliminar si está asociado a un producto.');
 					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar la técnica.');
+						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar.');
 					}
 					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 				}
