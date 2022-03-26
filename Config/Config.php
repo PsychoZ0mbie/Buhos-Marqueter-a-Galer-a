@@ -19,8 +19,8 @@
 	const DEC = ","; // Decimales;
 	const MIL = ".";//Millares;
 	const ENVIO =0;
-	const DESCRIPCION = "";
-	const SHAREDHASH ="Buhos Marquetería & Galería";
+	const DESCRIPCION = "Marquetería tradicional y Moderna para diplomas, fotografías, afiches, retablos, espejos y obras de arte. Venta de todo tipo de obra sobre lienzo.";
+	const SHAREDHASH ="BuhosMarqueteríayGalería";
 	//Datos envio de correo
 	const NOMBRE_REMITENTE= "Buhos Marquetería & Galería";
 	const EMAIL_REMITENTE = "davidstiven1999@hotmail.com";

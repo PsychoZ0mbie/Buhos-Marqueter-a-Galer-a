@@ -131,6 +131,22 @@
     function deleteFile(string $name){
         unlink('Assets/images/uploads/'.$name);
     }
+    
+    function Meses(){
+        $meses = array("Enero", 
+                      "Febrero", 
+                      "Marzo", 
+                      "Abril", 
+                      "Mayo", 
+                      "Junio", 
+                      "Julio", 
+                      "Agosto", 
+                      "Septiembre", 
+                      "Octubre", 
+                      "Noviembre", 
+                      "Diciembre");
+        return $meses;
+    }
     //Elimina exceso de espacios entre palabras
     function strClean($strCadena){
         $string = preg_replace(['/\s+/','/^\s|\s$/'],[' ',''], $strCadena);

@@ -31,7 +31,7 @@
                 for ($i=0; $i < count($arrData); $i++) { 
 					$btnView = "";
 					$btnEdit = "";
-					//$btnDelete = "";
+					$btnDelete = "";
 
                     if($_SESSION['permisosMod']['r']){
 						$btnView = '<button class="btn btn-info btn-sm " onClick="fntViewInfo('.$arrData[$i]['idorderdata'].','.$arrData[$i]['personid'].')" title="Ver"><i class="far fa-eye"></i></button>';
@@ -44,8 +44,14 @@
 					}else{
 						$btnEdit = "";
 					}
+                    if($_SESSION['permisosMod']['d'] && $_SESSION['userData']['idrole']==1){
+						$btnDelete = '<button class="btn btn-danger btn-sm " onClick="fntDelInfo('.$arrData[$i]['idorderdata'].','.$arrData[$i]['personid'].')" title="Eliminar"><i class="far fa-trash-alt"></i></button>';
+					}else{
+						$btnDelete = "";
+					}
+
                     $arrData[$i]['price'] = MS.number_format($arrData[$i]['price'],0,DEC,MIL);
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnView.' '.$btnEdit.'</div>';
+					$arrData[$i]['options'] = '<div class="text-center">'.$btnView.' '.$btnEdit.' '.$btnDelete.'</div>';
 				}
 				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
             }
@@ -114,6 +120,25 @@
                     }
                     echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 }
+            }
+            die();
+        }
+
+        public function delPedido(){
+            if($_POST){
+                if($_SESSION['permisosMod']['d']){
+                    $idpedido = intval($_POST['idorden']);
+                    $idpersona = intval($_POST['idpersona']);
+
+                    $request = $this->model->deletePedido($idpedido,$idpersona);
+                    if($request=="ok"){
+                        $arrResponse = array("status"=>true,"msg"=>"Se ha eliminado el pedido.");
+                    }else{
+                        $arrResponse = array("status"=>false,"msg"=>"No se ha podido eliminar, inténtelo más tarde");
+                    }
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                
             }
             die();
         }

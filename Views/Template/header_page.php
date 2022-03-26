@@ -1,5 +1,15 @@
 <?php
     $cantCarrito = 0;
+    $titulo = NOMBRE_EMPRESA;
+    $urlWeb = base_url();
+    $urlImg;
+    //dep($data['product']);
+    if(!empty($data['product'])){
+        $urlWeb = base_url()."/catalogo/producto/".$data['product'][0]['route'];
+        $urlImg = media()."/images/uploads/".$data['product'][0]['image'][0]['url_image'];
+        $titulo = $data['product'][0]['title'];
+    }
+
     if(isset($_SESSION['arrCarrito']) && $_SESSION['arrCarrito']>0){
         foreach ($_SESSION['arrCarrito'] as $key) {
             $cantCarrito += $key['cantidad'];
@@ -12,9 +22,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buhos Marquetería & Galería</title>
-
+    <meta name="description" content="<?=DESCRIPCION?>">
+    <meta name="author" content="<?=NOMBRE_EMPRESA?>" />
+    <meta name="copyright" content="<?=NOMBRE_EMPRESA?>"/>
+    <meta name="robots" content="index,follow"/>
+    <title><?= $data['page_tag'];?></title>
     <link rel ="shortcut icon" href="<?=media();?>/template/Assets/images/uploads/icon.gif" sizes="32x32" type="image/png">
+    
+    <meta property="fb:app_id"          content="1234567890" /> 
+    <meta property="og:locale" 		content='es_ES'/>
+    <meta property="og:type"        content="article" />
+    <meta property="og:site_name"	content="<?= NOMBRE_EMPRESA; ?>"/>
+    <meta property="og:description" content="<?=DESCRIPCION?>"/>
+    <meta property="og:title"       content="<?= $titulo; ?>" />
+    <meta property="og:url"         content="<?= $urlWeb; ?>" />
+    <meta property="og:image"       content="<?= $urlImg; ?>" />
+    <meta name="twitter:card" content="summary"></meta>
+    <meta name="twitter:site" content="<?= $urlWeb; ?>"></meta>
+    <meta name="twitter:creator" content="<?= NOMBRE_EMPRESA; ?>"></meta>
+    <link rel="canonical" href="<?= $urlWeb?>"/>
+    
     <script src="https://kit.fontawesome.com/3207833fba.js" crossorigin="anonymous"></script>
     <!--Resources styles-->
     <link rel="stylesheet" href="<?=media();?>/template/Assets/css/bootstrap.min.css">
@@ -50,7 +77,6 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="<?=base_url();?>/catalogo/marqueteria">Marquetería</a></li>
                             <li><a class="dropdown-item" href="<?=base_url();?>/catalogo/galeria">Galería</a></li>
-                            <li><a class="dropdown-item" href="#">Trabajos realizados</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

@@ -46,10 +46,11 @@ require_once("Libraries/Core/Mysql.php");
             return $request;
             
         }
-        public function getProductosCategoriasT($categoria,$params){
+        public function getProductosCategoriasT($categoria,$params,$cant){
             $this->intIdCategoria = $categoria;
             $this->strRuta = $params;
             $this->con = new Mysql();
+            
             if($this->strRuta ==""){
                 $ruta = "";
             }else{
@@ -61,6 +62,11 @@ require_once("Libraries/Core/Mysql.php");
                             p.subtopicid != 6 AND
                             p.status != 0 AND p.topicid = $this->intIdCategoria";
             }   
+            if($cant!=""){
+                $cant = "ORDER BY RAND() LIMIT 4";
+            }else{
+                $cant="";
+            }
            
             $sql = "SELECT s.idsubtopic,
                             s.topicid,
@@ -85,7 +91,7 @@ require_once("Libraries/Core/Mysql.php");
                             t.topicid = p.topicid AND 
                             s.idsubtopic = p.subtopicid AND
                             t.idtechnique = p.techniqueid AND
-                            p.status != 0 AND p.topicid = $this->intIdCategoria $ruta";
+                            p.status != 0 AND p.topicid = $this->intIdCategoria $ruta $cant";
             $request = $this->con->select_all($sql);
             if(count($request)){
                 for ($i=0; $i < count($request) ; $i++) { 

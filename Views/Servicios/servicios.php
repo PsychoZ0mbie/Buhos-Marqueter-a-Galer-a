@@ -17,7 +17,6 @@
                 <i class="fas fa-crop-alt"></i>
                 <h3>Marquetería</h3>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modiasdadqwda{lsdqw</p>
-                <a href="<?=base_url()?>/catalogo/marqueteria" class="btn_content">Ver más</a>
                 <a href="<?=base_url()?>/contacto" class="btn_content">Contactar</a>
               </div>
             </div>
@@ -26,7 +25,6 @@
                 <i class="fas fa-palette"></i>
                 <h3>Obras personalizadas</h3>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modiasdadqwda{lsdqw</p>
-                  <a href="<?=base_url()?>/catalogo/galeria" class="btn_content">Ver más</a>
                   <a href="<?=base_url()?>/contacto" class="btn_content">Contactar</a>
               </div>
             </div>

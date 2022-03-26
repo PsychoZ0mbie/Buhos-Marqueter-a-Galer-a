@@ -20,7 +20,7 @@
             $params = strClean($params);
             $ruta = ucwords(str_replace("-"," ",$params));
 
-            $data['productC'] = $this->getProductosCategoriasT(1,$params);
+            $data['productC'] = $this->getProductosCategoriasT(1,$params,"");
             $data['categoria'] = $this->getCategoriaT(1);
             $data['subcategoria'] = $this->getSubcategoriaT(1);
             $data['tecnicas'] = $this->getTecnicasT(1);
@@ -34,7 +34,7 @@
             $params = strClean($params);
             $ruta = ucwords(str_replace("-"," ",$params));
 
-            $data['productC'] = $this->getProductosCategoriasT(2,$params);
+            $data['productC'] = $this->getProductosCategoriasT(2,$params,"");
             $data['categoria'] = $this->getCategoriaT(2);
             $data['subcategoria'] = $this->getSubcategoriaT(2);
             $data['tecnicas'] = $this->getTecnicasT(2);

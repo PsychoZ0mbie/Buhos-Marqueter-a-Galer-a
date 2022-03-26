@@ -57,6 +57,17 @@
                     </div>
                   </div>
                 </div>
+                <div class="card_container">
+                  <div class="cards">
+                    <div class="card_front">
+                      <img src="<?=media();?>/template/Assets/images/uploads/miembro3.jpg" alt="">
+                    </div>
+                    <div class="card_back">
+                      <h2>David Parrado</h2>
+                      <p>Artista</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

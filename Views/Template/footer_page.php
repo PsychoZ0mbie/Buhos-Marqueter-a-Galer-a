@@ -12,9 +12,9 @@
                 <div class="col-lg-4 footer_social mt-4">
                     <h5 class="position-relative underline"><strong>Nuestras redes sociales</strong></h5>
                     <ul>
-                        <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href=""><i class="fab fa-instagram"></i></a></li>
-                        <li><a href=""><i class="fab fa-whatsapp"></i></i></a></li>
+                        <a href="https://www.facebook.com/BuhoMyG/" target="_blank"><li><i class="fab fa-facebook-f"></i></li></a>
+                        <a href="https://www.instagram.com/buhos_myg/?hl=es-la" target="_blank"><li><i class="fab fa-instagram"></i></li></a>
+                        <a href="https://api.whatsapp.com/send/?phone=573108714741" target="_blank"><li><i class="fab fa-whatsapp"></i></li></a>
                     </ul>
                 </div>
                 <div class="col-lg-4 footer_map mt-4">
@@ -29,8 +29,8 @@
                     </ul>
                 </div>
                 <div class="col-lg-12 footer_legal p-4 d-flex flex-column">
-                    <a href="">Politica de privacidad - Política de Cookies</a>
-                    <a href="">Términos y condiciones</a>
+                    <a href="<?=base_url()?>/politicas">Politica de privacidad - Política de Cookies</a>
+                    <a href="<?=base_url()?>/terminos">Términos y condiciones</a>
                     <p>Copyright 2022 / Buho's Marquetería & Galería - Todos los derechos reservados</p>
                 </div>
             </div>
@@ -55,5 +55,6 @@
     <script src="<?=media();?>/template/Assets/js/functions.js"></script>
     <script src="<?= media() ?>/js/functions_login.js"></script>
     <script src="<?= media() ?>/js/functions_admin.js"></script>
+
 </body>
 </html>

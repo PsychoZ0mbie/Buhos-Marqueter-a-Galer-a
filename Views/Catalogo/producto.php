@@ -10,6 +10,7 @@
     $atributos = $data['atributos'];
     $productosAl = $data['productsAl'];
 
+
     if($producto[0]['topicid'] == 2){
         $htmlD ='<li><i class="fas fa-check-circle text-success"></i>Dimensiones: <span>'.$producto[0]['length'].'cm x '.$producto[0]['width'].'cm</span></li>';
     }else{
@@ -25,6 +26,7 @@
     $url = base_url()."/catalogo/".$categoria[0]['route']."/";
     $ruta=base_url()."/catalogo/".$producto[0]['rutaC']."/";
     $urlProducto = base_url()."/catalogo/producto/";
+    $urlCompartir = base_url()."/catalogo/producto/".$producto[0]['route'];
 ?>
     <main>
     <div id="divLoading">
@@ -120,11 +122,10 @@
                 <div class="product_social">
                   <p><strong>Compartir en:</strong></p>
                   <ul>
-                    <li><a href="" title="Compartir en facebook"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="" title="Compartir en instagram"><i class="fab fa-instagram"></i></a></li>
-                    <li><a href="" title="Compartir en twitter"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="" title="Compartir en linkedin"><i class="fab fa-linkedin-in"></i></a></li>
-                    <li><a href="" title="Compartir en whatsapp"><i class="fab fa-whatsapp"></i></i></a></li>
+                    <a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=<?=$urlCompartir?>&t=<?=$producto[0]['title'];?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en facebook"><li><i class="fab fa-facebook-f"></i></li></a>
+                    <a href="#"  onclick="window.open('https://twitter.com/intent/tweet?text=<?=$producto[0]['title'];?>&url=<?=$urlCompartir?>&hashtags=<?=SHAREDHASH?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en twitter"><li><i class="fab fa-twitter"></i></li></a>
+                    <a href="#" onclick="window.open('http://www.linkedin.com/shareArticle?url=<?=$urlCompartir?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en linkedin"><li><i class="fab fa-linkedin-in"></i></li></a>
+                    <a href="#" onclick="window.open('https://api.whatsapp.com/send?text=<?=$urlCompartir?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en whatsapp"><li><i class="fab fa-whatsapp"></i></li></a>
                   </ul>
                 </div>
               </div>

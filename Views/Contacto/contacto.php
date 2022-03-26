@@ -49,9 +49,9 @@
                     <li><i class="fas fa-phone-alt"></i><p><?=TELEFONO?></p></li>
                   </ul>
                   <ul>
-                    <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href=""><i class="fab fa-instagram"></i></a></li>
-                    <li><a href=""><i class="fab fa-whatsapp"></i></i></a></li>
+                    <li><a href="https://www.facebook.com/BuhoMyG/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a href="https://www.instagram.com/buhos_myg/?hl=es-la" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="https://api.whatsapp.com/send/?phone=573108714741" target="_blank"><i class="fab fa-whatsapp"></i></i></a></li>
                   </ul>
                 </div>
                 <div class="contact_map">

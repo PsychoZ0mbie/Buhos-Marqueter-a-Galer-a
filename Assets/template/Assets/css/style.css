@@ -664,24 +664,6 @@ input[type=number] {
 .account i{
     font-size: 200px;
 }
-/*************************policies page**************************/
-.cookiesTable hr{
-    border:0; 
-    border-top: 1px solid #CCC;
-}
-.cookiesTable table{
-    width: 100%;  
-    margin: 10px auto; 
-    border: 1px solid #CCC; 
-    border-spacing: 0;
-}
-.cookiesTable table tr td, table tr th{
-    padding: 5px 10px;
-    font-family: arial; 
-}
-.cookiesTable tbody tr td{
-    border: 1px solid #CCC;
-}
 
 /*************************Footer**************************/
 footer{
@@ -723,25 +705,25 @@ footer ul li a{
     display: flex;
     justify-content: center;
 }
-.footer_social li{
+.footer_social a li{
     padding: 10px 20px 10px 20px;
     border-radius: 50%;
     margin: 10px;
     background-color: #10100D;
 }
-.footer_social li a i{
+.footer_social a li i{
     color:#fff;
     font-size: 18px;
     transition: 0.3s;
 }
-.footer_social li:hover{
+.footer_social a:hover li{
     background-color: #E05A10;
     transition: 0.3s;
 }
 .footer_map ul{
     text-align: left;
 }
-.footer_map ul li{
+.footer_map ul li a{
     padding: 10px 10px 0 0;
     transition: 0.3s;
 }

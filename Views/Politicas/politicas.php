@@ -12,7 +12,7 @@
           </p>
           <ol>
             <li><p>El tratamiento de los datos personales, serán suministrados con la finalidad contemplada en la presente Política de Privacidad y conforme al componente de los servicios prestados por <strong><?=NOMBRE_EMPRESA?></strong>.</p></li>
-            <li><p>Los datos personales suministrados en el sitio web, tendrán como finalidad: Contactar al cliente con el propósito de lograr llevar a cabo las actividades relacionadas, ya sea la fabricación o entrega del servicio contratado de <strong><?=NOMBRE_EMPRESA?></strong> por el cliente.</li>
+            <li><p>Los datos personales suministrados en el sitio web, tendrán como finalidad: Contactar al cliente con el propósito de llevar a cabo las actividades relacionadas, ya sea la fabricación o entrega del servicio contratado de <strong><?=NOMBRE_EMPRESA?></strong> por el cliente.</li>
             <li><p>Promocionar y mercadear los productos y servicios de <strong><?=NOMBRE_EMPRESA?></strong>, compartiendo también con sus clientes información promocional y comercial de los productos y servicios o cualquier otra información relacionada al área comercial</li>
             <li><p>Contactar con el cliente en caso de inconsistencias relacionadas a la forma de pago</p></li>
             <li><p>Compartir la información con terceros encargados del tratamiento cuando así se requiera en el desarrollo de los servicios prestados por <strong><?=NOMBRE_EMPRESA?></strong></p></li>

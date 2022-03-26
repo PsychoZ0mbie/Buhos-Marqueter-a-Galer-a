@@ -187,3 +187,42 @@ function fntEditInfo(idorden,idcliente){
     
 }
 
+function fntDelInfo(idorden,idcliente){
+    swal({
+        title: "Eliminar",
+        text: "¿Estas segur@?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Si, eliminar",
+        cancelButtonText: "No, cancelar",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    },function(isConfirm){
+        if(isConfirm){
+            let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            let ajaxUrl = base_url+"/pedidos/delPedido";
+            let formData = new FormData();
+
+            formData.append("idorden",idorden);
+            formData.append("idpersona",idcliente);
+
+            request.open("POST",ajaxUrl,true);
+            request.send(formData);
+            request.onreadystatechange = function(){
+                if(request.status==200 && request.readyState==4){
+                    let objData = JSON.parse(request.responseText);
+                    if(objData.status){
+                        swal("Eliminado",objData.msg,"success");
+                        tablePedidos.api().ajax.reload();
+                    }else{
+                        swal("Error",objData.msg,"error");
+                    }
+                }
+            }
+        }
+    });
+    
+}
+
+
+

@@ -1,5 +1,7 @@
 <?php headerPage($data);
     $productos = $data['products'];
+    $marqueteria = $data['marqueteria'];
+    $galeria = $data['galeria'];
     $urlProducto = base_url()."/catalogo/producto/";
 ?>
 <main>
@@ -25,40 +27,70 @@
                </div>
            </div>
        </section>
-        <section>
-            <div class="container mt-4">
-                <div class="container text-center mt-4 cover_presentation">
-                    <h2><strong>¿Qué podemos hacer por ti?</strong></h2>
-                    <p class="text-center m-5">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Soluta eum unde obcaecati voluptatem mollitia, quos, totam distinctio blanditiis provident explicabo expedita illo sint facilis, repellat quo nam fugiat ratione non.</p>
-                </div>
-                <div class="container services">
-                    <div class="row">
-                      <div class="col-lg-4">
-                        <div class="services_item">
-                          <i class="fas fa-crop-alt"></i>
-                          <h3>Marquetería</h3>
-                          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modiasdadqwda{lsdqw</p>
-                          <a href="" class="btn_content">Contactar</a>
-                        </div>
-                      </div>
-                      <div class="col-lg-4">
-                        <div class="services_item">
-                          <i class="fas fa-palette"></i>
-                          <h3>Obras personalizadas</h3>
-                          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modiasdadqwda{lsdqw</p>
-                          <a href="" class="btn_content">Contactar</a>
-                        </div>
-                      </div>
-                      <div class="col-lg-4">
-                        <div class="services_item">
-                          <i class="fas fa-undo"></i>
-                          <h3>Restauración</h3>
-                          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modiasdadqwda{lsdqw</p>
-                          <a href="" class="btn_content">Contactar</a>
-                        </div>
-                      </div>
+       <section>
+            <div class="container text-center mt-5 cover_presentation">
+                <a href="<?=base_url()?>/catalogo/marqueteria" class="text-decoration-none"><h2><strong>Marquetería</strong></h2></a>
+            </div>
+            <div class="catalog">
+                <?php
+                    for ($i=0; $i < count($marqueteria) ; $i++) { 
+                        # code...
+                    
+                ?>
+                <div class="catalog_product shadow p-3 mb-5 bg-body rounded">
+                    <div class="catalog_product_image">
+                        <img src="<?= $marqueteria[$i]['url_image']?>" alt="<?= $marqueteria[$i]['title']?>">
+                        <a href="<?=$urlProducto.$marqueteria[$i]['route']?>" class="btn_content">Ver más</a>
+                    </div>
+                    <div class="catalog_product_text">
+                        <a href=""><h2><strong><?= $marqueteria[$i]['title']?></strong></h2></a>
+                        <h3><?= $marqueteria[$i]['categoria']?></h3>
+                        <?php
+                        if($marqueteria[$i]['subtopicid'] != 6){
+                        ?>
+                        <p><?= $marqueteria[$i]['subcategoria']?></p>
+                        <?php }?>
+                        <?php if($marqueteria[$i]['stock']==0){ ?>
+                        <p class="text-danger">Agotado</p>
+                        <?php }else{?>
+                            <p><?= MS.$marqueteria[$i]['price'].MD?></p>
+                        <?php }?>
                     </div>
                 </div>
+                <?php }?>
+            </div>
+        </section>
+        <section>
+            <div class="container text-center mt-5 cover_presentation">
+                <a href="<?=base_url()?>/catalogo/galeria" class="text-decoration-none"><h2><strong>Galería</strong></h2></a>
+            </div>
+            <div class="catalog">
+                <?php
+                    for ($i=0; $i < count($galeria) ; $i++) { 
+                        # code...
+                    
+                ?>
+                <div class="catalog_product shadow p-3 mb-5 bg-body rounded">
+                    <div class="catalog_product_image">
+                        <img src="<?= $galeria[$i]['url_image']?>" alt="<?= $galeria[$i]['title']?>">
+                        <a href="<?=$urlProducto.$galeria[$i]['route']?>" class="btn_content">Ver más</a>
+                    </div>
+                    <div class="catalog_product_text">
+                        <a href=""><h2><strong><?= $galeria[$i]['title']?></strong></h2></a>
+                        <h3><?= $galeria[$i]['categoria']?></h3>
+                        <?php
+                        if($galeria[$i]['subtopicid'] != 6){
+                        ?>
+                        <p><?= $galeria[$i]['subcategoria']?></p>
+                        <?php }?>
+                        <?php if($galeria[$i]['stock']==0){ ?>
+                        <p class="text-danger">Agotado</p>
+                        <?php }else{?>
+                            <p><?= MS.$galeria[$i]['price'].MD?></p>
+                        <?php }?>
+                    </div>
+                </div>
+                <?php }?>
             </div>
         </section>
         
@@ -99,7 +131,7 @@
                 <img src="https://static.wixstatic.com/media/f10dd1_8fd50df8bb4d4761bcb2e7bbe1774856~mv2.jpg/v1/fill/w_1024,h_575,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01/f10dd1_8fd50df8bb4d4761bcb2e7bbe1774856~mv2.webp" alt="">
                 <div class="contact_home_text">
                     <h2 class="position-relative"><strong>¿No encuentras lo que deseas? Cóntactanos</strong></h2>
-                    <a class="btn_content"href="">Contactar</a>
+                    <a class="btn_content"href="<?=base_url();?>/contacto">Contactar</a>
                 </div>
         </section>
     </main>

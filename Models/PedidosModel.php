@@ -92,5 +92,14 @@
             $request = $this->update($sql,$arrData);
             return $request;
         }
+
+        public function deletePedido($idpedido,$idpersona){
+            $this->intIdpedido = $idpedido;
+            $this->intIdpersona = $idpersona;
+
+            $sql = "DELETE FROM orderdata WHERE idorderdata = $this->intIdpedido AND personid = $this->intIdpersona";
+            $request = $this->delete($sql);
+            return $request;
+        }
     }
 ?>
