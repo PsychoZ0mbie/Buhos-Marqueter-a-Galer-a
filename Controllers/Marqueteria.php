@@ -36,8 +36,8 @@
 					}else{
 						$arrData[$i]['status'] = '<span class="badge badge-danger">Inactivo</span>';
 					}
-					$url = base_url()."/tienda/producto/".$arrData[$i]['idproduct']."/".$arrData[$i]['route'];
-					$btnView = '<a class="btn btn-info btn-sm title="Ver" href="'.$url.'"><i class="far fa-eye"></i></a>';
+					$url = base_url()."/catalogo/producto/".$arrData[$i]['route'];
+					$btnView = '<a class="btn btn-info btn-sm title="Ver" href="'.$url.'" target="_blank"><i class="far fa-eye"></i></a>';
 
 					if($_SESSION['permisosMod']['u']){
 						$btnEdit = '<button class="btn btn-primary btn-sm " onClick="fntEditInfo('.$arrData[$i]['idproduct'].')" title="Editar"><i class="fas fa-pencil-alt"></i></button>';

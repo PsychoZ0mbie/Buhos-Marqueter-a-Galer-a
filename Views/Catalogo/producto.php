@@ -79,12 +79,11 @@
             <div class="col-lg-6 mb-5">
               <div class="product_right mt-4">
                 <div class="product_info">
-                  <h1 class="position-relative underline"><strong><?=$producto[0]['title'];?></strong></h1>
-                  <p class="mt-4 fs-5"><strong>Referencia:</strong> <?=$producto[0]['reference'];?></p>
+                  <h2 class="position-relative underline"><strong><?=$producto[0]['title'];?></strong></h2>
                   <input type="hidden" id="num_price" value="<?=$producto[0]['price']?>">
                   <input type="hidden" id="num_stock" value="<?=$producto[0]['stock']?>">
-                  <p class="fs-5 price" ><strong>Precio:</strong> <?=MS.number_format($producto[0]['price'],0,DEC,MIL).MD;?></p>
-                  <h2>Descripción</h2>
+                  <p class="fs-5 price pt-4" ><strong>Precio:</strong> <?=MS.number_format($producto[0]['price'],0,DEC,MIL).MD;?></p>
+                  <h3>Descripción</h3>
                   <p><?=$producto[0]['description'];?></p>
                   <ul>
                     <li><i class="fas fa-check-circle text-success"></i>Categoria: <span><?=$producto[0]['categoria'];?></span></li>
@@ -135,28 +134,6 @@
             <div class="col-lg-6 order-lg-1 order-md-5 order-sm-5">
                 <div class="accordion pt-4" id="accordionExample">
                     <p><strong>Información adicional</strong></p>
-                    <?php
-                      if($producto[0]['subtopicid'] != 5 && $producto[0]['subtopicid'] !=6 && $producto[0]['topicid']==1){
-
-                      
-                    ?>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            Cómo son las medidas
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                            <strong>Medida Interna</strong>: Es la medida que normalmente se usa y hace referencia al tamaño total de la obra, imagen, afiche, o arte que vas a enmarcar.<br>
-                            <strong>Medida externa</strong>: En ciertas ocasiones el espacio disponible para exhibir nuestros cuadros son limitados y por esta razón se usa esta medida, la cual es el tamaño total que quieres que mida el marco por la parte externa del mismo.
-                            </div>
-                        </div>
-                    </div>
-                    <?php }?>
-                    <?php 
-                      if($producto[0]['topicid'] == 1){
-                    ?>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -165,11 +142,26 @@
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                            3 a 4 días hábiles después de confirmado el pago, si tienes alguna solicitud con algún producto en especial, háznoslo saber para que podamos confirmarte si podemos entregarte antes.
+                              <ul>
+                                <li>
+                                    <p>Para marcos, retablos, y bastidores a medida, de acuerdo a la cantidad solicitada, se dará a conocer el tiempo estimado de producción
+                                      a partir del siguiente día hábil de haber realizado y confirmado el pedido.
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>Para obras de arte sobre lienzo disponibles en la tienda, su envío se realizará 2 días después a partir del siguiente día hábil de haber realizado
+                                      y confirmado el pedido.
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>Para obras de arte personalizadas nos pondremos en contacto para organizar los requisitos de la obra y el envío.
+                                    </p>
+                                </li>
+                              </ul>
+                              <a href="<?=base_url()?>/terminos" target="_blank">Más información</a>
                             </div>
                         </div>
                     </div>
-                    <?php }?>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -178,7 +170,11 @@
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                            Realizamos envíos directos en Villavicencio. Para zonas no cubiertas, realizamos envíos con diferentes transportadoras del país, buscando siempre la mejor opción para nuestros clientes, los tiempos pueden variar desde 1 día hábil hasta 5 días hábiles según la ciudad o municipio destino, normalmente en ciudades principales las transportadoras entregan máximo en 3 días hábiles.
+                              Realizamos envíos directos en Villavicencio. Para zonas no cubiertas, realizamos envíos con diferentes transportadoras del país, 
+                              buscando siempre la mejor opción para nuestros clientes, 
+                              los tiempos pueden variar de 3 días hasta 5 días hábiles según la ciudad o municipio destino, 
+                              normalmente en ciudades principales las transportadoras entregan máximo en 3 días hábiles. 
+                              <a href="<?=base_url()?>/terminos" target="_blank">Más información</a>
                             </div>
                         </div>
                     </div>
@@ -213,6 +209,7 @@
                     <div class="catalog_product_text">
                         <a href=""><h2><strong><?= $productosAl[$i]['title']?></strong></h2></a>
                         <h3><?= $productosAl[$i]['categoria']?></h3>
+                        <p><?= $productosAl[$i]['subcategoria']?></p>
                         <?php if($productosAl[$i]['stock']==0){ ?>
                         <p class="text-danger">Agotado</p>
                         <?php }else{?>

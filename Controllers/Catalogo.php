@@ -54,9 +54,9 @@
             $data['categoria'] = $this->getCategoriaT(2);
             $data['subcategoria'] = $this->getSubcategoriaT(2);
             $data['productsAl'] = $this->getProductosAlT($data['product'][0]['topicid']);
-            $data['page_tag'] = "Galería | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Galería | ".NOMBRE_EMPRESA;
-			$data['page_name'] = "galeria";
+            $data['page_tag'] = "Marquetería | ".NOMBRE_EMPRESA;
+			$data['page_title'] = "Marquetería | ".NOMBRE_EMPRESA;
+			$data['page_name'] = "marqueteria";
 			$this->views->getView($this,"producto",$data);
         }
         public function Carrito(){
@@ -83,7 +83,6 @@
 
         public function addCarrito(){
             if($_POST){
-                //dep($_POST);
                 //unset($_SESSION['arrCarrito']);exit;
                 $arrCarrito = array();
                 $cantCarrito = 0;
@@ -96,6 +95,7 @@
                 
                 if(is_numeric($idProducto) && is_numeric($intCant)){
                     $arrInfoProducto = $this->getProductInfo($idProducto,$intAtributo);
+                    //dep($arrInfoProducto);exit;
                     if(!isset($arrInfoProducto['atributo'])){
                         $arrInfoProducto['atributo']="";
                     }
@@ -111,6 +111,7 @@
                                             "cantidad" =>$intCant,
                                             "largo"=>$intLargo,
                                             "ancho"=>$intAncho,
+                                            "categoria"=>$arrInfoProducto['categoria'],
                                             "subcategoria"=>$arrInfoProducto['subcategoria'],
                                             "tipo" =>$arrInfoProducto['atributo'],
                                             "imagen" =>$arrInfoProducto['imagen']
@@ -317,6 +318,7 @@
                             $cantidad = $producto['cantidad'];
                             $largo = $producto['largo'];
                             $ancho = $producto['ancho'];
+                            $categoria = $producto['categoria'];
                             $subcategoria = $producto['subcategoria'];
                             $tipo = $producto['tipo'];
 
@@ -328,6 +330,7 @@
                                                                 $cantidad,
                                                                 $largo,
                                                                 $ancho,
+                                                                $categoria,
                                                                 $subcategoria,
                                                                 $tipo);
                         }

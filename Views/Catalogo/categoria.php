@@ -11,12 +11,31 @@
     <main>
        <section>
         <div class="cover">
-          <img src="https://amarillasdecolombia.co/imagenes/1e183d_2d029b_IMG_0447.jpg" alt="">
-          <h1 class="text-center"><strong><?=$categoria[0]['title'];?></strong></h1>
+          <?php if($categoria[0]['idtopic'] == 1){ ?>
+            <img src="<?=media();?>/template/Assets/images/uploads/banner1.gif" alt="Dale estilo a tus cuadros con las mejores molduras">
+          <?php }else{ ?>
+            <img src="<?=media();?>/template/Assets/images/uploads/banner2.gif" alt="Obras cargadas con emoción y creatividad">
+          <?php }?>
+            <h2 class="text-center"><strong><?=$categoria[0]['title'];?></strong></h2>
         </div>
         <div class="row mt-4 p-4">
           <aside class="col-lg-3 mt-4">
             <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="true" aria-controls="collapse">
+                    Catálogo
+                  </button>
+                </h2>
+                <div id="collapse" class="accordion-collapse collapse show" aria-labelledby="heading" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ul class="list-group">
+                      <a href="<?=base_url()."/catalogo/marqueteria"?>"><li class="list-group-item">Marquetería</li></a>
+                      <a href="<?=base_url()."/catalogo/galeria"?>"><li class="list-group-item">Galería</li></a>
+                    </ul>
+                  </div>
+                </div>
+              </div>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">

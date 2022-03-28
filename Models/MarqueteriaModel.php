@@ -401,7 +401,7 @@
     
             $return = "";
     
-            $sql = "SELECT * FROM attribute WHERE title = '$atributo' ";
+            $sql = "SELECT * FROM attribute WHERE title = '$atributo' AND subtopicid=$subcategoria ";
             $request = $this->select_all($sql);
     
             if(empty($request))
@@ -419,7 +419,7 @@
         public function updateAtributo($intIdAtributo, $strAtributo,$intIdCategoria,$intIdSubcategoria,$strPrice){
 
     
-            $sql = "SELECT * FROM attribute WHERE title ='{$strAtributo}' AND idattribute != $intIdAtributo";
+            $sql = "SELECT * FROM attribute WHERE title ='{$strAtributo}' AND subtopicid = $intIdSubcategoria AND idattribute != $intIdAtributo";
             $request = $this->select_all($sql);
     
             if(empty($request)){

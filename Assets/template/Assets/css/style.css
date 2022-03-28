@@ -82,7 +82,9 @@ input[type=number] {
 .navbar-brand p:nth-child(2){
     color:#10100D;
 }
-.navbar-brand p:nth-child(3){
+.navbar-brand h1{
+    display: inline;
+    font-size: 20px;
     color:#E05A10;
 }
 
@@ -127,10 +129,13 @@ input[type=number] {
 /*************************Home page**************************/
 
 .carousel-item img{
-    height: 100vh;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 .carousel-item{
     position: relative;
+    height: 400px;
     width: 100%;
 }
 .carousel-caption{
@@ -139,10 +144,10 @@ input[type=number] {
     left: 50%;
     transform: translate(-50%, -50%);
     height: 150px;
-    background-color: rgb(16, 16, 13,0.5);
+    background-color: rgb(16, 16, 13,0.7);
     width: 450px;
 }
-.carousel-caption h1{
+.carousel-caption h2{
     font-size: 30px;
     line-height: 50px;
     height: 100%;
@@ -342,7 +347,7 @@ input[type=number] {
     filter:brightness(50%);
     object-fit:cover;
 }
-.cover h1{
+.cover h2{
     position: absolute;
     width: 50%;
     top: 50%;
@@ -389,7 +394,6 @@ input[type=number] {
     overflow: hidden;
 }
 .catalog_product_image img{
-    filter: brightness(70%);
     height: 250px;
     width: 100%;
     object-fit: cover;
@@ -446,6 +450,7 @@ input[type=number] {
 .product_left img{
     height: 100%;
     width: 100%;
+    object-fit: cover;
 }
 .product_right{
     height: 600px;
@@ -456,12 +461,12 @@ input[type=number] {
     padding: 0;
     margin: 0;
 }
-.product_info h1{
+.product_info h2{
     padding-bottom: 10px;
     word-break: break-all;
     color: #E05A10;
 }
-.product_info h2{
+.product_info h3{
     padding:20px 0;
 }
 .product_info ul li i{
@@ -742,8 +747,8 @@ footer ul li a{
 /*************************Cards**************************/
 .card_container{
     position: relative;
-    height:350px;
-    width: 450px;
+    height:250px;
+    width: 300px;
 }
 .cards{
     position: absolute;
@@ -869,6 +874,13 @@ footer ul li a{
     .confirm_price p{
         font-size: 14px;
     }
+    .carousel-caption{
+        height: 150px;
+        width: 350px;
+    }
+    .carousel-caption h2{
+        font-size: 25px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -891,5 +903,13 @@ footer ul li a{
     .product_social ul li i{
         color:#10100D;
         font-size: 15px;
+    }
+    .carousel-caption{
+        height: 150px;
+        width: 250px;
+    }
+    .carousel-caption h2{
+        font-size: 20px;
+        line-height: 40px;
     }
 }

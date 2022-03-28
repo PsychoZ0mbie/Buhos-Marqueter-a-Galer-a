@@ -11,7 +11,12 @@
         $envio = "Pago contra entrega";
     }
     foreach ($_SESSION['arrCarrito'] as $key) {
-        $total = $key['cantidad']* $key['precio'];
+        if($key['cantidad']>= 12){
+            $total = $key['cantidad']* $key['precio'];
+            $total = $total * 0.9;
+        }else{
+            $total = $key['cantidad']* $key['precio'];
+        }
         $subtotal += $total;
     }
 ?>

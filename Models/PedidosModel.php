@@ -69,6 +69,7 @@
                             d.quantity,
                             d.length,
                             d.width,
+                            d.topic,
                             d.subtopic,
                             d.type,
                             o.idorderdata,

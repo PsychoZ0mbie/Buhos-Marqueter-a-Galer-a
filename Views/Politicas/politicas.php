@@ -5,10 +5,8 @@
           <h1 class="text-center mt-4">Políticas de privacidad y de cookies</h1>
           <h2 class="mt-4">Política de Privacidad</h2>
           <p>
-            La presente Política de Privacidad establece los términos que <strong><?=NOMBRE_EMPRESA?></strong> conforme a lo establecido en la ley 1581 de 2012 y demás normatividad 
-            colombiana vigente respecto a la política de protección de datos personales, 
-            usa y protege la información que es proporcionada por sus usuarios al momento de utilizar el sitio web. 
-            <strong><?=NOMBRE_EMPRESA?></strong> se compromete con la seguridad de los datos de sus usuarios, conforme a esto informa lo siguiente:
+            La presente Política de Privacidad establece los términos que <strong><?=NOMBRE_EMPRESA?></strong> usa y protege la información que es proporcionada por sus usuarios al momento de utilizar el sitio web. 
+            <strong><?=NOMBRE_EMPRESA?></strong> se compromete con la seguridad de los datos de sus usuarios. Conforme a esto, informa lo siguiente:
           </p>
           <ol>
             <li><p>El tratamiento de los datos personales, serán suministrados con la finalidad contemplada en la presente Política de Privacidad y conforme al componente de los servicios prestados por <strong><?=NOMBRE_EMPRESA?></strong>.</p></li>

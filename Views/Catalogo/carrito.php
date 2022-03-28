@@ -31,13 +31,18 @@
                     <?php
                             //dep($_SESSION['arrCarrito']);
                             foreach ($_SESSION['arrCarrito'] as $key) {
-                                $total = $key['cantidad']* $key['precio'];
+                                $antes =$key['cantidad']* $key['precio'];
+                                if($key['cantidad']>= 12){
+                                    $total = $key['cantidad']* $key['precio'];
+                                    $total = $total * 0.9;
+                                }else{
+                                    $total = $key['cantidad']* $key['precio'];
+                                }
                                 $subtotal += $total;
                                 $idProducto = openssl_encrypt($key['idproducto'],ENCRIPTADO,KEY);
                                 $idAtributo = $key['idatributo'];
                                 $largo = $key['largo'];
                                 $ancho = $key['ancho'];
-
                                 $strAtr = "at".$idAtributo;
                                 $strLar ="l".$largo;
                                 $strAnc = "a".$ancho;
@@ -53,11 +58,12 @@
                                 <div class="col-md-6">
                                 <p><strong><?=$key['nombre']?></strong></p>
                                 <?php
-                                    if($key['largo'] > 0 && $key['ancho'] > 0 && $key['idatributo']>0){
+                                    if($key['largo'] > 0 && $key['ancho'] > 0 || $key['idatributo']>0){
                                     
                                 ?>
                                 <p class="text-secondary"><?=$key['largo']?>cm x <?=$key['ancho']?>cm</p>
                                 <p class="text-secondary"><?=$key['tipo']?></p>
+                                <p class="text-secondary"><?=$key['categoria']?></p>
                                 <p class="text-secondary"><?=$key['subcategoria']?></p>
                                 <?php }?>
                                 </div>
@@ -70,7 +76,16 @@
                             <p class="m-0"><?=MS.number_format($key['precio'],0,DEC,MIL)?></p>
                         </div>
                         <div class="col-3 confirm_price">
+                            <?php if($key['cantidad']>= 12){
+                            ?>
+                            <p class="m-0 confirm_total text-decoration-line-through"><?=MS.number_format($antes,0,DEC,MIL)?></p>
                             <p class="m-0 confirm_total <?=$strProducto?>"><?=MS.number_format($total,0,DEC,MIL)?></p>
+                            <span class="text-danger">10% de descuento aplicado al por mayor!</span>
+                            <?php }else{
+
+                            ?>
+                            <p class="m-0 confirm_total <?=$strProducto?>"><?=MS.number_format($total,0,DEC,MIL)?></p>
+                            <?php }?>
                         </div>
                     </div>
                     <?php }?>

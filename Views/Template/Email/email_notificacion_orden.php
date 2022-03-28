@@ -64,11 +64,11 @@ $detalle = $data['pedido']['detalle'];
 		<table>
 			<tr>
 		    	<td width="140">Nombre:</td>
-		    	<td><?= $_SESSION['userData']['firstname'].' '.$_SESSION['userData']['lastname'] ?></td>
+		    	<td><?= $orden['firstname'].' '.$orden['lastname'] ?></td>
 		    </tr>
 		    <tr>
 		    	<td>Teléfono</td>
-		    	<td><?= $_SESSION['userData']['phone'] ?></td>
+		    	<td><?= $orden['phone'] ?></td>
 		    </tr>
 		    <tr>
 		    	<td>Dirección de envío:</td>
@@ -95,17 +95,27 @@ $detalle = $data['pedido']['detalle'];
 		  			foreach ($detalle as $producto) {
 		  				$precio = $producto['price'];
 		  				$importe = $producto['price'] * $producto['quantity'];
+						if($producto['quantity']>= 12){
+							$importe = $producto['price'] * $producto['quantity'];
+							$importe = $importe * 0.9;
+						}else{
+							$importe = $producto['price'] * $producto['quantity'];
+						}
 						  if($producto['width']==0 || $producto['length']==0){
 							  $medidas="";
 						  }else{
-							  $medidas=$producto['width']."cm X ".$producto['length']."cm";
+							  $medidas="Medidas: ".$producto['width']."cm X ".$producto['length']."cm";
 						  }
 		  	 ?>
 		    <tr>
-		      <td><?= $producto['title'] ?><br>
+		      <td>
+				  Titulo: <?= $producto['title'] ?><br>
 			  	  <?= $medidas ?><br>
-				  <?= $producto['subtopic'] ?><br>
+				  Categoria: <?= $producto['topic'] ?><br>
+				  Subcategoria:<?= $producto['subtopic'] ?><br>
+				  <?php if($producto['type'] != ""){ ?>
 				  <?=$producto['type']?>
+				  <?php }?>
 			  </td>
 		      <td class="text-right"><?= MS.number_format($precio,0,DEC,MIL)." ".MD?></td>
 		      <td class="text-center"><?= $producto['quantity'] ?></td>

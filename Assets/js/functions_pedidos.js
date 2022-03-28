@@ -103,27 +103,32 @@ function fntViewInfo(idpedido,idpersona){
                 document.querySelector("#departamento").innerHTML = objData.orden.departamento;
                 document.querySelector("#ciudad").innerHTML = objData.orden.ciudad;
                 document.querySelector("#direccion").innerHTML = objData.orden.address;
-                document.querySelector("#subtotal").innerHTML = objData.orden.price;
-                document.querySelector("#totalprecio").innerHTML = objData.orden.price;
+                document.querySelector("#subtotal").innerHTML = objData.orden.price+" "+md;
+                document.querySelector("#totalprecio").innerHTML = objData.orden.price+" "+md;
                 let arrDetalle = objData.detalle;
                 let html="";
                 for (let i = 0; i < arrDetalle.length; i++) {
                     let largo = arrDetalle[i]['length'];
                     let ancho = arrDetalle[i]['width'];
                     let medidas="";
+                    let tipo="";
                     if( largo != 0 && ancho != 0){
-                        medidas = `<p>${largo}cm X ${ancho}cm</p>`;
+                        medidas = `<p>Medidas: ${largo}cm X ${ancho}cm</p>`;
+                    }
+                    if(arrDetalle[i]['type']!=""){
+                        tipo = `<p>Tipo: ${arrDetalle[i]['type']}</p>`;
                     }
                     html+=` <tr>
                                 <td>
-                                    <p>${arrDetalle[i]['title']}</p>
+                                    <p>Título: ${arrDetalle[i]['title']}</p>
                                     ${medidas}
-                                    <p>${arrDetalle[i]['subtopic']}</p>
-                                    <p>${arrDetalle[i]['type']}</p>
+                                    <p>Categoría: ${arrDetalle[i]['topic']}</p>
+                                    <p>Subcategoría: ${arrDetalle[i]['subtopic']}</p>
+                                    
                                 </td>
-                                <td>${arrDetalle[i]['price']}</td>
+                                <td>${arrDetalle[i]['price']} ${md}</td>
                                 <td>${arrDetalle[i]['quantity']}</td>
-                                <td>${arrDetalle[i]['total']}</td>
+                                <td>${arrDetalle[i]['total']} ${md}</td>
                             </tr>`;
                 }
                 document.querySelector("#detalle").innerHTML = html;

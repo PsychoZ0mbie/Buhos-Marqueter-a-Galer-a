@@ -156,10 +156,10 @@
             return $request;
         }
 
-        public function insertPedidoDetail($idpedido,$idUser,$idproducto,$nombre,$precio,$cantidad,$largo,$ancho,$subcategoria,$tipo){
+        public function insertPedidoDetail($idpedido,$idUser,$idproducto,$nombre,$precio,$cantidad,$largo,$ancho,$categoria,$subcategoria,$tipo){
             $this->con = new Mysql();
-            $sql = "INSERT INTO orderdetail(orderdataid,personid,productid,title,price,quantity,length,width,subtopic,type)
-                    VALUE(?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO orderdetail(orderdataid,personid,productid,title,price,quantity,length,width,topic,subtopic,type)
+                    VALUE(?,?,?,?,?,?,?,?,?,?,?)";
 
             $arrData = array($idpedido,
                             $idUser,
@@ -169,6 +169,7 @@
                             $cantidad,
                             $largo,
                             $ancho,
+                            $categoria,
                             $subcategoria,
                             $tipo);
             $request = $this->con->insert($sql,$arrData);
@@ -209,6 +210,7 @@
                                         o.quantity,
                                         o.length,
                                         o.width,
+                                        o.topic,
                                         o.subtopic,
                                         o.type,
                                         p.idproduct

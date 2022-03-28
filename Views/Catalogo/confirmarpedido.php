@@ -5,9 +5,10 @@
                 <h1>Pedido confirmado!</h1>
                 <p>Se ha creado la orden No.<?=$data['orden']?></p><br>
                 <p>Puedes confirmar la orden<br>
-                    en tu correo electrónico o en tu perfil.
+                    en tu correo electrónico o en tu cuenta.
                 </p>
-                <a href="<?=base_url();?>" class="btn_content">Regresar</a>
+                <a class="btn_content" href="<?=base_url()?>/usuarios/perfil">Ver mi cuenta</a>
+                <a href="<?=base_url();?>" class="btn_content">Inicio</a>
             </div>
         </div>
         

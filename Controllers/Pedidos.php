@@ -110,7 +110,12 @@
                     if(!empty($arrOrden)){
                         $arrOrden['price'] = MS.number_format($arrOrden['price'],0,DEC,MIL);
                         for ($i=0; $i < count($arrOrdenDetalle); $i++) { 
-                            $arrOrdenDetalle[$i]['total'] = $arrOrdenDetalle[$i]['price'] * $arrOrdenDetalle[$i]['quantity'];
+                            if($arrOrdenDetalle[$i]['quantity'] >=12){
+                                $arrOrdenDetalle[$i]['total'] = $arrOrdenDetalle[$i]['price'] * $arrOrdenDetalle[$i]['quantity'];
+                                $arrOrdenDetalle[$i]['total'] = $arrOrdenDetalle[$i]['total'] * 0.9;
+                            }else{
+                                $arrOrdenDetalle[$i]['total'] = $arrOrdenDetalle[$i]['price'] * $arrOrdenDetalle[$i]['quantity'];
+                            }
                             $arrOrdenDetalle[$i]['total'] = MS.number_format( $arrOrdenDetalle[$i]['total'],0,DEC,MIL);
                             $arrOrdenDetalle[$i]['price'] = MS.number_format($arrOrdenDetalle[$i]['price'],0,DEC,MIL);
                         }

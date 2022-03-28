@@ -4,15 +4,18 @@
         <div class="container mt-4">
           <h1 class="text-center mt-4">Términos y condiciones</h1>
           <h2 class="mt-4">Envíos</h2>
-          <p>Realizamos envíos directos en Villavicencio. Para zonas no cubiertas, realizamos envíos con diferentes transportadoras del país, buscando siempre la mejor opción para nuestros clientes, los tiempos pueden variar desde 1 día hábil hasta 5 días hábiles según la ciudad o municipio destino, normalmente en ciudades principales las transportadoras entregan máximo en 3 días hábiles.</p>
+          <p>Realizamos envíos directos en Villavicencio. Para zonas no cubiertas, realizamos envíos con diferentes transportadoras del país, 
+            buscando siempre la mejor opción para nuestros clientes, 
+            los tiempos pueden variar de 3 días hasta 5 días hábiles según la ciudad o municipio destino, 
+            normalmente en ciudades principales las transportadoras entregan máximo en 3 días hábiles.</p>
           <p>Los envíos son pago contra entrega.</p>
         </div>
         <div class="container mt-4">
           <h2 class="mt-4">Plazos de fabricación y envío</h2>
           <ul>
             <li>
-                <p>Para marcos, retablos, y bastidores a medida, será de un máximo de 4 días laborales a partir del siguiente día hábil de haber
-                  realizado y confirmado el pedido (Si no hay material en disponibilidad nos podremos en contacto con usted para ofrecerle alternativas).
+                <p>Para marcos, retablos, y bastidores a medida, de acuerdo a la cantidad solicitada, se dará a conocer el tiempo estimado de producción
+                  a partir del siguiente día hábil de haber realizado y confirmado el pedido.
                 </p>
             </li>
             <li>

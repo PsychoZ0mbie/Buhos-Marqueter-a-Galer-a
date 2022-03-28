@@ -69,9 +69,9 @@ function totalPrice(){
                                 let input = inputDimension[i];
                                 input.onchange=function(e){
                                     let inp = e.target;
-                                    if(inp.value < 40){
+                                    if(inp.value < 30){
                                         inp.value= 0;
-                                        Swal.fire("Error","lo mínimo son 40 cm");
+                                        Swal.fire("Error","lo mínimo son 30 cm");
                                         return false;
                                     }
                                     let arrDimensions = getTotal();
@@ -97,19 +97,19 @@ function totalPrice(){
             let input = inputDimension[i];
             input.onchange=function(e){
                 let inp = e.target;
-                if(inp.value < 40){
+                if(inp.value < 30){
                     inp.value= 0;
-                    Swal.fire("Error","lo mínimo son 40 cm");
+                    Swal.fire("Error","lo mínimo son 30 cm");
                     return false;
                 }
                 let arrDimensions = getTotal();
                 let perimeter = arrDimensions[0];
     
                 total = perimeter*price;
-                total = formatNum(total,".");
+                totalFormat = formatNum(total,".");
     
     
-                let html =`<strong>Precio: </strong>${ms}${total} ${md}`;
+                let html =`<strong>Precio: </strong>${ms}${totalFormat} ${md}`;
                 document.querySelector("#num_price").value = total;
                 document.querySelector(".price").innerHTML = html;
             }
@@ -170,21 +170,32 @@ function addCar(){
             let idProduct = this.getAttribute("id");
             intPrice = parseInt(intPrice);
 
-            
-    
-            if(document.querySelector("#txtLargo") && document.querySelector("#txtAncho") && document.querySelector("#listAtributo")){
-                intLargo = parseInt(document.querySelector("#txtLargo").value);
-                intAncho = parseInt(document.querySelector("#txtAncho").value);
-                idAtributo = parseInt(document.querySelector("#listAtributo").value);
-                if(intLargo == "" || intAncho ==""){
-                    Swal.fire("Error", "Por favor, ingresa las medidas.","error");
-                    return false;
+            if(document.querySelector("#listAtributo")){
+
+                if(document.querySelector("#txtLargo") && document.querySelector("#txtAncho") && document.querySelector("#listAtributo")){
+                    intLargo = parseInt(document.querySelector("#txtLargo").value);
+                    intAncho = parseInt(document.querySelector("#txtAncho").value);
+                    idAtributo = parseInt(document.querySelector("#listAtributo").value);
+                    if(intLargo == "" || intAncho ==""){
+                        Swal.fire("Error", "Por favor, ingresa las medidas.","error");
+                        return false;
+                    }
+                    if(isNaN(idAtributo) || idAtributo<=0){
+                        Swal.fire("Error", "Por favor, selecciona el tipo.","error");
+                        return false;
+                    }
                 }
-                if(isNaN(idAtributo) || idAtributo<=0){
-                    Swal.fire("Error", "Por favor, selecciona el tipo.","error");
-                    return false;
+            }else{
+                if(document.querySelector("#txtLargo") && document.querySelector("#txtAncho")){
+                    intLargo = parseInt(document.querySelector("#txtLargo").value);
+                    intAncho = parseInt(document.querySelector("#txtAncho").value);
+                    if(intLargo == "" || intAncho ==""){
+                        Swal.fire("Error", "Por favor, ingresa las medidas.","error");
+                        return false;
+                    }
                 }
             }
+    
             
     
             if(isNaN(intCant)||intCant <=0 ){

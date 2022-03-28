@@ -2,20 +2,30 @@
    <main>
        <section>
         <div class="cover">
-          <img src="https://amarillasdecolombia.co/imagenes/1e183d_2d029b_IMG_0447.jpg" alt="">
-          <h1 class="text-center"><strong>Conócenos</strong></h1>
+          <img src="<?=media();?>/template/Assets/images/uploads/banner3.gif" alt="Conócenos">
+          <h2 class="text-center"><strong>Conócenos</strong></h2>
         </div>
         <div class="container about">
-          <p class="text-center m-5">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Soluta eum unde obcaecati voluptatem mollitia, quos, totam distinctio blanditiis provident explicabo expedita illo sint facilis, repellat quo nam fugiat ratione non.</p>
+          <p class="text-center m-5">En el año 1996 trabajaba en Bogotá como auxiliar de Kardex en Pvmetal Ltda. 
+                  Renuncié para residir en Villavicencio/Meta e inicié a trabajar cómo cobrador de cuadros 
+                  a crédito. En este trabajo me interesó el negocio y tuve mis propios vendedores. 
+                  Fue cuándo vi la necesidad de enmarcar yo mismo los cuadros que tenía para la venta, 
+                  saqué en arriendo un local en el año 1999 en el barrio san benito de Villavicencio, donde
+                  empíricamente empecé a cortar, armar y pintar mis propios marcos para los 
+                  cuadros que se vendían. <br>
+                  Así empezó Buho's Marquetería y Galería</p>
           <div class="learn_content">
             <div class="learn_text">
                 <a href="">
                     <h2><strong>Nuestra Misión</strong> </h2>
                 </a>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis qui consequatur, optio nulla, quis, quibusdam molestiae itaque ut corporis rem quasi non eveniet doloribus culpa voluptate vero molestias voluptatum autem!</p>
+                <p>Nuestra misión es lograr la satisfacción total de las necesidades y expectativas de
+                  nuestros clientes, brindándoles productos de alta calidad, pero lo más importante, prestándoles 
+                  un excelente servicio.
+                </p>
             </div>
             <div class="learn_image">
-                <img src="https://mymodernmet.com/wp/wp-content/uploads/2019/01/how-to-oil-paint-2.jpg" alt="">
+                <img src="<?=media();?>/template/Assets/images/uploads/mision.jpg" alt="Nuestra misión">
             </div>
           </div>
           <div class="learn_content">
@@ -23,10 +33,13 @@
                   <a href="">
                       <h2><strong>Nuestra visión</strong> </h2>
                   </a>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis qui consequatur, optio nulla, quis, quibusdam molestiae itaque ut corporis rem quasi non eveniet doloribus culpa voluptate vero molestias voluptatum autem!</p>
+                  <p>Ser reconocidos en el mercado a nivel nacional e internacional como una empresa líder
+                    en marquetería y arte, siendo así una marca reconocida y posicionada en el mercado
+                    al que pertenecemos.
+                  </p>
               </div>
               <div class="learn_image">
-                  <img src="https://static6.depositphotos.com/1005951/668/i/600/depositphotos_6680857-stock-photo-wood-star.jpg" alt="">
+                  <img src="<?=media();?>/template/Assets/images/uploads/vision.jpg" alt="Nuestra visión">
               </div>
           </div>
           <section>
@@ -38,7 +51,7 @@
                 <div class="card_container">
                   <div class="cards">
                     <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro1.jpg" alt="">
+                      <img src="<?=media();?>/template/Assets/images/uploads/miembro1.jpg" alt="Miembro 1">
                     </div>
                     <div class="card_back">
                       <h2>Oswaldo Parrado</h2>
@@ -49,18 +62,18 @@
                 <div class="card_container">
                   <div class="cards">
                     <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro2.jpg" alt="">
+                      <img src="<?=media();?>/template/Assets/images/uploads/miembro2.jpg" alt="Miembro 2">
                     </div>
                     <div class="card_back">
                       <h2>José Alejandro</h2>
-                      <p>Pintor</p>
+                      <p>Marquetero y Pintor</p>
                     </div>
                   </div>
                 </div>
                 <div class="card_container">
                   <div class="cards">
                     <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro3.jpg" alt="">
+                      <img src="<?=media();?>/template/Assets/images/uploads/miembro3.jpg" alt="Miembro 3">
                     </div>
                     <div class="card_back">
                       <h2>David Parrado</h2>

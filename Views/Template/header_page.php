@@ -57,7 +57,7 @@
             <a class="navbar-brand" href="<?=base_url();?>">
                 <img src="<?=media();?>/template/Assets/images/uploads/icon.gif" alt="Logo">
                 <p><strong>Buho's</strong></p>
-                <p><strong>Marquetería & Galería</strong></p>
+                <h1><strong>Marquetería & Galería</strong></h1>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

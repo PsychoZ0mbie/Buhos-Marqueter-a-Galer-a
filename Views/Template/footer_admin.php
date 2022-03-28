@@ -1,6 +1,8 @@
     
     <script>
         const base_url = "<?= base_url(); ?>";
+        const ms = "<?=MS;?>";
+        const md = "<?=MD?>";
     </script>
     <!-- Essential javascripts for application to work-->
     <script src="<?= media(); ?>/js/jquery-3.3.1.min.js?n=1"></script>

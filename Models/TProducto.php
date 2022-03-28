@@ -63,7 +63,7 @@ require_once("Libraries/Core/Mysql.php");
                             p.status != 0 AND p.topicid = $this->intIdCategoria";
             }   
             if($cant!=""){
-                $cant = "ORDER BY RAND() LIMIT 4";
+                $cant = "ORDER BY RAND() LIMIT $cant";
             }else{
                 $cant="";
             }
