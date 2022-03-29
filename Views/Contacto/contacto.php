@@ -15,19 +15,19 @@
                     <div class="col-md-6">
                       <div class="mb-3">
                         <label for="txtNombre" class="form-label">Nombres</label>
-                        <input type="text" class="form-control" id="txtNombre" name="txtNombre" placeholder="Jhon" required>
+                        <input type="text" class="form-control" id="txtNombre" name="txtNombre" required>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="mb-3">
                         <label for="txtApellido" class="form-label">Apellidos</label>
-                        <input type="text" class="form-control" id="txtApellido" name="txtApellido" placeholder="Doe" required>
+                        <input type="text" class="form-control" id="txtApellido" name="txtApellido" required>
                       </div>
                     </div>
                   </div>
                   <div class="mb-3">
                     <label for="txtEmail" class="form-label">Correo electrónico</label>
-                    <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="name@example.com" required>
+                    <input type="email" class="form-control" id="txtEmail" name="txtEmail" required>
                   </div>
                   <div class="mb-3">
                       <label for="txtTelefono" class="form-label">Teléfono</label>

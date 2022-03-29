@@ -56,7 +56,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="txtEmailOrden" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" id="txtEmailOrden" name="txtEmailOrden" placeholder="name@example.com" required>
+                        <input type="email" class="form-control" id="txtEmailOrden" name="txtEmailOrden" required>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -115,13 +115,13 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="txtNombreCliente" class="form-label">Nombres</label>
-                                            <input type="text" class="form-control" id="txtNombreCliente" name="txtNombreCliente" placeholder="Jhon" required>
+                                            <input type="text" class="form-control" id="txtNombreCliente" name="txtNombreCliente" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="txtApellidoCliente" class="form-label">Apellidos</label>
-                                            <input type="text" class="form-control" id="txtApellidoCliente" name="txtApellidoCliente" placeholder="Doe" required>
+                                            <input type="text" class="form-control" id="txtApellidoCliente" name="txtApellidoCliente" required>
                                         </div>
                                     </div>
                                 </div>

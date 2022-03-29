@@ -3,7 +3,7 @@
        <section>
         <div class="cover">
           <img src="<?=media();?>/template/Assets/images/uploads/banner3.gif" alt="Conócenos">
-          <h2 class="text-center"><strong>Conócenos</strong></h2>
+          <h1 class="text-center"><strong>Conócenos</strong></h1>
         </div>
         <div class="container about">
           <p class="text-center m-5">En el año 1996 trabajaba en Bogotá como auxiliar de Kardex en Pvmetal Ltda. 

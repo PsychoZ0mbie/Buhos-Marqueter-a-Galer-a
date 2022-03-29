@@ -4,7 +4,7 @@
        <section>
         <div class="cover">
           <img class="img-fluid" src="<?=media();?>/template/Assets/images/uploads/banner3.gif" alt="Servicios">
-          <h2 class="text-center"><strong>Servicios</strong></h2>
+          <h1 class="text-center"><strong>Servicios</strong></h1>
         </div>
         <div class="container text-center mt-4 cover_presentation">
           <h2><strong>¿Qué podemos hacer por ti?</strong></h2>
@@ -50,23 +50,23 @@
                 <div class="row justify-content-center mt-4">
                     <div class="col-lg-4 ">
                         <div class="why_card shadow-lg p-3 mb-5 bg-body rounded">
-                            <img src="https://static.wixstatic.com/media/89a690_b92948f1fa75471da79345a5f825add4.jpg/v1/fill/w_250,h_187,al_c,q_90/89a690_b92948f1fa75471da79345a5f825add4.jpg" alt="">
+                            <img src="<?=media();?>/template/Assets/images/uploads/caracteristica1.gif" alt="Material de calidad">
                             <h3 class="mt-4"><strong>Material de calidad</strong></h3>
-                            <p class="mt-3 mb-4">Todos nuestros materiales son escogidos para garantizar la conservación de todos nuestros trabajos.</p>
+                            <p class="mb-4">Todos nuestros materiales son escogidos para garantizar la conservación de todos nuestros trabajos.</p>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="why_card shadow-lg p-3 mb-5 bg-body rounded">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8atnieLUiDJY5ThlF539_PLeyeqVnwhI_0w&usqp=CAU" alt="">
+                            <img src="<?=media();?>/template/Assets/images/uploads/caracteristica2.gif" alt="Hecho a mano y a medida">
                             <h3 class="mt-4"><strong>Hecho a mano y a medida</strong></h3>
-                            <p class="mt-3 mb-4">Todos nuestros marcos y obras son hechos a mano y a las medidas requeridas por el cliente.</p>
+                            <p class="mb-4">Todos nuestros marcos y obras son hechos a mano y a las medidas requeridas por el cliente.</p>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="why_card shadow-lg p-3 mb-5 bg-body rounded">
-                            <img src="https://i0.wp.com/arteyalgomas.com/wp-content/uploads/2020/06/El-%C3%A1ngel-herido-Hugo-Simberg.jpg?fit=1024%2C818&ssl=1" alt="">
+                            <img src="<?=media();?>/template/Assets/images/uploads/caracteristica3.gif" alt="Satisfacción garantizada">
                             <h3 class="mt-4"><strong>Satisfacción garantizada</strong></h3>
-                            <p class="mt-3 mb-4">Ofrecemos las mejores soluciones para las necesidades de nuestros clientes, garantizando siempre el gusto y la satisfacción de nuestros clientes por nuestro trabajo.</p>
+                            <p class="mb-4">Ofrecemos las mejores soluciones para las necesidades de nuestros clientes, garantizando siempre el gusto y la satisfacción de nuestros clientes por nuestro trabajo.</p>
                         </div>
                     </div>
                 </div>

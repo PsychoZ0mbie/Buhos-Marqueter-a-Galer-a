@@ -12,7 +12,7 @@
                     <a href="<?=base_url()?>/catalogo/marqueteria">
                     <img src="<?=media();?>/template/Assets/images/uploads/banner1.gif" class="d-block w-100" alt="Dale estilo a tus cuadros con las mejores molduras">
                     <div class="carousel-caption">
-                        <h2>Dale estilo a tus cuadros con las mejores molduras</h2>
+                        <h1>Dale estilo a tus cuadros con las mejores molduras</h1>
                     </div>
                     </a>
                 </div>
@@ -20,7 +20,7 @@
                     <a href="<?=base_url()?>/catalogo/galeria">
                     <img src="<?=media();?>/template/Assets/images/uploads/banner2.gif" class="d-block w-100" alt="Obras cargadas con emoción y creatividad">
                     <div class="carousel-caption">
-                        <h2>Obras cargadas con emoción y creatividad</h2>
+                        <h1>Obras cargadas con emoción y creatividad</h1>
                     </div>
                     </a>
                 </div>

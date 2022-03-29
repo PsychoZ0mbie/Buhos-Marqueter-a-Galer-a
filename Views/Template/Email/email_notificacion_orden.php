@@ -104,17 +104,17 @@ $detalle = $data['pedido']['detalle'];
 						  if($producto['width']==0 || $producto['length']==0){
 							  $medidas="";
 						  }else{
-							  $medidas="Medidas: ".$producto['width']."cm X ".$producto['length']."cm";
+							  $medidas="<strong>Medidas:</strong> ".$producto['width']."cm X ".$producto['length']."cm";
 						  }
 		  	 ?>
 		    <tr>
 		      <td>
-				  Titulo: <?= $producto['title'] ?><br>
+				  <strong>Referencia:</strong> <?= $producto['title'] ?><br>
 			  	  <?= $medidas ?><br>
-				  Categoria: <?= $producto['topic'] ?><br>
-				  Subcategoria:<?= $producto['subtopic'] ?><br>
+				  <strong>Categoria:</strong> <?= $producto['topic'] ?><br>
+				  <strong>Subcategoria:</strong> <?= $producto['subtopic'] ?><br>
 				  <?php if($producto['type'] != ""){ ?>
-				  <?=$producto['type']?>
+				  <strong>Tipo:</strong> <?=$producto['type']?>
 				  <?php }?>
 			  </td>
 		      <td class="text-right"><?= MS.number_format($precio,0,DEC,MIL)." ".MD?></td>

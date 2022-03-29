@@ -16,7 +16,7 @@
           <?php }else{ ?>
             <img src="<?=media();?>/template/Assets/images/uploads/banner2.gif" alt="Obras cargadas con emoción y creatividad">
           <?php }?>
-            <h2 class="text-center"><strong><?=$categoria[0]['title'];?></strong></h2>
+            <h1 class="text-center"><strong><?=$categoria[0]['title'];?></strong></h1>
         </div>
         <div class="row mt-4 p-4">
           <aside class="col-lg-3 mt-4">

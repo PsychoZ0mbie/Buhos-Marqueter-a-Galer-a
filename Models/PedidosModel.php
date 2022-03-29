@@ -40,7 +40,7 @@
                             o.address,
                             o.comment,
                             o.phone,
-                            DATE_FORMAT(o.date, '%d-%m-%Y') as date,
+                            o.date,
                             o.price,
                             o.status,
                             c.idcity,

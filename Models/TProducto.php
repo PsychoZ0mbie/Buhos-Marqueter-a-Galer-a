@@ -197,7 +197,7 @@ require_once("Libraries/Core/Mysql.php");
                             s.idsubtopic = p.subtopicid AND
                             t.idtechnique = p.techniqueid AND
                             p.status != 0 AND p.topicid = $categoria
-                    ORDER BY RAND() limit 4";
+                    ORDER BY RAND() limit 3";
             $request = $this->con->select_all($sql);
             if(count($request)){
                 for ($i=0; $i < count($request) ; $i++) { 
@@ -266,6 +266,52 @@ require_once("Libraries/Core/Mysql.php");
 			$request = $this->con->select($sql);
 			return $request;
 		}
+        public function getProductSearch($busqueda){
+            $this->con = new Mysql();
+            $query = "SELECT COUNT(*) as total FROM product WHERE title LIKE '%$busqueda%' AND stock !=0";
+            $total = $this->con->select($query);
+
+            $sql = "SELECT 
+                        s.idsubtopic,
+                        s.topicid, 
+                        s.title as categoria,
+                        t.idtechnique,
+                        t.topicid,
+                        t.title as subcategoria,
+                        p.idproduct,
+                        p.topicid,
+                        p.subtopicid,
+                        p.techniqueid,
+                        p.title,
+                        p.price,
+                        p.route,
+                        p.stock,
+                        p.status
+                    FROM product p
+                    INNER JOIN techniques t, subtopics s
+                    WHERE p.title LIKE '%$busqueda%'  
+                            AND s.topicid = p.topicid AND 
+                            t.topicid = p.topicid AND 
+                            s.idsubtopic = p.subtopicid AND
+                            t.idtechnique = p.techniqueid AND
+                            p.status != 0
+                    ORDER BY idproduct DESC";
+            $request = $this->con->select_all($sql);
+            if(count($request)){
+                for ($i=0; $i < count($request) ; $i++) { 
+                    $intProducto = $request[$i]['idproduct'];
+                    $sqlimg ="SELECT * FROM productimage
+                            WHERE productid = $intProducto limit 1";
+                    $requestImage = $this->con->select_all($sqlimg);
+                    $request[$i]['url_image'] = media()."/images/uploads/".$requestImage[0]['title'];
+                    $request[$i]['price'] = number_format($request[$i]['price'],0,DEC,MIL);
+                }
+            }
+            
+            $request['productos'] = $request;
+            $request['total'] = $total;
+            return $request;
+        }
     }
 
 ?>

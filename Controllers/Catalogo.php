@@ -44,6 +44,13 @@
 			$this->views->getView($this,"categoria",$data);
         }
 
+        public function Buscar(){
+            $data['page_tag'] = "Buscar | ".NOMBRE_EMPRESA;
+			$data['page_title'] = "Buscar | ".NOMBRE_EMPRESA;
+			$data['page_name'] = "buscar";
+			$this->views->getView($this,"buscar",$data);
+        }
+
         public function Producto($params){
             
             $params = strClean($params);
@@ -388,6 +395,23 @@
 					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 				}
             die();
+        }
+
+        public function search(){
+            if(empty($_REQUEST['s'])){
+                header("Location: ".base_url());
+            }else{
+                $busqueda = strClean($_REQUEST['s']);
+                $request = $this->getProductSearch($busqueda);
+                
+                $data['resultados'] = $request['total'];
+                $data['productos'] = $request['productos'];
+
+                $data['page_tag'] = "Buscar | ".NOMBRE_EMPRESA;
+                $data['page_title'] = "Buscar | ".NOMBRE_EMPRESA;
+                $data['page_name'] = "buscar";
+                $this->views->getView($this,"buscar",$data);
+            }
         }
     }
 ?>

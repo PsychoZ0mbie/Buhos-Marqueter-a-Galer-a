@@ -57,7 +57,7 @@
             <a class="navbar-brand" href="<?=base_url();?>">
                 <img src="<?=media();?>/template/Assets/images/uploads/icon.gif" alt="Logo">
                 <p><strong>Buho's</strong></p>
-                <h1><strong>Marquetería & Galería</strong></h1>
+                <p><strong>Marquetería & Galería</strong></p>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -106,7 +106,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?=base_url();?>/catalogo/carrito" id="cantCarrito"><i class="fas fa-shopping-cart"> (<?=$cantCarrito?>)</i></a>
                     </li>
+                    <li class="nav-item">
+                        <a href="<?=base_url();?>/catalogo/buscar" class="nav-link"><i class="fas fa-search"></i></a>
+                    </li>
                 </ul>
+                <!--
+                -->
             </div>
         </div>
       </nav>

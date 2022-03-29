@@ -79,7 +79,7 @@
             <div class="col-lg-6 mb-5">
               <div class="product_right mt-4">
                 <div class="product_info">
-                  <h2 class="position-relative underline"><strong><?=$producto[0]['title'];?></strong></h2>
+                  <h1 class="position-relative underline"><strong><?=$producto[0]['title'];?></strong></h1>
                   <input type="hidden" id="num_price" value="<?=$producto[0]['price']?>">
                   <input type="hidden" id="num_stock" value="<?=$producto[0]['stock']?>">
                   <p class="fs-5 price pt-4" ><strong>Precio:</strong> <?=MS.number_format($producto[0]['price'],0,DEC,MIL).MD;?></p>

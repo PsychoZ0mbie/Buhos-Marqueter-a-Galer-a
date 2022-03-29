@@ -93,6 +93,12 @@
                 </ul>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6">
+                <h5>Mensaje: </h3>
+                <p id="mensaje"></p>
+              </div>
+            </div>
             <table class="w-100">
               <thead>
                 <tr class="bg-warning">
