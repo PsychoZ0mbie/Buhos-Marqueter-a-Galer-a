@@ -112,7 +112,7 @@ $detalle = $data['pedido']['detalle'];
 				  <strong>Referencia:</strong> <?= $producto['title'] ?><br>
 			  	  <?= $medidas ?><br>
 				  <strong>Categoria:</strong> <?= $producto['topic'] ?><br>
-				  <strong>Subcategoria:</strong> <?= $producto['subtopic'] ?><br>
+				  <strong>Técnica/Color:</strong> <?= $producto['subtopic'] ?><br>
 				  <?php if($producto['type'] != ""){ ?>
 				  <strong>Tipo:</strong> <?=$producto['type']?>
 				  <?php }?>
@@ -131,7 +131,7 @@ $detalle = $data['pedido']['detalle'];
 		  		</tr>
 		  		<tr>
 		  			<th colspan="3" class="text-right">Envío:</th>
-		  			<td class="text-right">Pago contra entrega</td>
+		  			<td class="text-right"><?= MS.number_format(ENVIO,0,DEC,MIL)." ".MD?></td>
 		  		</tr>
 		  		<tr>
 		  			<th colspan="3" class="text-right">Total:</th>

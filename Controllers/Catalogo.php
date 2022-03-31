@@ -344,7 +344,7 @@
                         $pedidoInfo = $this->getPedido($request_pedido);
                         $dataEmail = array('email_remitente' => EMAIL_REMITENTE, 
                                             'email_usuario'=>$pedidoInfo['orden']['email'], 
-                                            'email_copia'=>EMAIL_REMITENTE,
+                                            'email_copia'=>EMAIL_COPIA,
                                             'asunto' =>'Se ha creado la orden No - '.$request_pedido,
                                             'pedido' =>$pedidoInfo);
                         $sendEmail = sendEmail($dataEmail, 'email_notificacion_orden');

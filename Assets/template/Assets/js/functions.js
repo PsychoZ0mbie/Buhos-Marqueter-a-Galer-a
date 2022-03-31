@@ -77,8 +77,13 @@ function totalPrice(){
                                     let arrDimensions = getTotal();
                                     let perimeter = arrDimensions[0];
                                     let area = arrDimensions[1];
-    
-                                    let total = (perimeter*price)+(area*attributePrice);
+                                    let total = 0;
+                                    if(objData.data.subtopicid == 3){
+                                        total = (perimeter*price)+(perimeter*attributePrice);
+                                    }else{
+
+                                        total = (perimeter*price)+(area*attributePrice);
+                                    }
                                     let totalFormat = formatNum(total,".");
     
     

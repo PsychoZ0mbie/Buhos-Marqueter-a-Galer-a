@@ -27,6 +27,10 @@
                 <p>Para obras de arte personalizadas nos pondremos en contacto para organizar los requisitos de la obra y el envío.
                 </p>
             </li>
+            <li>
+                <p>Después de 60 días no se responde por pedidos finalizados.
+                </p>
+            </li>
           </ul>
           <p><strong><?=NOMBRE_EMPRESA?></strong> no se hace responsable de retrasos en la entrega debido a incidencias generadas en el proceso de envío
           o reparto por parte de la agencia de transporte o por ausencia del destinatario en la dirección de entrega.</p>

@@ -5,8 +5,8 @@ user-agent: *
 disallow:/dashboard/
 disallow:/usuarios/
 disallow:/roles/
-disallow:/articulos/
-disallow:/categorias/
+disallow:/galeria/
+disallow:/marqueteria/
 disallow:/suscripciones/
 disallow:/contacto/
 disallow:/login/

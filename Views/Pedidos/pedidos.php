@@ -123,7 +123,7 @@
                 </tr>
                 <tr>
                   <th colspan="3" class="text-right">Envío:</th>
-                  <td>Pago contra entrega</td>
+                  <td><?=MS.number_format(ENVIO,0,DEC,MIL)." ".MD;?></td>
                 </tr>
                 <tr>
                   <th colspan="3" class="text-right">Total:</th>

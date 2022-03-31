@@ -104,14 +104,7 @@
                                 </div>
                                 <div class="col-7">
                                     <p><strong id="resume_subtotal"><?=MS.number_format($subtotal,0,DEC,MIL)." ".MD?></strong></p>
-                                    <?php 
-                                        if(ENVIO > 0){
-                                            $envio = MS.number_format(ENVIO,0,DEC,MIL)." ".MD;
-                                        }else{
-                                            $envio = "Pago contra entrega";
-                                        }
-                                    ?>
-                                    <p><strong id="resume_envio"><?=$envio?></strong></p>
+                                    <p><strong id="resume_envio"><?=MS.number_format(ENVIO,0,DEC,MIL)." ".MD;?></strong></p>
                                     <p><strong id="resume_total"><?=MS.number_format(($subtotal+ENVIO),0,DEC,MIL)." ".MD?></strong></p>
                                 </div>
                             </div>

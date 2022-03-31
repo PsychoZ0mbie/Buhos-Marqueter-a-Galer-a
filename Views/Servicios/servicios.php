@@ -66,7 +66,7 @@
                         <div class="why_card shadow-lg p-3 mb-5 bg-body rounded">
                             <img src="<?=media();?>/template/Assets/images/uploads/caracteristica3.gif" alt="Satisfacción garantizada">
                             <h3 class="mt-4"><strong>Satisfacción garantizada</strong></h3>
-                            <p class="mb-4">Ofrecemos las mejores soluciones para las necesidades de nuestros clientes, garantizando siempre el gusto y la satisfacción de nuestros clientes por nuestro trabajo.</p>
+                            <p class="mb-4">Ofrecemos las mejores soluciones para las necesidades de nuestros clientes, garantizando siempre el gusto y la satisfacción por nuestro trabajo.</p>
                         </div>
                     </div>
                 </div>

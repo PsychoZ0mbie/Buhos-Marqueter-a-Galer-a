@@ -10,17 +10,14 @@
     $atributos = $data['atributos'];
     $productosAl = $data['productsAl'];
 
-
-    if($producto[0]['topicid'] == 2){
-        $htmlD ='<li><i class="fas fa-check-circle text-success"></i>Dimensiones: <span>'.$producto[0]['length'].'cm x '.$producto[0]['width'].'cm</span></li>';
+    if($producto[0]['topicid'] == 1 && $producto[0]['subtopicid'] != 5 && $producto[0]['subtopicid'] != 6){
+      $htmlS = '<li><i class="fas fa-check-circle text-success"></i>Color: <span>'.$producto[0]['subcategoria'].'</span></li>';
+    }else if($producto[0]['topicid'] == 2){
+      $htmlS = '<li><i class="fas fa-check-circle text-success"></i>Técnica: <span>'.$producto[0]['subcategoria'].'</span></li>';
+      $htmlD ='<li><i class="fas fa-check-circle text-success"></i>Dimensiones: <span>'.$producto[0]['length'].'cm x '.$producto[0]['width'].'cm</span></li>';
     }else{
-        $htmlD ="";
-    }
-    if($producto[0]['topicid'] == 1 && $producto[0]['subtopicid'] == 5 || $producto[0]['subtopicid'] == 6){
-      $htmlS="";
-      
-    }else{
-      $htmlS = '<li><i class="fas fa-check-circle text-success"></i>Subcategoria: <span>'.$producto[0]['subcategoria'].'</span></li>';
+      $htmlS = '';
+      $htmlD ="";
     }
 
     $url = base_url()."/catalogo/".$categoria[0]['route']."/";

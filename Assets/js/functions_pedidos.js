@@ -117,14 +117,17 @@ function fntViewInfo(idpedido,idpersona){
                         medidas = `<p><strong>Medidas:</strong> ${largo}cm X ${ancho}cm</p>`;
                     }
                     if(arrDetalle[i]['type']!=""){
-                        tipo = `<p>Tipo: ${arrDetalle[i]['type']}</p>`;
+                        tipo = `<p><strong>Tipo:</strong> ${arrDetalle[i]['type']}</p>`;
                     }
+                    if(arrDetalle[i]['topic'])
                     html+=` <tr>
                                 <td>
                                     <p><strong>Referencia:</strong> ${arrDetalle[i]['title']}</p>
                                     ${medidas}
                                     <p><strong>Categoría:</strong> ${arrDetalle[i]['topic']}</p>
-                                    <p><strong>Subcategoría:</strong> ${arrDetalle[i]['subtopic']}</p>
+                                    
+                                    <p><strong>Técnica/Color:</strong> ${arrDetalle[i]['subtopic']}</p>
+                                    ${tipo}
                                     
                                 </td>
                                 <td>${arrDetalle[i]['price']} ${md}</td>
