@@ -78,21 +78,22 @@
         //Server settings
         $mail->SMTPDebug = 0;                      //Enable verbose debug output
         $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = 'smtp.office365.com';                     //Set the SMTP server to send through
+        $mail->Host       = 'smtp.hostinger.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true; 
         $mail->Username   = $remitente;
         $mail->Password   = REMITENTE_PASSWORD;
                                 //Enable SMTP authentication
                              //SMTP username
                                        //SMTP password
-        $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
-        $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         
         //Recipients
         $mail->setFrom($remitente,$empresa);
         $mail->addAddress($emailDestino, $nombre);     //Add a recipient
         if(!empty($data['email_copia'])){
             $mail->addBCC($data['email_copia']);
+            $mail->addBCC($remitente);
         }
         
 

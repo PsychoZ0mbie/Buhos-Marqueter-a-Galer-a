@@ -44,7 +44,7 @@
     </script>
     <!--Frameworks/plugins-->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.min.js?n=1"></script>
+    <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.min.js"></script>
     <script src="<?=media();?>/template/Assets/js/jquery-3.6.0.min.js?n=1"></script>
     <script src="<?=media();?>/template/Assets/js/popper.min.js?n=1"></script>
     <script src="<?=media();?>/template/Assets/js/bootstrap.min.js?n=1"></script>

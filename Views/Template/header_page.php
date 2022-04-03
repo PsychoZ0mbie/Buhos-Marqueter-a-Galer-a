@@ -6,7 +6,7 @@
     //dep($data['product']);
     if(!empty($data['product'])){
         $urlWeb = base_url()."/catalogo/producto/".$data['product'][0]['route'];
-        $urlImg = media()."/images/uploads/".$data['product'][0]['image'][0]['url_image'];
+        $urlImg = $data['product'][0]['image'][0]['url_image'];
         $titulo = $data['product'][0]['title'];
     }
 
@@ -27,7 +27,7 @@
     <meta name="copyright" content="<?=NOMBRE_EMPRESA?>"/>
     <meta name="robots" content="index,follow"/>
     <title><?= $data['page_tag'];?></title>
-    <link rel ="shortcut icon" href="<?=media();?>/template/Assets/images/uploads/icon.gif" sizes="32x32" type="image/png">
+    <link rel ="shortcut icon" href="<?=media();?>/template/Assets/images/uploads/icon.gif" sizes="114x114" type="image/png">
     
     <meta property="fb:app_id"          content="1234567890" /> 
     <meta property="og:locale" 		content='es_ES'/>
@@ -48,6 +48,18 @@
     <link rel="stylesheet" href="<?=media();?>/template/Assets/css/simple-lightbox.min.css">
     <!-- My css -->
     <link rel="stylesheet" href="<?=media();?>/template/Assets/css/style.css">
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8MPBNE6BYH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-8MPBNE6BYH');
+    </script>
+    
+    <meta name="google-site-verification" content="6ieP5zkMXFQodaRSo9W_d40VtMlW8zGO-jZ5s_xE7Sg" />
 </head>
 <body>
 

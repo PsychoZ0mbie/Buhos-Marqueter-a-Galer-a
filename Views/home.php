@@ -12,7 +12,7 @@
                     <a href="<?=base_url()?>/catalogo/marqueteria">
                     <img src="<?=media();?>/template/Assets/images/uploads/banner1.gif" class="d-block w-100" alt="Dale estilo a tus cuadros con las mejores molduras">
                     <div class="carousel-caption">
-                        <h1>Dale estilo a tus cuadros con las mejores molduras</h1>
+                        <p>Dale estilo a tus cuadros con las mejores molduras</p>
                     </div>
                     </a>
                 </div>
@@ -20,7 +20,7 @@
                     <a href="<?=base_url()?>/catalogo/galeria">
                     <img src="<?=media();?>/template/Assets/images/uploads/banner2.gif" class="d-block w-100" alt="Obras cargadas con emoción y creatividad">
                     <div class="carousel-caption">
-                        <h1>Obras cargadas con emoción y creatividad</h1>
+                        <p>Obras cargadas con emoción y creatividad</p>
                     </div>
                     </a>
                 </div>
@@ -33,7 +33,19 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
-            </div>
+        </div>
+        <div class="container presentation mt-4">
+            <h1 class=""><strong>Tienda en línea de marcos a medida y obras de arte. Venta directa al público</strong></h1>
+            <p class="mt-3">
+                Somos la <strong><a href="<?=base_url()?>/catalogo/marqueteria">mejor marquetería</a></strong> del departamento del Meta/Colombia. Si lo que desea son marcos para espejos, diplomas,
+                cuadros, fotos, lienzos... Somos su tienda ideal. Disponemos de un amplio catálogo de 
+                <strong><a href="<?=base_url()?>/catalogo/marqueteria">molduras</a></strong>.
+            </p>
+            <p>
+                Visite nuestra <strong><a href="<?=base_url()?>/catalogo/galeria"> galería de arte</a></strong>, encontrará
+                cuadros de distintas categorías y técnicas. 
+            </p>
+        </div>
     </section>
     <section>
         <div class="container text-center mt-5 cover_presentation">
@@ -51,7 +63,7 @@
                     <a href="<?=$urlProducto.$marqueteria[$i]['route']?>" class="btn_content">Ver más</a>
                 </div>
                 <div class="catalog_product_text">
-                    <a href=""><h2><strong><?= $marqueteria[$i]['title']?></strong></h2></a>
+                    <a href="<?=$urlProducto.$marqueteria[$i]['route']?>"><h2><strong><?= $marqueteria[$i]['title']?></strong></h2></a>
                     <h3><?= $marqueteria[$i]['categoria']?></h3>
                     <?php
                     if($marqueteria[$i]['subtopicid'] != 6){
@@ -84,7 +96,7 @@
                     <a href="<?=$urlProducto.$galeria[$i]['route']?>" class="btn_content">Ver más</a>
                 </div>
                 <div class="catalog_product_text">
-                    <a href=""><h2><strong><?= $galeria[$i]['title']?></strong></h2></a>
+                    <a href="<?=$urlProducto.$galeria[$i]['route']?>"><h2><strong><?= $galeria[$i]['title']?></strong></h2></a>
                     <h3><?= $galeria[$i]['categoria']?></h3>
                     <?php
                     if($galeria[$i]['subtopicid'] != 6){
@@ -117,7 +129,7 @@
                     <a href="<?=$urlProducto.$productos[$i]['route']?>" class="btn_content">Ver más</a>
                 </div>
                 <div class="catalog_product_text">
-                    <a href=""><h2><strong><?= $productos[$i]['title']?></strong></h2></a>
+                    <a href="<?=$urlProducto.$productos[$i]['route']?>"><h2><strong><?= $productos[$i]['title']?></strong></h2></a>
                     <h3><?= $productos[$i]['categoria']?></h3>
                     <?php
                     if($productos[$i]['subtopicid'] != 6){
@@ -135,7 +147,7 @@
         </div>
     </section>
     <section class="contact_home mt-5 mb-5">
-            <img src="<?=media();?>/template/Assets/images/uploads/banner.gif" alt="">
+            <img src="<?=media();?>/template/Assets/images/uploads/banner4.gif" alt="">
             <div class="contact_home_text">
                 <h2 class="position-relative"><strong>¿No encuentras lo que deseas? Cóntactanos</strong></h2>
                 <a class="btn_content"href="<?=base_url();?>/contacto">Contactar</a>

@@ -10,6 +10,8 @@
     $atributos = $data['atributos'];
     $productosAl = $data['productsAl'];
 
+
+
     if($producto[0]['topicid'] == 1 && $producto[0]['subtopicid'] != 5 && $producto[0]['subtopicid'] != 6){
       $htmlS = '<li><i class="fas fa-check-circle text-success"></i>Color: <span>'.$producto[0]['subcategoria'].'</span></li>';
     }else if($producto[0]['topicid'] == 2){
@@ -204,7 +206,7 @@
                         <a href="<?=$urlProducto.$productosAl[$i]['route']?>" class="btn_content">Ver más</a>
                     </div>
                     <div class="catalog_product_text">
-                        <a href=""><h2><strong><?= $productosAl[$i]['title']?></strong></h2></a>
+                        <a href="<?=$urlProducto.$productosAl[$i]['route']?>"><h2><strong><?= $productosAl[$i]['title']?></strong></h2></a>
                         <h3><?= $productosAl[$i]['categoria']?></h3>
                         <p><?= $productosAl[$i]['subcategoria']?></p>
                         <?php if($productosAl[$i]['stock']==0){ ?>

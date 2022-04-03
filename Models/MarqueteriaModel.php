@@ -260,9 +260,7 @@
 			$request = $this->select_all($sql);
 			if(empty($request))
 			{
-				$sql = "DELETE FROM subtopics WHERE idsubtopic = $this->intIdSubcategoria;set @autoid :=0; 
-                update subtopics set idsubtopic = @autoid := (@autoid+1);
-                alter table subtopics Auto_Increment = 1;";
+				$sql = "DELETE FROM subtopics WHERE idsubtopic = $this->intIdSubcategoria";
 				$request = $this->delete($sql);
 				if($request)
 				{
@@ -355,9 +353,7 @@
 			$request = $this->select_all($sql);
 			if(empty($request))
 			{
-				$sql = "DELETE FROM techniques WHERE idtechnique = $this->intIdTecnica;set @autoid :=0; 
-                update techniques set idtechnique = @autoid := (@autoid+1);
-                alter table techniques Auto_Increment = 1;";
+				$sql = "DELETE FROM techniques WHERE idtechnique = $this->intIdTecnica";
 				$request = $this->delete($sql);
 				if($request)
 				{

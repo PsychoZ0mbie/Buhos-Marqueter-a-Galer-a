@@ -295,7 +295,7 @@ require_once("Libraries/Core/Mysql.php");
                             s.idsubtopic = p.subtopicid AND
                             t.idtechnique = p.techniqueid AND
                             p.status != 0
-                    ORDER BY idproduct DESC";
+                    ORDER BY p.title DESC";
             $request = $this->con->select_all($sql);
             if(count($request)){
                 for ($i=0; $i < count($request) ; $i++) { 

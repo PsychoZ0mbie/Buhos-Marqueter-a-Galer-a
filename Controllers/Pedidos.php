@@ -1,5 +1,5 @@
 <?php
-    class Pedidos extends controllers{
+    class Pedidos extends Controllers{
         public function __construct(){
             session_start();
 			if(empty($_SESSION['login']))

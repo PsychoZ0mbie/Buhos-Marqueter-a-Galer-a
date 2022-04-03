@@ -19,7 +19,7 @@
             $this->intIdCategoria = $categoria;
             $this->con = new Mysql();
 
-            $sql = "SELECT * FROM subtopics WHERE topicid = $this->intIdCategoria";
+            $sql = "SELECT * FROM subtopics WHERE topicid = $this->intIdCategoria ORDER BY title ASC";
             $request = $this->con->select_all($sql);
             return $request;
         }
@@ -27,7 +27,7 @@
             $this->intIdTecnica = $categoria;
             $this->con = new Mysql();
 
-            $sql = "SELECT * FROM techniques WHERE topicid = $this->intIdTecnica";
+            $sql = "SELECT * FROM techniques WHERE topicid = $this->intIdTecnica ORDER BY title ASC";
             $request = $this->con->select_all($sql);
             return $request;
         }

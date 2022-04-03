@@ -87,7 +87,7 @@
                 <a href="<?=$urlProducto.$productCategoria[$i]['route']?>" class="btn_content">Ver más</a>
               </div>
               <div class="catalog_product_text">
-                <a href=""><h2><strong><?= $productCategoria[$i]['title']?></strong></h2></a>
+                <a href="<?=$urlProducto.$productCategoria[$i]['route']?>"><h2><strong><?= $productCategoria[$i]['title']?></strong></h2></a>
                 <h3><?= $productCategoria[$i]['categoria']?></h3>
                 <?php
                   if($productCategoria[$i]['subtopicid'] != 6){

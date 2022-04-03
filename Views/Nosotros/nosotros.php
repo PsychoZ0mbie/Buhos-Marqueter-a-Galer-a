@@ -5,15 +5,20 @@
           <img src="<?=media();?>/template/Assets/images/uploads/banner3.gif" alt="Conócenos">
           <h1 class="text-center"><strong>Conócenos</strong></h1>
         </div>
+        <div class="container presentation mt-4">
+            <p class="text-center">
+              En el año 1996 trabajaba en Bogotá como auxiliar de Kardex en Pvmetal Ltda. 
+              Renuncié para residir en Villavicencio/Meta e inicié a trabajar cómo cobrador de cuadros 
+              a crédito. En este trabajo me interesó el negocio y tuve mis propios vendedores. 
+              Fue cuándo vi la necesidad de enmarcar yo mismo los cuadros que tenía para la venta, 
+              saqué en arriendo un local en el año 1999 en el barrio san benito de Villavicencio, donde
+              empíricamente empecé a cortar, armar y pintar mis propios marcos para los 
+              cuadros que se vendían. <br>
+              Así empezó Buho's Marquetería y Galería
+            </p>
+        </div>
         <div class="container about">
-          <p class="text-center m-5">En el año 1996 trabajaba en Bogotá como auxiliar de Kardex en Pvmetal Ltda. 
-                  Renuncié para residir en Villavicencio/Meta e inicié a trabajar cómo cobrador de cuadros 
-                  a crédito. En este trabajo me interesó el negocio y tuve mis propios vendedores. 
-                  Fue cuándo vi la necesidad de enmarcar yo mismo los cuadros que tenía para la venta, 
-                  saqué en arriendo un local en el año 1999 en el barrio san benito de Villavicencio, donde
-                  empíricamente empecé a cortar, armar y pintar mis propios marcos para los 
-                  cuadros que se vendían. <br>
-                  Así empezó Buho's Marquetería y Galería</p>
+          
           <div class="learn_content">
             <div class="learn_text">
                 <a href="">

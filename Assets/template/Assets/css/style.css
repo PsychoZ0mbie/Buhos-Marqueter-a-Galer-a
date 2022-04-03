@@ -125,7 +125,38 @@ input[type=number] {
     color: #10100D;
 }
 /*************************Home page**************************/
-
+.presentation{
+    padding: 30px;
+    position: relative;
+}
+.presentation::before{
+    content:"";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 200px;
+    border-top: 10px solid #E05A10;
+    border-left: 10px solid #E05A10;
+}
+.presentation::after{
+    content:"";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 200px;
+    height: 200px;
+    border-bottom: 10px solid #E05A10;
+    border-right: 10px solid #E05A10;
+}
+.presentation h1{
+    color:#676765;
+    font-size: 32px;
+}
+.presentation a{
+    text-decoration: none;
+    color: #10100D;
+}
 .carousel-item img{
     height: 100%;
     width: 100%;
@@ -145,7 +176,7 @@ input[type=number] {
     background-color: rgb(16, 16, 13,0.7);
     width: 450px;
 }
-.carousel-caption h1{
+.carousel-caption p{
     font-size: 30px;
     line-height: 50px;
     height: 100%;
@@ -330,9 +361,6 @@ input[type=number] {
     color:#fff;
 }
 /*************************About Page**************************/
-.about p{
-    font-size: 20px;
-}
 .cover{
     position: relative;
     height: 400px;
@@ -838,11 +866,18 @@ footer ul li a{
     .learn_content{
         margin: 20px 0;
     }
+    .product_right{
+        height: 450px;
+    }
     
 }
 
 
 @media (max-width: 767px) {
+    .presentation h1{
+        color:#676765;
+        font-size: 30px;
+    }
     .search{
         width: 100%;
     }
@@ -862,6 +897,10 @@ footer ul li a{
 
 
 @media (max-width: 575px) {
+    .presentation h1{
+        color:#676765;
+        font-size: 25px;
+    }
     .product_left .carousel-item {
         height: 450px;
         width: 100%;
@@ -882,7 +921,7 @@ footer ul li a{
         height: 150px;
         width: 350px;
     }
-    .carousel-caption h1{
+    .carousel-caption p{
         font-size: 25px;
     }
 }
@@ -912,7 +951,7 @@ footer ul li a{
         height: 150px;
         width: 250px;
     }
-    .carousel-caption h1{
+    .carousel-caption p{
         font-size: 20px;
         line-height: 40px;
     }

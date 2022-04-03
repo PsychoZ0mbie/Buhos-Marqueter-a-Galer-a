@@ -189,7 +189,7 @@
                             o.address,
                             o.comment,
                             o.phone,
-                            o.date,
+                            DATE_FORMAT(o.date, '%d-%m-%Y') as date,
                             o.price,
                             o.status,
                             d.iddepartment,
