@@ -26,36 +26,44 @@
 		}
 
 		public function setUsuario(){
-			if(!empty($_SESSION['permisosMod']['w'])){
 				if($_POST){
-					if(empty($_POST['txtNombre']) || empty($_POST['txtApellido']) || empty($_POST['txtTelefono']) || empty($_POST['listRolid']))
-					{
+					if(empty($_POST['txtFirstName']) || empty($_POST['txtLastName']) || empty($_POST['txtPhone']) || empty($_POST['typeList']) 
+					|| empty($_POST['txtEmail']) || empty($_POST['txtPassword']) ){
 						$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
 					}else{ 
-						$idUsuario = intval($_POST['idUsuario']);
-						$strNombre = ucwords(strClean($_POST['txtNombre']));
-						$strApellido = ucwords(strClean($_POST['txtApellido']));
-						$intTelefono = intval(strClean($_POST['txtTelefono']));
+						$idUsuario = intval($_POST['idUser']);
+						$strNombre = ucwords(strClean($_POST['txtFirstName']));
+						$strApellido = ucwords(strClean($_POST['txtLastName']));
+						$intTelefono = intval(strClean($_POST['txtPhone']));
 						$strEmail = strtolower(strClean($_POST['txtEmail']));
-						$intTipoId = intval(strClean($_POST['listRolid']));
+						$strPassword = strClean($_POST['txtPassword']);
+						$intTipoId = intval(strClean($_POST['typeList']));
+						$strRolName = ucwords(strClean($_POST['rolName']));
 						$request_user = "";
+						$foto = "";
+						$foto_perfil="";
+						if($_FILES['txtImg']['name'] == ""){
+							$foto_perfil = "avatar.png";
+						}else{
+							$foto = $_FILES['txtImg'];
+							$foto_perfil = 'perfil_'.bin2hex(random_bytes(6)).'.jpg';
+						}
 					
-						if($idUsuario == 0)
-						{
+						if($idUsuario == 0){
+						
 							$option = 1;
-							$strPassword =  empty($_POST['txtPassword']) ? hash("SHA256",passGenerator()) : hash("SHA256",$_POST['txtPassword']);
-							if($_SESSION['permisosMod']['w']){
-								$request_user = $this->model->insertUsuario($strNombre, 
-																			$strApellido, 
-																			$intTelefono, 
-																			$strEmail,
-																			$strPassword, 
-																			$intTipoId);
-							}
+							$strPassword =  hash("SHA256",$_POST['txtPassword']);
+							$request_user = $this->model->insertUsuario($strNombre, 
+																		$strApellido,
+																		$foto_perfil, 
+																		$intTelefono, 
+																		$strEmail,
+																		$strPassword, 
+																		$intTipoId,
+																		$strRolName);
 						}else{
 							$option = 2;
-							$strPassword =  empty($_POST['txtPassword']) ? "" : hash("SHA256",$_POST['txtPassword']);
-							if($_SESSION['permisosMod']['u']){
+							$strPassword =  hash("SHA256",$_POST['txtPassword']);
 								$request_user = $this->model->updateUsuario($idUsuario, 
 																			$strNombre,
 																			$strApellido, 
@@ -63,13 +71,15 @@
 																			$strEmail,
 																			$strPassword, 
 																			$intTipoId);
-							}
 
 						}
 
-						if($request_user > 0 )
-						{
+						if($request_user > 0 ){
+							if($foto!=""){
+								uploadImage($foto,$foto_perfil);
+							}
 							if($option == 1){
+								
 								$arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
 							}else{
 								$arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
@@ -84,52 +94,31 @@
 				}
 				
 				die();
-			}
 		}
 
         public function getUsuarios(){
-			if($_SESSION['permisosMod']['r']){
+
 				$arrData = $this->model->selectUsuarios();
-				for ($i=0; $i < count($arrData); $i++) {
-	
-					$btnView = '';
-					$btnEdit = '';
-					$btnDelete = '';
-	
-					if($_SESSION['permisosMod']['u']){
-						if(($_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'] ==1) || ($_SESSION['userData']['idrole'] ==1 and $arrData[$i]['idrole']!=1 )){	
-							$btnEdit = '<button class="btn btn-primary btn-sm btnEditUsuario" onClick="fntEditUsuario(this,'.$arrData[$i]['idperson'].')" title="Editar Usuario"><i class="fas fa-pencil-alt"></i></button>';
-						}else{
-							$btnEdit = '<button class="btn btn-secondary btn-sm" disabled ><i class="fas fa-pencil-alt"></i></button>';
-						}		
-					}
-					if($_SESSION['permisosMod']['d']){
-						if(($_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'] == 1) || ($_SESSION['userData']['idrole'] == 1 and $arrData[$i]['idrole'] != 1) and ($_SESSION['userData']['idperson'] != $arrData[$i]['idperson'] )){
-							$btnDelete = '<button class="btn btn-danger btn-sm btnDelUsuario" onClick="fntDelUsuario('.$arrData[$i]['idperson'].')" title="Eliminar Usuario"><i class="far fa-trash-alt"></i></button>';
-						}else{
-							$btnDelete = '<button class="btn btn-secondary btn-sm" disabled ><i class="far fa-trash-alt"></i></button>';
-						}
-					}
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnEdit.' '.$btnDelete.'</div>';
+				for ($i=0; $i < count($arrData); $i++) { 
+					$arrData[$i]['picture'] = base_url()."/Assets/images/uploads/".$arrData[$i]['picture'];
 				}
+				//$_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'
 				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-			}
 			die();
 		}
 
-		public function getUsuario($idpersona){
-			if($_SESSION['permisosMod']['r']){
-				$idusuario = intval($idpersona);
-				if($idusuario > 0){
-					$arrData = $this->model->selectUsuario($idusuario);
-					if(empty($arrData)){
+		public function getUsuario(){
+			$idusuario = intval($_POST['idUser']);
+			if($idusuario > 0){
+				$arrData = $this->model->selectUsuario($idusuario);
+				if(empty($arrData)){
 					
-						$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
-					}else{
-						$arrResponse = array('status' => true, 'data' => $arrData);
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+					$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
+				}else{
+					$arrData['url'] = base_url()."/Assets/images/uploads/".$arrData['picture'];
+					$arrResponse = array('status' => true, 'data' => $arrData);
 				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 			}
 			die();
 		}
@@ -147,17 +136,21 @@
 		}
 		public function delUsuario(){
 			if($_POST){
-				if($_SESSION['permisosMod']['d']){
-					$intIdUsuario = intval($_POST['idUsuario']);
-					$requestDelete = $this->model->deleteUsuario($intIdUsuario);
-					if($requestDelete == 'ok')
-					{
-						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el usuario');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar el usuario.');
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+				$intIdUsuario = intval($_POST['idUser']);
+				$request = $this->model->selectUsuario($intIdUsuario);
+
+				if($request['picture'] !="avatar.png"){
+					deleteFile($request['picture']);
 				}
+
+				$requestDelete = $this->model->deleteUsuario($intIdUsuario);
+				if($requestDelete == 'ok')
+				{
+					$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el usuario');
+				}else{
+					$arrResponse = array('status' => false, 'msg' => 'Error al eliminar el usuario.');
+				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 			}
 			die();
 		}

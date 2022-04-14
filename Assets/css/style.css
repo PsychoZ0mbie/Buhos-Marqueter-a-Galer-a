@@ -1,349 +1,103 @@
-body{
-    font-family: 'Spartan', sans-serif;
-}
-textarea{
-    resize: none;
-}
-.logo{
-    font-size: 35px;
-    color:rgb(255, 255, 255);
-    margin-left: 50px;
-    cursor:pointer;
-}
-.logo:hover{
-    color:rgb(255, 255, 255);
-}
-.app-sidebar__user-avatar {
-    width: 40px;
-    height: 40px;
-}
-.app-content{
-    background-color: #fff;
-}
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
-    background-color: #0205b8;
-}
-a{
-    color:#6c5f5f;
-}
-.app-header{
-    background-color: #0205b8;
-}
-.app-header__logo{
-    background-color: #0205b8;
-}
-.app-menu__item.active, .app-menu__item:hover, .app-menu__item:focus {
-    border-left-color: #0205b8;
-}
 
-
-/*Estilos loading*/
-#divLoading{
-	position: fixed;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: rgba(254, 254, 254,.65);
-	z-index: 1;
-	display: none;
-}
-#divLoading img{
-	width: 50px;
-	height: 50px;
-}
-
-.required{
-	color:red;
-	font-size: 13pt;
-	font-weight: bold;
-}
-
-/* CATEGORÍAS FOTO PORTADA*/
-.photo_url img{
-    height: 100%;
-    width: 100%;
-}
-
-.prevPhoto {
-    display: flex;
-    justify-content: space-between;
-    width: 300px;
-    height: 200px;
-    border: 1px solid #CCC;
-    position: relative;
-    cursor: pointer;
-    background: url(../images/uploads/upload.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    margin: auto;
-}
-.prevPhoto label{
-	cursor: pointer;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 2;
-}
-.prevPhoto img{
-	width: 100%;
-	height: 100%;
-}
-.upimg, .notBlock{
-	display: none !important;
-}
-.errorArchivo{
-	font-size: 16px;
-	font-family: arial;
-	color: #cc0000;
-	text-align: center;
-	font-weight: bold; 
-	margin-top: 10px;
-}
-#imgCategoria{
-	text-align: center;
-}
-#imgCategoria img{
-	width:200px;
-	margin: auto;
-}
-#imgArticulo img{
-	width:200px;
-	margin: auto;
-}
-.portada img{
-    width:100%;
-    height: auto;
-    max-height:580px;
-}
-/* Upload fotos*/
-#containerImages{
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	flex-wrap: wrap;
-}
-#containerImages > div{
-	margin-right: 10px;
-	margin-bottom: 8px;
-}
-.prevImage{
-	border: 1px solid #CCC;
-	width: 120px;
-	height: 148px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.prevImage img{
-	width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.inputUploadfile{
-	display: none;
-}
-.btnUploadfile, .btnDeleteImage{
-	border: 0;
-	background-color: #009688;
-	text-align: center;
-	padding: 2px 3px;
-	color: #FFF;
-	font-size: 9pt;
-	cursor: pointer;
-	width: 100%;
-}
-.btnDeleteImage{
-	background-color: #dc3545;
-}
-.prevImage .loading{
-	width: 30px;
-	height: 30px;
-}
-#celFotos img{
-	width: 150px;
-	margin: 10px;
-}
-.delPhoto{
-	color: #FFF;
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flex;
-	display: -o-flex;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-radius: 50%;
-	width: 25px;
-	height: 25px;
-	background: red;
-	position: absolute;
-	right: -10px;
-	top: -10px;
-	z-index: 10;
-}
-
-.headerRegister, .header-primary{
-	background: #009688;
-	color: #FFF;
-}
-
-.headerUpdate{
-	background: #007bff;
-	color: #FFF;
-}
-
-.upimg, .notBlock{
-	display: none !important;
-}
-/*Tag*/
-#containerTags{
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-}
-#containerTags div{
-    margin:5px;
-}
-#containerTags .btn-outline-secondary {
-    color: #fff;
-    border-color:#0205b8;
-    background-color: #0205b8;
-    border-radius: 20px;
-    transition: 0.2s;
-}
-#containerTags .btn-outline-secondary:hover {
-    background-color: #ca2901;
-    border-color:#ca2901;
-    transition: 0.2s;
-}
-
-/*-----------------x--ERROR--x----------------*/
-.error{
-    display:flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 100px;
-    margin-bottom: 100px;
-}
-.error div{
-    margin-bottom: 50px;
-}
-
-.error .form-btn{
-    width: 100%;
-    padding: 20px;
-    border-radius: 15px;
-}
-.error .form-btn:hover{
-    color:#fff;
-}
-.error h1{
-    color:#f30000;
-    font-size: 60px;
-    text-align: center;
-}
-.error p{
-    margin-top: 15px;
-    color:rgb(48, 47, 47);
-    font-size: 20px;
-    text-align: center;
-}
-.error a{
-    font-size: 20px;
-    text-align: center;
-}
-/*-----------------x--FOOTER--x----------------*/
-footer{
-    height: 100%;
-}
-.footer{
-    display:flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.item_footer{
-    margin: 10px 20px 20px 20px;
-}
-.item_footer:last-child{
-    margin-right: 100px;
-    margin-left: 100px;
-}
-/* -------------x--Login--x----------------*/
-.login-content .logo{
-    margin: 25px 5px 25px 5px;
-}
-/* -------------x--Comentarios--x----------------*/
-.comment{
-    border: 1px solid #666666;
-    border-radius: 4px;
-}
-.comment_info{
-    display: flex;
-    justify-content: space-between;
-    
-}
-/* -------------x--Profile--x----------------*/
-.profile-image{
+/***********************************************PageProduct*******************************************************/
+.uploadImg{
     width: 150px;
     height: 150px;
     margin: auto;
     position: relative;
 }
-.profile-image img{
+.uploadImg img{
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-.profile-image input[type="file"]{
+.uploadImg label a{
+    color:rgb(255, 255, 255);
+}
+.uploadImg label{
     display: none;
 }
-.profile-image label{
-    display: none;
-}
-.profile-image label i{
-    font-size: 40px;
-    color:#0205b8;
-    margin:55px 50px;
-}
-.profile-image:hover label{
-    display: block;
+.uploadImg:hover label{
+    display: flex;
     position: absolute;
+    justify-content: center;
+    align-items: center;
     border: 4px dashed #0205b8;
-    width: 100%;
     height: 100%;
-    background-color: rgba(215, 215, 224,0.5);
-    left: 0;
+    width: 100%;
     top:0;
-    margin: 0;
+    left: 0;
+    z-index: 100;
     cursor: pointer;
 }
-/* -------------x--Factura--x----------------*/
-.factura hr{
-    border:0; 
-    border-top: 1px solid #CCC;
+.uploadImg #txtImg{
+    display: none;
 }
-.factura table{
-    width: 100%;  
-    margin: 10px auto; 
-    border: 1px solid #CCC; 
-    border-spacing: 0;
+.item_list{
+    width: 800px;
 }
-.factura table tr td, table tr th{
-    padding: 5px 10px;
-    font-family: arial; 
+.item_list .row{
+    position: relative;
 }
-.factura tbody tr td{
-    border: 1px solid #CCC;
+.item_list p{
+    margin: 0;
+    word-break: break-all;
 }
+.item_list ul{
+    list-style: none;
+    padding: 0;
+}
+.item_list .btn{
+    height: 30px;
+    padding: 0;
+    margin: 2px 0;
+}
+.item_list .col-md-3{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.item_list img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10%;
+    padding: 5px;
+}
+.scroll_list{
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 70vh;
+}
+/***********************************************Modal*******************************************************/
+td{
+    word-break: break-all;
+    width: 100px;
+}
+.modal_img{
+    width: 200px;
+    height: 200px;
+}
+.modal_img img{
+    width: 100%;
+    height: 100%;
+}
+/***********************************************Media query*******************************************************/
 
-@media screen and (max-width: 470px) {
-    .factura table tr td, table tr th{
-        font-size: 9px;
+@media screen and (max-width: 1400px) {
+    .item_form{
+        width: 100%;
+        margin-right:0;
+    }
+    .item_list{
+        width: 100%;
     }
 }
+@media screen and (max-width: 768px){
+    .item_list img{
+        height:200px;
+        border-radius: 0;
+        object-fit: fill;
+    }
+}
+

@@ -16,19 +16,22 @@
 		private $strPassword;
 		private $strToken;
 		private $intTipoId;
+		private $strRolName;
 
 		public function __construct(){
 			parent::__construct();
 		}	
 
-		public function insertUsuario(string $nombre, string $apellido, int $telefono, string $email, string $password, int $tipoid){
+		public function insertUsuario(string $nombre, string $apellido,string $picture, int $telefono, string $email, string $password, int $tipoid,string $rolName){
 
 			$this->strNombre = $nombre;
 			$this->strApellido = $apellido;
+			$this->strPicture = $picture;
 			$this->intTelefono = $telefono;
 			$this->strEmail = $email;
 			$this->strPassword = $password;
 			$this->intTipoId = $tipoid;
+			$this->strRolName = $rolName;
 			$return = 0;
 
 			$sql = "SELECT * FROM person WHERE 
@@ -37,14 +40,16 @@
 
 			if(empty($request))
 			{
-				$query_insert  = "INSERT INTO person(firstname,lastname,phone,email,password,roleid) 
-								  VALUES(?,?,?,?,?,?)";
+				$query_insert  = "INSERT INTO person(firstname,lastname,picture,phone,email,password,roleid,rolname) 
+								  VALUES(?,?,?,?,?,?,?,?)";
 	        	$arrData = array($this->strNombre,
         						$this->strApellido,
+								$this->strPicture,
         						$this->intTelefono,
         						$this->strEmail,
         						$this->strPassword,
-        						$this->intTipoId);
+        						$this->intTipoId,
+								$this->strRolName);
 	        	$request_insert = $this->insert($query_insert,$arrData);
 	        	$return = $request_insert;
 			}else{
@@ -54,11 +59,8 @@
 		}
 
 		public function selectUsuarios(){
-			$sql = "SELECT p.idperson, p.firstname, p.lastname, p.phone, p.email, r.idrole, r.role
-			FROM person p
-			INNER JOIN role r
-			ON p.roleid = r.idrole
-			WHERE p.idperson !=1";
+			$sql = "SELECT idperson, firstname, lastname,picture, phone, email, roleid,rolname
+			FROM person ORDER BY idperson DESC";
 			$request = $this->select_all($sql);
 			return $request;
 		}
@@ -71,23 +73,21 @@
 
 		public function selectUsuario(int $idpersona){
 			$this->intIdUsuario = $idpersona;
-			$sql = "SELECT p.idperson,
-			p.firstname,
-			p.lastname,
-			p.picture,
-			p.phone,
-			p.address,
-			p.email,
-			p.departmentid,
-			p.cityid,
-			p.identification,
-			r.idrole,
-			r.role, 
-			DATE_FORMAT(p.datecreated, '%d/%m/%Y') as fechaRegistro 
-			FROM person p
-			INNER JOIN role r
-			ON p.roleid = r.idrole
-			WHERE p.idperson = $this->intIdUsuario";
+			$sql = "SELECT idperson,
+			firstname,
+			lastname,
+			picture,
+			phone,
+			address,
+			email,
+			department,
+			city,
+			identification,
+			roleid,
+			rolname, 
+			DATE_FORMAT(datecreated, '%d/%m/%Y') as date 
+			FROM person 
+			WHERE idperson = $this->intIdUsuario";
 			$request = $this->select($sql);
 			return $request;
 		}

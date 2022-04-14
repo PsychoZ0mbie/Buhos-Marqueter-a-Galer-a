@@ -55,6 +55,23 @@
     <script src="<?=media();?>/template/Assets/js/functions.js?n=1"></script>
     <script src="<?= media() ?>/js/functions_login.js?n=1"></script>
     <script src="<?= media() ?>/js/functions_admin.js?n=1"></script>
-
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org/",
+        "@type": "Person",
+        "name": "<?=NOMBRE_EMPRESA?>",
+        "url": "<?= base_url();?>",
+        "logo": "<?=media()?>/images/uploads/logo.pngg",
+        "email": "<?=EMAIL_REMITENTE?>",
+        "contactPoint" : [
+                {
+                "@type" : "ContactPoint",
+                "contactType" : "customer service",
+                "email": "<?=EMAIL_REMITENTE?>",
+                "url": "<?= base_url();?>"
+                }
+            ]
+        }
+    </script>
 </body>
 </html>

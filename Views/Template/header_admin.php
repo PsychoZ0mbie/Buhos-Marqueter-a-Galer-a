@@ -11,13 +11,13 @@
     <link rel ="shortcut icon" href="<?= media();?>/images/uploads/icon.gif">
     <title><?= $data['page_tag'];?></title>
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/main.css?n=1">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/bootstrap/bootstrap.min.css?n=1">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/vali/main.css?n=1">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/vali/style.css?n=1">
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/normalize.css?n=1">
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/bootstrap-select.min.css?n=1">
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/jquery.maxlength.css?n=1">
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css?n=1">
     <!-- Font-icon css-->
-    <link rel="stylesheet" href="<?= media();?>/css/font-awesome.min.css?n=1">
+    <link rel="stylesheet" href="<?= media();?>/css/icons/font-awesome.min.css?n=1">
   </head>
   <body class="app sidebar-mini">
     <div id="divLoading">
