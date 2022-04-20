@@ -12,6 +12,20 @@ function uploadImg(img,location){
     }
 }
 
+function formatNum(num,mil){
+    let numero = num;
+    let format = mil;
+
+    const noTruncarDecimales = {maximumFractionDigits: 20};
+
+    if(format == ","){
+        format = numero.toLocaleString('en-US', noTruncarDecimales);
+    }else if(mil == "."){
+        format  = numero.toLocaleString('es', noTruncarDecimales);
+    }
+    return format;   
+}
+
 async function request(url,requestData,option){
     let data ="";
     if(option==1){

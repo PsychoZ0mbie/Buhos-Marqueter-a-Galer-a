@@ -16,13 +16,12 @@
 		private $strPassword;
 		private $strToken;
 		private $intTipoId;
-		private $strRolName;
 
 		public function __construct(){
 			parent::__construct();
 		}	
 
-		public function insertUsuario(string $nombre, string $apellido,string $picture, int $telefono, string $email, string $password, int $tipoid,string $rolName){
+		public function insertUsuario(string $nombre, string $apellido,string $picture, int $telefono, string $email, string $password, int $tipoid){
 
 			$this->strNombre = $nombre;
 			$this->strApellido = $apellido;
@@ -31,7 +30,6 @@
 			$this->strEmail = $email;
 			$this->strPassword = $password;
 			$this->intTipoId = $tipoid;
-			$this->strRolName = $rolName;
 			$return = 0;
 
 			$sql = "SELECT * FROM person WHERE 
@@ -40,16 +38,15 @@
 
 			if(empty($request))
 			{
-				$query_insert  = "INSERT INTO person(firstname,lastname,picture,phone,email,password,roleid,rolname) 
-								  VALUES(?,?,?,?,?,?,?,?)";
+				$query_insert  = "INSERT INTO person(firstname,lastname,picture,phone,email,password,roleid) 
+								  VALUES(?,?,?,?,?,?,?)";
 	        	$arrData = array($this->strNombre,
         						$this->strApellido,
 								$this->strPicture,
         						$this->intTelefono,
         						$this->strEmail,
         						$this->strPassword,
-        						$this->intTipoId,
-								$this->strRolName);
+        						$this->intTipoId);
 	        	$request_insert = $this->insert($query_insert,$arrData);
 	        	$return = $request_insert;
 			}else{
@@ -58,15 +55,22 @@
 	        return $return;
 		}
 
-		public function selectUsuarios(){
-			$sql = "SELECT idperson, firstname, lastname,picture, phone, email, roleid,rolname
-			FROM person ORDER BY idperson DESC";
-			$request = $this->select_all($sql);
-			return $request;
-		}
-
-		public function selectUsuariosPicker(){
-			$sql = "SELECT idperson, firstname, lastname, roleid FROM person WHERE roleid != 2";
+		public function selectUsuarios($options){
+			if($options == 1){
+				$options=" ORDER BY idperson DESC";
+			}else if($options == 2){
+				$options=" ORDER BY idperson ASC";
+			}else if($options == 3){
+				$options=" ORDER BY firstname";
+			}else if($options == 4){
+				$options=" ORDER BY lastname";
+			}else if($options == 5){
+				$options=" ORDER BY rolid";
+			}else{
+				$options=" ORDER BY idperson DESC";
+			}
+			$sql = "SELECT idperson, firstname, lastname,picture, phone, email, roleid
+			FROM person $options";
 			$request = $this->select_all($sql);
 			return $request;
 		}
@@ -83,8 +87,7 @@
 			department,
 			city,
 			identification,
-			roleid,
-			rolname, 
+			roleid, 
 			DATE_FORMAT(datecreated, '%d/%m/%Y') as date 
 			FROM person 
 			WHERE idperson = $this->intIdUsuario";
@@ -92,36 +95,39 @@
 			return $request;
 		}
 
-		public function updateUsuario(int $idUsuario, string $nombre, string $apellido, int $telefono, string $email, string $password, int $tipoid){
+		public function updateUsuario(int $idUsuario, string $nombre, string $apellido, string $picture, int $telefono, string $email, string $password, int $tipoid){
 
 			$this->intIdUsuario = $idUsuario;
 			$this->strNombre = $nombre;
 			$this->strApellido = $apellido;
+			$this->strPicture = $picture;
 			$this->intTelefono = $telefono;
 			$this->strEmail = $email;
 			$this->strPassword = $password;
 			$this->intTipoId = $tipoid;
 
-			$sql = "SELECT * FROM person WHERE (email = '{$this->strEmail}' AND idperson != $this->intIdUsuario)";
+			$sql = "SELECT * FROM person WHERE email = '{$this->strEmail}' AND idperson != $this->intIdUsuario";
 			$request = $this->select_all($sql);
 
 			if(empty($request))
 			{
 				if($this->strPassword  != "")
 				{
-					$sql = "UPDATE person SET firstname=?, lastname=?, phone=?, email=?, password=?, roleid=? 
+					$sql = "UPDATE person SET firstname=?, lastname=?,picture=?, phone=?, email=?, password=?, roleid=? 
 							WHERE idperson = $this->intIdUsuario ";
 					$arrData = array($this->strNombre,
 	        						$this->strApellido,
+									$this->strPicture,
 	        						$this->intTelefono,
 	        						$this->strEmail,
 	        						$this->strPassword,
 	        						$this->intTipoId);
 				}else{
-					$sql = "UPDATE persona SET firstname=?, lastname=?, phone=?, email=?, roleid=? 
+					$sql = "UPDATE persona SET firstname=?, lastname=?,picture=?, phone=?, email=?, roleid=? 
 							WHERE idperson = $this->intIdUsuario ";
 					$arrData = array($this->strNombre,
 	        						$this->strApellido,
+									$this->strPicture,
 	        						$this->intTelefono,
 	        						$this->strEmail,
 	        						$this->intTipoId);

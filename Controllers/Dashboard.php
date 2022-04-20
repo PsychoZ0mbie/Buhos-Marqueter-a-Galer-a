@@ -3,19 +3,18 @@
         public function __construct(){
             parent::__construct();
             session_start();
-			if(empty($_SESSION['login']))
+			/*if(empty($_SESSION['login']))
 			{
 				header('Location: '.base_url().'/login');
 				die();
-			}
-            getPermisos(1);
+			}*/
         }
 
         public function dashboard(){
-            if(empty($_SESSION['permisosMod']['r'])){
+            /*if(empty($_SESSION['permisosMod']['r'])){
                 header("Location: ".base_url()."/usuarios/perfil");
                 die();
-            }
+            }*/
             
             $data['page_tag'] = "Dashboard";
 			$data['page_title'] = "Dashboard";
@@ -32,7 +31,6 @@
         }
 
         public function getPedidos(){
-            if($_SESSION['permisosMod']['r']){
                 $arrData = $this->model->selPedidos();
                 if(count($arrData)>0){
                     $arrResponse = array("status"=>true,"orden"=>$arrData);
@@ -40,7 +38,6 @@
                     $arrResponse = array("status"=>false,"msg"=>"No existen pedidos");
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            }
             die();
         }
     }

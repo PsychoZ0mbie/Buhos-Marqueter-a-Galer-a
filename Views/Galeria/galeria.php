@@ -2,7 +2,7 @@
     <main class="app-content" id="<?=$data['page_name']?>">
       <div class="app-title">
         <div>
-          <h1><i class="fa fa-users"></i> <?=$data['page_title']?></h1>
+          <h1><i class="fa fa-picture-o"></i> <?=$data['page_title']?></h1>
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
@@ -24,16 +24,15 @@
                     <select class="form-control form-control" aria-label="Default select example" id="orderBy" name="orderBy">
                       <option value="1">Ordenar por más reciente</option>
                       <option value="2">Ordenar por más antiguo</option>
-                      <option value="3">Ordenar por nombres</option>
-                      <option value="4">Ordenar por apellidos</option>
-                      <option value="5">Ordenar por roles</option>
+                      <option value="3">Ordenar por titulo</option>
+                      <option value="4">Ordenar por autor</option>
+                      <option value="5">Ordenar por categoria</option>
+                      <option value="6">Ordenar por técnica</option>
                     </select>
                   </div>
                 </div>
-                
             </div>
         </div>
       </div>
     </main>
 <?php footerAdmin($data); ?>
-    

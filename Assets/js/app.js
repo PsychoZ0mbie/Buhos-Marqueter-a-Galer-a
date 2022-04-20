@@ -4,27 +4,32 @@ import Galeria from "./modules/galeriaClass.js";
 import Usuario from "./modules/usuarioClass.js";
 
 
+let loading = document.querySelector("#divLoading");
 
 /*************************User Page*******************************/
 
-{
+if(document.querySelector("#usuarios")){
     let search = document.querySelector("#search");
     search.addEventListener('input',function() {
     let elements = document.querySelectorAll(".item");
     let value = search.value.toLowerCase();
-    for(let i = 0; i < elements.length; i++) {
-        let element = elements[i];
-        let strName = element.getAttribute("data-name").toLowerCase();
-        let strLastName = element.getAttribute("data-lastname").toLowerCase();
-        let strEmail = element.getAttribute("data-email").toLowerCase();
-        let strPhone = element.getAttribute("data-phone").toLowerCase();
-        if(!strName.includes(value) && !strLastName.includes(value) && !strEmail.includes(value) && !strPhone.includes(value)){
-            element.classList.add("d-none");
-        }else{
-            element.classList.remove("d-none");
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            let strName = element.getAttribute("data-name").toLowerCase()+" "+element.getAttribute("data-lastname").toLowerCase();
+            let strEmail = element.getAttribute("data-email").toLowerCase();
+            let strPhone = element.getAttribute("data-phone").toLowerCase();
+            if(!strName.includes(value) && !strEmail.includes(value) && !strPhone.includes(value)){
+                element.classList.add("d-none");
+            }else{
+                element.classList.remove("d-none");
+            }
         }
-    }
     })
+
+    let orderBy = document.querySelector("#orderBy");
+    orderBy.addEventListener("change",function(){
+        item.orderItem(orderBy.value);
+    });
 
     let item = new Usuario();
     item.interface();
@@ -45,15 +50,31 @@ import Usuario from "./modules/usuarioClass.js";
         let strLastName = document.querySelector("#txtLastName").value;
         let strEmail = document.querySelector("#txtEmail").value;
         let strPhone = document.querySelector("#txtPhone").value;
-        let typeList = document.querySelector("#typeList");
-        let typeName = typeList.selectedOptions[0].text;
-        let typeValue = typeList.value;
+        let typeValue = document.querySelector("#typeList").value;
         let strPassword = document.querySelector("#txtPassword").value;
         let idUser = document.querySelector("#idUser").value;
 
-        if(strFirstName == "" || strLastName == "" || strEmail == "" || strPhone == "" || typeValue == "" || strPassword == ""){
-            Swal.fire("Error","Todos los campos son obligatorios","error");
-            return false;
+        if(idUser == 0){
+
+            if(strFirstName == "" || strLastName == "" || strEmail == "" || strPhone == "" || typeValue == "" || strPassword == ""){
+                Swal.fire("Error","Todos los campos son obligatorios","error");
+                return false;
+            }
+            if(strPassword.length < 8){
+                Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres","error");
+                return false;
+            }
+        }else{
+            if(strFirstName == "" || strLastName == "" || strEmail == "" || strPhone == "" || typeValue == ""){
+                Swal.fire("Error","Todos los campos son obligatorios","error");
+                return false;
+            }
+            if(strPassword !=""){
+                if(strPassword.length < 8){
+                    Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres","error");
+                    return false;
+                } 
+            }
         }
         if(!fntEmailValidate(strEmail)){
             let html = `
@@ -68,10 +89,6 @@ import Usuario from "./modules/usuarioClass.js";
             Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
             return false;
         }
-        if(strPassword.length < 8){
-            Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres","error");
-            return false;
-        }
         if(strPhone.length < 10){
             Swal.fire("Error","El número de teléfono debe tener 10 dígitos","error");
             return false;
@@ -79,11 +96,15 @@ import Usuario from "./modules/usuarioClass.js";
 
         //Request
         let formData = new FormData(form);
-        formData.append("rolName",typeName);
         let url = base_url+"/Usuarios/setUsuario";
+        loading.style.display="flex";
         request(url,formData,1).then(function(objData){
+            loading.style.display="none";
             if(objData.status){
-                location.reload();
+                Swal.fire("Usuario",objData.msg,"success");
+                setTimeout(function(){
+                    location.reload();
+                },2000);
             }else{
                 Swal.fire("Error",objData.msg,"error");
             }
@@ -106,141 +127,196 @@ import Usuario from "./modules/usuarioClass.js";
     }
 }
 
-
 /******************************************************************/
 
-/*************************Product Page*******************************/
+/*************************Gallery Page*******************************/
 
-{
+if(document.querySelector("#galeria")){
 
-    if(document.querySelector("#selectTopic")){
-        let select = document.querySelector("#selectTopic");
-        select.addEventListener('change',function(){
-            let item={};
-            if(select.value == 1){
-                item = new Marqueteria();
-                item.interface();
-                if(document.querySelector("#formItem")){
-                    let img = document.querySelector("#txtImg");
-                        img.addEventListener("change",function(){
-                            let imgUpload = img.value;
-                            let fileUpload = img.files;
-                            let type = fileUpload[0].type;
-                            if(type != "image/png" && type != "image/jpg" && type != "image/jpeg"){
-                                imgUpload ="";
-                                Swal.fire("Error","El archivo es incorrecto.","error");
-                            }else{
-                                let objectUrl = window.URL || window.webkitURL;
-                                let route = objectUrl.createObjectURL(fileUpload[0]);
-                                document.querySelector(".uploadImg img").setAttribute("src",route);
-                            }
-                    });
-                    let form = document.querySelector("#formItem");
-                    form.addEventListener('submit',function(e){
-                        e.preventDefault();
-                        let element = document.querySelector("#listItem");
-                        let strName = document.querySelector("#txtName").value;
-                        let intPrice = document.querySelector("#intPrice").value;
-                        let intStock = document.querySelector("#intStock").value;
-                        let type = document.querySelector("#typeList");
-                        let strImg = document.querySelector(".uploadImg img").src;
-                        let strFile = document.querySelector("#txtImg").value;
-    
-                        if(strName =="" || intPrice == "" || intStock=="" || strFile=="" || type.value == 0){
-                            Swal.fire("Error","Todos los campos son obligatorios","error");
-                            return false;
-                        }
-    
-                        document.querySelector("#search").classList.remove("d-none");
-    
-                        let strType = type.selectedOptions[0].text;
-                        item.addItem(element,strImg,strName,intPrice,intStock,strType);
-                        Swal.fire("Agregado","Producto agregado correctamente","success");
-                        form.reset();
-                        document.querySelector(".uploadImg img").setAttribute("src","Assets/images/uploads/subirfoto.png");
-                    });
-                }
+    let search = document.querySelector("#search");
+    search.addEventListener('input',function() {
+    let elements = document.querySelectorAll(".item");
+    let value = search.value.toLowerCase();
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            let strTitle = element.getAttribute("data-title").toLowerCase();
+            let strTopic = element.getAttribute("data-topic").toLowerCase();
+            let strTechnique = element.getAttribute("data-technique").toLowerCase();
+            let strAuthor = element.getAttribute("data-author").toLocaleLowerCase();
+            if(!strTitle.includes(value) && !strTopic.includes(value) && !strTechnique.includes(value) && !strAuthor.includes(value)){
+                element.classList.add("d-none");
             }else{
-                item = new Galeria();
-                item.interface();
-                if(document.querySelector("#formItem")){
-                    let img = document.querySelector("#txtImg");
-                        img.addEventListener("change",function(){
-                            let imgUpload = img.value;
-                            let fileUpload = img.files;
-                            let type = fileUpload[0].type;
-                            if(type != "image/png" && type != "image/jpg" && type != "image/jpeg"){
-                                imgUpload ="";
-                                Swal.fire("Error","El archivo es incorrecto.","error");
-                            }else{
-                                let objectUrl = window.URL || window.webkitURL;
-                                let route = objectUrl.createObjectURL(fileUpload[0]);
-                                document.querySelector(".uploadImg img").setAttribute("src",route);
-                            }
-                    });
-                    let form = document.querySelector("#formItem");
-                        form.addEventListener('submit',function(e){
-                            e.preventDefault();
-                            let element = document.querySelector("#listItem");
-                            let strName = document.querySelector("#txtName").value;
-                            let intPrice = document.querySelector("#intPrice").value;
-                            let intStock = document.querySelector("#intStock").value;
-                            let type = document.querySelector("#typeList");
-                            let boolFrame = document.querySelector("#boolFrame").checked;
-                            let strImg = document.querySelector(".uploadImg img").src;
-                            let strFile = document.querySelector("#txtImg").value;
-                            let intWidth = document.querySelector("#intWidth").value;
-                            let intHeight = document.querySelector("#intHeight").value;
-    
-                            if(strName =="" || intPrice == "" || intStock=="" || strFile=="" || type.value == 0
-                            || intWidth =="" || intHeight == ""){
-                                Swal.fire("Error","Todos los campos son obligatorios","error");
-                                return false;
-                            }
-                            let strType = type.selectedOptions[0].text;
-                            item.addItem(element,strImg,strName,intPrice,intStock,strType,intWidth,intHeight);
-    
-                            document.querySelector("#search").classList.remove("d-none");
-                            Swal.fire("Agregado","Producto agregado correctamente","success");
-    
-                            form.reset();
-                            document.querySelector(".uploadImg img").setAttribute("src","Assets/images/uploads/subirfoto.png");
-                        });
-                }
+                element.classList.remove("d-none");
             }
+        }
+    })
+
+    
+
+    let item = new Galeria();
+    item.interface();
+    let element = document.querySelector("#listItem");
+    let img = [document.querySelector("#txtImg"),document.querySelector("#txtImg2")];
+    let imgLocation = ["#img","#img2"];
+    for (let i = 0; i < 2; i++) {
+        let image = img[i];
+        let imageLocation = imgLocation[i];
+        image.addEventListener("change",function(){
+            uploadImg(image,imageLocation);
+        })
+    }
+
+    let orderBy = document.querySelector("#orderBy");
+    orderBy.addEventListener("change",function(){
+        item.orderItem(element,orderBy.value);
+    });
+
+    window.addEventListener("DOMContentLoaded",function() {
+        item.showItems(element);
+    })
+    let form = document.querySelector("#formItem");
+    form.addEventListener("submit",function(e){
+        e.preventDefault();
+
+        let strName = document.querySelector("#txtName").value;
+        let intWidth = document.querySelector("#intWidth").value;
+        let intHeight = document.querySelector("#intHeight").value;
+        let topicList = document.querySelector("#topicList");
+        let subtopicList = document.querySelector("#subtopicList");
+        let frameList = document.querySelector("#frameList").value;
+        let statusList = document.querySelector("#statusList").value;
+        let intPrice = document.querySelector("#intPrice").value;
+        let idProduct = document.querySelector("#idProduct").value;
+
+        if(strName == "" || intWidth == "" || intHeight == "" || topicList.value == "" || subtopicList.value == ""
+            || intPrice == "" || frameList == "" || statusList==""){
+            Swal.fire("Error","Todos los campos son obligatorios","error");
+            return false;
+        }
+
+
+        //Request
+        let formData = new FormData(form);
+        let url = base_url+"/Galeria/setProducto";
+        loading.style.display="flex";
+        request(url,formData,1).then(function(objData){
+            loading.style.display="none";
+            if(objData.status){
+                Swal.fire("Galeria",objData.msg,"success");
+                setTimeout(function(){
+                    location.reload();
+                },2000);
+            }else{
+                Swal.fire("Error",objData.msg,"error");
+            }
+        });
+    });
+    //buttons
+    if(document.querySelector("#listItem")){
+        let listProduct = document.querySelector("#listItem");
+        listProduct.addEventListener("click",function(e) {
+                let element = e.target;
+                let id = element.getAttribute("data-id");
+                if(element.name == "btnDelete"){
+                    item.deleteItem(element,id);
+                }else if(element.name == "btnView"){
+                    item.viewItem(id);
+                }else if(element.name == "btnEdit"){
+                    item.editItem(id);
+                }
         });
     }
-    
-    /*if(document.querySelector("#listItem")){
-        let listProduct = document.querySelector("#listItem");
-        let intTopic = document.querySelector("#selectTopic");
-        listProduct.addEventListener("click",function(e) {
-            if(intTopic.value == 1){
-    
-                let item = new Marqueteria();
-                let element = e.target;
-    
-                if(element.name == "btnDelete"){
-                    item.deleteItem(element);
-                }else if(element.name == "btnView"){
-                    item.viewItem(element);
-                }else if(element.name == "btnEdit"){
-                    item.editItem(element);
-                }
-            }else{
-                let item = new Galeria();
-                let element = e.target;
-    
-                if(element.name == "btnDelete"){
-                    item.deleteItem(element);
-                }else if(element.name == "btnView"){
-                    item.viewItem(element);
-                }else if(element.name == "btnEdit"){
-                    item.editItem(element);
-                }
-            }
-                
-        });
-    }*/
 }
 /******************************************************************/
+
+/*************************Framing Page*******************************/
+
+if(document.querySelector("#marqueteria")){
+
+    let search = document.querySelector("#search");
+    search.addEventListener('input',function() {
+    let elements = document.querySelectorAll(".item");
+    let value = search.value.toLowerCase();
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            let strTitle = element.getAttribute("data-title").toLowerCase();
+            let strTopic = element.getAttribute("data-topic").toLowerCase();
+            if(!strTitle.includes(value) && !strTopic.includes(value)){
+                element.classList.add("d-none");
+            }else{
+                element.classList.remove("d-none");
+            }
+        }
+    })
+
+    
+
+    let item = new Marqueteria();
+    item.interface();
+    let element = document.querySelector("#listItem");
+    let img = [document.querySelector("#txtImg"),document.querySelector("#txtImg2")];
+    let imgLocation = ["#img","#img2"];
+    for (let i = 0; i < 2; i++) {
+        let image = img[i];
+        let imageLocation = imgLocation[i];
+        image.addEventListener("change",function(){
+            uploadImg(image,imageLocation);
+        })
+    }
+
+    let orderBy = document.querySelector("#orderBy");
+    orderBy.addEventListener("change",function(){
+        item.orderItem(element,orderBy.value);
+    });
+
+    window.addEventListener("DOMContentLoaded",function() {
+        item.showItems(element);
+    })
+    let form = document.querySelector("#formItem");
+    form.addEventListener("submit",function(e){
+        e.preventDefault();
+
+        let strName = document.querySelector("#txtName").value;
+        let topicList = document.querySelector("#topicList").value;
+        let statusList = document.querySelector("#statusList").value;
+        let intPrice = document.querySelector("#intPrice").value;
+        let idProduct = document.querySelector("#idProduct").value;
+
+        if(strName == "" ||  topicList == "" || intPrice == "" || statusList==""){
+            Swal.fire("Error","Todos los campos son obligatorios","error");
+            return false;
+        }
+
+
+        //Request
+        let formData = new FormData(form);
+        let url = base_url+"/Marqueteria/setProducto";
+        loading.style.display="flex";
+        request(url,formData,1).then(function(objData){
+            loading.style.display="none";
+            if(objData.status){
+                Swal.fire("Marqueteria",objData.msg,"success");
+                setTimeout(function(){
+                    location.reload();
+                },2000);
+            }else{
+                Swal.fire("Error",objData.msg,"error");
+            }
+        });
+    });
+    //buttons
+    if(document.querySelector("#listItem")){
+        let listProduct = document.querySelector("#listItem");
+        listProduct.addEventListener("click",function(e) {
+                let element = e.target;
+                let id = element.getAttribute("data-id");
+                if(element.name == "btnDelete"){
+                    item.deleteItem(element,id);
+                }else if(element.name == "btnView"){
+                    item.viewItem(id);
+                }else if(element.name == "btnEdit"){
+                    item.editItem(id);
+                }
+        });
+    }
+}

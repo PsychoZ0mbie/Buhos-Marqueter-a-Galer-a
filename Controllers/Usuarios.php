@@ -11,99 +11,108 @@
 				header('Location: '.base_url().'/login');
 				die();
 			}
-			getPermisos(2);
 		}
 
 		public function Usuarios(){
-			if(empty($_SESSION['permisosMod']['r'])){
+			/*if(empty($_SESSION['permisosMod']['r'])){
 				header("Location:".base_url().'/dashboard');
-			}
+			}*/
 			$data['page_tag'] = "Usuarios | ".NOMBRE_EMPRESA;
 			$data['page_title'] = "Usuarios";
 			$data['page_name'] = "usuarios";
-			$data['page_functions'] = "functions_usuarios.js";
 			$this->views->getView($this,"usuarios",$data);
 		}
 
 		public function setUsuario(){
-				if($_POST){
-					if(empty($_POST['txtFirstName']) || empty($_POST['txtLastName']) || empty($_POST['txtPhone']) || empty($_POST['typeList']) 
-					|| empty($_POST['txtEmail']) || empty($_POST['txtPassword']) ){
-						$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
-					}else{ 
-						$idUsuario = intval($_POST['idUser']);
-						$strNombre = ucwords(strClean($_POST['txtFirstName']));
-						$strApellido = ucwords(strClean($_POST['txtLastName']));
-						$intTelefono = intval(strClean($_POST['txtPhone']));
-						$strEmail = strtolower(strClean($_POST['txtEmail']));
-						$strPassword = strClean($_POST['txtPassword']);
-						$intTipoId = intval(strClean($_POST['typeList']));
-						$strRolName = ucwords(strClean($_POST['rolName']));
-						$request_user = "";
-						$foto = "";
-						$foto_perfil="";
+			if($_POST){
+				if(empty($_POST['txtFirstName']) || empty($_POST['txtLastName']) || empty($_POST['txtPhone']) || empty($_POST['typeList']) 
+				|| empty($_POST['txtEmail'])){
+					$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
+				}else{ 
+					$idUsuario = intval($_POST['idUser']);
+					$strNombre = ucwords(strClean($_POST['txtFirstName']));
+					$strApellido = ucwords(strClean($_POST['txtLastName']));
+					$intTelefono = intval(strClean($_POST['txtPhone']));
+					$strEmail = strtolower(strClean($_POST['txtEmail']));
+					$strPassword = strClean($_POST['txtPassword']);
+					$intTipoId = intval(strClean($_POST['typeList']));
+					$request_user = "";
+					$foto = "";
+					$foto_perfil="";
+					
+				
+					if($idUsuario == 0){
+						$option = 1;
 						if($_FILES['txtImg']['name'] == ""){
 							$foto_perfil = "avatar.png";
 						}else{
 							$foto = $_FILES['txtImg'];
-							$foto_perfil = 'perfil_'.bin2hex(random_bytes(6)).'.jpg';
+							$foto_perfil = 'perfil_'.bin2hex(random_bytes(6)).'.gif';
 						}
-					
-						if($idUsuario == 0){
-						
-							$option = 1;
-							$strPassword =  hash("SHA256",$_POST['txtPassword']);
-							$request_user = $this->model->insertUsuario($strNombre, 
-																		$strApellido,
-																		$foto_perfil, 
-																		$intTelefono, 
-																		$strEmail,
-																		$strPassword, 
-																		$intTipoId,
-																		$strRolName);
+						$strPassword =  hash("SHA256",$_POST['txtPassword']);
+						$request_user = $this->model->insertUsuario($strNombre, 
+																	$strApellido,
+																	$foto_perfil, 
+																	$intTelefono, 
+																	$strEmail,
+																	$strPassword, 
+																	$intTipoId);
+					}else{
+						$option = 2;
+						$request = $this->model->selectUsuario($idUsuario);
+						if($_FILES['txtImg']['name'] == ""){
+							$foto_perfil = $request['picture'];
 						}else{
-							$option = 2;
-							$strPassword =  hash("SHA256",$_POST['txtPassword']);
-								$request_user = $this->model->updateUsuario($idUsuario, 
-																			$strNombre,
-																			$strApellido, 
-																			$intTelefono, 
-																			$strEmail,
-																			$strPassword, 
-																			$intTipoId);
-
-						}
-
-						if($request_user > 0 ){
-							if($foto!=""){
-								uploadImage($foto,$foto_perfil);
+							if($request['picture'] != "avatar.png"){
+								deleteFile($request['picture']);
 							}
-							if($option == 1){
-								
-								$arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
-							}else{
-								$arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
-							}
-						}else if($request_user == 'exist'){
-							$arrResponse = array('status' => false, 'msg' => '¡Atención! el email ó el teléfono ya está registrado, ingrese otro.');		
-						}else{
-							$arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
+							$foto = $_FILES['txtImg'];
+							$foto_perfil = 'perfil_'.bin2hex(random_bytes(6)).'.gif';
 						}
+						$strPassword =  hash("SHA256",$_POST['txtPassword']);
+						$request_user = $this->model->updateUsuario($idUsuario, 
+																	$strNombre,
+																	$strApellido,
+																	$foto_perfil, 
+																	$intTelefono, 
+																	$strEmail,
+																	$strPassword, 
+																	$intTipoId);
+
 					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+
+					if($request_user > 0 ){
+						if($foto!=""){
+							uploadImage($foto,$foto_perfil);
+						}
+						if($option == 1){
+							
+							$arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
+						}else{
+							$arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
+						}
+					}else if($request_user == 'exist'){
+						$arrResponse = array('status' => false, 'msg' => '¡Atención! el email ó el teléfono ya está registrado, ingrese otro.');		
+					}else{
+						$arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
+					}
 				}
-				
-				die();
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+			}
+			die();
 		}
 
         public function getUsuarios(){
-
-				$arrData = $this->model->selectUsuarios();
-				for ($i=0; $i < count($arrData); $i++) { 
-					$arrData[$i]['picture'] = base_url()."/Assets/images/uploads/".$arrData[$i]['picture'];
-				}
-				//$_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'
-				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
+			$options="";
+			if(isset($_POST['orderBy'])){
+				$options =intval($_POST['orderBy']);
+			}
+			$arrData = $this->model->selectUsuarios($options);
+			for ($i=0; $i < count($arrData); $i++) { 
+				$arrData[$i]['picture'] = base_url()."/Assets/images/uploads/".$arrData[$i]['picture'];
+			}
+			//$_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'
+			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
 			die();
 		}
 
@@ -146,9 +155,9 @@
 				$requestDelete = $this->model->deleteUsuario($intIdUsuario);
 				if($requestDelete == 'ok')
 				{
-					$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el usuario');
+					$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado');
 				}else{
-					$arrResponse = array('status' => false, 'msg' => 'Error al eliminar el usuario.');
+					$arrResponse = array('status' => false, 'msg' => 'Error al eliminar');
 				}
 				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 			}

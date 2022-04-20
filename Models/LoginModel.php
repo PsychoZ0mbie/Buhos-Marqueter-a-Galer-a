@@ -26,21 +26,19 @@
         public function sessionLogin(int $iduser){
             $this->intIdUsuario = $iduser;
             //BUSCAR ROL
-            $sql = "SELECT p.idperson,
-                            p.firstname,
-                            p.lastname,
-                            p.picture,
-                            p.phone,
-                            p.address,
-                            p.email,
-                            p.departmentid,
-                            p.cityid,
-                            p.identification,
-                            r.idrole,
-                            r.role
+            $sql = "SELECT  idperson,
+                            firstname,
+                            lastname,
+                            picture,
+                            phone,
+                            address,
+                            email,
+                            department,
+                            city,
+                            identification,
+                            roleid
                     FROM person p
-                    INNER JOIN role r
-                    WHERE p.idperson = $this->intIdUsuario AND p.roleid = r.idrole";
+                    WHERE idperson = $this->intIdUsuario";
             $request = $this->select($sql);
             $_SESSION['userData'] = $request;
             return $request;
