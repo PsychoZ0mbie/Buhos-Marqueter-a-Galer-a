@@ -8,6 +8,7 @@
         private $strRuta;
         private $strProducto;
         private $intPrecio;
+        private $intDesperdicio;
         private $intStatus;
         private $strImagen;
 
@@ -18,12 +19,13 @@
 		}
 
         /******************************Products************************************/
-        public function insertProducto($categoria,$nombre,$subcategoria,$precio,$ruta,$status,$imagenes){
+        public function insertProducto($categoria,$nombre,$subcategoria,$precio,$desperdicio,$ruta,$status,$imagenes){
 
             $this->strProducto = $nombre;
             $this->intIdCategoria = $categoria;
             $this->intIdSubcategoria = $subcategoria;
             $this->intPrecio = $precio;
+            $this->intDesperdicio = $desperdicio;
             $this->strRuta = $ruta;
             $this->intStatus = $status;
 
@@ -33,12 +35,13 @@
             $request = $this->select_all($sql);
 
             if(empty($request)){
-                $query_insert = "INSERT INTO product (title,topicid,subtopicid,price,route,status) VALUES(?,?,?,?,?,?)";
+                $query_insert = "INSERT INTO product (title,topicid,subtopicid,price,waste,route,status) VALUES(?,?,?,?,?,?,?)";
                 $arrData = array(
                                 $this->strProducto,
                                 $this->intIdCategoria,
                                 $this->intIdSubcategoria,
                                 $this->intPrecio,
+                                $this->intDesperdicio,
                                 $this->strRuta,
                                 $this->intStatus);
                 
@@ -59,12 +62,13 @@
             }
             return $return;
         }
-        public function updateProducto($idProducto,$categoria,$nombre,$subcategoria,$precio,$ruta,$status,$imagenes){
+        public function updateProducto($idProducto,$categoria,$nombre,$subcategoria,$precio,$desperdicio,$ruta,$status,$imagenes){
             $this->intIdProducto = $idProducto;
             $this->strProducto = $nombre;
             $this->intIdCategoria = $categoria;
             $this->intIdSubcategoria = $subcategoria;
             $this->intPrecio = $precio;
+            $this->intDesperdicio = $desperdicio;
             $this->strRuta = $ruta;
             $this->intStatus = $status;
 
@@ -73,12 +77,13 @@
             $request = $this->select_all($sql);
 
             if(empty($request)){
-                $query_update = "UPDATE product SET title=?,topicid=?,subtopicid=?,price=?,route=?,status=? WHERE idproduct = $this->intIdProducto";
+                $query_update = "UPDATE product SET title=?,topicid=?,subtopicid=?,price=?,waste=?,route=?,status=? WHERE idproduct = $this->intIdProducto";
                 $arrData = array(
                     $this->strProducto,
                     $this->intIdCategoria,
                     $this->intIdSubcategoria,
                     $this->intPrecio,
+                    $this->intDesperdicio,
                     $this->strRuta,
                     $this->intStatus);
                 
@@ -122,6 +127,7 @@
                             topicid,
                             subtopicid,
                             price,
+                            waste,
                             DATE_FORMAT(datecreated, '%Y-%m-%d') as date,
                             route,
                             status
@@ -144,6 +150,7 @@
                     topicid,
                     subtopicid,
                     price,
+                    waste,
                     DATE_FORMAT(datecreated, '%d-%m-%Y') as date,
                     route,
                     status

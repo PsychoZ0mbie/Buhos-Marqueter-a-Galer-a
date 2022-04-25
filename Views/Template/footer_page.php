@@ -43,16 +43,14 @@
         const md = "<?=MD?>";
     </script>
     <!--Frameworks/plugins-->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.min.js"></script>
-    <script src="<?=media();?>/template/Assets/js/jquery-3.6.0.min.js?n=1"></script>
-    <script src="<?=media();?>/template/Assets/js/popper.min.js?n=1"></script>
-    <script src="<?=media();?>/template/Assets/js/bootstrap.min.js?n=1"></script>
-    <script src="<?=media();?>/template/Assets/js/simple-lightbox.min.js?n=1"></script>
+    <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.js?n=1"></script>
+    <script src="<?=media();?>/template/Assets/js/bootstrap/popper.min.js?n=1"></script>
+    <script src="<?=media();?>/template/Assets/js/bootstrap/bootstrap.min.js?n=1"></script>
     
 
     <!--My functions-->
-    <script src="<?=media();?>/template/Assets/js/functions.js?n=1"></script>
+    <script type="text/javascript" src="<?= media(); ?>/js/functions.js?n=1"></script>
+    <script src="<?=media();?>/template/Assets/js/app.js?n=1"></script>
     <script src="<?= media() ?>/js/functions_login.js?n=1"></script>
     <script src="<?= media() ?>/js/functions_admin.js?n=1"></script>
     <script type="application/ld+json">

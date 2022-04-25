@@ -30,7 +30,7 @@
 
 		public function setProducto(){
 			if($_POST){
-				if(empty($_POST['txtName']) || empty($_POST['topicList']) || empty($_POST['intPrice']) || empty($_POST['statusList'])){
+				if(empty($_POST['txtName']) || empty($_POST['topicList']) || empty($_POST['intPrice']) || empty($_POST['intWaste']) || empty($_POST['statusList'])){
 					$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
 				}else{ 
 					$idProducto = intval($_POST['idProduct']);
@@ -38,6 +38,8 @@
 					$intCategoria = intval(strClean($_POST['topicList']));
 					$intEstado = intval(strClean($_POST['statusList']));
 					$intPrecio = intval(strClean($_POST['intPrice']));
+					$intDesperdicio = intval(strClean($_POST['intWaste']));
+
 					$request_product = "";
 					$foto=[];
 					$foto_img=[];
@@ -62,6 +64,7 @@
 																	$strNombre, 
 																	$intCategoria, 
 																	$intPrecio,
+																	$intDesperdicio,
 																	$ruta,
 																	$intEstado,
 																	$foto_img);
@@ -88,6 +91,7 @@
 																	$strNombre, 
 																	$intCategoria, 
 																	$intPrecio,
+																	$intDesperdicio,
 																	$ruta,
 																	$intEstado,
 																	$foto_img);

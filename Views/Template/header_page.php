@@ -44,8 +44,7 @@
     
     <script src="https://kit.fontawesome.com/3207833fba.js" crossorigin="anonymous"></script>
     <!--Resources styles-->
-    <link rel="stylesheet" href="<?=media();?>/template/Assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?=media();?>/template/Assets/css/simple-lightbox.min.css">
+    <link rel="stylesheet" href="<?=media();?>/template/Assets/css/bootstrap/bootstrap.min.css">
     <!-- My css -->
     <link rel="stylesheet" href="<?=media();?>/template/Assets/css/style.css">
     

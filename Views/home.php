@@ -1,11 +1,11 @@
 <?php headerPage($data);
-    $productos = $data['products'];
+    /*$productos = $data['products'];
     $marqueteria = $data['marqueteria'];
     $galeria = $data['galeria'];
-    $urlProducto = base_url()."/catalogo/producto/";
+    $urlProducto = base_url()."/catalogo/producto/";*/
 ?>
 <main>
-    <section>
+    <!--<section>
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -153,7 +153,7 @@
                 <a class="btn_content"href="<?=base_url();?>/contacto">Contactar</a>
             </div>
     </section>
-    </main>
+    </main>-->
 <?php footerPage($data);?>    
     
     

@@ -279,10 +279,11 @@ if(document.querySelector("#marqueteria")){
         let strName = document.querySelector("#txtName").value;
         let topicList = document.querySelector("#topicList").value;
         let statusList = document.querySelector("#statusList").value;
+        let intWaste = document.querySelector("#intWaste").value;
         let intPrice = document.querySelector("#intPrice").value;
         let idProduct = document.querySelector("#idProduct").value;
 
-        if(strName == "" ||  topicList == "" || intPrice == "" || statusList==""){
+        if(strName == "" ||  topicList == "" || intPrice == "" || statusList=="" || intWaste == ""){
             Swal.fire("Error","Todos los campos son obligatorios","error");
             return false;
         }

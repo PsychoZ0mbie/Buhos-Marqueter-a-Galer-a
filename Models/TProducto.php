@@ -7,6 +7,37 @@ require_once("Libraries/Core/Mysql.php");
         private $strRuta;
         private $intIdProducto;
 
+
+
+        public function getMolduras($tipo){
+            $this->con = new Mysql();
+            
+            $sql = "SELECT 
+                            idproduct,
+                            title,
+                            author,
+                            topicid,
+                            subtopicid,
+                            price,
+                            waste,
+                            DATE_FORMAT(datecreated, '%Y-%m-%d') as date,
+                            route,
+                            status
+                    FROM product
+                    WHERE topicid = 1 AND subtopicid = $tipo AND status = 1 ORDER BY title DESC";
+             
+            $request = $this->con->select_all($sql);
+            for ($i=0; $i <count($request) ; $i++) { 
+                $idproduct = $request[$i]['idproduct'];
+                $sqlimg = "SELECT * FROM productimage WHERE productid=$idproduct";
+                $requestimg = $this->con->select_all($sqlimg);
+                $request[$i]['url'][0] = base_url()."/Assets/images/uploads/".$requestimg[0]['title'];
+                $request[$i]['url'][1] = $requestimg[1]['title'];
+            }
+            return $request;
+        }
+
+        /*
         public function getProductosT(){
             $this->con = new Mysql();
             $sql = "SELECT s.idsubtopic,
@@ -311,7 +342,7 @@ require_once("Libraries/Core/Mysql.php");
             $request['productos'] = $request;
             $request['total'] = $total;
             return $request;
-        }
+        }*/
     }
 
 ?>

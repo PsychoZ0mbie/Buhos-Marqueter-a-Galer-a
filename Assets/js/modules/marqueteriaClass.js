@@ -32,9 +32,19 @@ export default class Marqueteria extends Interface{
                     <option value="2">Moldura importada</option>
                 </select>
             </div>
-            <div class="mb-3">
-                <label for="intPrice" class="form-label">Precio</label>
-                <input type="number" class="form-control" id="intPrice" name="intPrice">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="intWaste" class="form-label">Desperdicio</label>
+                        <input type="number" class="form-control" id="intWaste" name="intWaste">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="intPrice" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="intPrice" name="intPrice">
+                    </div>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="statusList" class="form-label">Disponibilidad</label>
@@ -76,7 +86,12 @@ export default class Marqueteria extends Interface{
                 }
                 for (let l = 0; l < statusList.length; l++) {
                     if(statusList[l].value == objData[i]['status']){
-                        status = statusList[l].textContent;
+                        if(statusList[l].value == 1){
+                            status = `<span class="badge badge-success">${statusList[l].textContent}</span>`
+                        }else{
+                            status = `<span class="badge badge-danger">${statusList[l].textContent}</span>`
+                        }
+
                         break;
                     }
                 }
@@ -91,7 +106,9 @@ export default class Marqueteria extends Interface{
                         <p><strong>Referencia: </strong>${objData[i]['title']}</p>
                         <ul>
                             <li class="text-secondary"><strong>Tipo de moldura: </strong>${topic}</li>
-                            <li class="text-secondary"><strong>Precio: </strong>$${price}</li>
+                            <li class="text-secondary"><strong>Precio: </strong>$${price} x cm</li>
+                            <li class="text-secondary"><strong>Desperdicio: </strong>${objData[i]['waste']} cm</li>
+                            <li class="text-secondary"><strong>Disponibilidad: </strong>${status}</li>
                         </ul>
                     </div>
                     <div class="col-md-3">
@@ -133,8 +150,15 @@ export default class Marqueteria extends Interface{
                 }
                 for (let l = 0; l < statusList.length; l++) {
                     if(statusList[l].value == objData[i]['status']){
-                        status = statusList[l].textContent;
+
+                        if(statusList[l].value == 1){
+                            status = `<span class="badge badge-success">${statusList[l].textContent}</span>`
+                        }else{
+                            status = `<span class="badge badge-danger">${statusList[l].textContent}</span>`
+                        }
+
                         break;
+                        
                     }
                 }
                 html += `
@@ -148,7 +172,9 @@ export default class Marqueteria extends Interface{
                         <p><strong>Referencia: </strong>${objData[i]['title']}</p>
                         <ul>
                             <li class="text-secondary"><strong>Tipo de moldura: </strong>${topic}</li>
-                            <li class="text-secondary"><strong>Precio: </strong>$${price}</li>
+                            <li class="text-secondary"><strong>Precio: </strong>$${price} x cm</li>
+                            <li class="text-secondary"><strong>Desperdicio: </strong>${objData[i]['waste']} cm</li>
+                            <li class="text-secondary"><strong>Disponibilidad: </strong>${status}</li>
                         </ul>
                     </div>
                     <div class="col-md-3">
@@ -245,8 +271,12 @@ export default class Marqueteria extends Interface{
                                                     <td>${status}</td>
                                                 </tr>
                                                 <tr scope="row">
+                                                    <td>Desperdicio: </td>
+                                                    <td>${objData.data.waste} cm</td>
+                                                </tr>
+                                                <tr scope="row">
                                                     <td>Precio: </td>
-                                                    <td>$${price}</td>
+                                                    <td>$${price} x cm</td>
                                                 </tr>
                                                 <tr scope="row">
                                                     <td>Fecha de creación: </td>
@@ -302,7 +332,7 @@ export default class Marqueteria extends Interface{
 
                 document.querySelector("#txtName").value = objData.data.title;
                 document.querySelector("#intPrice").value = objData.data.price;
-                
+                document.querySelector("#intWaste").value = objData.data.waste;
                 document.querySelector("#idProduct").value = objData.data.idproduct;
 
                 let images = document.querySelectorAll(".uploadImg img");

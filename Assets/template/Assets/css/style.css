@@ -10,6 +10,19 @@ input::-webkit-inner-spin-button {
    -webkit-appearance: none;
    margin: 0;
 }
+.text__color{
+    color:#E05A10;
+}
+.scroll_list{
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 350px;
+}
+.scroll_listX{
+    overflow: hidden;
+    overflow-x: scroll;
+    height: 100px;
+}
 
 #divLoading{
     position: absolute;
@@ -400,68 +413,108 @@ input[type=number] {
     flex-wrap: wrap;
 }
 
-/*************************Catalog Page**************************/
-.search{
-    width: 50%;
-}
-.catalog{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
-.catalog_product{
-    text-align: center;
-    height: 450px;
-    width: 350px;
-    padding: 5px;
-    margin: 20px;
-}
-.catalog_product_image{
+/*************************Medidas Page**************************/
+.measures__container{
+    height: 500px;
+    width: 100%;
     position: relative;
     overflow: hidden;
 }
-.catalog_product_image img{
-    height: 250px;
-    width: 100%;
-    object-fit: cover;
-    transition: 0.5s all ease;
-}
-.catalog_product:hover .catalog_product_image img{
-    filter: brightness(50%);
-    transition: 0.5s all ease;
-    transform: scale(1.25);
-}
-.catalog_product_image a{
+.measures__frame{
     position: absolute;
-    display: none;
-    top: 90%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: 0.5s all ease;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    height: 150px;
+    width: 150px;
+    transition: all 0.3s ease;
+    z-index: 100;
+    
 }
-.catalog_product:hover .catalog_product_image a{
-    display: block;
-}
-.catalog_product_text a{
-    text-decoration: none;
-}
-.catalog_product_text{
-    padding: 20px;   
-}
-.catalog_product_text h2{
+.measures__frame img{
+    position: absolute;
     width: 100%;
-    font-size: 20px;
-    word-break: break-all;
-    color: #E05A10;
-}
-.catalog_product_text h3{
-    font-size: 20px;
-    color: #E05A10;
-}
-.catalog_product_text p{
+    height: 100%;
+    object-fit:fill;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+
     margin: 0;
-    color:#676765
+    transition: all 0.3s ease;
+}
+
+.measures__container label a{
+    color:rgb(255, 255, 255);
+}
+.measures__container label{
+    position: absolute;
+    left:50%;
+    bottom: 10px;
+    transform: translate(-50%,0);
+    z-index: 200;
+}
+
+.measures__dimensions{
+    transition: all 0.3s ease;
+}
+.measures__margin{
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    height: 150px;
+    width: 150px;
+    transition: all 0.3s ease;
+    border-image: none;
+}
+.measures__item{
+    height: 100px;
+    width: 100px;
+    margin: 5px;
+    cursor: pointer;
+}
+.measures__item img{
+    height: 100%;
+    width: 100%;
+    
+    object-position: 50% 50%;
+}
+.color_margin_item{
+    min-width: 50px;
+    height: 50px;
+    margin: 10px;
+    border: 1px solid #000;
+}
+.color_margin_item:nth-child(1){
+    background-color: #fff;
+}
+.color_margin_item:nth-child(2){
+    background-color: #F3E5AB;
+}
+.color_margin_item:nth-child(3){
+    background-color: #F5F5DC;
+}
+.color_margin_item:nth-child(4){
+    background-color: #000;
+}
+.color_margin_item:nth-child(5){
+    background-color: #E3E4E5;
+}
+.color_margin_item:nth-child(6){
+    background-color: #EFB810;
+}
+.color_margin_item:nth-child(7){
+    background-color: #ff0000;
+}
+.color_margin_item:nth-child(8){
+    background-color: #0000FF;
+}
+.color_margin_item:nth-child(9){
+    background-color: #FFFF00;
+}
+.color_margin_item:nth-child(10){
+    background-color: #EA899A;
 }
 
 /*************************Products Page**************************/
@@ -501,29 +554,21 @@ input[type=number] {
 .product_info ul li i{
     padding-right: 10px;
 }
-.product_purchase{
+.btn_number{
     padding-top: 20px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-.product_purchase input, .product_purchase button{
+.btn_number input, .product_purchase button{
     text-align: center;
     width: 200px;
     height: 50px;
     margin: 5px;
     border: 2px solid #676765;
 }
-#btn_increment{
-    text-align: center;
-    width: 50px;
-    height: 50px;
-    border: 2px solid #676765;
-    font-size: 25px;
-    cursor: pointer;
-}
-#btn_decrement{
+.btnMeasure{
     text-align: center;
     width: 50px;
     height: 50px;
