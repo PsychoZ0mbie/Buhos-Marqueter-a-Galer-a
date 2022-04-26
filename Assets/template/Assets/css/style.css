@@ -439,7 +439,6 @@ input[type=number] {
     left:50%;
     top:50%;
     transform: translate(-50%,-50%);
-
     margin: 0;
     transition: all 0.3s ease;
 }
@@ -480,40 +479,40 @@ input[type=number] {
     
     object-position: 50% 50%;
 }
-.color_margin_item{
+.color_block{
     min-width: 50px;
     height: 50px;
     margin: 10px;
     border: 1px solid #000;
 }
-.color_margin_item:nth-child(1){
+.color_block:nth-child(1){
     background-color: #fff;
 }
-.color_margin_item:nth-child(2){
+.color_block:nth-child(2){
     background-color: #F3E5AB;
 }
-.color_margin_item:nth-child(3){
+.color_block:nth-child(3){
     background-color: #F5F5DC;
 }
-.color_margin_item:nth-child(4){
+.color_block:nth-child(4){
     background-color: #000;
 }
-.color_margin_item:nth-child(5){
+.color_block:nth-child(5){
     background-color: #E3E4E5;
 }
-.color_margin_item:nth-child(6){
+.color_block:nth-child(6){
     background-color: #EFB810;
 }
-.color_margin_item:nth-child(7){
+.color_block:nth-child(7){
     background-color: #ff0000;
 }
-.color_margin_item:nth-child(8){
+.color_block:nth-child(8){
     background-color: #0000FF;
 }
-.color_margin_item:nth-child(9){
+.color_block:nth-child(9){
     background-color: #FFFF00;
 }
-.color_margin_item:nth-child(10){
+.color_block:nth-child(10){
     background-color: #EA899A;
 }
 

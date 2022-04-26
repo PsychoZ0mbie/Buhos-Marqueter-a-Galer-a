@@ -10,71 +10,78 @@ if(document.querySelector("#medidas")){
 
     let inputMeasure = document.querySelectorAll(".btn_number div.d-flex");
     let measureFrame = document.querySelector(".measures__frame");
-    let measureImg = document.querySelector(".measures__frame img");
     let measureMargin = document.querySelector(".measures__margin");
     let measureContainer = document.querySelector(".measures__container");
+
+    let intHeight;
+    let intWidth;
     
     for (let i = 0; i < inputMeasure.length; i++) {
     
         let event = inputMeasure[i];
-    
-        event.addEventListener("click",function(e){
-            
-            let element = e.target;
-            let inputValue = element.parentElement.children[1];
-            let btn = element.getAttribute("name");
-            let value = inputValue.value;
-            if(value < 10 || value > 200){
-                Swal.fire("Error","Las dimensiones deben ser mínimo de 20 cm o máximo 200 cm!","error");
-                inputValue.value = 20;
-                return false;
-            }
-
-            if(btn==="decrement"){
-                inputValue.value--;
-            }else if(btn==="increment"){
-                inputValue.value++;
-            }
-            
-
-            value = String(parseInt(inputValue.value)+dimensionDefault)+"px";
-            if(i==0){
-                //measureImg.style.height = value;
-                measureFrame.style.height = value;
-                measureMargin.style.height = value;
-            }else{
-                //measureImg.style.width = value;
-                measureFrame.style.width = value;
-                measureMargin.style.width = value;
-            }
-        })
-    
         event.addEventListener("change",function(e){
 
             if(e.target.value < 10 || e.target.value > 200){
-                Swal.fire("Error","Las dimensiones deben ser mínimo de 20 cm o máximo 200 cm!","error");
+                Swal.fire("Error","Las dimensiones deben ser mínimo de 10 cm o máximo 200 cm!","error");
                 e.target.value = 10;
                 return false;
             }
 
             let inputValue = String(parseInt(e.target.value)+dimensionDefault)+"px";
             if(i==0){
-                //measureImg.style.height = inputValue;
                 measureFrame.style.height = inputValue;
                 measureMargin.style.height = inputValue;
             }else{
-                //measureImg.style.width = inputValue;
                 measureFrame.style.width = inputValue;
                 measureMargin.style.width = inputValue;
             }
         })
     }
     
-    let btnContinue = document.querySelector("#btnCustom");
-    btnContinue.addEventListener("click",function(){
-        document.querySelector(".measures__dimensions").classList.add("d-none");
-        document.querySelector(".measures__custom").classList.remove("d-none");
+    //Pages
+
+    let btnNext = document.querySelector("#btnNext");
+    let btnPrevious = document.querySelector("#btnPrevious");
+
+    btnNext.addEventListener("click",function(){
+        if( document.querySelectorAll(".page.active")){
+            let pages = document.querySelectorAll(".page.active");
+    
+            for (let i = 0; i < pages.length; i++) {
+    
+                let nextPage = pages[i].nextElementSibling;
+                let previousPage = nextPage.previousElementSibling;
+                
+                nextPage.classList.add("active");
+                nextPage.classList.remove("d-none");
+
+                previousPage.classList.remove("active");
+                previousPage.classList.add("d-none");
+                
+            }
+        }
     })
+    
+    btnPrevious.addEventListener("click",function(){
+        if( document.querySelectorAll(".page.active")){
+            let pages = document.querySelectorAll(".page.active");
+    
+            for (let i = 0; i < pages.length; i++) {
+
+                let previousPage = pages[i].previousElementSibling;
+                let nextPage = previousPage.nextElementSibling;
+                
+                previousPage.classList.add("active");
+                previousPage.classList.remove("d-none");
+
+                nextPage.classList.remove("active");
+                nextPage.classList.add("d-none");
+                
+            }
+        }
+    })
+
+    
 
     let selectType = document.querySelector("#selectType");
     selectType.addEventListener("change",function(){
@@ -100,7 +107,6 @@ if(document.querySelector("#medidas")){
             parent.appendChild(fragment);
         });
     })
-    //let paddingImg;
     let selectFrame = document.querySelector("#selectFrames");
     selectFrame.addEventListener("click",function(e){
         
@@ -111,11 +117,9 @@ if(document.querySelector("#medidas")){
 
             let borderStyle = border*0.5; //Cálculo ancho de moldura
             let borderOutset = borderStyle*1.01; // Cálculo separación entre el borde de imágen y el contenedor
-            //paddingImg = borderStyle*0.40; // Cálculo de relleno de imágen con respecto al borde
             
             borderOutset = String(borderOutset)+"px";
             borderStyle = String(borderStyle)+"px";
-            //paddingImg = String(paddingImg)+"px";
 
             let url = base_url+"/Assets/images/uploads/"+image;
             url= "url("+url+") 40% repeat";
@@ -124,7 +128,6 @@ if(document.querySelector("#medidas")){
             measureMargin.style.border = borderStyle+" solid #000";
             measureMargin.style.borderImage= url;
             measureMargin.style.borderImageOutset = borderOutset;
-            //measureImg.style.padding = paddingImg;
             
         }
     })
@@ -137,24 +140,38 @@ if(document.querySelector("#medidas")){
         let rangeFrame = document.querySelector("#rangeFrame");
         let height = document.querySelector("#intHeight").value;
         let width = document.querySelector("#intWidth").value;
-        
+        let selectBorder = document.querySelector("#selectBorder");
+
+        intHeight = height;
+        intWidth = width;
+        console.log(intHeight)
+        console.log(intWidth);
+
         if(selectMargin.value == 1){
 
             measureMargin.style.background ="transparent";
+            measureFrame.style.border = "none";
             let heightMargin = String(parseInt(height)+dimensionDefault)+"px";
             let widthMargin = String(parseInt(width)+dimensionDefault)+"px";
 
             measureMargin.style.height = heightMargin;
             measureMargin.style.width = widthMargin;
-            
+
             document.querySelector(".rangeInfo").classList.add("d-none");
             document.querySelector(".color_margin").classList.add("d-none");
+
+            selectBorder.classList.add("d-none");
+            document.querySelector(".color_border").classList.add("d-none");
 
         }else if(selectMargin.value == 2){
             
             measureMargin.style.background ="#fff";
             document.querySelector(".rangeInfo").classList.remove("d-none");
             document.querySelector(".color_margin").classList.remove("d-none");
+
+            selectBorder.classList.remove("d-none");
+            
+
             rangeFrame.addEventListener("input",function(){
 
                 let rangeValue = parseInt(rangeFrame.value);
@@ -166,13 +183,32 @@ if(document.querySelector("#medidas")){
                 measureMargin.style.height = heightMargin;
                 measureMargin.style.width = widthMargin;
 
-                let elementsColor = document.querySelectorAll(".color_margin_item");
-                for (let i = 0; i < elementsColor.length; i++) {
-                    let element = elementsColor[i];
+                let marginColor = document.querySelectorAll(".color_margin_item");
+                for (let i = 0; i < marginColor.length; i++) {
+                    let element = marginColor[i];
                     element.addEventListener("click",function(e){
-                        let colorBackground = window.getComputedStyle(element).backgroundColor;
-                        measureMargin.style.background = colorBackground;
+                        let color = window.getComputedStyle(element).backgroundColor;
+                        measureMargin.style.background = color;
                     })
+                }
+            })
+
+            selectBorder.addEventListener("change",function(){
+                if(selectBorder.value == 1){
+                    document.querySelector(".color_border").classList.add("d-none");
+                    measureFrame.style.border = "none";
+                }else{
+
+                    document.querySelector(".color_border").classList.remove("d-none");
+                    let borderColor = document.querySelectorAll(".color_border_item");
+                    for (let i = 0; i < borderColor.length; i++) {
+                        let element = borderColor[i];
+                        element.addEventListener("click",function(e){
+                            let color = window.getComputedStyle(element).backgroundColor;
+                            measureFrame.style.border = "5px solid "+color;
+                        })
+                    }
+
                 }
             })
 
@@ -195,8 +231,6 @@ if(document.querySelector("#medidas")){
         }
     });
 
-    
-
     measureContainer.addEventListener("mousemove",function(e){
         let clientX = e.clientX-measureContainer.offsetLeft;
         let clientY = e.clientY-measureContainer.offsetTop;
@@ -205,15 +239,13 @@ if(document.querySelector("#medidas")){
 
         clientX = clientX / mWidth * 100;
         clientY = clientY / mheight * 100;
-
+        
         measureMargin.style.transform = "translate(-"+clientX+"%,-"+clientY+"%) scale(2)";
         measureFrame.style.transform = "translate(-"+clientX+"%,-"+clientY+"%) scale(2)";
-        //measureImg.style.transform = "translate(-50%,-50%) scale(2)";
     })
     measureContainer.addEventListener("mouseleave",function(){
         measureMargin.style.transform = "translate(-50%,-50%) scale(1)";
         measureFrame.style.transform = "translate(-50%,-50%) scale(1)";
-        //measureImg.style.transform = "translate(-50%,-50%) scale(1)";
     })
 
 }
