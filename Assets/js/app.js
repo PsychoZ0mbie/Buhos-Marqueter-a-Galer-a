@@ -1,5 +1,6 @@
 'use strict';
 import Marqueteria from "./modules/marqueteriaClass.js";
+import MarqueteriaColores from "./modules/marqueteriaColoresClass.js";
 import Galeria from "./modules/galeriaClass.js";
 import Usuario from "./modules/usuarioClass.js";
 
@@ -98,7 +99,7 @@ if(document.querySelector("#usuarios")){
         let formData = new FormData(form);
         let url = base_url+"/Usuarios/setUsuario";
         loading.style.display="flex";
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             loading.style.display="none";
             if(objData.status){
                 Swal.fire("Usuario",objData.msg,"success");
@@ -199,7 +200,7 @@ if(document.querySelector("#galeria")){
         let formData = new FormData(form);
         let url = base_url+"/Galeria/setProducto";
         loading.style.display="flex";
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             loading.style.display="none";
             if(objData.status){
                 Swal.fire("Galeria",objData.msg,"success");
@@ -293,7 +294,7 @@ if(document.querySelector("#marqueteria")){
         let formData = new FormData(form);
         let url = base_url+"/Marqueteria/setProducto";
         loading.style.display="flex";
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             loading.style.display="none";
             if(objData.status){
                 Swal.fire("Marqueteria",objData.msg,"success");
@@ -315,6 +316,83 @@ if(document.querySelector("#marqueteria")){
                     item.deleteItem(element,id);
                 }else if(element.name == "btnView"){
                     item.viewItem(id);
+                }else if(element.name == "btnEdit"){
+                    item.editItem(id);
+                }
+        });
+    }
+}
+if(document.querySelector("#colores")){
+
+    let search = document.querySelector("#search");
+    search.addEventListener('input',function() {
+    let elements = document.querySelectorAll(".item");
+    let value = search.value.toLowerCase();
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            let strTitle = element.getAttribute("data-title").toLowerCase();
+            if(!strTitle.includes(value)){
+                element.classList.add("d-none");
+            }else{
+                element.classList.remove("d-none");
+            }
+        }
+    })
+
+    
+
+    let item = new MarqueteriaColores();
+    item.interface();
+
+    let element = document.querySelector("#listItem");
+    let orderBy = document.querySelector("#orderBy");
+
+    orderBy.addEventListener("change",function(){
+        item.orderItem(element,orderBy.value);
+    });
+
+    window.addEventListener("DOMContentLoaded",function() {
+        item.showItems(element);
+    })
+    let form = document.querySelector("#formItem");
+    form.addEventListener("submit",function(e){
+        e.preventDefault();
+
+        let strName = document.querySelector("#txtName").value;
+        let statusList = document.querySelector("#statusList").value;
+        let strHex = document.querySelector("#txtHexa").value;
+        let idColor = document.querySelector("#idColor").value;
+
+        if(strName == "" ||  statusList == "" || strHex == ""){
+            Swal.fire("Error","Todos los campos son obligatorios","error");
+            return false;
+        }
+
+
+        //Request
+        let formData = new FormData(form);
+        let url = base_url+"/Marqueteria/setColor";
+        loading.style.display="flex";
+        request(url,formData,"post").then(function(objData){
+            loading.style.display="none";
+            if(objData.status){
+                Swal.fire("Marqueteria",objData.msg,"success");
+                setTimeout(function(){
+                    location.reload();
+                },2000);
+            }else{
+                Swal.fire("Error",objData.msg,"error");
+            }
+        });
+    });
+    //buttons
+    if(document.querySelector("#listItem")){
+        let listProduct = document.querySelector("#listItem");
+        listProduct.addEventListener("click",function(e) {
+                let element = e.target;
+                let id = element.getAttribute("data-id");
+                if(element.name == "btnDelete"){
+                    item.deleteItem(element,id);
                 }else if(element.name == "btnEdit"){
                     item.editItem(id);
                 }

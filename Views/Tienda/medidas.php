@@ -58,12 +58,13 @@
                                             <div id="divLoading" class="position-absolute top-0 start-0 w-100 h-100">
                                                 <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <p><strong>Elige el tipo de margen y borde de la obra:</strong> </p>
+                        <p><strong>Elige el margen, borde y vidrio:</strong> </p>
                         <div class="accordion accordion-flush mb-3" id="accordionExample">
                             <div class="accordion-item">
                                 
@@ -74,6 +75,7 @@
                                 </h2>
                                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
+                                        <p><strong>Tipo de margen:</strong> </p>
                                         <select class="form-select" aria-label="Default select example" id="selectMargin">
                                             <option value="1">Sin margen</option>
                                             <option value="2">Fondo</option>
@@ -81,63 +83,104 @@
                                         </select>
                                         
                                         <div class="mt-3 rangeInfo d-none">
-                                            <label for="exampleFormControlInput1" class="form-label">Ajusta el margen</label>
-                                            <input type="range" class="form-range" min="1" max="10" id="rangeFrame" value="1">
+                                            <p><strong>Ajusta el margen</strong></p>
+                                            <label for="exampleFormControlInput1" class="form-label"></label>
+                                            <input type="range" class="form-range" min="0" max="10" id="rangeFrame" value="0">
                                             <div class="d-flex justify-content-end">
                                                 <p id="rangeData" class="m-0">0 cm</p>
                                             </div>
                                         </div>
+                                        
                                         <div class="color_margin mt-2 d-none">
-                                            <label for="exampleFormControlInput1" class="form-label">Seleccione el color del fondo</label>
+                                            <p><strong>Elige el color: </strong> </p>
+                                            <label for="exampleFormControlInput1" class="form-label"></label>
                                             <div class="scroll_listX d-flex justify-content-start">
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
-                                                <div class="color_block color_margin_item"></div>
+                                                <div id="divLoading" class="position-absolute top-0 start-0 w-100 h-100">
+                                                    <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
+                                                </div>
                                             </div>
                                         </div>
-                                        <select class="form-select mt-3 d-none" aria-label="Default select example" id="selectBorder">
-                                            <option value="1">Sin borde</option>
-                                            <option value="2">Borde con bocel de madera</option>
-                                            <option value="3">Borde con marco de madera</option>
-                                        </select>
-                                        <div class="color_border mt-3 d-none">
-                                            <label for="exampleFormControlInput1" class="form-label">Seleccione el color del borde</label>
-                                            <div class="scroll_listX d-flex justify-content-start">
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
-                                                <div class="color_block color_border_item"></div>
+                                        <hr>
+                                        <div class="mt-3 d-none" id="border">
+                                            <p><strong>Tipo de borde: </strong></p>
+                                            <select class="form-select" aria-label="Default select example" id="selectBorder">
+                                                <option value="1">Sin borde</option>
+                                                <option value="2">Bocel de madera</option>
+                                                <option value="3">Marco de madera</option>
+                                            </select>
+                                            <div class="color_border mt-3 d-none">
+                                                <p><strong>Elige el color: </strong> </p>
+                                                <label for="exampleFormControlInput1" class="form-label"></label>
+                                                <div class="scroll_listX d-flex justify-content-start">
+                                                    <div id="divLoading" class="position-absolute top-0 start-0 w-100 h-100">
+                                                        <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
+                                        <hr>
+                                        <div class="mt-3 d-none" id="glass">
+                                            <p><strong>Tipo de vidrio:</strong></p>
+                                            <select class="form-select" aria-label="Default select example" id="selectGlass">
+                                                <option value="1">Sin vidrio</option>
+                                                <option value="2">Antireflejo</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
+                        <h3 class="mt-3 fs-5 text-center" id="price"></h3>
                     </div>
                     <div class="measures__description d-none page">
-                        <h2 class="fs-5 text__color mt-2"><strong>Ficha técnica</strong></h2>
+                        <h2 class="fs-5 text__color mt-2"><strong>Descripción</strong></h2>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Material de la moldura: </td>
+                                    <td id="txtMolduras"></td>
+                                </tr>
+                                <tr>
+                                    <td>Referencia de la moldura: </td>
+                                    <td id="txtRef"></td>
+                                </tr>
+                                <tr>
+                                    <td>Tipo de margen</td>
+                                    <td id="txtMargen"></td>
+                                </tr>
+                                <tr>
+                                    <td>Margen</td>
+                                    <td id="txtMargenMedida">0 cm</td>
+                                </tr>
+                                <tr>
+                                    <td>Tipo de borde</td>
+                                    <td id="txtBorde"></td>
+                                </tr>
+                                <tr>
+                                    <td>Medidas de la imágen</td>
+                                    <td id="txtMedidasImg"></td>
+                                </tr>
+                                <tr>
+                                    <td>Medidas del marco</td>
+                                    <td id="txtMedidasMarco"></td>
+                                </tr>
+                                <tr>
+                                    <td>Precio: </td>
+                                    <td id="txtPrice"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-center mt-2 ">
+                            <input  type="number" id="addCant" class="me-4 text-center" value="1" min="1">
+                            <button type="button" class="btn_content addCart">Agregar</button>
+                        </div>
                     </div>
                 </div>
-                
             </div>
             <div class="d-flex justify-content-center mt-4">
-
-                <button class="btn_content me-4" id="btnPrevious">Atrás</button>
+                <button class="btn_content me-4 d-none" id="btnPrevious">Atrás</button>
                 <button class="btn_content" id="btnNext">Siguiente</button>
-
             </div>
         </div>
         

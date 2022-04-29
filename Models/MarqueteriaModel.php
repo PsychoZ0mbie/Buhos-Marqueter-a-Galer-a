@@ -13,6 +13,7 @@
         private $strImagen;
 
 
+
 		public function __construct(){
 		
 			parent::__construct();
@@ -180,11 +181,74 @@
 			$request = $this->delete($sql);
         }
 
-        /*public function updateTemp($product,$id){
-            $sql = "UPDATE product SET subtopicid=? WHERE idproduct = $product";
-            $array = array($id);
-            $request = $this->update($sql,$array);
-        }*/
+        /******************************Colors************************************/
+
+        public function insertColor($strNombre,$strHex,$intEstado){
+            $return = "";
+            $sql = "SELECT * FROM colors WHERE title ='$strNombre'";
+            $request = $this->select_all($sql);
+
+            if(empty($request)){
+                $query_insert = "INSERT INTO colors (title,hex,status) VALUES(?,?,?)";
+                $arrData = array($strNombre,$strHex,$intEstado);
+                $request_insert = $this->insert($query_insert,$arrData);
+                $return = $request_insert;
+            }else{
+                $return = "exist";
+            }
+            return $return;
+        }
+        public function updateColor($idColor,$strNombre,$strHex,$intEstado){
+            $return = "";
+            $sql = "SELECT * FROM colors WHERE title ='$strNombre' AND id != $idColor";
+            $request = $this->select_all($sql);
+
+            if(empty($request)){
+                $query_update = "UPDATE colors SET title=?,hex=?,status=? WHERE id = $idColor";
+                $arrData = array($strNombre,$strHex,$intEstado);
+                $request_update = $this->update($query_update,$arrData);
+                $return = $request_update;
+                
+            }else{
+                $return = "exist";
+            }
+            return $return;   
+        }
+        public function selectColors($options){
+            if($options == 1){
+				$options=" ORDER BY id DESC";
+			}else if($options == 2){
+				$options=" ORDER BY id ASC";
+			}else if($options == 3){
+				$options=" ORDER BY title";
+			}else{
+				$options=" ORDER BY id DESC";
+			}
+            
+            $sql = "SELECT 
+                            id,
+                            title,
+                            hex,
+                            status
+                    FROM colors
+                    $options";
+             
+            $request = $this->select_all($sql);
+            return $request;
+        }
+        public function selectColor($idcolor){
+            $sql = "SELECT * FROM colors
+            WHERE id = $idcolor";
+            $request = $this->select($sql);
+
+            return $request;
+        }
+        public function deleteColor(int $id){
+			$sql = "DELETE FROM colors WHERE id = $id";
+			$request = $this->delete($sql);
+			return $request;
+		}
+        
 
 	}
 

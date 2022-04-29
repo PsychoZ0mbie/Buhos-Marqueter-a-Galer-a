@@ -65,7 +65,7 @@ export default class Marqueteria extends Interface{
         let formData = new FormData();
         let fragment = document.createDocumentFragment();
         formData.append("orderBy",value);
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             let div = document.querySelector("div.scroll_list");
             let html=""
             
@@ -127,7 +127,7 @@ export default class Marqueteria extends Interface{
     }
     showItems(element){
         let url = base_url+"/Marqueteria/getProductos";
-        request(url,"",2).then(function(objData){
+        request(url,"","get").then(function(objData){
 
             let div = document.createElement("div");
             let fragment = document.createDocumentFragment();
@@ -197,7 +197,7 @@ export default class Marqueteria extends Interface{
         let formData = new FormData();
         formData.append("idProduct",id);
 
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             if(objData.status){
                 let topicList = document.querySelectorAll("#topicList option");
                 let statusList = document.querySelectorAll("#statusList option");
@@ -310,7 +310,7 @@ export default class Marqueteria extends Interface{
         let url = base_url+"/Marqueteria/getProducto";
         let formData = new FormData();
         formData.append("idProduct",id);
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             if(objData.status){
 
                 let topicList = document.querySelectorAll("#topicList option");
@@ -364,7 +364,7 @@ export default class Marqueteria extends Interface{
                     let formData = new FormData();
                     formData.append("idProduct",id);
                     loading.style.display = "flex";
-                    request(url,formData,1).then(function(objData){
+                    request(url,formData,"post").then(function(objData){
                         loading.style.display = "none";
                         Swal.fire("Marqueteria",objData.msg,"success");
                         element.parentElement.parentElement.remove();

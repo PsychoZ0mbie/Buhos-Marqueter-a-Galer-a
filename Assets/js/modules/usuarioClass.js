@@ -66,7 +66,7 @@ export default class Usuario extends Interface{
         let url = base_url+"/Usuarios/getUsuarios"
         let formData = new FormData();
         formData.append("orderBy",value);
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             let div = document.querySelector("div.scroll_list");
             let html="";
             let typeList = document.querySelectorAll("#typeList option");
@@ -108,7 +108,7 @@ export default class Usuario extends Interface{
     }
     showItems(element){
         let url = base_url+"/Usuarios/getUsuarios";
-        request(url,"",2).then(function(objData){
+        request(url,"","get").then(function(objData){
             let div = document.createElement("div");
             let fragment = document.createDocumentFragment();
             let html="";
@@ -157,7 +157,7 @@ export default class Usuario extends Interface{
         let formData = new FormData();
         formData.append("idUser",id);
 
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             if(objData.status){
                 let typeList = document.querySelectorAll("#typeList option");
                 let rolname ="";
@@ -250,7 +250,7 @@ export default class Usuario extends Interface{
         let url = base_url+"/Usuarios/getUsuario";
         let formData = new FormData();
         formData.append("idUser",id);
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             if(objData.status){
                 let typeList = document.querySelectorAll("#typeList option");
                 for (let i = 0; i < typeList.length; i++) {
@@ -291,7 +291,7 @@ export default class Usuario extends Interface{
                     let formData = new FormData();
                     formData.append("idUser",id);
                     loading.style.display = "flex";
-                    request(url,formData,1).then(function(objData){
+                    request(url,formData,"post").then(function(objData){
                         loading.style.display = "none";
                         Swal.fire("Usuarios",objData.msg,"success");
                         element.parentElement.parentElement.remove();

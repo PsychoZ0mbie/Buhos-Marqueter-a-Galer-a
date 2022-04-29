@@ -14,7 +14,12 @@
       <ul class="app-menu">
         <li><a class="app-menu__item" href="<?=base_url();?>/dashboard"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
         <li><a class="app-menu__item" href="<?=base_url();?>/usuarios"><i class="app-menu__icon fa fa-users"></i><span class="app-menu__label">Usuarios</span></a></li>
-        <li><a class="app-menu__item" href="<?=base_url();?>/marqueteria"><i class="app-menu__icon fa fa-crop"></i><span class="app-menu__label">Marquetería</span></a></li>
+        <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-crop"></i><span class="app-menu__label">Marquetería</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item" href="<?=base_url();?>/marqueteria/productos"><i class="icon fa fa-circle-o"></i> Productos</a></li>
+            <li><a class="treeview-item" href="<?=base_url();?>/marqueteria/colores"><i class="icon fa fa-circle-o"></i> Colores</a></li>
+          </ul>
+        </li>
         <li><a class="app-menu__item" href="<?=base_url();?>/galeria"><i class="app-menu__icon fa fa-picture-o"></i><span class="app-menu__label">Galería</span></a></li>
         <li><a class="app-menu__item" href="<?=base_url();?>/mensaje"><i class="app-menu__icon fa fa-envelope"></i><span class="app-menu__label">Mensajes</span></a></li>
         <li><a class="app-menu__item" href="<?=base_url();?>/pedidos"><i class="app-menu__icon fa fa-truck"></i><span class="app-menu__label">Pedidos</span></a></li>

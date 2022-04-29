@@ -120,7 +120,7 @@ export default class Galeria extends Interface{
         let formData = new FormData();
         let fragment = document.createDocumentFragment();
         formData.append("orderBy",value);
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             let div = document.querySelector("div.scroll_list");
             let html=""
             
@@ -187,7 +187,7 @@ export default class Galeria extends Interface{
     }
     showItems(element){
         let url = base_url+"/Galeria/getProductos";
-        request(url,"",2).then(function(objData){
+        request(url,"","get").then(function(objData){
 
             let div = document.createElement("div");
             let fragment = document.createDocumentFragment();
@@ -259,7 +259,7 @@ export default class Galeria extends Interface{
         let formData = new FormData();
         formData.append("idProduct",id);
 
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             if(objData.status){
                 let topicList = document.querySelectorAll("#topicList option");
                 let subtopicList = document.querySelectorAll("#subtopicList option");
@@ -403,7 +403,7 @@ export default class Galeria extends Interface{
         let url = base_url+"/Galeria/getProducto";
         let formData = new FormData();
         formData.append("idProduct",id);
-        request(url,formData,1).then(function(objData){
+        request(url,formData,"post").then(function(objData){
             if(objData.status){
                 let topicList = document.querySelectorAll("#topicList option");
                 let subtopicList = document.querySelectorAll("#subtopicList option");
@@ -480,7 +480,7 @@ export default class Galeria extends Interface{
                     let formData = new FormData();
                     formData.append("idProduct",id);
                     loading.style.display = "flex";
-                    request(url,formData,1).then(function(objData){
+                    request(url,formData,"post").then(function(objData){
                         loading.style.display = "none";
                         Swal.fire("Galeria",objData.msg,"success");
                         element.parentElement.parentElement.remove();

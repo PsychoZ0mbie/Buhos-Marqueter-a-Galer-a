@@ -12,19 +12,6 @@ function uploadImg(img,location){
     }
 }
 
-function uploadImgBackgroundImg(img,location){
-    let imgUpload = img.value;
-    let fileUpload = img.files;
-    let type = fileUpload[0].type;
-    if(type != "image/png" && type != "image/jpg" && type != "image/jpeg" && type != "image/gif"){
-        imgUpload ="";
-        Swal.fire("Error","El archivo es incorrecto.","error");
-    }else{
-        let objectUrl = window.URL || window.webkitURL;
-        let route = objectUrl.createObjectURL(fileUpload[0]);
-        location.style.backgroundImage = "url("+route+")";
-    }
-}
 
 function formatNum(num,mil){
     let numero = num;
@@ -42,7 +29,8 @@ function formatNum(num,mil){
 
 async function request(url,requestData,option){
     let data ="";
-    if(option==1){
+    option.toLowerCase();
+    if(option=='post'){
         option = {
             method: 'post',
             body:requestData

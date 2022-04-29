@@ -15,7 +15,6 @@ require_once("Libraries/Core/Mysql.php");
             $sql = "SELECT 
                             idproduct,
                             title,
-                            author,
                             topicid,
                             subtopicid,
                             price,
@@ -34,6 +33,30 @@ require_once("Libraries/Core/Mysql.php");
                 $request[$i]['url'][0] = base_url()."/Assets/images/uploads/".$requestimg[0]['title'];
                 $request[$i]['url'][1] = $requestimg[1]['title'];
             }
+            return $request;
+        }
+        public function getColores(){
+            $this->con = new Mysql();
+            
+            $sql = "SELECT *
+                    FROM colors
+                    WHERE status = 1 ORDER BY title ASC";
+             
+            $request = $this->con->select_all($sql);
+            return $request;
+        }
+
+        public function getMoldura($id){
+            $this->con = new Mysql();
+            $sql = "SELECT 
+                    idproduct,
+                    title,
+                    topicid,
+                    price,
+                    waste
+                    FROM product 
+                    WHERE topicid=1 AND idproduct=$id";
+            $request = $this->con->select($sql);
             return $request;
         }
 

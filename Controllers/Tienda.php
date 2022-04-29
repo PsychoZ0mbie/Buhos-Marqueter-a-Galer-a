@@ -37,6 +37,74 @@
             echo json_encode($request,JSON_UNESCAPED_UNICODE);
             die();
         }
+        public function getColor(){
+            $request = $this->getColores();
+            echo json_encode($request,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
+        public function calcularMarco($id){
+            //dep($_POST);
+            if($_POST){
+
+                $intTriplex = 17;
+                $intPassepartout = 10;
+                $intDobleMarco = 114;
+                $intBocel = 30;
+
+                $id = intval($_POST['id']);
+                $intHeight = intval($_POST['height']);
+                $intWidth = intval($_POST['width']);
+                $intMargin = 0;
+                $resultado=0;
+                $area=0;
+                $borde=0;
+                $request = $this->getMoldura($id);
+                if(isset($_POST['type'])){
+                    $intType = intval($_POST['type']);
+                    if($intType == 2){
+                        $intMargin = intval($_POST['margin']);
+                        if($intMargin != 0){
+                            $intMargin*=2;
+                            $intHeightMargin = $intHeight+$intMargin;
+                            $intWidthMargin = $intWidth+$intMargin;
+                            $area = ($intHeightMargin * $intWidthMargin)*$intTriplex;
+                            $resultado = (($intHeightMargin+$intWidthMargin)*2) + $request['waste'];
+                        }else{
+                            $resultado = (($intHeight+$intWidth)*2) + $request['waste'];
+                        }
+                    }else{
+                        $intMargin = intval($_POST['margin']);
+                        if($intMargin != 0){
+                            $intMargin*=2;
+                            $intHeightMargin = $intHeight+$intMargin;
+                            $intWidthMargin = $intWidth+$intMargin;
+                            $area = ($intHeightMargin * $intWidthMargin)*$intPassepartout;
+                            $resultado = (($intHeightMargin+$intWidthMargin)*2) + $request['waste'];
+                        }else{
+                            $resultado = (($intHeight+$intWidth)*2) + $request['waste'];
+                        }
+                    }
+
+                    if(isset($_POST['border'])){
+                        $intBorder = intval($_POST['border']);
+                        if($intBorder == 2){
+                            $borde = (($intHeight+$intWidth)*2)*$intBocel;
+                        }else{
+                            $borde = (($intHeight+$intWidth)*2)*$intDobleMarco;
+                        }
+                    }
+                }else{
+                    $resultado = (($intHeight+$intWidth)*2) + $request['waste'];
+                }
+
+                $resultado = $resultado * $request['price']+$area+$borde;
+                
+                echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+
         /*public function Galeria($params){
 
             $params = strClean($params);

@@ -11,12 +11,14 @@
 			parent::__construct();
 		}
 		/******************************Products************************************/
-		public function marqueteria(){
+		public function productos(){
 			$data['page_tag'] = "Marqueteria | Productos";
 			$data['page_title'] = "Marqueteria | Productos";
 			$data['page_name'] = "marqueteria";
 			$this->views->getView($this,"marqueteria",$data);
 		}
+
+		
 
 		public function getProductos(){
 			$options="";
@@ -128,17 +130,6 @@
 			die();
 
 		}
-		/*public function organizar(){
-			$arrData = $this->model->selectProductos();
-			for ($i=0; $i < count($arrData) ; $i++) { 
-
-				if($arrData[$i]['subtopicid'] == 3 && $arrData[$i]['topicid'] == 1){
-					$this->model->updateTemp($arrData[$i]['idproduct'],1);
-				}else if($arrData[$i]['subtopicid'] == 4 && $arrData[$i]['topicid'] == 1){
-					$this->model->updateTemp($arrData[$i]['idproduct'],2);
-				}
-			}
-		}*/
 		public function getProducto($producto){
 			$idProducto = intval($_POST['idProduct']);
 			if($idProducto > 0){
@@ -181,7 +172,7 @@
 			}
 			die();
 		}
-	
+		/*
 		public function setImage(){
 			if($_POST){
 				if(empty($_POST['idProducto'])){
@@ -223,6 +214,95 @@
 				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 			}
 			die();
+		}*/
+
+		/******************************Colors************************************/
+
+		public function colores(){
+			$data['page_tag'] = "Marqueteria | Colores";
+			$data['page_title'] = "Marqueteria | Colores";
+			$data['page_name'] = "colores";
+			$this->views->getView($this,"colores",$data);
 		}
+		public function getColores(){
+			$options="";
+			if(isset($_POST['orderBy'])){
+				$options =intval($_POST['orderBy']);
+			}
+			$arrData = $this->model->selectColors($options);
+			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
+			die();
+		}
+		public function setColor(){
+			if($_POST){
+				if(empty($_POST['txtName']) || empty($_POST['txtHexa']) || empty($_POST['statusList'])){
+					$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
+				}else{ 
+					$idColor = intval($_POST['idColor']);
+					$strNombre = ucwords(strClean($_POST['txtName']));
+					$strHex = strtolower(strClean($_POST['txtHexa']));
+					$intEstado = intval(strClean($_POST['statusList']));
+
+					$request_product = "";
+				
+					if($idColor == 0){
+						$option = 1;
+						$request_product = $this->model->insertColor($strNombre,$strHex,$intEstado);
+					}else{
+						
+						$option = 2;
+						$request_product = $this->model->updateColor($idColor,$strNombre,$strHex,$intEstado);
+
+					}
+
+					if($request_product > 0 ){
+						if($option == 1){
+							$arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
+						}else{
+							$arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
+						}
+					}else if($request_product == 'exist'){
+						$arrResponse = array('status' => false, 'msg' => '¡Atención! el título ya existe, ingrese otro.');		
+					}else{
+						$arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
+					}
+				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+			}
+			die();
+
+		}
+		public function getColor($color){
+			$idColor = intval($_POST['idcolor']);
+			if($idColor > 0){
+				$arrData = $this->model->selectColor($idColor);
+				if(empty($arrData)){
+					
+					$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
+				}else{
+					$arrResponse = array('status' => true, 'data' => $arrData);
+				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+			}
+			die();
+		}
+		public function delColor(){
+			if($_POST){
+
+				$idColor = intval($_POST['idcolor']);
+				
+				$requestDelete = $this->model->deleteColor($idColor);
+				if($requestDelete == 'ok')
+				{
+					$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado');
+				}else{
+					$arrResponse = array('status' => false, 'msg' => 'Error al eliminar');
+				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+			}
+			die();
+		}
+
+
 	}
 ?>
