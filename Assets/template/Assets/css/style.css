@@ -16,7 +16,7 @@ input::-webkit-inner-spin-button {
 .scroll_list{
     overflow: hidden;
     overflow-y: scroll;
-    height: 350px;
+    height: 300px;
 }
 .scroll_listX{
     overflow: hidden;

@@ -13,7 +13,10 @@ if(document.querySelector("#medidas")){
     let measureFrame = document.querySelector(".measures__frame");
     let measureMargin = document.querySelector(".measures__margin");
     let measureContainer = document.querySelector(".measures__container");
-    
+    let rangeFrame = document.querySelector("#rangeFrame");
+    let selectBorder = document.querySelector("#selectBorder");
+    let selectMargin = document.querySelector("#selectMargin");
+
     for (let i = 0; i < inputMeasure.length; i++) {
     
         let event = inputMeasure[i];
@@ -44,67 +47,60 @@ if(document.querySelector("#medidas")){
     
     /******************************Custom frame******************************** */
     let selectType = document.querySelector("#selectType");
+    let selectGlass = document.querySelector("#selectGlass");
     selectType.addEventListener("change",function(){
-        
+        let textType = selectType.options[selectType.selectedIndex].text;
         if(selectType.value != 0){
-            document.querySelector("#txtMolduras").innerHTML = selectType.options[selectType.selectedIndex].text
-        }
+            document.querySelector("#txtMolduras").innerHTML = textType;
+            let url = base_url+"/tienda/getMuestras/"+selectType.value;
+            loading.style.display="flex";
+            request(url,"","get").then(function(objData){
+                loading.style.display="none";
+                let parent = document.querySelector(".scroll_list").parentElement;
+                let child = document.querySelector(".scroll_list");
+                let fragment = document.createDocumentFragment();
+    
+                let html ="";
+                for (let i = 0; i < objData.length; i++) {
+                    html += `
+                    <div class="measures__item" id="${objData[i]['idproduct']}" data-frame="${objData[i]['url'][1]}" data-border="${objData[i]['waste']}" title="${objData[i]['title']}">
+                        <img src="${objData[i]['url'][0]}" alt="">
+                    </div>
+                    `
+                }
+                child.innerHTML = html;
+                fragment.appendChild(child);
+                parent.appendChild(fragment);
 
-        let url = base_url+"/tienda/getMuestras/"+selectType.value;
-        loading.style.display="flex";
-        request(url,"","get").then(function(objData){
-            loading.style.display="none";
-            let parent = document.querySelector(".accordion-body");
-            let child = document.querySelector(".scroll_list");
-            let fragment = document.createDocumentFragment();
-
-            let html ="";
-            for (let i = 0; i < objData.length; i++) {
-                html += `
-                <div class="measures__item" id="${objData[i]['idproduct']}" data-frame="${objData[i]['url'][1]}" data-border="${objData[i]['waste']}" title="${objData[i]['title']}">
-                    <img src="${objData[i]['url'][0]}" alt="">
-                </div>
-                `
-            }
-            child.innerHTML = html;
-            fragment.appendChild(child);
-            parent.appendChild(fragment);
-            let measureItems = document.querySelectorAll(".measures__item");
-            for (let i = 0; i < measureItems.length; i++) {
-                let item = measureItems[i];
-                item.addEventListener("click",function(e){
-                    let measureItem = e.target.parentElement;
-                    for (let j = 0; j < measureItems.length; j++) {
-                        if(measureItems[j].classList.length > 1){
-                            if(measureItem != measureItems[j]){
-                                measureItems[j].classList.remove("active");
+                let measureItems = document.querySelectorAll(".measures__item");
+                for (let i = 0; i < measureItems.length; i++) {
+                    let item = measureItems[i];
+                    item.addEventListener("click",function(e){
+                        let measureItem = e.target.parentElement;
+                        for (let j = 0; j < measureItems.length; j++) {
+                            if(measureItems[j].classList.length > 1){
+                                if(measureItem != measureItems[j]){
+                                    measureItems[j].classList.remove("active");
+                                }
+                            }else{
+                                measureItem.classList.add("active");
                             }
-                        }else{
-                            measureItem.classList.add("active");
                         }
-                    }
-                    let id = measureItem.getAttribute("id");
-                    let image = measureItem.getAttribute("data-frame");
-                    let reference = measureItem.getAttribute("title");
-                    let border = parseInt(measureItem.getAttribute("data-border"));
-                    
-                    if(image != null){
-
-                        let urlRequest = base_url+"/tienda/calcularMarco";
-                        let formData = new FormData();
-                        let height = parseInt(document.querySelector("#intHeight").value);
-                        let width = parseInt(document.querySelector("#intWidth").value);
-            
-                        formData.append("id",id);
-                        formData.append("height",height);
-                        formData.append("width",width);
-            
-                        request(urlRequest,formData,"post").then(function(objData){
-                            document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
-                            document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
-                        });
-
-                        let borderStyle = border*0.5; //Cálculo ancho de moldura
+                        let id = measureItem.getAttribute("id");
+                        let image = measureItem.getAttribute("data-frame");
+                        let reference = measureItem.getAttribute("title");
+                        let border = parseInt(measureItem.getAttribute("data-border"));
+                        document.querySelector("#selectFrame").innerHTML = textType+" - "+reference;
+                        if(image != null){
+    
+                            let urlRequest = base_url+"/tienda/calcularMarco";
+                            let formData = new FormData();
+                            let height = parseInt(document.querySelector("#intHeight").value);
+                            let width = parseInt(document.querySelector("#intWidth").value);
+                
+                            
+    
+                            let borderStyle = border*0.5; //Cálculo ancho de moldura
                             let borderOutset = borderStyle*1.01; // Cálculo separación entre el borde de imágen y el contenedor
                             borderOutset = String(borderOutset)+"px";
                             borderStyle = String(borderStyle)+"px";
@@ -118,131 +114,154 @@ if(document.querySelector("#medidas")){
                             measureMargin.style.border = borderStyle+" solid #000";
                             measureMargin.style.borderImage= url;
                             measureMargin.style.borderImageOutset = borderOutset;
-                    }
-                });
-            }
-        });
+
+                            selectMargin.value = 1;
+                            selectBorder.value = 1;
+
+                            //let selectedElement = document.querySelector(".measures__item.active");
+                            let heightMargin = String(height+dimensionDefault)+"px";
+                            let widthMargin = String(width+dimensionDefault)+"px";
+
+                            measureFrame.style.border = "none";
+                            measureFrame.style.border = "none";
+
+                            measureMargin.style.background ="transparent";
+                            measureMargin.style.height = heightMargin;
+                            measureMargin.style.width = widthMargin;
+
+                            document.querySelector("#txtMargen").innerHTML = "Sin margen";
+                            document.querySelector("#txtBorde").innerHTML = "Sin borde";
+                            document.querySelector("#txtMedidasMarco").innerHTML = height+"cm X "+width+"cm";
+                            document.querySelector(".rangeInfo").classList.add("d-none");
+                            document.querySelector(".color_margin").classList.add("d-none");
+                            document.querySelector("#border").classList.add("d-none");
+
+                            formData.append("id",id);
+                            formData.append("height",height);
+                            formData.append("width",width);
+                
+                            request(urlRequest,formData,"post").then(function(objData){
+                                document.querySelector(".measures__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                                document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                                document.querySelector(".measures__border__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                                document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
+                            });
+                        }
+    
+                    });
+                }
+            });
+        }
+
     })
 
     /******************************Margin selection******************************** */
 
-    let selectMargin = document.querySelector("#selectMargin");
+
     document.querySelector("#txtMargen").innerHTML = "Sin margen";
     document.querySelector("#txtBorde").innerHTML = "Sin borde";
     document.querySelector("#txtMedidasMarco").innerHTML = document.querySelector("#intHeight").value+"cm X "+document.querySelector("#intWidth").value+"cm";
 
     selectMargin.addEventListener("change",function(){
 
-        let rangeFrame = document.querySelector("#rangeFrame");
-        
-        let selectBorder = document.querySelector("#selectBorder");
+        let textType = selectMargin.options[selectMargin.selectedIndex].text;
         let urlRequest = base_url+"/tienda/calcularMarco";
-
-        //Variables para calcular costo
-        let selectedElement = document.querySelector(".measures__item.active");
-        let id = selectedElement.getAttribute("id");
         let height = parseInt(document.querySelector("#intHeight").value);
         let width = parseInt(document.querySelector("#intWidth").value);
-        
+
+        document.querySelector("#txtMargen").innerHTML= textType;
 
         if(selectMargin.value == 1){
+            
+            let selectedElement = document.querySelector(".measures__item.active");
+            let id = selectedElement.getAttribute("id");
+
+            let heightMargin = String(height+dimensionDefault)+"px";
+            let widthMargin = String(width+dimensionDefault)+"px";
+            
             measureFrame.style.border = "none";
-            selectBorder.value = 1;
+            measureFrame.style.border = "none";
+
+            measureMargin.style.background ="transparent";
+            measureMargin.style.height = heightMargin;
+            measureMargin.style.width = widthMargin;
+
+            
+            
+            //selectBorder.value = 1;
             let formData = new FormData();
             formData.append("id",id);
             formData.append("height",height);
             formData.append("width",width);
-            //formData.append("margin",margin);
 
-            loading.style.display="flex";
             request(urlRequest,formData,"post").then(function(objData){
-                document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                document.querySelector(".measures__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                document.querySelector(".measures__margin__custom .price").innerHTML = document.querySelector(".measures__custom .price").innerHTML;
+                document.querySelector(".measures__border__custom .price").innerHTML = document.querySelector(".measures__custom .price").innerHTML;
                 document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
             });
 
-            document.querySelector("#txtMargen").innerHTML = "Sin margen";
-            document.querySelector("#txtBorde").innerHTML = "Sin borde";
-            measureMargin.style.background ="transparent";
-            measureFrame.style.border = "none";
-
-            let heightMargin = String(height+dimensionDefault)+"px";
-            let widthMargin = String(width+dimensionDefault)+"px";
-
-            document.querySelector("#txtMedidasMarco").innerHTML = height+"cm X "+width+"cm";
-            measureMargin.style.height = heightMargin;
-            measureMargin.style.width = widthMargin;
-
             document.querySelector(".rangeInfo").classList.add("d-none");
             document.querySelector(".color_margin").classList.add("d-none");
-
             document.querySelector("#border").classList.add("d-none");
-            document.querySelector(".color_border").classList.add("d-none");
 
         }else if(selectMargin.value == 2){
-
-            document.querySelector("#txtMedidasMarco").innerHTML = height+"cm X "+width+"cm";
+            selectBorder.value = 1;
             measureMargin.style.height = String(height+dimensionDefault)+"px";
             measureMargin.style.width = String(width+dimensionDefault)+"px";
-
-            rangeFrame.value = 0;
-            selectBorder.value = 1;
             measureFrame.style.border = "none";
-            document.querySelector("#rangeData").innerHTML = 0+" cm";
             measureMargin.style.background ="#fff";
+            rangeFrame.value = 0;
+
+            document.querySelector("#txtMedidasMarco").innerHTML = height+"cm X "+width+"cm";
+            document.querySelector("#rangeData").innerHTML = 0+" cm";
             document.querySelector(".rangeInfo").classList.remove("d-none");
             document.querySelector(".color_margin").classList.remove("d-none");
+            document.querySelector(".measures__margin__custom .price").innerHTML = document.querySelector(".measures__custom .price").innerHTML;
+            document.querySelector(".measures__border__custom .price").innerHTML = document.querySelector(".measures__custom .price").innerHTML;
+            document.querySelector("#txtPrice").innerHTML =  document.querySelector(".measures__custom .price").innerHTML;
             document.querySelector("#border").classList.remove("d-none");
 
             let url = base_url+"/tienda/getColor";
-
-            
-            loading.style.display="flex";
             request(url,"","get").then(function(objData){
                 loading.style.display="none";
                 let parentMargin = document.querySelector(".color_margin");
-                let parentBorder = document.querySelector(".color_border");
+                //let parentBorder = document.querySelector(".color_border");
                 let childMargin = document.querySelector(".color_margin .scroll_listX");
-                let childBorder = document.querySelector(".color_border .scroll_listX");
+                //let childBorder = document.querySelector(".color_border .scroll_listX");
                 let fragmentMargin = document.createDocumentFragment();
-                let fragmentBorder = document.createDocumentFragment();
+                //let fragmentBorder = document.createDocumentFragment();
 
                 let htmlMargin ="";
-                let htmlBorder="";
+                //let htmlBorder="";
                 for (let i = 0; i < objData.length; i++) {
                     htmlMargin += `
                     <div class="color_block color_margin_item" style="background: #${objData[i]['hex']};" data-id="${objData[i]['id']}" 
                     title="${objData[i]['title']}" data-color="${objData[i]['hex']}">
                     </div>
                     `
-                    htmlBorder += `
-                    <div class="color_block color_border_item" style="background: #${objData[i]['hex']};" data-id="${objData[i]['id']}" 
-                    title="${objData[i]['title']}" data-color="${objData[i]['hex']}">
-                    </div>
-                    `
                 }
                 childMargin.innerHTML = htmlMargin;
-                childBorder.innerHTML = htmlBorder;
                 fragmentMargin.appendChild(childMargin);
-                fragmentBorder.appendChild(childBorder);
                 parentMargin.appendChild(fragmentMargin);
-                parentBorder.appendChild(fragmentBorder);
 
-            });
-
-            let formData = new FormData();
-            formData.append("id",id);
-            formData.append("height",height);
-            formData.append("width",width);
-            //formData.append("margin",margin);
-
-            loading.style.display="flex";
-            request(urlRequest,formData,"post").then(function(objData){
-                document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
-                document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
             });
             
             rangeFrame.addEventListener("input",function(){
+
+                let selectedElement = document.querySelector(".measures__item.active");
+                let id = selectedElement.getAttribute("id");
                 let margin = parseInt(rangeFrame.value);
+                let heightMargin = String(height+dimensionDefault+margin*10)+"px";
+                let widthMargin = String(width+dimensionDefault+margin*10)+"px";
+
+                measureMargin.style.height = heightMargin;
+                measureMargin.style.width = widthMargin;
+
+                document.querySelector("#rangeData").innerHTML = margin+" cm";
+                document.querySelector("#txtMargenMedida").innerHTML  = margin+" cm";
+                document.querySelector("#txtMedidasMarco").innerHTML = (height+(margin*2))+"cm X "+(width+(margin*2))+"cm";
+
                 let formData = new FormData();
                 formData.append("id",id);
                 formData.append("type",selectMargin.value);
@@ -250,99 +269,90 @@ if(document.querySelector("#medidas")){
                 formData.append("width",width);
                 formData.append("margin",margin);
                 
-                //loading.style.display="flex";
                 request(urlRequest,formData,"post").then(function(objData){
-                    document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                    document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                    document.querySelector(".measures__custom .price").innerHTML = document.querySelector(".measures__margin__custom .price").innerHTML;
+                    document.querySelector(".measures__border__custom .price").innerHTML = document.querySelector(".measures__margin__custom .price").innerHTML;
                     document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
                 });
-
-                document.querySelector("#rangeData").innerHTML = margin+" cm";
-                document.querySelector("#txtMargenMedida").innerHTML  = margin+" cm";
-                document.querySelector("#txtMedidasMarco").innerHTML = (height+(margin*2))+"cm X "+(width+(margin*2))+"cm";
-                let heightMargin = String(height+dimensionDefault+margin*10)+"px";
-                let widthMargin = String(width+dimensionDefault+margin*10)+"px";
-
-                measureMargin.style.height = heightMargin;
-                measureMargin.style.width = widthMargin;
-
+                
                 let marginColor = document.querySelectorAll(".color_margin_item");
                 for (let i = 0; i < marginColor.length; i++) {
                     let element = marginColor[i];
                     element.addEventListener("click",function(e){
-                        document.querySelector("#txtMargen").innerHTML = "Sin margen";
+                        document.querySelector("#txtMargen").innerHTML = textType;
                         let color = "#"+element.getAttribute("data-color");
                         let title = element.getAttribute("title");
                         document.querySelector("#txtMargen").innerHTML = "Fondo - "+title;
-                        document.querySelector(".color_margin label").innerHTML = "Color: "+title;
+                        document.querySelector("#selectedMarginColor").innerHTML = title;
                         measureMargin.style.background = color;
                     })
                 }
             })
 
-            
-
         }else if(selectMargin.value == 3){
 
             measureMargin.style.height = String(height+dimensionDefault)+"px";
             measureMargin.style.width = String(width+dimensionDefault)+"px";
-
-            selectBorder.value = 1;
+            measureMargin.style.background ="#f5f5dc";
             measureFrame.style.border = "none";
-            let formData = new FormData();
-            formData.append("id",id);
-            formData.append("height",height);
-            formData.append("width",width);
-            //formData.append("margin",margin);
-
-            loading.style.display="flex";
-            request(urlRequest,formData,"post").then(function(objData){
-                document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
-                document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
-            });
-            
             rangeFrame.value = 0;
+
+            
+            document.querySelector("#txtPrice").innerHTML =  document.querySelector(".measures__custom .price").innerHTML;
             document.querySelector("#rangeData").innerHTML = 0+" cm";
+            document.querySelector("#txtMargen").innerHTML = "Passepartout";
             document.querySelector(".rangeInfo").classList.remove("d-none");
             document.querySelector(".color_margin").classList.add("d-none");
-            measureMargin.style.background ="#F3E5AB";
-            document.querySelector("#txtMargen").innerHTML = "Passepartout";
+            document.querySelector("#border").classList.remove("d-none");
+            document.querySelector(".measures__margin__custom .price").innerHTML = document.querySelector(".measures__custom .price").innerHTML;
+            document.querySelector(".measures__border__custom .price").innerHTML = document.querySelector(".measures__custom .price").innerHTML;
+
             rangeFrame.addEventListener("input",function(){
 
+                let selectedElement = document.querySelector(".measures__item.active");
+                let idP = selectedElement.getAttribute("id");
                 let margin = parseInt(rangeFrame.value);
+                let heightMargin = String(height+dimensionDefault+margin*10)+"px";
+                let widthMargin = String(width+dimensionDefault+margin*10)+"px";
                 let formData = new FormData();
-                formData.append("id",id);
+
+                measureMargin.style.height = heightMargin;
+                measureMargin.style.width = widthMargin;
+
+                formData.append("id",idP);
                 formData.append("type",selectMargin.value);
                 formData.append("height",height);
                 formData.append("width",width);
                 formData.append("margin",margin);
                 
-                //loading.style.display="flex";
                 request(urlRequest,formData,"post").then(function(objData){
-                    document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                    document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                    document.querySelector(".measures__custom .price").innerHTML = document.querySelector(".measures__margin__custom .price").innerHTML;
+                    document.querySelector(".measures__border__custom .price").innerHTML = document.querySelector(".measures__margin__custom .price").innerHTML;
                     document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
                 });
 
                 document.querySelector("#rangeData").innerHTML = margin+" cm";
                 document.querySelector("#txtMargenMedida").innerHTML  = margin+" cm";
                 document.querySelector("#txtMedidasMarco").innerHTML = (height+(margin*2))+"cm X "+(width+(margin*2))+"cm";
-
-                let heightMargin = String(height+dimensionDefault+margin*10)+"px";
-                let widthMargin = String(width+dimensionDefault+margin*10)+"px";
-
-                measureMargin.style.height = heightMargin;
-                measureMargin.style.width = widthMargin;
+    
             })
         }
 
         selectBorder.addEventListener("change",function(){
             
+            let textBorder = selectBorder.options[selectBorder.selectedIndex].text;
+            
             if(selectBorder.value == 1){
-                document.querySelector("#txtBorde").innerHTML = "Sin borde";
-                document.querySelector(".color_border").classList.add("d-none");
+
                 measureFrame.style.border = "none";
 
+                let selectedElement = document.querySelector(".measures__item.active");
+                let id = selectedElement.getAttribute("id");
                 let margin = parseInt(rangeFrame.value);
                 let formData = new FormData();
+
                 formData.append("id",id);
                 formData.append("type",selectMargin.value);
                 formData.append("height",height);
@@ -350,46 +360,91 @@ if(document.querySelector("#medidas")){
                 formData.append("margin",margin);
                     
                 request(urlRequest,formData,"post").then(function(objData){
-                    document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                    document.querySelector(".measures__border__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                    document.querySelector(".measures__margin__custom .price").innerHTML = document.querySelector(".measures__border__custom .price").innerHTML;
+                    document.querySelector(".measures__custom .price").innerHTML = document.querySelector(".measures__border__custom .price").innerHTML;
                     document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
                 });
+
+                document.querySelector("#txtBorde").innerHTML = textBorder;
+                document.querySelector(".color_border").classList.add("d-none");
 
             }else{
 
-                let margin = parseInt(rangeFrame.value);
-                let formData = new FormData();
-                formData.append("id",id);
-                formData.append("type",selectMargin.value);
-                formData.append("height",height);
-                formData.append("width",width);
-                formData.append("margin",margin);
-                formData.append("border",selectBorder.value);
-                    
-                request(urlRequest,formData,"post").then(function(objData){
-                    document.querySelector("#price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
-                    document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
-                });
+                let url = base_url+"/tienda/getColor";
 
-                let bordeName = selectBorder.options[selectBorder.selectedIndex].innerHTML;
-                document.querySelector("#txtBorde").innerHTML = bordeName;
-                document.querySelector(".color_border").classList.remove("d-none");
                 measureFrame.style.border = "none";
-                let borderColor = document.querySelectorAll(".color_border_item");
 
-                for (let i = 0; i < borderColor.length; i++) {
-                    let element = borderColor[i];
-                    element.addEventListener("click",function(e){
-                        let color = "#"+element.getAttribute("data-color");
-                        let title = element.getAttribute("title");
-                        document.querySelector(".color_border label").innerHTML = "Color: "+title;
-                        document.querySelector("#txtBorde").innerHTML = bordeName+" - "+title;
-                        measureFrame.style.border = "5px solid "+color;
-                    })
-                }
+                document.querySelector(".color_border").classList.remove("d-none");
 
+                request(url,"","get").then(function(objData){
+                    loading.style.display="none";
+                    let parentBorder = document.querySelector(".color_border");
+                    let childBorder = document.querySelector(".color_border .scroll_listX");
+                    let fragmentBorder = document.createDocumentFragment();
+                    let htmlBorder="";
+    
+                    for (let i = 0; i < objData.length; i++) {
+    
+                        htmlBorder += `
+                        <div class="color_block color_border_item" style="background: #${objData[i]['hex']};" data-id="${objData[i]['id']}" 
+                        title="${objData[i]['title']}" data-color="${objData[i]['hex']}">
+                        </div>
+                        `
+                    }
+                    childBorder.innerHTML = htmlBorder;
+                    fragmentBorder.appendChild(childBorder);
+                    parentBorder.appendChild(fragmentBorder);
+
+                    if(document.querySelectorAll(".color_border_item")){
+                        let selectedElement = document.querySelector(".measures__item.active");
+                        let id = selectedElement.getAttribute("id");
+                        let borderColor = document.querySelector(".color_border .scroll_listX");
+                        let margin = parseInt(rangeFrame.value);
+                        let formData = new FormData();
+        
+                        formData.append("id",id);
+                        formData.append("type",selectMargin.value);
+                        formData.append("height",height);
+                        formData.append("width",width);
+                        formData.append("margin",margin);
+                        formData.append("border",selectBorder.value);
+                            
+                        request(urlRequest,formData,"post").then(function(objData){
+                            document.querySelector(".measures__border__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                            document.querySelector(".measures__margin__custom .price").innerHTML = document.querySelector(".measures__border__custom .price").innerHTML;
+                            document.querySelector(".measures__custom .price").innerHTML = document.querySelector(".measures__border__custom .price").innerHTML;
+                            document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
+                        });
+        
+                        borderColor.addEventListener("click",function(e){
+                            let element = e.target;
+                            let color = "#"+element.getAttribute("data-color");
+                            let title = element.getAttribute("title");
+                            document.querySelector("#txtBorde").innerHTML = textBorder+" - "+title;
+                            document.querySelector("#selectedBorderColor").innerHTML = title;
+                            if(selectBorder.value==2){
+                                measureFrame.style.border = "3px solid "+color;
+                            }else{
+                                measureFrame.style.border = "8px solid "+color;
+                            }
+                        })
+                        
+                        document.querySelector("#txtBorde").innerHTML = textBorder;
+                        document.querySelector(".color_border").classList.remove("d-none");
+                    }
+                });
+                
             }
-        })
+        });
+        
+
+        selectGlass.addEventListener("change",function(){
+            let textGlass = selectGlass.options[selectGlass.selectedIndex].text;
+            let textBorder = selectBorder.options[selectBorder.selectedIndex].text;
+        });
     });
+    
 
     
 

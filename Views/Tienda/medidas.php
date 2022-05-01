@@ -37,37 +37,29 @@
                         </div>
                     </div>
                     <div class="measures__custom d-none page">
-                        <h2 class="fs-5 text__color mt-2"><strong>Diseña tu marco</strong></h2>
-                        <p><strong>Elige el material y la moldura:</strong> </p>
-                        <div class="accordion accordion-flush mb-3" id="accordionExample">
-                            <div class="accordion-item">
-                                
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Seleccione
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <select class="form-select" aria-label="Default select example" id="selectType">
-                                            <option selected>Seleccione material</option>
-                                            <option value="1">Molduras en madera</option>
-                                            <option value="2">Molduras importadas</option>
-                                        </select>
-                                        <div class="scroll_list d-flex flex-wrap justify-content-center position-relative" id="selectFrames">
-                                            <div id="divLoading" class="position-absolute top-0 start-0 w-100 h-100">
-                                                <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
+                        <div class="d-flex justify-content-between mt-3 mb-3 align-items-center">
+                            <h2 class="fs-5 text__color m-0"><strong>Diseña tu marco</strong></h2>
+                            <p class="fs-5 price m-0"></p>
+                        </div>
+                        <div class="d-flex">
+                            <p class="me-2"><strong>Elige el material y la moldura:</strong></p>
+                            <p id="selectFrame"></p>
+                        </div>
+                        <div>
+                            <select class="form-select" aria-label="Default select example" id="selectType">
+                                <option selected>Seleccione material</option>
+                                <option value="1">Molduras en madera</option>
+                                <option value="2">Molduras importadas</option>
+                            </select>
+                            <div class="scroll_list d-flex flex-wrap justify-content-center position-relative" id="selectFrames">
+                                <div id="divLoading" class="position-absolute top-0 start-0 w-100 h-100">
+                                    <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
                                 </div>
                             </div>
                         </div>
-                        <p><strong>Elige el margen, borde y vidrio:</strong> </p>
+                        <!--<p><strong>Elige el margen, borde y vidrio:</strong> </p>
                         <div class="accordion accordion-flush mb-3" id="accordionExample">
                             <div class="accordion-item">
-                                
                                 <h2 class="accordion-header" id="headingTwo">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                                         Seleccione
@@ -100,26 +92,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr>
-                                        <div class="mt-3 d-none" id="border">
-                                            <p><strong>Tipo de borde: </strong></p>
-                                            <select class="form-select" aria-label="Default select example" id="selectBorder">
-                                                <option value="1">Sin borde</option>
-                                                <option value="2">Bocel de madera</option>
-                                                <option value="3">Marco de madera</option>
-                                            </select>
-                                            <div class="color_border mt-3 d-none">
-                                                <p><strong>Elige el color: </strong> </p>
-                                                <label for="exampleFormControlInput1" class="form-label"></label>
-                                                <div class="scroll_listX d-flex justify-content-start">
-                                                    <div id="divLoading" class="position-absolute top-0 start-0 w-100 h-100">
-                                                        <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="mt-3 d-none" id="glass">
+                                        <div class="mt-3" id="glass">
                                             <p><strong>Tipo de vidrio:</strong></p>
                                             <select class="form-select" aria-label="Default select example" id="selectGlass">
                                                 <option value="1">Sin vidrio</option>
@@ -129,9 +102,63 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>--> 
+                    </div>
+                    <div class="measures__margin__custom d-none page">
+                        <div class="d-flex justify-content-between mt-3 mb-3 align-items-center">
+                            <h2 class="fs-5 text__color m-0"><strong>Diseña tu marco</strong></h2>
+                            <p class="fs-5 price m-0"></p>
                         </div>
-                        
-                        <h3 class="mt-3 fs-5 text-center" id="price"></h3>
+                        <p><strong>Elige el tipo de margen:</strong></p>
+                        <select class="form-select" aria-label="Default select example" id="selectMargin">
+                            <option value="1">Sin margen</option>
+                            <option value="2">Caribe</option>
+                            <option value="3">Passepartout</option>
+                        </select>
+                        <div class="mt-3 rangeInfo d-none">
+                            <p class="m-0"><strong>Ajusta el margen</strong></p>
+                            <label for="exampleFormControlInput1" class="form-label"></label>
+                            <input type="range" class="form-range" min="0" max="10" id="rangeFrame" value="0">
+                            <div class="d-flex justify-content-end">
+                                <p id="rangeData" class="m-0">0 cm</p>
+                            </div>
+                        </div>
+                        <div class="color_margin mt-2 d-none">
+                            <div class="d-flex">
+                                <p class="me-2"><strong>Elige el color:</strong></p>
+                                <p id="selectedMarginColor"></p>
+                            </div>
+                            <div class="scroll_listX d-flex justify-content-start"></div>
+                        </div>
+                    </div>
+                    <div class="measures__border__custom d-none page">
+                        <div class="d-flex justify-content-between mt-3 mb-3 align-items-center">
+                            <h2 class="fs-5 text__color m-0"><strong>Diseña tu marco</strong></h2>
+                            <p class="fs-5 price m-0"></p>
+                        </div>
+                        <div class="mt-3 d-none" id="border">
+                            <p><strong>Elige el borde interno:</strong></p>
+                            <select class="form-select" aria-label="Default select example" id="selectBorder">
+                                <option value="1">Sin borde</option>
+                                <option value="2">Bocel de madera</option>
+                                <option value="3">Marco de madera</option>
+                            </select>
+                            <div class="color_border mt-3 d-none">
+                                <div class="d-flex">
+                                    <p class="me-2"><strong>Elige el color:</strong></p>
+                                    <p id="selectedBorderColor"></p>
+                                </div>
+                                <div class="scroll_listX d-flex justify-content-start"></div>
+                                
+                            </div>
+                        </div>
+                        <div class="mt-3" id="glass">
+                            <p><strong>Tipo de vidrio:</strong></p>
+                            <select class="form-select" aria-label="Default select example" id="selectGlass">
+                                <option value="1">Sin vidrio</option>
+                                <option value="2">Antireflejo</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="measures__description d-none page">
                         <h2 class="fs-5 text__color mt-2"><strong>Descripción</strong></h2>
