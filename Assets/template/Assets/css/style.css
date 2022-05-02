@@ -420,6 +420,11 @@ input[type=number] {
     position: relative;
     overflow: hidden;
 }
+.measures__zoom{
+    position: absolute;
+    bottom: 0;
+    z-index: 999;
+}
 .measures__frame{
     position: absolute;
     left:50%;

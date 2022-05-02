@@ -13,8 +13,16 @@
                         <div class="measures__margin">
 
                         </div>
-                        <label for="measuresImg"><a class="btn btn-info btnUp">Subir foto</a></label>
-                        <input class="d-none" type="file" id="measuresImg" name="measuresImg"> 
+                        <!--<label for="measuresImg"><a class="btn btn-info btnUp">Subir foto</a></label>
+                        <input class="d-none" type="file" id="measuresImg" name="measuresImg"> -->
+                        <div class="measures__zoom w-100">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <i class="fas fa-search-minus"></i>
+                                <input type="range" class="form-range me-4 ms-4" min="10" max="200" id="rangeZoom" value="100">
+                                <i class="fas fa-search-plus"></i>
+                            </div> 
+                            <p id="rangeZoomData" class="text-center m-0">100%</p>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6 pages">
@@ -57,52 +65,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<p><strong>Elige el margen, borde y vidrio:</strong> </p>
-                        <div class="accordion accordion-flush mb-3" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                                        Seleccione
-                                    </button>
-                                </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <p><strong>Tipo de margen:</strong> </p>
-                                        <select class="form-select" aria-label="Default select example" id="selectMargin">
-                                            <option value="1">Sin margen</option>
-                                            <option value="2">Fondo</option>
-                                            <option value="3">Passepartout</option>
-                                        </select>
-                                        
-                                        <div class="mt-3 rangeInfo d-none">
-                                            <p><strong>Ajusta el margen</strong></p>
-                                            <label for="exampleFormControlInput1" class="form-label"></label>
-                                            <input type="range" class="form-range" min="0" max="10" id="rangeFrame" value="0">
-                                            <div class="d-flex justify-content-end">
-                                                <p id="rangeData" class="m-0">0 cm</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="color_margin mt-2 d-none">
-                                            <p><strong>Elige el color: </strong> </p>
-                                            <label for="exampleFormControlInput1" class="form-label"></label>
-                                            <div class="scroll_listX d-flex justify-content-start">
-                                                <div id="divLoading" class="position-absolute top-0 start-0 w-100 h-100">
-                                                    <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3" id="glass">
-                                            <p><strong>Tipo de vidrio:</strong></p>
-                                            <select class="form-select" aria-label="Default select example" id="selectGlass">
-                                                <option value="1">Sin vidrio</option>
-                                                <option value="2">Antireflejo</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>--> 
                     </div>
                     <div class="measures__margin__custom d-none page">
                         <div class="d-flex justify-content-between mt-3 mb-3 align-items-center">
@@ -177,12 +139,16 @@
                                     <td id="txtMargen"></td>
                                 </tr>
                                 <tr>
-                                    <td>Margen</td>
-                                    <td id="txtMargenMedida">0 cm</td>
-                                </tr>
-                                <tr>
                                     <td>Tipo de borde</td>
                                     <td id="txtBorde"></td>
+                                </tr>
+                                <tr>
+                                    <td>Tipo de vidrio</td>
+                                    <td id="txtVidrio"></td>
+                                </tr>
+                                <tr>
+                                    <td>Margen</td>
+                                    <td id="txtMargenMedida">0 cm</td>
                                 </tr>
                                 <tr>
                                     <td>Medidas de la imágen</td>

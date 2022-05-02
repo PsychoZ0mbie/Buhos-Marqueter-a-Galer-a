@@ -51,15 +51,22 @@
                 $intPassepartout = 10;
                 $intDobleMarco = 114;
                 $intBocel = 30;
+                $intVidrio = 9;
 
                 $id = intval($_POST['id']);
                 $intHeight = intval($_POST['height']);
                 $intWidth = intval($_POST['width']);
+                $intHeightMargin = 0;
+                $intWidthMargin = 0;
                 $intMargin = 0;
+                $intType = 1;
                 $resultado=0;
                 $area=0;
                 $borde=0;
+                $vidrio=0;
+
                 $request = $this->getMoldura($id);
+
                 if(isset($_POST['type'])){
                     $intType = intval($_POST['type']);
                     if($intType == 2){
@@ -73,7 +80,7 @@
                         }else{
                             $resultado = (($intHeight+$intWidth)*2) + $request['waste'];
                         }
-                    }else{
+                    }else if($intType == 3){
                         $intMargin = intval($_POST['margin']);
                         if($intMargin != 0){
                             $intMargin*=2;
@@ -84,22 +91,39 @@
                         }else{
                             $resultado = (($intHeight+$intWidth)*2) + $request['waste'];
                         }
+                    }else{
+                        $resultado = (($intHeight+$intWidth)*2) + $request['waste'];
                     }
 
                     if(isset($_POST['border'])){
                         $intBorder = intval($_POST['border']);
                         if($intBorder == 2){
                             $borde = (($intHeight+$intWidth)*2)*$intBocel;
-                        }else{
+                        }else if($intBorder == 3){
                             $borde = (($intHeight+$intWidth)*2)*$intDobleMarco;
                         }
                     }
+
                 }else{
                     $resultado = (($intHeight+$intWidth)*2) + $request['waste'];
                 }
 
-                $resultado = $resultado * $request['price']+$area+$borde;
+                if(isset($_POST['glass'])){
+                    //dep($_POST);
+                    $glass = intval($_POST['glass']);
+                    if($glass == 2){
+                        if(isset($_POST['margin'])){
+                            $margin = intval($_POST['margin'])*2;
+                            $height = $intHeight+$margin;
+                            $width = $intWidth+$margin;
+                            $vidrio = ($height*$width)*$intVidrio;
+                        }else{
+                            $vidrio = ($intHeight*$intWidth)*$intVidrio;
+                        }
+                    }
+                }
                 
+                $resultado = $resultado * $request['price']+$area+$borde+$vidrio;
                 echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
             }
             die();
