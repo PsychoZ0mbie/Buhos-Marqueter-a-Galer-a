@@ -11,11 +11,11 @@
 
 		public function home($params)
 		{
-			$params = strClean($params);
+			/*$params = strClean($params);
             $ruta = ucwords(str_replace("-"," ",$params));
 			$data['products'] = $this->getProductosT();
 			$data['galeria'] = $this->getProductosCategoriasT(2,$params,3);
-			$data['marqueteria'] = $this->getProductosCategoriasT(1,$params,3);
+			$data['marqueteria'] = $this->getProductosCategoriasT(1,$params,3);*/
 			$data['page_tag'] = NOMBRE_EMPRESA;
 			$data['page_title'] = NOMBRE_EMPRESA;
 			$data['page_name'] = NOMBRE_EMPRESA;

@@ -15,12 +15,12 @@
         }
         
         /******************************Marquetería************************************/
-        public function medidas(){
-            $data['page_tag'] = "Medidas | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Medidas | ".NOMBRE_EMPRESA;
-			$data['page_name'] = "medidas";
+        public function marqueteria(){
+            $data['page_tag'] = "Marqueteria | ".NOMBRE_EMPRESA;
+			$data['page_title'] = "Marqueteria | ".NOMBRE_EMPRESA;
+			$data['page_name'] = "marqueteria";
             //$data['molduras'] =$this->getMolduras();
-			$this->views->getView($this,"medidas",$data);
+			$this->views->getView($this,"marqueteria",$data);
         }
         public function personalizar(){
 
@@ -43,7 +43,7 @@
             die();
         }
 
-        public function calcularMarco($id){
+        public function calcularMarco(){
             //dep($_POST);
             if($_POST){
 
@@ -125,6 +125,120 @@
                 
                 $resultado = $resultado * $request['price']+$area+$borde+$vidrio;
                 echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+
+        public function agregarCarrito(){
+            //dep($_POST);
+            if($_POST){
+                $intIdTopic = intval($_POST['intIdTopic']);
+                $cantCarrito = 0;
+                $arrCarrito = array();
+
+                if($intIdTopic == 1){
+                    if(empty($_POST['intId']) || empty($_POST['strMargin']) || empty($_POST['strBorder']) || empty($_POST['strGlass']) || 
+                    empty($_POST['intHeight']) || empty($_POST['intWidth']) || $_POST['intMargin'] < 0 || empty($_POST['intAddCant'])
+                    || empty($_POST['intMarginType']) || empty($_POST['intBorderType']) || empty($_POST['intGlassType']) || $_POST['intAddCant'] < 0){
+
+                        $arrResponse = array("status" => false,"msg"=>"Error de datos");
+
+                    }else{
+                        //unset($_SESSION['arrCarrito']);exit;
+                        $intId = intval($_POST['intId']);
+                        $intHeight = intVal($_POST['intHeight']);
+                        $intWidth = intval($_POST['intWidth']);
+                        $intMargin = intval($_POST['intMargin']) * 2;
+                        $intMarginType = intval($_POST['intMarginType']);
+                        $intBorderType = intval($_POST['intBorderType']);
+                        $intGlassType = intval($_POST['intGlassType']);
+                        $intAddCant = intval($_POST['intAddCant']);
+
+                        $strMargin = strClean($_POST['strMargin']);
+                        $strBorder = strClean($_POST['strBorder']);
+                        $strGlass = strClean($_POST['strGlass']);
+
+                        $requestMoldura = $this->getMoldura($intId);
+                        if(!empty($requestMoldura)){
+
+                            $triplexPrecio = 17;
+                            $passepartoutPrecio = 10;
+                            $dobleMarcoPrecio = 114;
+                            $bocelPrecio = 30;
+                            $vidrioPrecio = 9;
+
+                            $precio = $requestMoldura['price'];
+                            $desperdicio = $requestMoldura['waste'];
+
+                            $margin = 0;
+                            $borde = 0;
+                            $vidrio = 0;
+
+                            $area = ($intWidth + $intMargin)*($intHeight + $intMargin);
+                            $perimetro = (($intWidth + $intHeight + $intMargin+$intMargin)*2) + $desperdicio;
+
+                            if($intMarginType == 2){
+                                $margin = $area * $triplexPrecio;
+                            }else if($intMarginType == 3){
+                                $margin = $area * $passepartoutPrecio;
+                            }
+
+                            if($intBorderType == 2){
+                                $borde = (($intHeight+$intWidth)*2) * $bocelPrecio;
+                            }else if($intBorderType == 3){
+                                $borde = (($intHeight+$intWidth)*2) * $dobleMarcoPrecio;
+                            }
+
+                            if($intGlassType == 2){
+                                $vidrio = $area * $vidrioPrecio;
+                            }
+                            $precioMarco = ($perimetro*$precio) +$vidrio+$borde+$margin;
+
+                            $arrMarco = array("idproducto"=>$intId,
+                                                "idcategoria"=>$intIdTopic,
+                                                "referenciaMoldura"=>$requestMoldura['title'],
+                                                "tipoMargen" => $strMargin,
+                                                "tipoBorde" => $strBorder,
+                                                "tipoVidrio" => $strGlass,
+                                                "margen" => ($intMargin/2)."cm",
+                                                "medidasImagen"=>$intHeight."cm X ".$intWidth."cm",
+                                                "medidasMarco"=>($intHeight+$intMargin)."cm X ".($intWidth+$intMargin)."cm",
+                                                "cantidad"=>$intAddCant,
+                                                "precio"=>$precioMarco
+                                                     
+                            );
+                            if(isset($_SESSION['arrCarrito'])){
+                                $arrCarrito = $_SESSION['arrCarrito'];
+                                $flag = true;
+                                for ($i=0; $i < count($arrCarrito); $i++) { 
+                                    if($arrCarrito[$i]['idproducto'] == $arrMarco['idproducto'] && $arrCarrito[$i]['referenciaMoldura'] == $arrMarco['referenciaMoldura']
+                                    && $arrCarrito[$i]['tipoMargen'] == $arrMarco['tipoMargen'] && $arrCarrito[$i]['tipoBorde'] == $arrMarco['tipoBorde']
+                                    && $arrCarrito[$i]['tipoVidrio'] == $arrMarco['tipoVidrio'] && $arrCarrito[$i]['margen'] == $arrMarco['margen'] 
+                                    && $arrCarrito[$i]['medidasImagen'] == $arrMarco['medidasImagen'] && $arrCarrito[$i]['medidasMarco'] == $arrMarco['medidasMarco']){
+                                        $arrCarrito[$i]['cantidad'] += $intAddCant;
+                                        $flag = false;
+                                    }
+                                }
+
+                                if($flag){
+                                    array_push($arrCarrito,$arrMarco);
+                                }
+
+                                $_SESSION['arrCarrito'] = $arrCarrito;
+                            }else{
+                                array_push($arrCarrito,$arrMarco);
+                                $_SESSION['arrCarrito'] = $arrCarrito;
+                                
+                            }
+                            foreach ($_SESSION['arrCarrito'] as $cantidad) {
+                                $cantCarrito += $cantidad['cantidad'];
+                            }
+                            //dep($_SESSION['arrCarrito']);
+                        }
+                        $arrResponse = array("status"=>true,"msg"=>"Producto agregado","cantidad"=>$cantCarrito);
+                    }
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }

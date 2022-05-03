@@ -1,6 +1,9 @@
 'use strict'
 let loading = document.querySelector("#divLoading");
-if(document.querySelector("#medidas")){
+
+/*********************************************************************Frame page************************************************************************ */
+
+if(document.querySelector("#marqueteria")){
     /******************************Dimensions frame******************************** */
     let dimensionDefault = 200;
     if(document.querySelector("#measuresImg")){
@@ -139,7 +142,7 @@ if(document.querySelector("#medidas")){
                             selectMargin.value = 1;
                             selectBorder.value = 1;
                             selectGlass.value = 1;
-
+                            rangeFrame.value = 0;
                             //let selectedElement = document.querySelector(".measures__item.active");
                             let heightMargin = String(height+dimensionDefault)+"px";
                             let widthMargin = String(width+dimensionDefault)+"px";
@@ -153,6 +156,8 @@ if(document.querySelector("#medidas")){
 
                             document.querySelector("#txtMargen").innerHTML = "Sin margen";
                             document.querySelector("#txtBorde").innerHTML = "Sin borde";
+                            document.querySelector("#txtVidrio").innerHTML = "Sin Vidrio";
+                            document.querySelector("#txtMargenMedida").innerHTML = "0 cm";
                             document.querySelector("#txtMedidasMarco").innerHTML = height+"cm X "+width+"cm";
                             document.querySelector(".rangeInfo").classList.add("d-none");
                             document.querySelector(".color_margin").classList.add("d-none");
@@ -286,8 +291,14 @@ if(document.querySelector("#medidas")){
                 let heightMargin = String(height+dimensionDefault+margin*10)+"px";
                 let widthMargin = String(width+dimensionDefault+margin*10)+"px";
 
+                
+
                 measureMargin.style.height = heightMargin;
                 measureMargin.style.width = widthMargin;
+                measureFrame.style.border = "none";
+
+                selectBorder.value = 1;
+                selectGlass.value= 1;
 
                 document.querySelector("#rangeData").innerHTML = margin+" cm";
                 document.querySelector("#txtMargenMedida").innerHTML  = margin+" cm";
@@ -332,8 +343,9 @@ if(document.querySelector("#medidas")){
             selectGlass.value= 1;
 
             document.querySelector("#txtPrice").innerHTML =  document.querySelector(".measures__custom .price").innerHTML;
-            document.querySelector("#rangeData").innerHTML = 0+" cm";
+            document.querySelector("#rangeData").innerHTML = "0 cm";
             document.querySelector("#txtMargen").innerHTML = "Passepartout";
+            document.querySelector("#txtMargenMedida").innerHTML = "0 cm";
             document.querySelector(".rangeInfo").classList.remove("d-none");
             document.querySelector(".color_margin").classList.add("d-none");
             document.querySelector(".color_border").classList.add("d-none");
@@ -354,6 +366,10 @@ if(document.querySelector("#medidas")){
 
                 measureMargin.style.height = heightMargin;
                 measureMargin.style.width = widthMargin;
+                measureFrame.style.border = "none";
+
+                selectBorder.value = 1;
+                selectGlass.value = 1;
 
                 formData.append("id",idP);
                 formData.append("type",selectMargin.value);
@@ -361,6 +377,7 @@ if(document.querySelector("#medidas")){
                 formData.append("width",width);
                 formData.append("margin",margin);
                 formData.append("glass",selectGlass.value);
+                
                 
                 request(urlRequest,formData,"post").then(function(objData){
                     document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
@@ -372,6 +389,8 @@ if(document.querySelector("#medidas")){
                 document.querySelector("#rangeData").innerHTML = margin+" cm";
                 document.querySelector("#txtMargenMedida").innerHTML  = margin+" cm";
                 document.querySelector("#txtMedidasMarco").innerHTML = (height+(margin*2))+"cm X "+(width+(margin*2))+"cm";
+                document.querySelector("#txtBorde").innerHTML = "Sin borde";
+                //document.querySelector("#txtVidrio").innerHTML = "Sin Vidrio";
     
             })
         }
@@ -470,6 +489,8 @@ if(document.querySelector("#medidas")){
                         
                         document.querySelector("#txtBorde").innerHTML = textBorder;
                         document.querySelector(".color_border").classList.remove("d-none");
+                        document.querySelector("#txtBorde").innerHTML = "Sin borde";
+                        //document.querySelector("#txtVidrio").innerHTML = "Sin Vidrio";
                     }
                 });
                 
@@ -587,6 +608,63 @@ if(document.querySelector("#medidas")){
         }
     })
 
+    /******************************Add cart******************************** */
+    let addCart = document.querySelector(".addCart");
+    addCart.addEventListener("click",function(){
+        if(document.querySelector(".measures__item.active")){
+            
+            let selectedElement = document.querySelector(".measures__item.active");
+            let intId = selectedElement.getAttribute("id");
+            let intHeight = document.querySelector("#intHeight").value;
+            let intWidth = document.querySelector("#intWidth").value;
+            let intMargin = document.querySelector("#rangeFrame").value;
+            let intAddCant = document.querySelector("#addCant").value;
+            let intMarginType = selectMargin.value;
+            let intBorderType = selectBorder.value;
+            let intGlassType = selectGlass.value;
+            let strMargin = document.querySelector("#txtMargen").innerHTML;
+            let strBorder = document.querySelector("#txtBorde").innerHTML;
+            let strGlass = document.querySelector("#txtVidrio").innerHTML;
+            
+            let urlRequest = base_url+"/tienda/agregarCarrito";
+            let formData = new FormData();
+
+            if(intAddCant < 0){
+                return false;
+            }
+
+            formData.append("intId",intId);
+            formData.append("strMargin",strMargin);
+            formData.append("strBorder",strBorder);
+            formData.append("strGlass",strGlass);
+            formData.append("intHeight",intHeight);
+            formData.append("intWidth",intWidth);
+            formData.append("intMargin",intMargin);
+            formData.append("intAddCant",intAddCant);
+            formData.append("intMarginType",intMarginType);
+            formData.append("intBorderType",intBorderType);
+            formData.append("intGlassType",intGlassType);
+            formData.append("intIdTopic",1);
+
+            
+            
+
+            request(urlRequest,formData,"post").then(function(objData){
+                if(objData.status){
+                    document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                    Swal.fire("Agregado",objData.msg,"success");
+                    
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                }
+            });
+            
+        }else{
+            Swal.fire("Error","No has elegido el marco.","error");
+        }
+        
+        
+    });
 }
 
 

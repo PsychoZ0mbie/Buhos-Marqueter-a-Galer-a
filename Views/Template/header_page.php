@@ -9,12 +9,13 @@
         $urlImg = $data['product'][0]['image'][0]['url_image'];
         $titulo = $data['product'][0]['title'];
     }
-
+    
     if(isset($_SESSION['arrCarrito']) && $_SESSION['arrCarrito']>0){
         foreach ($_SESSION['arrCarrito'] as $key) {
             $cantCarrito += $key['cantidad'];
         }
     }
+    //dep($_SESSION['arrCarrito']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,11 +84,11 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Catálogo
+                        Tienda
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="<?=base_url();?>/catalogo/marqueteria">Marquetería</a></li>
-                            <li><a class="dropdown-item" href="<?=base_url();?>/catalogo/galeria">Galería</a></li>
+                            <li><a class="dropdown-item" href="<?=base_url();?>/Tienda/marqueteria">Marquetería</a></li>
+                            <li><a class="dropdown-item" href="<?=base_url();?>/Tienda/galeria">Galería</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -115,10 +116,7 @@
                     </li>
                     <?php }?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=base_url();?>/catalogo/carrito" id="cantCarrito"><i class="fas fa-shopping-cart"> (<?=$cantCarrito?>)</i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="<?=base_url();?>/catalogo/buscar" class="nav-link"><i class="fas fa-search"></i></a>
+                        <a class="nav-link" href="<?=base_url();?>/tienda/carrito" id="cantCarrito"><i class="fas fa-shopping-cart"> (<?=$cantCarrito?>)</i></a>
                     </li>
                 </ul>
                 <!--
