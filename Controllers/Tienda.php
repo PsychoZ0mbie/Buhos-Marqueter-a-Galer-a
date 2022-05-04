@@ -22,12 +22,35 @@
             //$data['molduras'] =$this->getMolduras();
 			$this->views->getView($this,"marqueteria",$data);
         }
-        public function personalizar(){
+        public function Galeria($params){
 
-            $data['page_tag'] = "Personalizar marco | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Personalizar marco | ".NOMBRE_EMPRESA;
-			$data['page_name'] = "personalizar";
-			$this->views->getView($this,"personalizar",$data);
+            $params = strClean($params);
+            $ruta = ucwords(str_replace("-"," ",$params));
+
+            /*$data['productC'] = $this->getProductosCategoriasT(2,$params,"");
+            $data['categoria'] = $this->getCategoriaT(2);
+            $data['subcategoria'] = $this->getSubcategoriaT(2);
+            $data['tecnicas'] = $this->getTecnicasT(2);*/
+            $data['page_tag'] = "Galería | ".NOMBRE_EMPRESA;
+			$data['page_title'] = "Galería | ".NOMBRE_EMPRESA;
+			$data['page_name'] = "galeria";
+			$this->views->getView($this,"galeria",$data);
+        }
+        public function producto($params){
+            
+            $params = strClean($params);
+            $title = $params;
+            $ruta = ucwords(str_replace("-"," ",$params));
+
+            /*$data['product'] = $this->getProductosViewT($params);
+            $data['atributos'] = $this->getProductosAtt($data['product'][0]['subtopicid']);
+            $data['categoria'] = $this->getCategoriaT(2);
+            $data['subcategoria'] = $this->getSubcategoriaT(2);
+            $data['productsAl'] = $this->getProductosAlT($data['product'][0]['topicid']);*/
+            $data['page_tag'] = $title." | ".NOMBRE_EMPRESA;
+			$data['page_title'] = $title." | ".NOMBRE_EMPRESA;
+			$data['page_name'] = "producto";
+			$this->views->getView($this,"producto",$data);
         }
         public function getMuestras($params){
             $params = strClean($params);
@@ -39,6 +62,25 @@
         }
         public function getColor(){
             $request = $this->getColores();
+            echo json_encode($request,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
+        public function getCuadros(){
+            $options=array();
+            //dep($_POST);
+            if(!empty($_POST['topic'])){
+                $topic = intval($_POST['topic']);
+                $options = array("topic",$topic);
+            }else if(!empty($_POST['tech'])){
+                $tech = intval($_POST['tech']);
+                $options = array("tech",$tech);
+            }else if(!empty($_POST['order'])){
+                //$options="";
+                $options = array(intval($_POST['order']));
+            }
+            
+            $request = $this->getObras($options);
             echo json_encode($request,JSON_UNESCAPED_UNICODE);
             die();
         }
@@ -243,21 +285,8 @@
             die();
         }
 
-        /*public function Galeria($params){
-
-            $params = strClean($params);
-            $ruta = ucwords(str_replace("-"," ",$params));
-
-            $data['productC'] = $this->getProductosCategoriasT(2,$params,"");
-            $data['categoria'] = $this->getCategoriaT(2);
-            $data['subcategoria'] = $this->getSubcategoriaT(2);
-            $data['tecnicas'] = $this->getTecnicasT(2);
-            $data['page_tag'] = "Galería | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Galería | ".NOMBRE_EMPRESA;
-			$data['page_name'] = "galeria";
-			$this->views->getView($this,"categoria",$data);
-        }
-
+        
+        /*
         public function Buscar(){
             $data['page_tag'] = "Buscar | ".NOMBRE_EMPRESA;
 			$data['page_title'] = "Buscar | ".NOMBRE_EMPRESA;
@@ -265,21 +294,7 @@
 			$this->views->getView($this,"buscar",$data);
         }
 
-        public function Producto($params){
-            
-            $params = strClean($params);
-            $ruta = ucwords(str_replace("-"," ",$params));
-
-            $data['product'] = $this->getProductosViewT($params);
-            $data['atributos'] = $this->getProductosAtt($data['product'][0]['subtopicid']);
-            $data['categoria'] = $this->getCategoriaT(2);
-            $data['subcategoria'] = $this->getSubcategoriaT(2);
-            $data['productsAl'] = $this->getProductosAlT($data['product'][0]['topicid']);
-            $data['page_tag'] = "Marquetería | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Marquetería | ".NOMBRE_EMPRESA;
-			$data['page_name'] = "marqueteria";
-			$this->views->getView($this,"producto",$data);
-        }
+        
         public function Carrito(){
             
             $data['page_tag'] = "Carrito | ".NOMBRE_EMPRESA;

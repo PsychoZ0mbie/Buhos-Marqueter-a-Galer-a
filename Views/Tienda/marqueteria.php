@@ -166,7 +166,7 @@
                         </table>
                         <div class="d-flex justify-content-center mt-2 ">
                             <input  type="number" id="addCant" class="me-4 text-center" value="1" min="1">
-                            <button type="button" class="btn_content addCart">Agregar</button>
+                            <button type="button" class="btn_content addCart"><i class="fas fa-shopping-cart"></i> Agregar</button>
                         </div>
                     </div>
                 </div>

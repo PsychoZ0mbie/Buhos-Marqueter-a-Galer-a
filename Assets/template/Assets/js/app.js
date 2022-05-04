@@ -667,4 +667,168 @@ if(document.querySelector("#marqueteria")){
     });
 }
 
+/*********************************************************************Gallery page************************************************************************ */
+if(document.querySelector("#galeria")){
+    
+    let url = base_url+"/tienda/getCuadros";
+    request(url,"","get").then(function(objData){
+        let html="";
+        let parent = document.querySelector("#itemsGallery").parentElement;
+        let child = document.querySelector("#itemsGallery");
+        let fragment = document.createDocumentFragment();
+        for (let i = 0; i < objData.length; i++) {
+            let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
+            let route = base_url+"/tienda/producto/"+objData[i]['route'];
+            html+=`
+            <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
+                <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">${objData[i]['title']}</h5>
+                    <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
+                    <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
+                    <p class="card-text">${price}</p>
+                    <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                </div>
+            </div>
+            `;
+            
+        }
+        child.innerHTML = html;
+        fragment.appendChild(child);
+        parent.appendChild(fragment); 
+    });
 
+    if(document.querySelectorAll("#collapseOne ul li")){
+        let topics = document.querySelectorAll("#collapseOne ul li");
+        for (let i = 0; i < topics.length; i++) {
+            let topic = topics[i];
+            topic.addEventListener("click",function(e){
+                let id = e.target.getAttribute("id");
+                let formData = new FormData;
+                id = id.replace("topic","");
+                
+                formData.append("topic",id);
+                request(url,formData,"post").then(function(objData){
+                    let html="";
+                    let parent = document.querySelector("#itemsGallery").parentElement;
+                    let child = document.querySelector("#itemsGallery");
+                    let fragment = document.createDocumentFragment();
+                    for (let i = 0; i < objData.length; i++) {
+                        let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
+                        let route = base_url+"/tienda/producto/"+objData[i]['route'];
+                        html+=`
+                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
+                            <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${objData[i]['title']}</h5>
+                                <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
+                                <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
+                                <p class="card-text">${price}</p>
+                                <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                            </div>
+                        </div>
+                        `;
+                        
+                    }
+                    child.innerHTML = html;
+                    fragment.appendChild(child);
+                    parent.appendChild(fragment);
+                });
+    
+            });
+        }
+    }
+    if(document.querySelectorAll("#collapseTwo ul li")){
+        let techs = document.querySelectorAll("#collapseTwo ul li");
+        for (let i = 0; i < techs.length; i++) {
+            let tech = techs[i];
+            tech.addEventListener("click",function(e){
+                let id = e.target.getAttribute("id");
+                let formData = new FormData;
+                id = id.replace("tech","");
+                
+                formData.append("tech",id);
+                request(url,formData,"post").then(function(objData){
+                    let html="";
+                    let parent = document.querySelector("#itemsGallery").parentElement;
+                    let child = document.querySelector("#itemsGallery");
+                    let fragment = document.createDocumentFragment();
+                    for (let i = 0; i < objData.length; i++) {
+                        let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
+                        let route = base_url+"/tienda/producto/"+objData[i]['route'];
+                        html+=`
+                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
+                            <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${objData[i]['title']}</h5>
+                                <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
+                                <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
+                                <p class="card-text">${price}</p>
+                                <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                            </div>
+                        </div>
+                        `;
+                        
+                    }
+                    child.innerHTML = html;
+                    fragment.appendChild(child);
+                    parent.appendChild(fragment);
+                });
+    
+            });
+        }
+    }
+
+    let search = document.querySelector("#search");
+    search.addEventListener('input',function() {
+    let elements = document.querySelectorAll(".card");
+    let value = search.value.toLowerCase();
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            let strTitle = element.getAttribute("data-title").toLowerCase();
+            let strAutor = element.getAttribute("data-author").toLowerCase();
+            if(!strTitle.includes(value) && !strAutor.includes(value)){
+                element.classList.add("d-none");
+            }else{
+                element.classList.remove("d-none");
+            }
+        }
+    })
+
+    let orderBy = document.querySelector("#orderBy");
+    orderBy.addEventListener("change",function(){
+        let formData = new FormData;
+        formData.append("order",orderBy.value);
+        request(url,formData,"post").then(function(objData){
+            let html="";
+            let parent = document.querySelector("#itemsGallery").parentElement;
+            let child = document.querySelector("#itemsGallery");
+            let fragment = document.createDocumentFragment();
+            for (let i = 0; i < objData.length; i++) {
+                let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
+                let route = base_url+"/tienda/producto/"+objData[i]['route'];
+                html+=`
+                <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
+                    <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">${objData[i]['title']}</h5>
+                        <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
+                        <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
+                        <p class="card-text">${price}</p>
+                        <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                    </div>
+                </div>
+                `;
+            }
+            child.innerHTML = html;
+            fragment.appendChild(child);
+            parent.appendChild(fragment);
+        });
+    });
+
+}
+
+/*********************************************************************Product page************************************************************************ */
+if(document.querySelector("#producto")){
+    console.log("hola");
+}

@@ -45,7 +45,6 @@ require_once("Libraries/Core/Mysql.php");
             $request = $this->con->select_all($sql);
             return $request;
         }
-
         public function getMoldura($id){
             $this->con = new Mysql();
             $sql = "SELECT 
@@ -57,6 +56,28 @@ require_once("Libraries/Core/Mysql.php");
                     FROM product 
                     WHERE topicid=1 AND idproduct=$id";
             $request = $this->con->select($sql);
+            return $request;
+        }
+        public function getObras($arr){
+            $options="";
+            if(count($arr) && $arr[0] == "topic"){
+                $options = " AND subtopicid = $arr[1]";
+            }else if(count($arr) && $arr[0] == "tech"){
+                $options = " AND techniqueid =$arr[1]";
+            }else if(count($arr) && $arr[0] == 2){
+                $options = " ORDER BY price DESC";
+            }else if(count($arr) && $arr[0] == 3){
+                $options = " ORDER BY price ASC";
+            }
+            $this->con = new MySql();
+            $sql = "SELECT * FROM product WHERE topicid =2 $options";
+            $request = $this->con->select_all($sql);
+            for ($i=0; $i < count($request); $i++) { 
+                $idproduct = $request[$i]['idproduct'];
+                $sqlImg = "SELECT * FROM productimage WHERE productid = $idproduct";
+                $requestImg = $this->con->select_all($sqlImg);
+                $request[$i]['url'] = base_url()."/Assets/images/uploads/".$requestImg[0]['title'];
+            }
             return $request;
         }
 

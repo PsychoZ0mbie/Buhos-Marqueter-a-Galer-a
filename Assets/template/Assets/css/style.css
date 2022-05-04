@@ -10,6 +10,12 @@ input::-webkit-inner-spin-button {
    -webkit-appearance: none;
    margin: 0;
 }
+.item_hover:hover{
+    background:#E05A10;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
 .text__color{
     color:#E05A10;
 }
@@ -78,6 +84,11 @@ input[type=number] {
 .breadcrumb a{
     text-decoration: none;
     color: #10100D;
+}
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 /*************************Header**************************/
 .navbar-brand{
