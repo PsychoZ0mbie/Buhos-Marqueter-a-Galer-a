@@ -14,7 +14,7 @@
             $this->login = new LoginModel();
         }
         
-        /******************************Marquetería************************************/
+        /******************************Paginas************************************/
         public function marqueteria(){
             $data['page_tag'] = "Marqueteria | ".NOMBRE_EMPRESA;
 			$data['page_title'] = "Marqueteria | ".NOMBRE_EMPRESA;
@@ -22,11 +22,7 @@
             //$data['molduras'] =$this->getMolduras();
 			$this->views->getView($this,"marqueteria",$data);
         }
-        public function Galeria($params){
-
-            $params = strClean($params);
-            $ruta = ucwords(str_replace("-"," ",$params));
-
+        public function Galeria(){
             /*$data['productC'] = $this->getProductosCategoriasT(2,$params,"");
             $data['categoria'] = $this->getCategoriaT(2);
             $data['subcategoria'] = $this->getSubcategoriaT(2);
@@ -39,19 +35,31 @@
         public function producto($params){
             
             $params = strClean($params);
-            $title = $params;
-            $ruta = ucwords(str_replace("-"," ",$params));
-
+            $title = ucwords(str_replace("-"," ",$params));
+            $producto = $this->getProducto($params);
+            if($producto == "no existe"){
+                header('Location: '.base_url().'/error');
+				die();
+            }
             /*$data['product'] = $this->getProductosViewT($params);
             $data['atributos'] = $this->getProductosAtt($data['product'][0]['subtopicid']);
             $data['categoria'] = $this->getCategoriaT(2);
             $data['subcategoria'] = $this->getSubcategoriaT(2);
             $data['productsAl'] = $this->getProductosAlT($data['product'][0]['topicid']);*/
+            $data['product'] = $producto;
             $data['page_tag'] = $title." | ".NOMBRE_EMPRESA;
 			$data['page_title'] = $title." | ".NOMBRE_EMPRESA;
 			$data['page_name'] = "producto";
 			$this->views->getView($this,"producto",$data);
         }
+        public function Carrito(){            
+            $data['page_tag'] = "Carrito | ".NOMBRE_EMPRESA;
+			$data['page_title'] = "Carrito | ".NOMBRE_EMPRESA;
+			$data['page_name'] = "carrito";
+			$this->views->getView($this,"carrito",$data);
+        }
+
+        /******************************Métodos de paginas************************************/
         public function getMuestras($params){
             $params = strClean($params);
             $params = str_replace(" ","",$params);
@@ -65,26 +73,6 @@
             echo json_encode($request,JSON_UNESCAPED_UNICODE);
             die();
         }
-
-        public function getCuadros(){
-            $options=array();
-            //dep($_POST);
-            if(!empty($_POST['topic'])){
-                $topic = intval($_POST['topic']);
-                $options = array("topic",$topic);
-            }else if(!empty($_POST['tech'])){
-                $tech = intval($_POST['tech']);
-                $options = array("tech",$tech);
-            }else if(!empty($_POST['order'])){
-                //$options="";
-                $options = array(intval($_POST['order']));
-            }
-            
-            $request = $this->getObras($options);
-            echo json_encode($request,JSON_UNESCAPED_UNICODE);
-            die();
-        }
-
         public function calcularMarco(){
             //dep($_POST);
             if($_POST){
@@ -170,10 +158,10 @@
             }
             die();
         }
-
         public function agregarCarrito(){
             //dep($_POST);
             if($_POST){
+                //unset($_SESSION['arrCarrito']);exit;
                 $intIdTopic = intval($_POST['intIdTopic']);
                 $cantCarrito = 0;
                 $arrCarrito = array();
@@ -186,7 +174,6 @@
                         $arrResponse = array("status" => false,"msg"=>"Error de datos");
 
                     }else{
-                        //unset($_SESSION['arrCarrito']);exit;
                         $intId = intval($_POST['intId']);
                         $intHeight = intVal($_POST['intHeight']);
                         $intWidth = intval($_POST['intWidth']);
@@ -236,19 +223,20 @@
                             }
                             $precioMarco = ($perimetro*$precio) +$vidrio+$borde+$margin;
 
-                            $arrMarco = array("idproducto"=>$intId,
-                                                "idcategoria"=>$intIdTopic,
-                                                "referenciaMoldura"=>$requestMoldura['title'],
-                                                "tipoMargen" => $strMargin,
-                                                "tipoBorde" => $strBorder,
-                                                "tipoVidrio" => $strGlass,
-                                                "margen" => ($intMargin/2)."cm",
-                                                "medidasImagen"=>$intHeight."cm X ".$intWidth."cm",
-                                                "medidasMarco"=>($intHeight+$intMargin)."cm X ".($intWidth+$intMargin)."cm",
-                                                "cantidad"=>$intAddCant,
-                                                "precio"=>$precioMarco
-                                                     
+                            $arrMarco = array(
+                                "idproducto"=>$intId,
+                                "idcategoria"=>$intIdTopic,
+                                "referenciaMoldura"=>$requestMoldura['title'],
+                                "tipoMargen" => $strMargin,
+                                "tipoBorde" => $strBorder,
+                                "tipoVidrio" => $strGlass,
+                                "margen" => ($intMargin/2)."cm",
+                                "medidasImagen"=>$intHeight."cm X ".$intWidth."cm",
+                                "medidasMarco"=>($intHeight+$intMargin)."cm X ".($intWidth+$intMargin)."cm",
+                                "cantidad"=>$intAddCant,
+                                "precio"=>$precioMarco                   
                             );
+
                             if(isset($_SESSION['arrCarrito'])){
                                 $arrCarrito = $_SESSION['arrCarrito'];
                                 $flag = true;
@@ -279,30 +267,174 @@
                         }
                         $arrResponse = array("status"=>true,"msg"=>"Producto agregado","cantidad"=>$cantCarrito);
                     }
+                }else if($intIdTopic == 2){
+                    $id = openssl_decrypt($_POST['id'],ENCRIPTADO,KEY);
+                    $requestCuadro  = $this->getObra($id);
+                    $arrCarrito=array();
+                    $arrCuadro = array(
+                        "idproducto"=> $requestCuadro['idproduct'],
+                        "idcategoria"=>$intIdTopic,
+                        "autor" => $requestCuadro['author'],
+                        "dimensiones" =>$requestCuadro['height']."cm X".$requestCuadro['width']."cm",
+                        "cantidad"=>1,
+                        "url"=>$requestCuadro['url'],
+                        "precio" =>$requestCuadro['price']
+                    );
+                    
+                    if(isset($_SESSION['arrCarrito'])){
+                        $arrCarrito = $_SESSION['arrCarrito'];
+                        $flag = true;
+                        for ($i=0; $i < count($arrCarrito) ; $i++) { 
+                            if($arrCarrito[$i]['idproducto'] == $arrCuadro['idproducto']){
+                                $flag =false;
+                                break;
+                            }
+                        }
+                        if($flag){
+                            array_push($arrCarrito,$arrCuadro);
+                            $arrResponse = array("status"=>true,"msg"=>"Producto agregado");
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"El producto ya ha sido agregado");
+                        }
+                        $_SESSION['arrCarrito'] = $arrCarrito;
+                    }else{
+                        array_push($arrCarrito,$arrCuadro);
+                        $_SESSION['arrCarrito'] = $arrCarrito;
+                        $arrResponse = array("status"=>true,"msg"=>"Producto agregado");
+                    }
+                    foreach ($_SESSION['arrCarrito'] as $cantidad) {
+                        $cantCarrito += $cantidad['cantidad'];
+                    }
+                    $arrResponse['cantidad'] = $cantCarrito;
+
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }
-
-        
-        /*
-        public function Buscar(){
-            $data['page_tag'] = "Buscar | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Buscar | ".NOMBRE_EMPRESA;
-			$data['page_name'] = "buscar";
-			$this->views->getView($this,"buscar",$data);
-        }
-
-        
-        public function Carrito(){
+        public function getCuadros(){
+            $options=array();
+            //dep($_POST);
+            if(!empty($_POST['topic'])){
+                $topic = intval($_POST['topic']);
+                $options = array("topic",$topic);
+            }else if(!empty($_POST['tech'])){
+                $tech = intval($_POST['tech']);
+                $options = array("tech",$tech);
+            }else if(!empty($_POST['order'])){
+                //$options="";
+                $options = array(intval($_POST['order']));
+            }
             
-            $data['page_tag'] = "Carrito | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Carrito | ".NOMBRE_EMPRESA;
-			$data['page_name'] = "carrito";
-			$this->views->getView($this,"carrito",$data);
+            $request = $this->getObras($options);
+            echo json_encode($request,JSON_UNESCAPED_UNICODE);
+            die();
         }
+        public function getCuadrosAl(){
+            $autor = strClean($_POST['autor']);
+            $request = $this->getObrasAl($autor);
+            echo json_encode($request,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function carritoInfo(){
+            if(isset($_SESSION['arrCarrito']) && !empty($_SESSION['arrCarrito'])){
+                $html="";
+                $arrCarrito = $_SESSION['arrCarrito'];
+                $resumen = 0;
+                for ($i=0; $i < count($arrCarrito) ; $i++) { 
+                    $subtotal = $arrCarrito[$i]['precio'] * $arrCarrito[$i]['cantidad'];
+                    $resumen += $subtotal;
+                    $precio = formatNum($arrCarrito[$i]['precio']);
+                    $id = openssl_encrypt($arrCarrito[$i]['idproducto'],ENCRIPTADO,KEY);
+                    if($arrCarrito[$i]['idcategoria'] == 2){
+                        $html.= '
+                        <tr id="'.$id.'" idc="'.$arrCarrito[$i]['idcategoria'].'">
+                            <td class="position-relative">
+                                <span class="cursor__pointer btn_content position-absolute top-0 start-0 pt-1 pb-1 pe-2 ps-2 mt-1 rounded-circle btnDelete" title="Eliminar" name="eliminar">x</span>
+                                <img src="'.$arrCarrito[$i]['url'].'" class="mb-2" style="height:100px; width:100px;">
+                                <p class="m-0 text-secondary"><strong>Autor: </strong>'.$arrCarrito[$i]['autor'].'</p>
+                                <p class="m-0 text-secondary"><strong>Dimensiones: </strong>'.$arrCarrito[$i]['dimensiones'].'</p>
+                            </td>
+                            <td>1</td>
+                            <td>'.$precio.'</td>
+                            <td>'.$precio.'</td>
+                        </tr>
+                        ';
+                    }else if($arrCarrito[$i]['idcategoria'] == 1){
+                        $html.= '
+                        <tr id="'.$id.'" idc="'.$arrCarrito[$i]['idcategoria'].'" tm="'.$arrCarrito[$i]['tipoMargen'].'" tb="'.$arrCarrito[$i]['tipoBorde'].'"
+                        tv="'.$arrCarrito[$i]['tipoVidrio'].'" m="'.$arrCarrito[$i]['margen'].'" mi="'.$arrCarrito[$i]['medidasImagen'].'" mm="'.$arrCarrito[$i]['medidasMarco'].'"
+                        >
+                            <td class="position-relative">
+                                <span class="cursor__pointer btn_content position-absolute top-0 start-0 pt-1 pb-1 pe-2 ps-2 mt-1 rounded-circle btnDelete" title="Eliminar" name="eliminar">x</span>
+                                <p class="m-0 mt-4 text-secondary"><strong>Referencia: </strong>'.$arrCarrito[$i]['referenciaMoldura'].'</p>
+                                <p class="m-0 text-secondary"><strong>Tipo de margen: </strong>'.$arrCarrito[$i]['tipoMargen'].'</p>
+                                <p class="m-0 text-secondary"><strong>Tipo de borde: </strong>'.$arrCarrito[$i]['tipoBorde'].'</p>
+                                <p class="m-0 text-secondary"><strong>Tipo de vidrio: </strong>'.$arrCarrito[$i]['tipoVidrio'].'</p>
+                                <p class="m-0 text-secondary"><strong>Margen: </strong>'.$arrCarrito[$i]['margen'].'</p>
+                                <p class="m-0 text-secondary"><strong>Medidas de la imágen: </strong>'.$arrCarrito[$i]['medidasImagen'].'</p>
+                                <p class="m-0 text-secondary"><strong>Medidas del marco: </strong>'.$arrCarrito[$i]['medidasMarco'].'</p>
+                            </td>
+                            <td><input  type="number" id="addCant" class="text-center w-50" value="'.$arrCarrito[$i]['cantidad'].'" min="1"></td>
+                            <td>'.$precio.'</td>
+                            <td>'.$precio.'</td>
+                        </tr>
+                        ';
+                    }
+                }
+                $arrResponse = array("status"=>true,"msg"=>"Hay productos","html"=>$html,"resumen"=>formatNum($resumen));
+            }else{
+                $arrResponse = array("status"=>false,"msg"=>"No hay productos");
+            }
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function eliminarCarrito(){
+            if($_POST){
+                $id = openssl_decrypt($_POST['id'],ENCRIPTADO,KEY);
+                $idCategoria = intval($_POST['idCategoria']);
+                $tipoMargen = strClean($_POST['tipoMargen']);
+                $tipoBorde = strClean($_POST['tipoBorde']);
+                $tipoVidrio = strClean($_POST['tipoVidrio']);
+                $margen = strClean($_POST['margen']);
+                $medidasImagen = strClean($_POST['medidasImagen']);
+                $medidasMarco = strClean($_POST['medidasMarco']);
 
+                if(is_numeric($id)){
+                    $resumen=0;
+                    $cantidad=0;
+                    $arrCarrito = $_SESSION['arrCarrito'];
+                    for ($i=0; $i < count($arrCarrito) ; $i++) { 
+                        if($idCategoria == 1){
+                            if($arrCarrito[$i]['idproducto'] == $id && $arrCarrito[$i]['tipoMargen'] == $tipoMargen 
+                            && $arrCarrito[$i]['tipoBorde'] == $tipoBorde
+                            && $arrCarrito[$i]['tipoVidrio'] == $tipoVidrio && $arrCarrito[$i]['margen'] == $margen 
+                            && $arrCarrito[$i]['medidasImagen'] == $medidasImagen && $arrCarrito[$i]['medidasMarco'] == $medidasMarco){
+                                unset($arrCarrito[$i]);
+                                break;
+                            }
+                        }else if($idCategoria == 2){
+                            if($arrCarrito[$i]['idproducto'] == $id){
+                                unset($arrCarrito[$i]);
+                                break;
+                            } 
+                        }
+                    }
+                    sort($arrCarrito);
+                    $_SESSION['arrCarrito'] = $arrCarrito;
+                    foreach ($_SESSION['arrCarrito'] as $key) {
+                        $cantidad += $key['cantidad'];
+                        $resumen += $key['cantidad'] * $key['precio'];
+                    } 
+                    $arrResponse = array("status"=>true,"msg"=>"Producto eliminado","resumen"=>formatNum($resumen),"cantidad"=>$cantidad);
+                }else{
+                    $arrResponse = array("status"=>false,"msg"=>"Ha ocurrido un problema, inténtelo de nuevo.");
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        /*
         public function procesarPedido(){
             if(empty($_SESSION['arrCarrito'])){
                 header('location: '.base_url());

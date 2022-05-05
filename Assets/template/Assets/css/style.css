@@ -16,6 +16,9 @@ input::-webkit-inner-spin-button {
     cursor: pointer;
     transition: all 0.3s;
 }
+.text__size{
+    font-size: 13px;
+}
 .text__color{
     color:#E05A10;
 }
@@ -23,6 +26,9 @@ input::-webkit-inner-spin-button {
     overflow: hidden;
     overflow-y: scroll;
     height: 300px;
+}
+.cursor__pointer{
+    cursor: pointer;
 }
 .scroll_listX{
     overflow: hidden;
@@ -549,7 +555,6 @@ input[type=number] {
     object-fit: cover;
 }
 .product_right{
-    height: 600px;
     width: 100%;
 }
 .product_right ul{
@@ -925,9 +930,6 @@ footer ul li a{
     
     .learn_content{
         margin: 20px 0;
-    }
-    .product_right{
-        height: 450px;
     }
     
 }

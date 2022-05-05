@@ -5,9 +5,9 @@
     $urlImg;
     //dep($data['product']);
     if(!empty($data['product'])){
-        $urlWeb = base_url()."/catalogo/producto/".$data['product'][0]['route'];
-        $urlImg = $data['product'][0]['image'][0]['url_image'];
-        $titulo = $data['product'][0]['title'];
+        $urlWeb = base_url()."/tienda/producto/".$data['product']['route'];
+        $urlImg = $data['product']['url'][0];
+        $titulo = $data['product']['title'];
     }
     
     if(isset($_SESSION['arrCarrito']) && $_SESSION['arrCarrito']>0){
@@ -79,21 +79,21 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="<?=base_url();?>">Inicio</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?=base_url();?>/nosotros">Nosotros</a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Tienda
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="<?=base_url();?>/Tienda/marqueteria">Marquetería</a></li>
-                            <li><a class="dropdown-item" href="<?=base_url();?>/Tienda/galeria">Galería</a></li>
+                            <li><a class="dropdown-item" href="<?=base_url();?>/tienda/marqueteria">Marquetería</a></li>
+                            <li><a class="dropdown-item" href="<?=base_url();?>/tienda/galeria">Galería</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?=base_url();?>/servicios">Servicios</a>
+                        <a class="nav-link" href="<?=base_url();?>/nosotros">Nosotros</a>
                     </li>
+                    <!--<li class="nav-item">
+                        <a class="nav-link" href="<?=base_url();?>/servicios">Servicios</a>
+                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link" href="<?=base_url();?>/contacto">Contacto</a>
                     </li>

@@ -44,6 +44,10 @@
         $format .= print_r('</pre>');
         return $format;
     }
+    function formatNum(int $num){
+        $num = MS.number_format($num,0,DEC,MIL).MD;
+        return $num;
+    }
     function sessionUser(int $idpersona){
         require_once("Models/LoginModel.php");
         $objLogin = new LoginModel();

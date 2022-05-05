@@ -80,7 +80,46 @@ require_once("Libraries/Core/Mysql.php");
             }
             return $request;
         }
-
+        public function getObrasAl($autor){
+            $this->con = new MySql();
+            $sql = "SELECT * FROM product WHERE topicid =2 AND author='$autor' ORDER BY RAND() limit 3";
+            $request = $this->con->select_all($sql);
+            for ($i=0; $i < count($request); $i++) { 
+                $idproduct = $request[$i]['idproduct'];
+                $sqlImg = "SELECT * FROM productimage WHERE productid = $idproduct";
+                $requestImg = $this->con->select_all($sqlImg);
+                $request[$i]['url'] = base_url()."/Assets/images/uploads/".$requestImg[0]['title'];
+            }
+            return $request;
+        }
+        public function getObra($intId){
+            $this->con = new Mysql();
+            $this->intIdProducto = $intId;
+            $sql = "SELECT * FROM product WHERE idproduct =$this->intIdProducto";
+            $sqlImg = "SELECT * FROM productimage WHERE productid=$this->intIdProducto LIMIT 1";
+            $request = $this->con->select($sql);
+            $requestImg = $this->con->select($sqlImg);
+            $request['url'] = base_url()."/Assets/images/uploads/".$requestImg['title'];
+            return $request;
+        }
+        public function getProducto($params){
+            $this->con = new Mysql();
+            $this->strRuta = $params;
+            $sql = "SELECT * FROM product WHERE topicid = 2 AND route= '$params'";
+            $request = $this->con->select($sql);
+            if(!empty($request)){
+                $idproduct = $request['idproduct'];
+                $sqlimg = "SELECT * FROM productimage WHERE productid= $idproduct";
+                $requestImage = $this->con->select_all($sqlimg);
+                for ($i=0; $i < count($requestImage); $i++) { 
+                    $request['url'][$i] = base_url()."/Assets/images/uploads/".$requestImage[$i]['title'];
+                }
+                $return = $request;
+            }else{
+                $return = "no existe";
+            }
+            return $return;
+        }
         /*
         public function getProductosT(){
             $this->con = new Mysql();

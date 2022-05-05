@@ -21,10 +21,10 @@
                     <h5 class="position-relative underline"><strong>Empresa</strong></h5>
                     <ul>
                         <li><a href="<?=base_url();?>">Inicio</a></li>
+                        <li><a href="<?=base_url();?>/tienda/marqueteria">Marquetería</a></li>
+                        <li><a href="<?=base_url();?>/tienda/galeria">Galería</a></li>
                         <li><a href="<?=base_url();?>/nosotros">Nosotros</a></li>
-                        <li><a href="<?=base_url();?>/catalogo/marqueteria">Marquetería</a></li>
-                        <li><a href="<?=base_url();?>/catalogo/galeria">Galería</a></li>
-                        <li><a href="<?=base_url();?>/servicios">Servicios</a></li>
+                        <!--<li><a href="<?=base_url();?>/servicios">Servicios</a></li>-->
                         <li><a href="<?=base_url();?>/contacto">Contacto</a></li>
                     </ul>
                 </div>

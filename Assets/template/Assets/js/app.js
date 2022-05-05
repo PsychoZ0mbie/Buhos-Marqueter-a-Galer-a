@@ -830,5 +830,112 @@ if(document.querySelector("#galeria")){
 
 /*********************************************************************Product page************************************************************************ */
 if(document.querySelector("#producto")){
-    console.log("hola");
+    let formData = new FormData();
+    let autor = document.querySelector("#autor").innerHTML;
+    let url = base_url+"/tienda/getCuadrosAl";
+    formData.append("autor",autor);
+    request(url,formData,"post").then(function(objData){
+        let html="";
+        let parent = document.querySelector("#itemsGallery").parentElement;
+        let child = document.querySelector("#itemsGallery");
+        let fragment = document.createDocumentFragment();
+        for (let i = 0; i < objData.length; i++) {
+            let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
+            let route = base_url+"/tienda/producto/"+objData[i]['route'];
+            html+=`
+            <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
+                <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">${objData[i]['title']}</h5>
+                    <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
+                    <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
+                    <p class="card-text">${price}</p>
+                    <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                </div>
+            </div>
+            `;
+            
+        }
+        child.innerHTML = html;
+        fragment.appendChild(child);
+        parent.appendChild(fragment); 
+    });
+    
+    if(document.querySelector(".addCart")){
+        let button = document.querySelector(".addCart");
+        button.addEventListener("click",function(){
+            
+            let id = button.getAttribute("id");
+            let urlRequest = base_url+"/tienda/agregarCarrito";
+            let formData = new FormData();
+
+            formData.append("id",id);
+            formData.append("intIdTopic",2);
+            request(urlRequest,formData,"post").then(function(objData){
+                if(objData.status){
+                    document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                    Swal.fire("Agregado",objData.msg,"success");
+                    
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                }
+            });
+        })
+    }
+}
+
+/*********************************************************************Product page************************************************************************ */
+if(document.querySelector("#carrito")){
+    let url = base_url+"/tienda/carritoInfo";
+    request(url,"","get").then(function(objData){
+        if(objData.status){
+            document.querySelector("#with").classList.remove("d-none");
+            document.querySelector("#without").classList.add("d-none");
+            document.querySelector("tbody").innerHTML = objData.html;
+            document.querySelector("#subtotal").innerHTML = objData.resumen;
+            document.querySelector("#total").innerHTML = objData.resumen;
+        }
+    })
+
+    if(document.querySelector("#with table")){
+        let tabla = document.querySelector("#with table");
+        tabla.addEventListener("click",function(e){
+            if(e.target.getAttribute("name")){
+                let element = e.target.parentElement.parentElement;
+                let id =  element.getAttribute("id");
+                let idCategoria =  element.getAttribute("idc");
+                let tipoMargen =  element.getAttribute("tm");
+                let tipoBorde =  element.getAttribute("tb");
+                let tipoVidrio =  element.getAttribute("tv");
+                let margen =  element.getAttribute("m");
+                let medidasImagen =  element.getAttribute("mi");
+                let medidasMarco =  element.getAttribute("mm");
+                let url = base_url+"/tienda/eliminarCarrito"
+                let formData = new FormData();
+                formData.append("id",id);
+                formData.append("idCategoria",idCategoria);
+                formData.append("tipoMargen",tipoMargen);
+                formData.append("tipoBorde",tipoBorde);
+                formData.append("tipoVidrio",tipoVidrio);
+                formData.append("margen",margen);
+                formData.append("medidasImagen",medidasImagen);
+                formData.append("medidasMarco",medidasMarco);
+                
+                request(url,formData,"post").then(function(objData){
+                    if(objData.status){
+                        document.querySelector("#subtotal").innerHTML = objData.resumen;
+                        document.querySelector("#total").innerHTML = objData.resumen;
+                        document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                        if(objData.cantidad == 0){
+                            document.querySelector("#with").classList.add("d-none");
+                            document.querySelector("#without").classList.remove("d-none");
+                        }
+                        element.remove();
+                    }else{
+                        Swal.fire("Error",objData.msg,"error");
+                    }
+                });
+            }
+        });
+    }
 }

@@ -1,5 +1,28 @@
 <?php
     headerPage($data);
+    $producto = $data['product'];
+    $img="";
+    $button="";
+    $urlCompartir = base_url()."/tienda/producto/".$producto['route'];
+    $precio =formatNum($producto['price']);
+    for ($i=0; $i < count($producto['url']); $i++) { 
+      if($i == 0){
+        $img.='<div class="carousel-item active">
+              <img src="'.$producto['url'][$i].'" class="d-block w-100" alt="'.$producto['title'].'">
+            </div>';
+      }else{
+        $img.='<div class="carousel-item">
+              <img src="'.$producto['url'][$i].'" class="d-block w-100" alt="'.$producto['title'].'">
+            </div>';
+      }
+      
+    }
+    if($producto['status'] == 1){
+      $precio = '<p class="fs-5 pt-4" id="price"><strong>Precio: </strong>'.$precio.'</p>';
+      $button = '<button type="button" id="'.openssl_encrypt($producto['idproduct'],ENCRIPTADO,KEY).'" class="btn_content addCart"><i class="fas fa-shopping-cart"></i> Agregar</button>';
+    }else{
+      $precio = '<p class="fs-5 pt-4 text-danger" id="price"><strong>Vendido</strong></p>';
+    }
 ?>
     <main id="<?=$data['page_name']?>">
        <section>
@@ -9,9 +32,7 @@
               <div class="product_left mt-4">
                 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                   <div class="carousel-inner">
-                    <div class="carousel-item ">
-                      <img src="" class="d-block w-100" alt="">
-                    </div>
+                    <?= $img?>
                   </div>
                   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -27,28 +48,27 @@
             <div class="col-lg-6 mb-5">
               <div class="product_right mt-4">
                 <div class="product_info">
-                  <h1 class="position-relative underline"><strong>Título</strong></h1>
-                  <p class="fs-5 pt-4" id="price"><strong>Precio:</strong></p>
+                  <h1 class="position-relative underline"><strong><?=$producto['title']?></strong></h1>
+                  <?=$precio?>
                   <ul class="mb-3">
-                    <li><i class="fas fa-check-circle text-success"></i>Categoria:</li>
+                    <li>Autor: <span id="autor"><?=$producto['author']?></span></li>
+                    <li>Dimensiones: <?=$producto['height']?>cm X <?=$producto['width']?>cm</li>
                   </ul>
-                  <p id="description"></p>
+                  <p id="description"><?=$producto['description']?></p>
+                  <div class="d-flex justify-content-center mt-2 ">
+                    <?=$button?>
+                  </div>
                 </div>
                 <hr>
                 <div class="product_social">
                   <p><strong>Compartir en:</strong></p>
-                  <!--<ul>
-                    <a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=<?=$urlCompartir?>&t=<?=$producto[0]['title'];?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en facebook"><li><i class="fab fa-facebook-f"></i></li></a>
-                    <a href="#"  onclick="window.open('https://twitter.com/intent/tweet?text=<?=$producto[0]['title'];?>&url=<?=$urlCompartir?>&hashtags=<?=SHAREDHASH?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en twitter"><li><i class="fab fa-twitter"></i></li></a>
+                  <ul>
+                    <a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=<?=$urlCompartir?>&t=<?=$producto['title'];?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en facebook"><li><i class="fab fa-facebook-f"></i></li></a>
+                    <a href="#"  onclick="window.open('https://twitter.com/intent/tweet?text=<?=$producto['title'];?>&url=<?=$urlCompartir?>&hashtags=<?=SHAREDHASH?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en twitter"><li><i class="fab fa-twitter"></i></li></a>
                     <a href="#" onclick="window.open('http://www.linkedin.com/shareArticle?url=<?=$urlCompartir?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en linkedin"><li><i class="fab fa-linkedin-in"></i></li></a>
                     <a href="#" onclick="window.open('https://api.whatsapp.com/send?text=<?=$urlCompartir?>','ventanacompartir','toolbar=0,status=0,width=650,height=450')" title="Compartir en whatsapp"><li><i class="fab fa-whatsapp"></i></li></a>
-                  </ul>-->
+                  </ul>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mb-5">
-            <div class="col-lg-6 order-lg-1 order-md-5 order-sm-5">
                 <div class="accordion pt-4" id="accordionExample">
                     <p><strong>Información adicional</strong></p>
                     <div class="accordion-item">
@@ -96,24 +116,16 @@
                         </div>
                     </div>
                 </div>
+              </div>
             </div>
-            <div class="col-lg-6 order-lg-5 order-md-1 order-sm-1 ">
-                <div class="d-flex justify-content-center mt-2 ">
-                    <input  type="number" id="addCant" class="me-4 text-center" value="1" min="1">
-                    <button type="button" class="btn_content addCart"><i class="fas fa-shopping-cart"></i> Agregar</button>
-                </div>
-            </div>
-          </div> 
+          </div>
        </section>
        <section>
-            <div class="container text-center mt-5 cover_presentation">
+            <div class="container text-center cover_presentation">
                 <h2><strong>También te puede interesar</strong></h2>
             </div>
-            <div class="catalog">
-                
-            </div>
+            <div class="d-flex justify-content-center flex-wrap position-relative mt-4" id="itemsGallery"></div>
         </section>
-       
     </main>
 <?php 
     footerPage($data);
