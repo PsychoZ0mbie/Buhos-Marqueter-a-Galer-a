@@ -8,8 +8,13 @@
     <meta name="theme-color" content="#009688">
     <link rel="shortcut icon" href="<?= media();?>/images/uploads/icon.gif">
     <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/main.css">
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/bootstrap/bootstrap.min.css?n=1">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/vali/main.css?n=1">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/vali/style.css?n=1">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/normalize.css?n=1">
+    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css?n=1">
+    <!-- Font-icon css-->
+    <link rel="stylesheet" href="<?= media();?>/css/icons/font-awesome.min.css?n=1">
     
     <title><?= $data['page_tag']; ?></title>
   </head>
@@ -75,6 +80,6 @@
     <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.js?n=1"></script>
     <script type="text/javascript" src="<?= media(); ?>/js/plugins/tinymce/tinymce.min.js?n=1"></script>
     <!-- The javascript plugin to display page loading on top-->
-    <script src="<?= media(); ?>/js/<?= $data['page_functions']; ?>"></script>
+    <script src="<?= media(); ?>/js/functions_login"></script>
   </body>
 </html>

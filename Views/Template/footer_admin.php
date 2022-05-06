@@ -14,7 +14,6 @@
     <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.js?n=1"></script>
     <script type="text/javascript" src="<?= media(); ?>/js/plugins/tinymce/tinymce.min.js?n=1"></script>
 
-	<script type="text/javascript" src="<?= media(); ?>/js/functions_admin.js?n=1"></script>
   <script type="text/javascript" src="<?= media(); ?>/js/functions.js?n=1"></script>
 	<script type="module" src="<?= media(); ?>/js/app.js?n=1"></script>
   </body>

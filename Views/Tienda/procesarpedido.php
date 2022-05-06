@@ -1,13 +1,6 @@
 <?php 
     headerPage($data);
-    $total = 0;
-    $subtotal=0;
-    $medidas="";
-    $tipo="";
-
-    
-
-    foreach ($_SESSION['arrCarrito'] as $key) {
+    /*foreach ($_SESSION['arrCarrito'] as $key) {
         if($key['cantidad']>= 12){
             $total = $key['cantidad']* $key['precio'];
             $total = $total * 0.9;
@@ -15,9 +8,9 @@
             $total = $key['cantidad']* $key['precio'];
         }
         $subtotal += $total;
-    }
+    }*/
 ?>
-<main>
+<main id="<?=$data['page_name']?>">
     <div id="divLoading">
       <div>
           <img src="<?= media(); ?>/images/loading/loading.svg" alt="Loading">
@@ -31,7 +24,6 @@
                     
                 ?>
                 <form id="formOrden" name="formOrden" class="bg-light p-4">
-                    <input type="hidden" id="txtPrecio" name="txtPrecio" value="<?=$subtotal?>">
                     <h2>Datos</h2>
                     <div class="row">
                         <div class="col-md-6">
@@ -156,13 +148,11 @@
                         <div class="row">
                             <div class="col-5">
                                 <p><strong>Subtotal</strong></p>
-                                <p><strong>Envio</strong></p>
                                 <p><strong>Total</strong></p>
                             </div>
                             <div class="col-7">
-                                <p><strong id="resume_subtotal"><?=MS.number_format($subtotal,0,DEC,MIL)." ".MD?></strong></p>
-                                <p><strong id="resume_envio"><?=MS.number_format(ENVIO,0,DEC,MIL)." ".MD;?></strong></p>
-                                <p><strong id="resume_total"><?=MS.number_format(($subtotal+ENVIO),0,DEC,MIL)." ".MD?></strong></p>
+                                <p><strong id="subtotal"></strong></p>
+                                <p><strong id="total"></strong></p>
                             </div>
                         </div>
                     </div>

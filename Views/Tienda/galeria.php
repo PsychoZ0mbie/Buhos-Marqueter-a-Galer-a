@@ -1,12 +1,5 @@
 <?php 
     headerPage($data);
-    /*$productCategoria = $data['productC'];
-    $categoria = $data['categoria'];
-    $subcategoria = $data['subcategoria'];
-    $tecnica =$data['tecnicas'];
-
-    $urlProducto = base_url()."/catalogo/producto/";
-    $url = base_url()."/catalogo/".$categoria[0]['route']."/";*/
 ?>
     <main id="<?=$data['page_name']?>">
        <section>

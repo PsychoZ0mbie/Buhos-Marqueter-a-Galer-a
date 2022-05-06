@@ -8,7 +8,7 @@
 
 <main id="<?=$data['page_name']?>">
     <section class="m-4">
-        <form id="with">
+        <form id="with" class="d-none">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="table-responsive-md">

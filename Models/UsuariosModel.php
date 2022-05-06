@@ -77,21 +77,45 @@
 
 		public function selectUsuario(int $idpersona){
 			$this->intIdUsuario = $idpersona;
-			$sql = "SELECT idperson,
-			firstname,
-			lastname,
-			picture,
-			phone,
-			address,
-			email,
-			department,
-			city,
-			identification,
-			roleid, 
-			DATE_FORMAT(datecreated, '%d/%m/%Y') as date 
-			FROM person 
-			WHERE idperson = $this->intIdUsuario";
+			$sql = "SELECT p.idperson,
+			p.firstname,
+			p.lastname,
+			p.picture,
+			p.phone,
+			p.address,
+			p.email,
+			p.department,
+			p.city,
+			p.identification,
+			p.roleid, 
+			d.iddepartment,
+			d.department as departamento,
+			c.idcity,
+			c.city as ciudad,
+			DATE_FORMAT(p.datecreated, '%d/%m/%Y') as date 
+			FROM person p 
+			INNER JOIN department d, city c 
+			WHERE p.idperson = $this->intIdUsuario AND c.idcity = p.city AND d.iddepartment = p.department";
+
 			$request = $this->select($sql);
+			if(empty($request)){
+				$sql = "SELECT idperson,
+				firstname,
+				lastname,
+				picture,
+				phone,
+				address,
+				email,
+				department,
+				city,
+				identification,
+				roleid, 
+				DATE_FORMAT(datecreated, '%d/%m/%Y') as date 
+				FROM person 
+				WHERE idperson = $this->intIdUsuario";
+				$request = $this->select($sql);
+			}
+
 			return $request;
 		}
 

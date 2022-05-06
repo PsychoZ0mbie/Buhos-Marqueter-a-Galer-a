@@ -10,7 +10,7 @@
   }
   
 ?>
-    <main class="app-content">
+    <main class="app-content" id="<?=$data['page_name']?>">
       <div class="row user">
         <div class="col-md-3">
           <div class="tile p-0">

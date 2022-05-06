@@ -71,37 +71,62 @@ export default class Usuario extends Interface{
             let html="";
             let typeList = document.querySelectorAll("#typeList option");
             let rolname ="";
-            for (let i = 0; i < objData.length; i++) {
-                
+            for (let i = 0; i < objData.data.length; i++) {
                 for (let j = 0; j < typeList.length; j++) {
-                    if(typeList[j].value == objData[i].roleid){
+                    if(typeList[j].value == objData.data[i].roleid){
                         rolname = typeList[j].textContent;
                         break;
                     }
                 }
-                html += `
-                
-                <div class="row mt-2 bg-body rounded item" data-name="${objData[i]['firstname']}" data-lastname="${objData[i]['lastname']}" data-email="${objData[i]['email']}" data-phone="${objData[i]['phone']}">
-                    <hr>
-                    <div class="col-md-2">
-                        <img src="${objData[i]['picture']}" alt="">
+                if(objData.admin){
+                    html += `
+                    
+                    <div class="row mt-2 bg-body rounded item" data-name="${objData.data[i]['firstname']}" data-lastname="${objData.data[i]['lastname']}" data-email="${objData.data[i]['email']}" data-phone="${objData.data[i]['phone']}">
+                        <hr>
+                        <div class="col-md-2">
+                            <img src="${objData.data[i]['picture']}" alt="">
+                        </div>
+                        <div class="col-md-7">
+                            <p><strong>Nombre: </strong>${objData.data[i]['firstname']} ${objData.data[i]['lastname']}</p>
+                            <ul>
+                                <li class="text-secondary"><strong>Correo: </strong>${objData.data[i]['email']}</li>
+                                <li class="text-secondary"><strong>Teléfono: </strong>${objData.data[i]['phone']}</li>
+                                <li class="text-secondary"><strong>Rol: </strong>${rolname}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-info w-100 text-white" title="Ver" name="btnView" data-id="${objData.data[i]['idperson']}">Ver</button>
+                            <a href="#formItem" class="btn btn-success w-100 text-white" title="Editar" name="btnEdit"  data-id="${objData.data[i]['idperson']}">Editar</a>
+                            <button class="btn btn-danger w-100 text-white" title="Eliminar" name="btnDelete"  data-id="${objData.data[i]['idperson']}">Eliminar</button>
+                        </div>
+                        <hr>
                     </div>
-                    <div class="col-md-7">
-                        <p><strong>Nombre: </strong>${objData[i]['firstname']} ${objData[i]['lastname']}</p>
-                        <ul>
-                            <li class="text-secondary"><strong>Correo: </strong>${objData[i]['email']}</li>
-                            <li class="text-secondary"><strong>Teléfono: </strong>${objData[i]['phone']}</li>
-                            <li class="text-secondary"><strong>Rol: </strong>${rolname}</li>
-                        </ul>
+                    `;
+                }else{
+                    html += `
+                    
+                    <div class="row mt-2 bg-body rounded item" data-name="${objData.data[i]['firstname']}" data-lastname="${objData.data[i]['lastname']}" data-email="${objData.data[i]['email']}" data-phone="${objData.data[i]['phone']}">
+                        <hr>
+                        <div class="col-md-2">
+                            <img src="${objData.data[i]['picture']}" alt="">
+                        </div>
+                        <div class="col-md-7">
+                            <p><strong>Nombre: </strong>${objData.data[i]['firstname']} ${objData.data[i]['lastname']}</p>
+                            <ul>
+                                <li class="text-secondary"><strong>Correo: </strong>${objData.data[i]['email']}</li>
+                                <li class="text-secondary"><strong>Teléfono: </strong>${objData.data[i]['phone']}</li>
+                                <li class="text-secondary"><strong>Rol: </strong>${rolname}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-info w-100 text-white" title="Ver" name="btnView" data-id="${objData.data[i]['idperson']}">Ver</button>
+                            <a href="#formItem" class="btn btn-success w-100 text-white" title="Editar" name="btnEdit"  data-id="${objData.data[i]['idperson']}">Editar</a>
+                            <button class="btn btn-secondary w-100 text-white" title="Eliminar" name="btnDelete" disabled>Eliminar</button>
+                        </div>
+                        <hr>
                     </div>
-                    <div class="col-md-3">
-                        <button class="btn btn-info w-100 text-white" title="Ver" name="btnView" data-id="${objData[i]['idperson']}">Ver</button>
-                        <a href="#formItem" class="btn btn-success w-100 text-white" title="Editar" name="btnEdit"  data-id="${objData[i]['idperson']}">Editar</a>
-                        <button class="btn btn-danger w-100 text-white" title="Eliminar" name="btnDelete"  data-id="${objData[i]['idperson']}">Eliminar</button>
-                    </div>
-                    <hr>
-                </div>
-                `;
+                    `; 
+                }
             }
             div.innerHTML = html;
         });
@@ -114,36 +139,63 @@ export default class Usuario extends Interface{
             let html="";
             let typeList = document.querySelectorAll("#typeList option");
             let rolname ="";
-            for (let i = 0; i < objData.length; i++) {
+            let admin=false;
+            for (let i = 0; i < objData.data.length; i++) {
                 for (let j = 0; j < typeList.length; j++) {
-                    if(typeList[j].value == objData[i].roleid){
+                    if(typeList[j].value == objData.data[i].roleid){
                         rolname = typeList[j].textContent;
                         break;
                     }
                 }
-                html += `
-                
-                <div class="row mt-2 bg-body rounded item" data-name="${objData[i]['firstname']}" data-lastname="${objData[i]['lastname']}" data-email="${objData[i]['email']}" data-phone="${objData[i]['phone']}">
-                    <hr>
-                    <div class="col-md-2">
-                        <img src="${objData[i]['picture']}" alt="">
+                if(objData.admin){
+                    html += `
+                    
+                    <div class="row mt-2 bg-body rounded item" data-name="${objData.data[i]['firstname']}" data-lastname="${objData.data[i]['lastname']}" data-email="${objData.data[i]['email']}" data-phone="${objData.data[i]['phone']}">
+                        <hr>
+                        <div class="col-md-2">
+                            <img src="${objData.data[i]['picture']}" alt="">
+                        </div>
+                        <div class="col-md-7">
+                            <p><strong>Nombre: </strong>${objData.data[i]['firstname']} ${objData.data[i]['lastname']}</p>
+                            <ul>
+                                <li class="text-secondary"><strong>Correo: </strong>${objData.data[i]['email']}</li>
+                                <li class="text-secondary"><strong>Teléfono: </strong>${objData.data[i]['phone']}</li>
+                                <li class="text-secondary"><strong>Rol: </strong>${rolname}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-info w-100 text-white" title="Ver" name="btnView" data-id="${objData.data[i]['idperson']}">Ver</button>
+                            <a href="#formItem" class="btn btn-success w-100 text-white" title="Editar" name="btnEdit"  data-id="${objData.data[i]['idperson']}">Editar</a>
+                            <button class="btn btn-danger w-100 text-white" title="Eliminar" name="btnDelete"  data-id="${objData.data[i]['idperson']}">Eliminar</button>
+                        </div>
+                        <hr>
                     </div>
-                    <div class="col-md-7">
-                        <p><strong>Nombre: </strong>${objData[i]['firstname']} ${objData[i]['lastname']}</p>
-                        <ul>
-                            <li class="text-secondary"><strong>Correo: </strong>${objData[i]['email']}</li>
-                            <li class="text-secondary"><strong>Teléfono: </strong>${objData[i]['phone']}</li>
-                            <li class="text-secondary"><strong>Rol: </strong>${rolname}</li>
-                        </ul>
+                    `;
+                }else{
+                    html += `
+                    
+                    <div class="row mt-2 bg-body rounded item" data-name="${objData.data[i]['firstname']}" data-lastname="${objData.data[i]['lastname']}" data-email="${objData.data[i]['email']}" data-phone="${objData.data[i]['phone']}">
+                        <hr>
+                        <div class="col-md-2">
+                            <img src="${objData.data[i]['picture']}" alt="">
+                        </div>
+                        <div class="col-md-7">
+                            <p><strong>Nombre: </strong>${objData.data[i]['firstname']} ${objData.data[i]['lastname']}</p>
+                            <ul>
+                                <li class="text-secondary"><strong>Correo: </strong>${objData.data[i]['email']}</li>
+                                <li class="text-secondary"><strong>Teléfono: </strong>${objData.data[i]['phone']}</li>
+                                <li class="text-secondary"><strong>Rol: </strong>${rolname}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-info w-100 text-white" title="Ver" name="btnView" data-id="${objData.data[i]['idperson']}">Ver</button>
+                            <a href="#formItem" class="btn btn-success w-100 text-white" title="Editar" name="btnEdit"  data-id="${objData.data[i]['idperson']}">Editar</a>
+                            <button class="btn btn-secondary w-100 text-white" title="Eliminar" name="btnDelete" disabled>Eliminar</button>
+                        </div>
+                        <hr>
                     </div>
-                    <div class="col-md-3">
-                        <button class="btn btn-info w-100 text-white" title="Ver" name="btnView" data-id="${objData[i]['idperson']}">Ver</button>
-                        <a href="#formItem" class="btn btn-success w-100 text-white" title="Editar" name="btnEdit"  data-id="${objData[i]['idperson']}">Editar</a>
-                        <button class="btn btn-danger w-100 text-white" title="Eliminar" name="btnDelete"  data-id="${objData[i]['idperson']}">Eliminar</button>
-                    </div>
-                    <hr>
-                </div>
-                `;
+                    `; 
+                }
             }
             div.innerHTML = html;
             div.classList.add("scroll_list");
@@ -195,6 +247,10 @@ export default class Usuario extends Interface{
                                                     </td>
                                                 </tr>
                                                 <tr scope="row">
+                                                    <td>Dirección: </td>
+                                                    <td>${objData.data.date}</td>
+                                                </tr>
+                                                <tr scope="row">
                                                     <td>Nombre: </td>
                                                     <td> ${objData.data.firstname} ${objData.data.lastname}</td>
                                                 </tr>
@@ -220,7 +276,7 @@ export default class Usuario extends Interface{
                                                 </tr>
                                                 <tr scope="row">
                                                     <td>Departamento/ciudad: </td>
-                                                    <td>${objData.data.department}/${objData.data.city}</td>
+                                                    <td>${objData.data.departamento}/${objData.data.ciudad}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

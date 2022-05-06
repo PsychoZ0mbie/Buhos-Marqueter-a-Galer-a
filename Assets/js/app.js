@@ -399,3 +399,12 @@ if(document.querySelector("#colores")){
         });
     }
 }
+
+/*************************Profile Page*******************************/
+if(document.querySelector("#perfil")){
+    let url = base_url+"/usuarios/getSelectDepartamentos";
+    request(url,"","get").then(function(objData){
+        document.querySelector("#listDepartamento").innerHTML = objData.department;
+        document.querySelector("#listCity").innerHTML = objData.city;
+    });
+}

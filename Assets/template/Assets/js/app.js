@@ -17,7 +17,7 @@ if(document.querySelector("#marqueteria")){
     let inputMeasure = document.querySelectorAll(".btn_number div.d-flex");
     let measureFrame = document.querySelector(".measures__frame");
     let measureMargin = document.querySelector(".measures__margin");
-    let measureContainer = document.querySelector(".measures__container");
+    //let measureContainer = document.querySelector(".measures__container");
     let rangeFrame = document.querySelector("#rangeFrame");
     let selectBorder = document.querySelector("#selectBorder");
     let selectMargin = document.querySelector("#selectMargin");
@@ -80,103 +80,99 @@ if(document.querySelector("#marqueteria")){
             loading.style.display="flex";
             request(url,"","get").then(function(objData){
                 loading.style.display="none";
-                let parent = document.querySelector(".scroll_list").parentElement;
-                let child = document.querySelector(".scroll_list");
-                let fragment = document.createDocumentFragment();
-    
-                let html ="";
-                for (let i = 0; i < objData.length; i++) {
-                    html += `
-                    <div class="measures__item" id="${objData[i]['idproduct']}" data-frame="${objData[i]['url'][1]}" data-border="${objData[i]['waste']}" title="${objData[i]['title']}">
-                        <img src="${objData[i]['url'][0]}" alt="">
-                    </div>
-                    `
-                }
-                child.innerHTML = html;
-                fragment.appendChild(child);
-                parent.appendChild(fragment);
+                if(objData.status){
+                    let parent = document.querySelector(".scroll_list").parentElement;
+                    let child = document.querySelector(".scroll_list");
+                    let fragment = document.createDocumentFragment();
+        
+                    child.innerHTML = objData.html;
+                    fragment.appendChild(child);
+                    parent.appendChild(fragment);
 
-                let measureItems = document.querySelectorAll(".measures__item");
-                for (let i = 0; i < measureItems.length; i++) {
-                    let item = measureItems[i];
-                    item.addEventListener("click",function(e){
-                        let measureItem = e.target.parentElement;
-                        for (let j = 0; j < measureItems.length; j++) {
-                            if(measureItems[j].classList.length > 1){
-                                if(measureItem != measureItems[j]){
-                                    measureItems[j].classList.remove("active");
+                    let measureItems = document.querySelectorAll(".measures__item");
+                    for (let i = 0; i < measureItems.length; i++) {
+                        let item = measureItems[i];
+                        item.addEventListener("click",function(e){
+                            let measureItem = e.target.parentElement;
+                            for (let j = 0; j < measureItems.length; j++) {
+                                if(measureItems[j].classList.length > 1){
+                                    if(measureItem != measureItems[j]){
+                                        measureItems[j].classList.remove("active");
+                                    }
+                                }else{
+                                    measureItem.classList.add("active");
                                 }
-                            }else{
-                                measureItem.classList.add("active");
                             }
-                        }
-                        let id = measureItem.getAttribute("id");
-                        let image = measureItem.getAttribute("data-frame");
-                        let reference = measureItem.getAttribute("title");
-                        let border = parseInt(measureItem.getAttribute("data-border"));
-                        document.querySelector("#selectFrame").innerHTML = textType+" - "+reference;
-                        if(image != null){
-    
-                            let urlRequest = base_url+"/tienda/calcularMarco";
-                            let formData = new FormData();
-                            let height = parseInt(document.querySelector("#intHeight").value);
-                            let width = parseInt(document.querySelector("#intWidth").value);
+                            let id = measureItem.getAttribute("id");
+                            let image = measureItem.getAttribute("data-frame");
+                            let reference = measureItem.getAttribute("title");
+                            let border = parseInt(measureItem.getAttribute("data-border"));
+                            document.querySelector("#selectFrame").innerHTML = textType+" - "+reference;
+                            if(image != null){
+        
+                                let urlRequest = base_url+"/tienda/calcularMarco";
+                                let formData = new FormData();
+                                let height = parseInt(document.querySelector("#intHeight").value);
+                                let width = parseInt(document.querySelector("#intWidth").value);
+                    
+                                
+        
+                                let borderStyle = border*0.5; //Cálculo ancho de moldura
+                                let borderOutset = borderStyle*1.01; // Cálculo separación entre el borde de imágen y el contenedor
+                                borderOutset = String(borderOutset)+"px";
+                                borderStyle = String(borderStyle)+"px";
                 
-                            
-    
-                            let borderStyle = border*0.5; //Cálculo ancho de moldura
-                            let borderOutset = borderStyle*1.01; // Cálculo separación entre el borde de imágen y el contenedor
-                            borderOutset = String(borderOutset)+"px";
-                            borderStyle = String(borderStyle)+"px";
-            
-                            document.querySelector("#txtRef").innerHTML = reference;
-                            let url = base_url+"/Assets/images/uploads/"+image;
-            
-                            url= "url("+url+") 40% repeat";
-                            
-            
-                            measureMargin.style.border = borderStyle+" solid #000";
-                            measureMargin.style.borderImage= url;
-                            measureMargin.style.borderImageOutset = borderOutset;
-
-                            selectMargin.value = 1;
-                            selectBorder.value = 1;
-                            selectGlass.value = 1;
-                            rangeFrame.value = 0;
-                            //let selectedElement = document.querySelector(".measures__item.active");
-                            let heightMargin = String(height+dimensionDefault)+"px";
-                            let widthMargin = String(width+dimensionDefault)+"px";
-
-                            measureFrame.style.border = "none";
-                            measureFrame.style.border = "none";
-
-                            measureMargin.style.background ="transparent";
-                            measureMargin.style.height = heightMargin;
-                            measureMargin.style.width = widthMargin;
-
-                            document.querySelector("#txtMargen").innerHTML = "Sin margen";
-                            document.querySelector("#txtBorde").innerHTML = "Sin borde";
-                            document.querySelector("#txtVidrio").innerHTML = "Sin Vidrio";
-                            document.querySelector("#txtMargenMedida").innerHTML = "0 cm";
-                            document.querySelector("#txtMedidasMarco").innerHTML = height+"cm X "+width+"cm";
-                            document.querySelector(".rangeInfo").classList.add("d-none");
-                            document.querySelector(".color_margin").classList.add("d-none");
-                            document.querySelector("#border").classList.add("d-none");
-
-                            formData.append("id",id);
-                            formData.append("height",height);
-                            formData.append("width",width);
-                            formData.append("glass",selectGlass);
+                                document.querySelector("#txtRef").innerHTML = reference;
+                                let url = base_url+"/Assets/images/uploads/"+image;
                 
-                            request(urlRequest,formData,"post").then(function(objData){
-                                document.querySelector(".measures__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
-                                document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
-                                document.querySelector(".measures__border__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
-                                document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
-                            });
-                        }
-    
-                    });
+                                url= "url("+url+") 40% repeat";
+                                
+                
+                                measureMargin.style.border = borderStyle+" solid #000";
+                                measureMargin.style.borderImage= url;
+                                measureMargin.style.borderImageOutset = borderOutset;
+
+                                selectMargin.value = 1;
+                                selectBorder.value = 1;
+                                selectGlass.value = 1;
+                                rangeFrame.value = 0;
+                                //let selectedElement = document.querySelector(".measures__item.active");
+                                let heightMargin = String(height+dimensionDefault)+"px";
+                                let widthMargin = String(width+dimensionDefault)+"px";
+
+                                measureFrame.style.border = "none";
+                                measureFrame.style.border = "none";
+
+                                measureMargin.style.background ="transparent";
+                                measureMargin.style.height = heightMargin;
+                                measureMargin.style.width = widthMargin;
+
+                                document.querySelector("#txtMargen").innerHTML = "Sin margen";
+                                document.querySelector("#txtBorde").innerHTML = "Sin borde";
+                                document.querySelector("#txtVidrio").innerHTML = "Sin Vidrio";
+                                document.querySelector("#txtMargenMedida").innerHTML = "0 cm";
+                                document.querySelector("#txtMedidasMarco").innerHTML = height+"cm X "+width+"cm";
+                                document.querySelector(".rangeInfo").classList.add("d-none");
+                                document.querySelector(".color_margin").classList.add("d-none");
+                                document.querySelector("#border").classList.add("d-none");
+
+                                formData.append("id",id);
+                                formData.append("height",height);
+                                formData.append("width",width);
+                                formData.append("glass",selectGlass);
+                    
+                                request(urlRequest,formData,"post").then(function(objData){
+                                    document.querySelector(".measures__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                                    document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                                    document.querySelector(".measures__border__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
+                                    document.querySelector("#txtPrice").innerHTML = "$"+formatNum(objData,".")+" COP";
+                                });
+                            }
+        
+                        });
+                    }
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
                 }
             });
         }
@@ -669,31 +665,15 @@ if(document.querySelector("#marqueteria")){
 
 /*********************************************************************Gallery page************************************************************************ */
 if(document.querySelector("#galeria")){
-    
     let url = base_url+"/tienda/getCuadros";
+    //loading.style.display = "flex";
     request(url,"","get").then(function(objData){
-        let html="";
+        //loading.style.display ="none";
         let parent = document.querySelector("#itemsGallery").parentElement;
         let child = document.querySelector("#itemsGallery");
         let fragment = document.createDocumentFragment();
-        for (let i = 0; i < objData.length; i++) {
-            let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
-            let route = base_url+"/tienda/producto/"+objData[i]['route'];
-            html+=`
-            <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
-                <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
-                <div class="card-body text-center">
-                    <h5 class="card-title">${objData[i]['title']}</h5>
-                    <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
-                    <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
-                    <p class="card-text">${price}</p>
-                    <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
-                </div>
-            </div>
-            `;
-            
-        }
-        child.innerHTML = html;
+
+        child.innerHTML = objData.html;
         fragment.appendChild(child);
         parent.appendChild(fragment); 
     });
@@ -709,28 +689,11 @@ if(document.querySelector("#galeria")){
                 
                 formData.append("topic",id);
                 request(url,formData,"post").then(function(objData){
-                    let html="";
                     let parent = document.querySelector("#itemsGallery").parentElement;
                     let child = document.querySelector("#itemsGallery");
                     let fragment = document.createDocumentFragment();
-                    for (let i = 0; i < objData.length; i++) {
-                        let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
-                        let route = base_url+"/tienda/producto/"+objData[i]['route'];
-                        html+=`
-                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
-                            <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">${objData[i]['title']}</h5>
-                                <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
-                                <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
-                                <p class="card-text">${price}</p>
-                                <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
-                            </div>
-                        </div>
-                        `;
-                        
-                    }
-                    child.innerHTML = html;
+                    
+                    child.innerHTML = objData.html;
                     fragment.appendChild(child);
                     parent.appendChild(fragment);
                 });
@@ -749,28 +712,11 @@ if(document.querySelector("#galeria")){
                 
                 formData.append("tech",id);
                 request(url,formData,"post").then(function(objData){
-                    let html="";
                     let parent = document.querySelector("#itemsGallery").parentElement;
                     let child = document.querySelector("#itemsGallery");
                     let fragment = document.createDocumentFragment();
-                    for (let i = 0; i < objData.length; i++) {
-                        let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
-                        let route = base_url+"/tienda/producto/"+objData[i]['route'];
-                        html+=`
-                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
-                            <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">${objData[i]['title']}</h5>
-                                <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
-                                <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
-                                <p class="card-text">${price}</p>
-                                <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
-                            </div>
-                        </div>
-                        `;
-                        
-                    }
-                    child.innerHTML = html;
+            
+                    child.innerHTML = objData.html;
                     fragment.appendChild(child);
                     parent.appendChild(fragment);
                 });
@@ -800,27 +746,11 @@ if(document.querySelector("#galeria")){
         let formData = new FormData;
         formData.append("order",orderBy.value);
         request(url,formData,"post").then(function(objData){
-            let html="";
             let parent = document.querySelector("#itemsGallery").parentElement;
             let child = document.querySelector("#itemsGallery");
             let fragment = document.createDocumentFragment();
-            for (let i = 0; i < objData.length; i++) {
-                let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
-                let route = base_url+"/tienda/producto/"+objData[i]['route'];
-                html+=`
-                <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
-                    <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">${objData[i]['title']}</h5>
-                        <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
-                        <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
-                        <p class="card-text">${price}</p>
-                        <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
-                    </div>
-                </div>
-                `;
-            }
-            child.innerHTML = html;
+            
+            child.innerHTML = objData.html;
             fragment.appendChild(child);
             parent.appendChild(fragment);
         });
@@ -884,9 +814,10 @@ if(document.querySelector("#producto")){
     }
 }
 
-/*********************************************************************Product page************************************************************************ */
+/*********************************************************************Shopping page************************************************************************ */
 if(document.querySelector("#carrito")){
     let url = base_url+"/tienda/carritoInfo";
+    
     request(url,"","get").then(function(objData){
         if(objData.status){
             document.querySelector("#with").classList.remove("d-none");
@@ -894,13 +825,16 @@ if(document.querySelector("#carrito")){
             document.querySelector("tbody").innerHTML = objData.html;
             document.querySelector("#subtotal").innerHTML = objData.resumen;
             document.querySelector("#total").innerHTML = objData.resumen;
+        }else{
+            document.querySelector("#with").classList.add("d-none");
+            document.querySelector("#without").classList.remove("d-none");
         }
     })
 
     if(document.querySelector("#with table")){
         let tabla = document.querySelector("#with table");
         tabla.addEventListener("click",function(e){
-            if(e.target.getAttribute("name")){
+            if(e.target.getAttribute("name") == "eliminar"){
                 let element = e.target.parentElement.parentElement;
                 let id =  element.getAttribute("id");
                 let idCategoria =  element.getAttribute("idc");
@@ -926,16 +860,71 @@ if(document.querySelector("#carrito")){
                         document.querySelector("#subtotal").innerHTML = objData.resumen;
                         document.querySelector("#total").innerHTML = objData.resumen;
                         document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                        element.remove();
                         if(objData.cantidad == 0){
                             document.querySelector("#with").classList.add("d-none");
                             document.querySelector("#without").classList.remove("d-none");
                         }
-                        element.remove();
                     }else{
                         Swal.fire("Error",objData.msg,"error");
                     }
                 });
             }
+            if(e.target.getAttribute("name") == "actualizar"){
+                let input = e.target;
+                input.addEventListener("change",function(){
+                    let cantidad = input.value;
+                    if(cantidad > 0){
+                        let element = input.parentElement.parentElement;
+                        let id =  element.getAttribute("id");
+                        let idCategoria =  element.getAttribute("idc");
+                        let tipoMargen =  element.getAttribute("tm");
+                        let tipoBorde =  element.getAttribute("tb");
+                        let tipoVidrio =  element.getAttribute("tv");
+                        let margen =  element.getAttribute("m");
+                        let medidasImagen =  element.getAttribute("mi");
+                        let medidasMarco =  element.getAttribute("mm");
+                        let url = base_url+"/tienda/actualizarCarrito"
+                        let formData = new FormData();
+    
+                        formData.append("id",id);
+                        formData.append("idCategoria",idCategoria);
+                        formData.append("tipoMargen",tipoMargen);
+                        formData.append("tipoBorde",tipoBorde);
+                        formData.append("tipoVidrio",tipoVidrio);
+                        formData.append("margen",margen);
+                        formData.append("medidasImagen",medidasImagen);
+                        formData.append("medidasMarco",medidasMarco);
+                        formData.append("cantidad",cantidad);
+                        
+                        request(url,formData,"post").then(function(objData){
+                            if(objData.status){
+                                document.querySelector("#subtotal").innerHTML = objData.resumen;
+                                document.querySelector("#total").innerHTML = objData.resumen;
+                                document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                                element.children[3].innerHTML = objData.total;
+                            }else{
+                                Swal.fire("Error",objData.msg,"error");
+                                input.value = 1;
+                            }
+                        });
+                    }else{
+                        input.value = 1;
+                        Swal.fire("Error","La cantidad debe ser mayor a cero, inténtelo de nuevo.","error"); 
+                    }
+                });
+            }
         });
     }
+
+}
+
+/*********************************************************************Order process page************************************************************************ */
+if(document.querySelector("#procesarpedido")){
+    let url = base_url+"/tienda/totalCarrito";
+    request(url,"","get").then(function(objData){
+        document.querySelector("#subtotal").innerHTML = objData;
+        document.querySelector("#total").innerHTML = objData;
+    });
+    
 }

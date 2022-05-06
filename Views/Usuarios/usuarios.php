@@ -26,7 +26,6 @@
                       <option value="2">Ordenar por más antiguo</option>
                       <option value="3">Ordenar por nombres</option>
                       <option value="4">Ordenar por apellidos</option>
-                      <option value="5">Ordenar por roles</option>
                     </select>
                   </div>
                 </div>
