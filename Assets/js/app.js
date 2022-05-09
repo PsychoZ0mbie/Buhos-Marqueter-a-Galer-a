@@ -128,7 +128,213 @@ if(document.querySelector("#usuarios")){
     }
 }
 
-/******************************************************************/
+/*************************Profile Page*******************************/
+if(document.querySelector("#perfil")){
+    let url = base_url+"/usuarios/getSelectDepartamentos";
+    let listDepartamento = document.querySelector("#listDepartamento");
+    let formPerfil = document.querySelector("#formPerfil");
+    request(url,"","get").then(function(objData){
+        listDepartamento.innerHTML = objData.department;
+        document.querySelector("#listCiudad").innerHTML = objData.city;
+    });
+    listDepartamento.addEventListener("change",function(){
+        let url = base_url+"/usuarios/getSelectCity/"+listDepartamento.value;
+        request(url,"","get").then(function(objData){
+            document.querySelector("#listCiudad").innerHTML = objData.html;
+        });
+    });
+
+    formPerfil.addEventListener("submit",function(e){
+        e.preventDefault();
+        let url = base_url+"/usuarios/putPerfil";
+        let strNombre = document.querySelector("#txtNombre").value;
+        let strApellido = document.querySelector("#txtApellido").value;
+        let strEmail = document.querySelector("#txtEmail").value;
+        let intTelefono = document.querySelector("#txtTelefono").value;
+        let intDepartamento = document.querySelector("#listDepartamento").value;
+        let intCiudad = document.querySelector("#listCiudad").value;
+        let intCedula = document.querySelector("#txtId").value;
+        let strPassword = document.querySelector("#txtPassword").value;
+        let strConfirmarPassword = document.querySelector("#txtPasswordConfirm").value;
+
+        if(strNombre =="" || strApellido =="" || strEmail =="" || intTelefono=="" || intDepartamento ==""
+        || intCiudad =="" || intCedula ==""){
+            Swal.fire("Error","todos los campos con (*) son obligatorios","error");
+            return false;
+        }
+        if(intTelefono.length < 10){
+            Swal.fire("Error","El número de teléfono debe tener 10 dígitos","error");
+            return false;
+        }
+        if(intCedula.length < 8 || intCedula.length > 10){
+            Swal.fire("Error","La cédula debe tener de 8 a 10 dígitos","error");
+            return false;
+        }
+        if(strPassword !=""){
+            if(strPassword.length < 8){
+                Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres","error");
+                return false;
+            } 
+            if(strApellido != strConfirmarPassword){
+                Swal.fire("Error","Las contraseñas no coinciden","error");
+                return false;
+            }
+        }
+        if(!fntEmailValidate(strEmail)){
+            let html = `
+            <br>
+            <br>
+            <p>micorreo@hotmail.com</p>
+            <p>micorreo@outlook.com</p>
+            <p>micorreo@yahoo.com</p>
+            <p>micorreo@live.com</p>
+            <p>micorreo@gmail.com</p>
+            `;
+            Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
+            return false;
+        }
+
+        
+
+        let formData = new FormData(formPerfil);
+        request(url,formData,"post").then(function(objData){
+            if(objData.status){
+                Swal.fire("Perfil",objData.msg,"success");
+            }else{
+                Swal.fire("Perfil",objData.msg,"error");
+            }
+        })
+    })
+}
+
+/*************************Login Page*******************************/
+
+if(document.querySelector("#login")){
+    $('.login-content [data-toggle="flip"]').click(function() {
+        $('.login-box').toggleClass('flipped');
+        return false;
+    });
+
+    let formLogin = document.querySelector("#formLogin");
+    let formResetPass = document.querySelector("#formResetPass");
+
+    formLogin.addEventListener("submit",function(e){
+        e.preventDefault();
+        let strEmail = document.querySelector('#txtEmail').value;
+        let strPassword = document.querySelector('#txtPassword').value;
+
+        if(strEmail == "" || strPassword ==""){
+            Swal.fire("Por favor", "Escribe usuario y contraseña.", "error");
+            return false;
+        }else{
+            let url = base_url+'/Login/loginUser'; 
+            let formData = new FormData(formLogin);
+            divLoading.style.display = "flex";
+            request(url,formData,"post").then(function(objData){
+                if(objData.status){
+                    window.location = base_url+'/dashboard';
+                    //window.location.reload(false);
+                }else{
+                    Swal.fire("Atención", objData.msg, "error");
+                    document.querySelector('#txtPassword').value = "";
+                }
+                divLoading.style.display = "none";
+            });
+        }
+    })
+        
+    formResetPass.addEventListener("submit",function(e){
+        e.preventDefault();
+
+        let strEmail = document.querySelector("#txtEmailReset").value;
+        let url = base_url+'/Login/resetPass'; 
+        let formData = new FormData(formResetPass);
+        if(strEmail == ""){
+            swal("Por favor", "Escribe tu correo electrónico.","error");
+            return false;
+        }
+        if(!fntEmailValidate(strEmail)){
+            let html = `
+            <br>
+            <br>
+            <p>micorreo@hotmail.com</p>
+            <p>micorreo@outlook.com</p>
+            <p>micorreo@yahoo.com</p>
+            <p>micorreo@live.com</p>
+            <p>micorreo@gmail.com</p>
+            `;
+            Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
+            return false;
+        }
+
+        divLoading.style.display = "flex";
+        request(url,formData,"post").then(function(objData){
+            if(objData.status){
+                Swal.fire({
+                    title: "Recuperar cuenta",
+                    text: objData.msg,
+                    icon: "success",
+                    confirmButtonText: 'Ok',
+                    showCancelButton: true,
+                }).then(function(result){
+                    if(result.isConfirmed){
+                        window.location = base_url+"/login";
+                    }
+                });
+            }else{
+                swal("Atención",objData.msg,"error");
+            }
+            divLoading.style.display = "none";
+        });
+    }); 
+}
+if(document.querySelector("#cambiarcontraseña")){
+        
+    let formCambiarPass = document.querySelector("#formCambiarPass");
+    formCambiarPass.addEventListener("submit",function(e){
+        e.preventDefault();
+        
+        let strPassword = document.querySelector("#txtPassword").value;
+        let strPasswordConfirm = document.querySelector("#txtPasswordConfirm").value;
+        let idUsuario = document.querySelector("#idUsuario").value;
+        let url = base_url+'/Login/setPassword'; 
+        let formData = new FormData(formCambiarPass);
+
+        if(strPassword == "" || strPasswordConfirm==""){
+            swal("Por favor", "Escribe la nueva contraseña.", "error");
+            return false;
+        }else{
+            if(strPassword.length < 8){
+                swal("Atención", "La contraseña debe tener un mínimo de 8 carácteres.","info");
+                return false;
+            }if(strPassword != strPasswordConfirm){
+                swal("Atención", "Las contraseñas no coinciden.", "error");
+                return false;
+            }
+
+            divLoading.style.display = "flex";
+            request(url,formData,"post").then(function(objData){
+                if(objData.status){
+                    Swal.fire({
+                        title: "Por favor, inicia sesión",
+                        text: objData.msg,
+                        icon: "success",
+                        confirmButtonText: 'Ok',
+                        showCancelButton: true,
+                    }).then(function(result){
+                        if(result.isConfirmed){
+                            window.location = base_url+"/login";
+                        }
+                    });
+                }else{
+                    swal("Atención",objData.msg,"error");
+                }
+                divLoading.style.display = "none";
+            });
+        }
+    });
+}
+
 
 /*************************Gallery Page*******************************/
 
@@ -228,7 +434,7 @@ if(document.querySelector("#galeria")){
         });
     }
 }
-/******************************************************************/
+
 
 /*************************Framing Page*******************************/
 
@@ -400,11 +606,3 @@ if(document.querySelector("#colores")){
     }
 }
 
-/*************************Profile Page*******************************/
-if(document.querySelector("#perfil")){
-    let url = base_url+"/usuarios/getSelectDepartamentos";
-    request(url,"","get").then(function(objData){
-        document.querySelector("#listDepartamento").innerHTML = objData.department;
-        document.querySelector("#listCity").innerHTML = objData.city;
-    });
-}

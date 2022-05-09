@@ -27,6 +27,7 @@
                     <h5>Datos personales</h5>
                 </div>
                 <form id="formPerfil" name="formPerfil" class="form-horizontal mt-4">
+                  <input type="hidden" id="idUser" name="idUser" value="<?= $_SESSION['idUser']?>" required="">
                   <div class="profile-image">
                     <img src="<?= $img;?>">
                     <label for="profile-img"><i class="fas fa-cloud-upload-alt"></i></label>
@@ -34,31 +35,31 @@
                   </div>
                   <div class="form-row mt-4">
                       <div class="form-group col-md-6">
-                          <label for="txtNombre">Nombre</label>
+                          <label for="txtNombre">Nombre <span class="text-danger">*</span></label>
                           <input type="text" class="form-control" id="txtNombre" name="txtNombre" value="<?= $_SESSION['userData']['firstname']; ?>" required="">
                       </div>
                       <div class="form-group col-md-6">
-                          <label for="txtApellido">Nombre</label>
+                          <label for="txtApellido">Apellido <span class="text-danger">*</span></label>
                           <input type="text" class="form-control" id="txtApellido" name="txtApellido" value="<?= $_SESSION['userData']['lastname']; ?>" required="">
                       </div>
                   </div>
                   <div class="form-row">
                       <div class="form-group col-md-6">
-                          <label for="txtEmail">Email</label>
+                          <label for="txtEmail">Email <span class="text-danger">*</span></label>
                           <input type="email" class="form-control valid validEmail" id="txtEmail" name="txtEmail" value="<?= $_SESSION['userData']['email']; ?>" required="" readonly disabled >
                       </div>
                       <div class="form-group col-md-6">
-                          <label for="txtTelefono">Teléfono</label>
+                          <label for="txtTelefono">Teléfono <span class="text-danger">*</span></label>
                           <input type="text" class="form-control valid validNumber" id="txtTelefono" name="txtTelefono" value="<?= $_SESSION['userData']['phone']; ?>" required="" onkeypress="return controlTag(event);">
                       </div>
                   </div>
                   <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for ="listDepartamento">Departamento</label>
+                        <label for ="listDepartamento">Departamento <span class="text-danger">*</span></label>
                         <select name="listDepartamento" id="listDepartamento" class="form-control" data-live-search="true"></select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for ="listCiudad">Ciudad</label>
+                        <label for ="listCiudad">Ciudad <span class="text-danger">*</span></label>
                         <select name="listCiudad" id="listCiudad" class="form-control" data-live-search="true"></select>
                     </div>
                   </div>
@@ -69,7 +70,7 @@
                       </div>
 
                       <div class="form-group col-md-6">
-                          <label for="txtId">Cédula de ciudadania</label>
+                          <label for="txtId">Cédula de ciudadania <span class="text-danger">*</span></label>
                           <input type="text" class="form-control" id="txtId" name="txtId" value="<?=$_SESSION['userData']['identification']?>" required="">
                       </div>
                   </div>

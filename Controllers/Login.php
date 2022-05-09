@@ -17,7 +17,6 @@
 			$data['page_tag'] = "Login";
 			$data['page_title'] = "Buhos marquetería y galeria";
 			$data['page_name'] = "login";
-			$data['page_functions'] = "functions_login.js";
 			$this->views->getView($this,"login",$data);
 		}
 		
@@ -110,9 +109,8 @@
 					$data['page_title'] = "Cambiar contraseña";
 					$data['email'] = $strEmail;
 					$data['token'] = $strToken;
-					$data['page_name'] = "cambiar_contraseña";
+					$data['page_name'] = "cambiarcontraseña";
 					$data['idperson'] = $arrResponse['idperson'];
-					$data['page_functions'] = "functions_login.js";
 					$this->views->getView($this,"cambiar_password",$data);
 				}
 			}

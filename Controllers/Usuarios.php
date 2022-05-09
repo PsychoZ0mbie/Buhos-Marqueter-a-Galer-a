@@ -201,10 +201,6 @@
 						$foto_perfil = 'perfil_'.bin2hex(random_bytes(6)).'.jpg';
 					}
 					
-						
-					
-					
-
 					$strPassword = "";
 					if(!empty($_POST['txtPassword'])){
 						$strPassword = hash("SHA256",$_POST['txtPassword']);
@@ -239,10 +235,10 @@
 			$htmlDepartamento="";
 			$htmlCiudad="";
 			$arrDepartment = $this->model->selectDepartamento();
-			$arrCity = $this->model->selectCiudad($_SESSION['userData']['departmentid']);
+			$arrCity = $this->model->selectCiudad($_SESSION['userData']['department']);
 			if(count($arrDepartment) > 0){
 				for ($i=0; $i < count($arrDepartment) ; $i++) { 
-					if($_SESSION['userData']['departmentid']== $arrDepartment[$i]['iddepartment']){
+					if($_SESSION['userData']['department']== $arrDepartment[$i]['iddepartment']){
 						$htmlDepartamento .= '<option value="'.$arrDepartment[$i]['iddepartment'].'" selected>'.$arrDepartment[$i]['department'].'</option>';
 					}else{
 						$htmlDepartamento .= '<option value="'.$arrDepartment[$i]['iddepartment'].'">'.$arrDepartment[$i]['department'].'</option>';
@@ -251,7 +247,7 @@
 			}
 			if(count($arrCity) > 0){
 				for ($i=0; $i < count($arrCity); $i++) { 
-					if($_SESSION['userData']['cityid']== $arrCity[$i]['idcity']){
+					if($_SESSION['userData']['city']== $arrCity[$i]['idcity']){
 						$htmlCiudad .= '<option value="'.$arrCity[$i]['idcity'].'" selected>'.$arrCity[$i]['city'].'</option>';
 					}else{
 						$htmlCiudad .= '<option value="'.$arrCity[$i]['idcity'].'">'.$arrCity[$i]['city'].'</option>';
@@ -270,7 +266,8 @@
 					$htmlCiudad .= '<option value="'.$arrData[$i]['idcity'].'" selected>'.$arrData[$i]['city'].'</option>';
 				}
 			}
-			echo $htmlCiudad;
+			$arrResponse = array("html"=>$htmlCiudad);
+			echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 		}
 
 	}

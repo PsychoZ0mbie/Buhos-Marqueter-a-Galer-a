@@ -8,7 +8,6 @@
         </a>
         <div>
           <p class="app-sidebar__user-name"><?=$_SESSION['userData']['firstname'] ?></p>
-          <p class="app-sidebar__user-designation"><?=$_SESSION['userData']['rolname'] ?></p>
         </div>
       </div>
       <ul class="app-menu">

@@ -63,7 +63,8 @@
         $token = $r1.'-'.$r2.'-'.$r3.'-'.$r4;
         return $token;
     }
-    function sendEmail($data,$template){
+    //Producción
+    /*function sendEmail($data,$template){
         $mail = new PHPMailer(true);
         $mail->CharSet = 'UTF-8';
 
@@ -91,6 +92,52 @@
                                        //SMTP password
         $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        
+        //Recipients
+        $mail->setFrom($remitente,$empresa);
+        $mail->addAddress($emailDestino, $nombre);     //Add a recipient
+        if(!empty($data['email_copia'])){
+            $mail->addBCC($data['email_copia']);
+            $mail->addBCC($remitente);
+        }
+        
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = $asunto;
+        $mail->Body    = $mensaje;
+
+        return $mail->send();
+    }*/
+    //Pruebas
+    function sendEmail($data,$template){
+        $mail = new PHPMailer(true);
+        $mail->CharSet = 'UTF-8';
+
+        $asunto = $data['asunto'];
+        $emailDestino = $data['email_usuario'];
+        $nombre="";
+        if(!empty($data['nombreUsuario'])){
+            $nombre= $data['nombreUsuario'];
+        }
+        $empresa = NOMBRE_REMITENTE;
+        $remitente = $data['email_remitente'];
+        ob_start();
+        require_once("Views/Template/Email/".$template.".php");
+        $mensaje = ob_get_clean();
+
+        //Server settings
+        $mail->SMTPDebug = 0;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.office365.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true; 
+        $mail->Username   = $remitente;
+        $mail->Password   = REMITENTE_PASSWORD;
+                                //Enable SMTP authentication
+                             //SMTP username
+                                       //SMTP password
+        $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+        $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         
         //Recipients
         $mail->setFrom($remitente,$empresa);

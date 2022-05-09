@@ -4,15 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="Abel OSH">
+    <meta name="author" content="David Parrado">
     <meta name="theme-color" content="#009688">
     <link rel="shortcut icon" href="<?= media();?>/images/uploads/icon.gif">
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/bootstrap/bootstrap.min.css?n=1">
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/vali/main.css?n=1">
     <link rel="stylesheet" type="text/css" href="<?= media();?>/css/vali/style.css?n=1">
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/normalize.css?n=1">
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css?n=1">
     <!-- Font-icon css-->
     <link rel="stylesheet" href="<?= media();?>/css/icons/font-awesome.min.css?n=1">
     
@@ -22,9 +20,9 @@
     <section class="material-half-bg">
       <div class="cover"></div>
     </section>
-    <section class="login-content">
+    <section class="login-content" id="<?=$data['page_name']?>">
       <div class="logo">
-        <h1><?= $data['page_title']; ?></h1>
+        <h1><?= $data['page_title'];?></h1>
       </div>
       <div class="login-box">
         <div id="divLoading" >
@@ -71,15 +69,17 @@
         const base_url = "<?= base_url(); ?>";
     </script>
     <!-- Essential javascripts for application to work-->
-    <script src="<?= media(); ?>/js/bootstrap/jquery-3.3.1.min.js?n=1"></script>
-    <script src="<?= media(); ?>/js/bootstrap/popper.min.js?n=1"></script>
-    <script src="<?= media(); ?>/js/bootstrap/bootstrap.min.js?n=1"></script>
-    <script src="<?= media(); ?>/js/vali/main.js?n=1"></script>
+    <script src="<?= media(); ?>/js/bootstrap/jquery-3.3.1.min.js"></script>
+    <script src="<?= media(); ?>/js/bootstrap/popper.min.js"></script>
+    <script src="<?= media(); ?>/js/bootstrap/bootstrap.min.js"></script>
     <script src="<?= media();?>/js/icons/fontawesome.js"></script>
+    <script src="<?= media(); ?>/js/vali/main.js"></script>
     
-    <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.js?n=1"></script>
-    <script type="text/javascript" src="<?= media(); ?>/js/plugins/tinymce/tinymce.min.js?n=1"></script>
+    <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.js"></script>
+    <script type="text/javascript" src="<?= media(); ?>/js/plugins/tinymce/tinymce.min.js"></script>
     <!-- The javascript plugin to display page loading on top-->
-    <script src="<?= media(); ?>/js/functions_login"></script>
+    <script src="<?= media(); ?>/js/vali/pace.min.js"></script>
+    <script type="text/javascript" src="<?= media(); ?>/js/functions.js?n=1"></script>
+    <script type="module" src="<?= media(); ?>/js/app.js?n=1"></script>
   </body>
 </html>

@@ -10,7 +10,7 @@
     <section class="m-4">
         <form id="with" class="d-none">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="table-responsive-md">
                         <table class="text-break table-responsive-sm table align-middle">
                             <thead>
@@ -27,7 +27,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="resume bg-light">
                         <div class="resume_total p-4">
                             <h2>Resumen</h2>

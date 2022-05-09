@@ -38,13 +38,15 @@
 
 			if(empty($request))
 			{
-				$query_insert  = "INSERT INTO person(firstname,lastname,picture,phone,email,password,roleid) 
-								  VALUES(?,?,?,?,?,?,?)";
+				$query_insert  = "INSERT INTO person(firstname,lastname,picture,phone,email,department,city,password,roleid) 
+								  VALUES(?,?,?,?,?,?,?,?,?)";
 	        	$arrData = array($this->strNombre,
         						$this->strApellido,
 								$this->strPicture,
         						$this->intTelefono,
         						$this->strEmail,
+								5,
+								1,
         						$this->strPassword,
         						$this->intTipoId);
 	        	$request_insert = $this->insert($query_insert,$arrData);
@@ -98,24 +100,6 @@
 			WHERE p.idperson = $this->intIdUsuario AND c.idcity = p.city AND d.iddepartment = p.department";
 
 			$request = $this->select($sql);
-			if(empty($request)){
-				$sql = "SELECT idperson,
-				firstname,
-				lastname,
-				picture,
-				phone,
-				address,
-				email,
-				department,
-				city,
-				identification,
-				roleid, 
-				DATE_FORMAT(datecreated, '%d/%m/%Y') as date 
-				FROM person 
-				WHERE idperson = $this->intIdUsuario";
-				$request = $this->select($sql);
-			}
-
 			return $request;
 		}
 
@@ -195,8 +179,8 @@
 								picture=?, 
 								phone=?,
 								address=?,
-								departmentid=?,
-								cityid=?,
+								department=?,
+								city=?,
 								identification=?,
 								password=?
 						WHERE idperson = $this->intIdUsuario";
@@ -217,8 +201,8 @@
 								picture=?, 
 								phone=?,
 								address=?,
-								departmentid=?,
-								cityid=?,
+								department=?,
+								city=?,
 								identification=?
 						WHERE idperson = $this->intIdUsuario";
 				$arrData = array($this->strNombre,

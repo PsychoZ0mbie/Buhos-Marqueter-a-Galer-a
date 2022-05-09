@@ -25,11 +25,17 @@
 	const ENVIO =0;
 	const DESCRIPCION = "Marquetería tradicional y Moderna para diplomas, fotografías, afiches, retablos, espejos y obras de arte. Venta de todo tipo de obra sobre lienzo. La mejor marquetería del departamento de Villavicencio/Meta";
 	const SHAREDHASH ="BuhosMarqueteríayGalería";
-	//Datos envio de correo
-	const NOMBRE_REMITENTE= "Buhos Marquetería & Galería";
+	//Datos envio de correo produccion
+	/*const NOMBRE_REMITENTE= "Buhos Marquetería & Galería";
 	const EMAIL_REMITENTE = "info@buhosmarqueteriaygaleria.co";
 	const EMAIL_COPIA = "davidstiven1999@hotmail.com";
-	const REMITENTE_PASSWORD = "Buhos.197023";
+	const REMITENTE_PASSWORD = "Buhos.197023";*/
+
+	//Datos envio de correo pruebas
+	const NOMBRE_REMITENTE= "Buhos Marquetería & Galería";
+	const EMAIL_REMITENTE = "davidstiven1999@hotmail.com";
+	//const EMAIL_COPIA = "davidstiven1999@hotmail.com";
+	const REMITENTE_PASSWORD = "da197023";
 	
 	const NOMBRE_EMPRESA = "Buhos Marquetería & Galería";
 	const DIRECCION = "Colombia, Villavicencio/Meta, Cra 36 #15a-03 Barrio Nuevo Ricaurte";
