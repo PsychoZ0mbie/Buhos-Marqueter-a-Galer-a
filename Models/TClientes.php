@@ -31,10 +31,12 @@
             $sql = "SELECT * FROM person WHERE email = '$this->strEmail'";
             $request = $this->con->select_all($sql);
             if(empty($request)){
-                $query = "INSERT INTO person(firstname,lastname,email,password,roleid) VALUE(?,?,?,?,?)";
+                $query = "INSERT INTO person(firstname,lastname,email,department,city,password,roleid) VALUE(?,?,?,?,?,?,?)";
                 $arrData = array($this->strNombre,
                                 $this->strApellido,
                                 $this->strEmail,
+                                5,
+                                1,
                                 $this->strPassword,
                                 $this->intRolId
                                 );
@@ -45,7 +47,6 @@
             }
             return $return;
         }
-
         public function insertDetalleTemp(array $arrPedido){
             $this->con = new Mysql();
             $this->intIdUser = $arrPedido['idcliente'];
@@ -58,33 +59,40 @@
             $request = $this->con->select_all($sql);
             if(empty($request)){
                 foreach ($productos as $pro) {
-                    $query = "INSERT INTO tempdetail(personid,
-                                                    productid,
-                                                    attributeid,
-                                                    subtopicid,
-                                                    title,
-                                                    price,
-                                                    quantity,
-                                                    length,
-                                                    width,
-                                                    subtopic,
-                                                    type,
-                                                    transactionid)
-                            VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
-                    $arrData = array($this->intIdUser,
-                                    $pro['idproducto'],
-                                    $pro['idatributo'],
-                                    $pro['idsubcategoria'],
-                                    $pro['nombre'],
-                                    $pro['precio'],
-                                    $pro['cantidad'],
-                                    $pro['largo'],
-                                    $pro['ancho'],
-                                    $pro['subcategoria'],
-                                    $pro['tipo'],
-                                    $this->intIdTransaccion
-                                    );
-                    $request_insert = $this->con->insert($query,$arrData);
+                    if($pro['idcategoria'] == 2){
+
+                        $query = "INSERT INTO tempdetail(personid,productid,topicid,title,author,dimensions,technique,quantity,price,transactionid)
+                                VALUE(?,?,?,?,?,?,?,?,?,?)";
+                        $arrData=array($this->intIdUser,
+                                        $pro['idproducto'],
+                                        $pro['idcategoria'],
+                                        $pro['titulo'],
+                                        $pro['autor'],
+                                        $pro['dimensiones'],
+                                        $pro['tecnica'],
+                                        $pro['cantidad'],
+                                        $pro['precio'],
+                                        $this->intIdTransaccion);
+                        $requestPro = $this->con->insert($query,$arrData);
+                    }else if($pro['idcategoria'] == 1){
+                        $query = "INSERT INTO tempdetail(personid,productid,topicid,title,margintype,bordertype,glasstype,margin,measureimage,
+                                            measureframe,quantity,price,transactionid)
+                                VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        $arrData=array($this->intIdUser,
+                                        $pro['idproducto'],
+                                        $pro['idcategoria'],
+                                        $pro['referenciaMoldura'],
+                                        $pro['tipoMargen'],
+                                        $pro['tipoBorde'],
+                                        $pro['tipoVidrio'],
+                                        $pro['margen'],
+                                        $pro['medidasImagen'],
+                                        $pro['medidasMarco'],
+                                        $pro['cantidad'],
+                                        $pro['precio'],
+                                        $this->intIdTransaccion);
+                        $requestPro = $this->con->insert($query,$arrData);
+                    }
                 }
             }else{
                 $sqlDel = "DELETE FROM tempdetail
@@ -92,33 +100,40 @@
                     AND transactionid = '$this->intIdTransaccion'";
                 $requestDel = $this->con->delete($sqlDel);
                 foreach ($productos as $pro) {
-                    $query = "INSERT INTO tempdetail(personid,
-                                                    productid,
-                                                    attributeid,
-                                                    subtopicid,
-                                                    title,
-                                                    price,
-                                                    quantity,
-                                                    length,
-                                                    width,
-                                                    subtopic,
-                                                    type,
-                                                    transactionid)
-                            VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
-                    $arrData = array($this->intIdUser,
-                                    $pro['idproducto'],
-                                    $pro['idatributo'],
-                                    $pro['idsubcategoria'],
-                                    $pro['nombre'],
-                                    $pro['precio'],
-                                    $pro['cantidad'],
-                                    $pro['largo'],
-                                    $pro['ancho'],
-                                    $pro['subcategoria'],
-                                    $pro['tipo'],
-                                    $this->intIdTransaccion
-                                    );
-                    $request_insert = $this->con->insert($query,$arrData);
+                    if($pro['idcategoria'] == 2){
+
+                        $query = "INSERT INTO tempdetail(personid,productid,topicid,title,author,dimensions,technique,quantity,price,transactionid)
+                                VALUE(?,?,?,?,?,?,?,?,?,?)";
+                        $arrData=array($this->intIdUser,
+                                        $pro['idproducto'],
+                                        $pro['idcategoria'],
+                                        $pro['titulo'],
+                                        $pro['autor'],
+                                        $pro['dimensiones'],
+                                        $pro['tecnica'],
+                                        $pro['cantidad'],
+                                        $pro['precio'],
+                                        $this->intIdTransaccion);
+                        $requestPro = $this->con->insert($query,$arrData);
+                    }else if($pro['idcategoria'] == 1){
+                        $query = "INSERT INTO tempdetail(personid,productid,topicid,title,margintype,bordertype,glasstype,margin,measureimage,
+                                            measureframe,quantity,price,transactionid)
+                                VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        $arrData=array($this->intIdUser,
+                                        $pro['idproducto'],
+                                        $pro['idcategoria'],
+                                        $pro['referenciaMoldura'],
+                                        $pro['tipoMargen'],
+                                        $pro['tipoBorde'],
+                                        $pro['tipoVidrio'],
+                                        $pro['margen'],
+                                        $pro['medidasImagen'],
+                                        $pro['medidasMarco'],
+                                        $pro['cantidad'],
+                                        $pro['precio'],
+                                        $this->intIdTransaccion);
+                        $requestPro = $this->con->insert($query,$arrData);
+                    }
                 }
             }
         }
@@ -155,27 +170,51 @@
             $request = $this->con->insert($sql,$arrData);
             return $request;
         }
-
-        public function insertPedidoDetail($idpedido,$idUser,$idproducto,$nombre,$precio,$cantidad,$largo,$ancho,$categoria,$subcategoria,$tipo){
+        public function insertPedidoDetail(array $arrPedido){
             $this->con = new Mysql();
-            $sql = "INSERT INTO orderdetail(orderdataid,personid,productid,title,price,quantity,length,width,topic,subtopic,type)
-                    VALUE(?,?,?,?,?,?,?,?,?,?,?)";
+            $this->intIdUser = $arrPedido['idusuario'];
+            $intIdPedido = $arrPedido['idpedido'];
+            $productos = $arrPedido['productos'];
+            foreach ($productos as $pro) {
+                if($pro['idcategoria'] == 2){
 
-            $arrData = array($idpedido,
-                            $idUser,
-                            $idproducto,
-                            $nombre,
-                            $precio,
-                            $cantidad,
-                            $largo,
-                            $ancho,
-                            $categoria,
-                            $subcategoria,
-                            $tipo);
-            $request = $this->con->insert($sql,$arrData);
-            return $request;
+                    $query = "INSERT INTO orderdetail(orderdataid,personid,productid,topicid,title,author,dimensions,technique,quantity,price)
+                            VALUE(?,?,?,?,?,?,?,?,?,?)";
+                    $arrData=array($intIdPedido,
+                                    $this->intIdUser,
+                                    $pro['idproducto'],
+                                    $pro['idcategoria'],
+                                    $pro['titulo'],
+                                    $pro['autor'],
+                                    $pro['dimensiones'],
+                                    $pro['tecnica'],
+                                    $pro['cantidad'],
+                                    $pro['precio'],
+                                    );
+                    $requestPro = $this->con->insert($query,$arrData);
+                }else if($pro['idcategoria'] == 1){
+                    $query = "INSERT INTO orderdetail(orderdataid,personid,productid,topicid,title,margintype,bordertype,glasstype,margin,measureimage,
+                                        measureframe,quantity,price)
+                            VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    $arrData=array($intIdPedido,
+                                    $this->intIdUser,
+                                    $pro['idproducto'],
+                                    $pro['idcategoria'],
+                                    $pro['referenciaMoldura'],
+                                    $pro['tipoMargen'],
+                                    $pro['tipoBorde'],
+                                    $pro['tipoVidrio'],
+                                    $pro['margen'],
+                                    $pro['medidasImagen'],
+                                    $pro['medidasMarco'],
+                                    $pro['cantidad'],
+                                    $pro['precio'],
+                                    );
+                    $requestPro = $this->con->insert($query,$arrData);
+                }
+            }
+            return $requestPro;
         }
-
         public function getPedido($pedido){
             $this->con = new Mysql();
             $sql = "SELECT o.idorderdata,
@@ -205,14 +244,20 @@
                 $sqlDetalle = "SELECT o.orderdataid,
                                         o.personid,
                                         o.productid,
+                                        o.topicid,
                                         o.title,
                                         o.price,
+                                        o.author,
+                                        o.dimensions,
+                                        o.technique,
+                                        o.margintype,
+                                        o.bordertype,
+                                        o.glasstype,
+                                        o.margin,
+                                        o.measureimage,
+                                        o.measureframe,
                                         o.quantity,
-                                        o.length,
-                                        o.width,
-                                        o.topic,
-                                        o.subtopic,
-                                        o.type,
+                                        o.price,
                                         p.idproduct
                                 FROM orderdetail o
                                 INNER JOIN product p
@@ -222,7 +267,6 @@
             }
             return $request;
         }
-
         public function setMensaje($strNombre,$strApellido,$strEmail,$strTelefono,$mensaje,$ip,$dispositivo,$useragent){
             $this->con = new Mysql();
             $sql = "INSERT INTO contact(firstname,lastname,email,phone,message,ip,device,useragent) VALUE(?,?,?,?,?,?,?,?)";
@@ -236,6 +280,23 @@
                             $useragent);
             $request = $this->con->insert($sql,$arrData);
             return $request;
+        }
+        public function selectDepartamento(){
+            $this->con= new Mysql();
+			$sql ="SELECT * FROM department";
+			$request = $this->con->select_all($sql);
+			return $request;
+		}
+		public function selectCiudad($deparment){
+            $this->con= new Mysql();
+			$sql = "SELECT * FROM city WHERE departmentid = $deparment";
+			$request = $this->con->select_all($sql);
+			return $request;
+		}
+        public function deleteDetalleTemp(){
+            $sql = "DELETE FROM tempdetail
+                WHERE personid = $this->intIdUser";
+            $requestDel = $this->con->delete($sql);
         }
                                                                                       
     }   

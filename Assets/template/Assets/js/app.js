@@ -764,29 +764,13 @@ if(document.querySelector("#producto")){
     let autor = document.querySelector("#autor").innerHTML;
     let url = base_url+"/tienda/getCuadrosAl";
     formData.append("autor",autor);
-    request(url,formData,"post").then(function(objData){
-        let html="";
+    request(url,"","get").then(function(objData){
+        //loading.style.display ="none";
         let parent = document.querySelector("#itemsGallery").parentElement;
         let child = document.querySelector("#itemsGallery");
         let fragment = document.createDocumentFragment();
-        for (let i = 0; i < objData.length; i++) {
-            let price = "$"+formatNum(parseInt(objData[i]['price']),".")+" COP";
-            let route = base_url+"/tienda/producto/"+objData[i]['route'];
-            html+=`
-            <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="${objData[i]['title']}" data-author="${objData[i]['author']}">
-                <img src="${objData[i]['url']}" class="card-img-top " alt="${objData[i]['title']}">
-                <div class="card-body text-center">
-                    <h5 class="card-title">${objData[i]['title']}</h5>
-                    <p class="card-text m-0">${objData[i]['height']}cm x ${objData[i]['width']}cm</p>
-                    <p class="card-text text-secondary">Artista - ${objData[i]['author']}</p>
-                    <p class="card-text">${price}</p>
-                    <a href="${route}" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
-                </div>
-            </div>
-            `;
-            
-        }
-        child.innerHTML = html;
+
+        child.innerHTML = objData.html;
         fragment.appendChild(child);
         parent.appendChild(fragment); 
     });
@@ -926,5 +910,233 @@ if(document.querySelector("#procesarpedido")){
         document.querySelector("#subtotal").innerHTML = objData;
         document.querySelector("#total").innerHTML = objData;
     });
+    if(document.querySelector("#formOrden")){
+        let formOrden = document.querySelector("#formOrden");
+        let url = base_url+"/tienda/getSelectDepartamentos";
+        let listDepartamento = document.querySelector("#listDepartamento");
+        request(url,"","get").then(function(objData){
+            listDepartamento.innerHTML = objData.department;
+        });
+        listDepartamento.addEventListener("change",function(){
+            let url = base_url+"/tienda/getSelectCity/"+listDepartamento.value;
+            request(url,"","get").then(function(objData){
+                document.querySelector("#listCiudad").innerHTML = objData.html;
+            });
+        });
+        formOrden.addEventListener("submit",function(e){
+            e.preventDefault();
+            let strNombre = document.querySelector("#txtNombreOrden").value;
+            let strApellido = document.querySelector("#txtApellidoOrden").value;
+            let strEmail = document.querySelector("#txtEmailOrden").value;
+            let intTelefono = document.querySelector("#txtTelefono").value;
+            let intDepartamento = document.querySelector("#listDepartamento").value;
+            let intCiudad = document.querySelector("#listCiudad").value;
+            let intCedula = document.querySelector("#txtIdentificacion").value;
+            let strDireccion = document.querySelector("#txtDireccion").value;
+            let strComentario = document.querySelector("#txtComentario").value;
+
+            if(strNombre =="" || strApellido =="" || strEmail =="" || intTelefono=="" || intDepartamento ==""
+            || intCiudad =="" || intCedula =="" || strDireccion==""){
+                Swal.fire("Error","todos los campos con (*) son obligatorios","error");
+                return false;
+            }
+            if(intTelefono.length < 10){
+                Swal.fire("Error","El número de teléfono debe tener 10 dígitos","error");
+                return false;
+            }
+            if(intCedula.length < 8 || intCedula.length > 10){
+                Swal.fire("Error","La cédula debe tener de 8 a 10 dígitos","error");
+                return false;
+            }
+            if(!fntEmailValidate(strEmail)){
+                let html = `
+                <br>
+                <br>
+                <p>micorreo@hotmail.com</p>
+                <p>micorreo@outlook.com</p>
+                <p>micorreo@yahoo.com</p>
+                <p>micorreo@live.com</p>
+                <p>micorreo@gmail.com</p>
+                `;
+                Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
+                return false;
+            }
+            let formData = new FormData(formOrden);
+            let url=base_url+"/tienda/setPedido";
+            request(url,formData,"post").then(function(objData){
+            if(objData.status){
+                window.location=base_url+"/tienda/confirmarPedido"
+            }else{
+                Swal.fire("Error",objData.msg,"error");
+            }
+        })
+        });
+    }
+    if( document.querySelector("#formLogin")){
+
+        let formLogin = document.querySelector("#formLogin");
+        formLogin.addEventListener("submit",function(e){
+            e.preventDefault();
+            let strEmail = document.querySelector('#txtEmail').value;
+            let strPassword = document.querySelector('#txtPassword').value;
     
+            if(strEmail == "" || strPassword ==""){
+                Swal.fire("Por favor", "Escribe usuario y contraseña.", "error");
+                return false;
+            }else{
+                let url = base_url+'/Login/loginUser'; 
+                let formData = new FormData(formLogin);
+                //divLoading.style.display = "flex";
+                request(url,formData,"post").then(function(objData){
+                    if(objData.status){
+                        window.location.reload(false);
+                    }else{
+                        Swal.fire("Atención", objData.msg, "error");
+                        document.querySelector('#txtPassword').value = "";
+                    }
+                    //divLoading.style.display = "none";
+                });
+            }
+        })
+    }
+    if(document.querySelector("#formRegister")){
+        let formRegister = document.querySelector("#formRegister");
+        formRegister.addEventListener("submit",function(e){
+            e.preventDefault();
+    
+            let strNombre = document.querySelector("#txtNombreCliente").value;
+            let strApellido = document.querySelector("#txtApellidoCliente").value;
+            let strEmail = document.querySelector("#txtEmailCliente").value;
+            let strPassword = document.querySelector("#txtPasswordCliente").value;
+            let estado = document.querySelector("#checkBox").checked;
+            
+    
+            if(strNombre == "" || strApellido == "" || strEmail == "" || strPassword == ""){
+                Swal.fire("Error","Todos los campos son obligatorios.","error");
+                return false;
+            }
+            if(!fntEmailValidate(strEmail)){
+                Swal.fire("Error","El correo electrónico ingresado no es valido.","error");
+                return false;
+            }
+            if(strPassword.length < 8){
+                Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres.","error");
+                return false;
+            }
+            if(!estado){
+                Swal.fire("Error","Debes aceptar los términos y condiciones!","error");
+                return false;
+            }
+            //divLoad.style.display = "flex";
+            let url = base_url+"/Tienda/setCliente";
+            let formData = new FormData(formRegister);
+    
+            request(url,formData,"post").then(function(objData){
+                if(objData.status){
+                    Swal.fire({
+                        icon: 'success',
+                        title: objData.msg,
+                        confirmButtonText: 'Ok'
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload(false);
+                        }
+                      })
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                } 
+            });
+        });
+    }
+}
+
+/*********************************************************************Account page************************************************************************ */
+if(document.querySelector("#cuenta")){
+    if( document.querySelector("#formLogin")){
+
+        let formLogin = document.querySelector("#formLogin");
+        formLogin.addEventListener("submit",function(e){
+            e.preventDefault();
+            let strEmail = document.querySelector('#txtEmail').value;
+            let strPassword = document.querySelector('#txtPassword').value;
+    
+            if(strEmail == "" || strPassword ==""){
+                Swal.fire("Por favor", "Escribe usuario y contraseña.", "error");
+                return false;
+            }else{
+                let url = base_url+'/Login/loginUser'; 
+                let formData = new FormData(formLogin);
+                //divLoading.style.display = "flex";
+                request(url,formData,"post").then(function(objData){
+                    if(objData.status){
+                        window.location.reload(false);
+                    }else{
+                        Swal.fire("Atención", objData.msg, "error");
+                        document.querySelector('#txtPassword').value = "";
+                    }
+                    //divLoading.style.display = "none";
+                });
+            }
+        })
+    }
+    if(document.querySelector("#formRegister")){
+        let formRegister = document.querySelector("#formRegister");
+        formRegister.addEventListener("submit",function(e){
+            e.preventDefault();
+    
+            let strNombre = document.querySelector("#txtNombreCliente").value;
+            let strApellido = document.querySelector("#txtApellidoCliente").value;
+            let strEmail = document.querySelector("#txtEmailCliente").value;
+            let strPassword = document.querySelector("#txtPasswordCliente").value;
+            let estado = document.querySelector("#checkBox").checked;
+            
+    
+            if(strNombre == "" || strApellido == "" || strEmail == "" || strPassword == ""){
+                Swal.fire("Error","Todos los campos son obligatorios.","error");
+                return false;
+            }
+            if(!fntEmailValidate(strEmail)){
+                Swal.fire("Error","El correo electrónico ingresado no es valido.","error");
+                return false;
+            }
+            if(strPassword.length < 8){
+                Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres.","error");
+                return false;
+            }
+            if(!estado){
+                Swal.fire("Error","Debes aceptar los términos y condiciones!","error");
+                return false;
+            }
+            //divLoad.style.display = "flex";
+            let url = base_url+"/Tienda/setCliente";
+            let formData = new FormData(formRegister);
+    
+            request(url,formData,"post").then(function(objData){
+                if(objData.status){
+                    Swal.fire({
+                        icon: 'success',
+                        title: objData.msg,
+                        confirmButtonText: 'Ok'
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload(false);
+                        }
+                      })
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                } 
+            });
+        });
+    }
+}
+
+/*********************************************************************header page************************************************************************ */
+if(document.querySelector("#header")){
+    let logout = document.querySelector("#logout");
+    logout.addEventListener("click",function(e){
+        let url = base_url+"/logout";
+        request(url,"","get").then(function(objData){
+            window.location = base_url;
+        });
+    });
 }

@@ -4,7 +4,7 @@
     $galeria = $data['galeria'];
     $urlProducto = base_url()."/catalogo/producto/";*/
 ?>
-<main>
+<main id="<?=$data['page_name']?>">
     <section>
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -34,15 +34,15 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        <div class="container presentation mt-4">
+        <div class="container presentation d-none mt-4">
             <h1 class=""><strong>Tienda en línea de marcos a medida y obras de arte. Venta directa al público</strong></h1>
             <p class="mt-3">
-                Somos la <strong><a href="<?=base_url()?>/catalogo/marqueteria">mejor marquetería</a></strong> del departamento del Meta/Colombia. Si lo que desea son marcos para espejos, diplomas,
+                Somos la <strong>mejor marquetería</strong> del departamento del Meta/Colombia. Si lo que desea son marcos para espejos, diplomas,
                 cuadros, fotos, lienzos... Somos su tienda ideal. Disponemos de un amplio catálogo de 
-                <strong><a href="<?=base_url()?>/catalogo/marqueteria">molduras</a></strong>.
+                <strong>molduras</strong>.
             </p>
             <p>
-                Visite nuestra <strong><a href="<?=base_url()?>/catalogo/galeria"> galería de arte</a></strong>, encontrará
+                Visite nuestra <strong>galería de arte</strong>, encontrará
                 cuadros de distintas categorías y técnicas. 
             </p>
         </div>

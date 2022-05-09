@@ -93,45 +93,53 @@ $detalle = $data['pedido']['detalle'];
 		  		if(count($detalle) > 0){
 		  			$subtotal = 0;
 		  			foreach ($detalle as $producto) {
-		  				$precio = $producto['price'];
-		  				$importe = $producto['price'] * $producto['quantity'];
-						if($producto['quantity']>= 12){
-							$importe = $producto['price'] * $producto['quantity'];
-							$importe = $importe * 0.9;
-						}else{
-							$importe = $producto['price'] * $producto['quantity'];
-						}
-						  if($producto['width']==0 || $producto['length']==0){
-							  $medidas="";
-						  }else{
-							  $medidas="<strong>Medidas:</strong> ".$producto['width']."cm X ".$producto['length']."cm";
-						  }
+						$subtotal = $producto['quantity']*$producto['price'];
+						if($producto['topicid'] == 1){
+							
+						
 		  	 ?>
 		    <tr>
 		      <td>
-				  <strong>Referencia:</strong> <?= $producto['title'] ?><br>
-			  	  <?= $medidas ?><br>
-				  <strong>Categoria:</strong> <?= $producto['topic'] ?><br>
-				  <strong>Técnica/Color:</strong> <?= $producto['subtopic'] ?><br>
-				  <?php if($producto['type'] != ""){ ?>
-				  <strong>Tipo:</strong> <?=$producto['type']?>
-				  <?php }?>
+				  <strong>Referencia: </strong><?=$producto['title']?><br>
+				  <strong>Tipo de margen: </strong><?=$producto['margintype']?><br>
+				  <strong>Tipo de borde: </strong><?=$producto['bordertype']?><br>
+				  <strong>Tipo de vidrio: </strong><?=$producto['glasstype']?><br>
+				  <strong>Margen: </strong><?=$producto['margin']?><br>
+				  <strong>Medidas de la imágen: </strong><?=$producto['measureimage']?><br>
+				  <strong>Medidas del marco: </strong><?=$producto['measureframe']?>
 			  </td>
-		      <td class="text-right"><?= MS.number_format($precio,0,DEC,MIL)." ".MD?></td>
+		      <td class="text-right"><?=formatNum($producto['price'])?></td>
 		      <td class="text-center"><?= $producto['quantity'] ?></td>
-		      <td class="text-right"><?= MS.number_format($importe,0,DEC,MIL)." ".MD?></td>
+		      <td class="text-right"><?= formatNum($subtotal) ?></td>
 		    </tr>
-			<?php }
-				} ?>
+			<?php }else if(2){
+				
+			?>
+			<tr>
+		      <td>
+				  <strong>Título: </strong><?=$producto['title']?><br>
+				  <strong>Dimensiones: </strong><?=$producto['dimensions']?><br>
+				  <strong>Técnica: </strong><?=$producto['technique']?><br>
+				  <strong>Autor: </strong><?=$producto['author']?>
+			  </td>
+		      <td class="text-right"><?=formatNum($producto['price'])?></td>
+		      <td class="text-center"><?= $producto['quantity'] ?></td>
+		      <td class="text-right"><?= formatNum($subtotal) ?></td>
+		    </tr>
+			<?php
+			}
+			?>
+			<?php 		
+					
+					
+				}
+			} 
+			?>
 		  </tbody>
 		  <tfoot>
 		  		<tr>
 		  			<th colspan="3" class="text-right">Subtotal:</th>
 		  			<td class="text-right"><?= MS.number_format($orden['price'],0,DEC,MIL)." ".MD?></td>
-		  		</tr>
-		  		<tr>
-		  			<th colspan="3" class="text-right">Envío:</th>
-		  			<td class="text-right"><?= MS.number_format(ENVIO,0,DEC,MIL)." ".MD?></td>
 		  		</tr>
 		  		<tr>
 		  			<th colspan="3" class="text-right">Total:</th>

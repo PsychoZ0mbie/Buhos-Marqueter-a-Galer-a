@@ -70,7 +70,24 @@ require_once("Libraries/Core/Mysql.php");
                 $options = " ORDER BY price ASC";
             }
             $this->con = new MySql();
-            $sql = "SELECT * FROM product WHERE topicid =2 $options";
+            $sql = "SELECT p.idproduct,
+                            p.title,
+                            p.author,
+                            p.topicid,
+                            p.subtopicid,
+                            p.techniqueid,
+                            p.height,
+                            p.width,
+                            p.frame,
+                            p.price,
+                            p.description,
+                            p.route,
+                            p.status,
+                            t.idtechnique,
+                            t.title as tecnica
+                    FROM product p
+                    INNER JOIN techniques t
+                    WHERE p.topicid =2 AND t.idtechnique = p.techniqueid $options";
             $request = $this->con->select_all($sql);
             for ($i=0; $i < count($request); $i++) { 
                 $idproduct = $request[$i]['idproduct'];
@@ -80,9 +97,28 @@ require_once("Libraries/Core/Mysql.php");
             }
             return $request;
         }
-        public function getObrasAl($autor){
+        public function getObrasAl(){
             $this->con = new MySql();
-            $sql = "SELECT * FROM product WHERE topicid =2 AND author='$autor' ORDER BY RAND() limit 3";
+            $sql = "SELECT  
+                    p.idproduct,
+                    p.title,
+                    p.author,
+                    p.topicid,
+                    p.subtopicid,
+                    p.techniqueid,
+                    p.height,
+                    p.width,
+                    p.frame,
+                    p.price,
+                    p.description,
+                    p.route,
+                    p.status,
+                    t.idtechnique,
+                    t.title as tecnica
+                    FROM product p
+                    INNER JOIN techniques t
+                    WHERE p.topicid =2 AND t.idtechnique = p.techniqueid
+                    ORDER BY RAND() limit 3";
             $request = $this->con->select_all($sql);
             for ($i=0; $i < count($request); $i++) { 
                 $idproduct = $request[$i]['idproduct'];
@@ -95,7 +131,25 @@ require_once("Libraries/Core/Mysql.php");
         public function getObra($intId){
             $this->con = new Mysql();
             $this->intIdProducto = $intId;
-            $sql = "SELECT * FROM product WHERE idproduct =$this->intIdProducto";
+            $sql = "SELECT 
+                    p.idproduct,
+                    p.title,
+                    p.author,
+                    p.topicid,
+                    p.subtopicid,
+                    p.techniqueid,
+                    p.height,
+                    p.width,
+                    p.frame,
+                    p.price,
+                    p.description,
+                    p.route,
+                    p.status,
+                    t.idtechnique,
+                    t.title as tecnica 
+                    FROM product p
+                    INNER JOIN techniques t
+                    WHERE idproduct =$this->intIdProducto AND t.idtechnique = p.techniqueid";
             $sqlImg = "SELECT * FROM productimage WHERE productid=$this->intIdProducto LIMIT 1";
             $request = $this->con->select($sql);
             $requestImg = $this->con->select($sqlImg);
@@ -105,7 +159,25 @@ require_once("Libraries/Core/Mysql.php");
         public function getProducto($params){
             $this->con = new Mysql();
             $this->strRuta = $params;
-            $sql = "SELECT * FROM product WHERE topicid = 2 AND route= '$params'";
+            $sql = " SELECT 
+                        p.idproduct,
+                        p.title,
+                        p.author,
+                        p.topicid,
+                        p.subtopicid,
+                        p.techniqueid,
+                        p.height,
+                        p.width,
+                        p.frame,
+                        p.price,
+                        p.description,
+                        p.route,
+                        p.status,
+                        t.idtechnique,
+                        t.title as tecnica 
+                    FROM product p
+                    INNER JOIN techniques t
+                    WHERE p.topicid = 2 AND route= '$params' AND t.idtechnique = p.techniqueid";
             $request = $this->con->select($sql);
             if(!empty($request)){
                 $idproduct = $request['idproduct'];
@@ -121,6 +193,7 @@ require_once("Libraries/Core/Mysql.php");
             return $return;
         }
         /*
+        
         public function getProductosT(){
             $this->con = new Mysql();
             $sql = "SELECT s.idsubtopic,

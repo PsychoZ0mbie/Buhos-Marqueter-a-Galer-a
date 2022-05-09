@@ -63,7 +63,7 @@
 </head>
 <body>
 
-   <header>
+   <header id="header">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="<?=base_url();?>">
@@ -107,7 +107,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="<?=base_url();?>/usuarios/perfil">Perfil</a></li>
-                            <li><a class="dropdown-item" href="<?=base_url();?>/logout">Cerrar sesión</a></li>
+                            <li><a class="dropdown-item cursor__pointer" id="logout">Cerrar sesión</a></li>
                         </ul>
                     </li>
                     <?php }else{?>

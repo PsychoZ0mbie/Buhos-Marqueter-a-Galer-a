@@ -28,49 +28,49 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="txtNombreOrden" class="form-label">Nombres</label>
-                                <input type="text" class="form-control" id="txtNombreOrden" name="txtNombreOrden" placeholder="Jhon" required>
+                                <label for="txtNombreOrden" class="form-label">Nombres <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="txtNombreOrden" name="txtNombreOrden" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="txtApellidoOrden" class="form-label">Apellidos</label>
-                                <input type="text" class="form-control" id="txtApellidoOrden" name="txtApellidoOrden" placeholder="Doe" required>
+                                <label for="txtApellidoOrden" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="txtApellidoOrden" name="txtApellidoOrden" required>
                             </div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="txtIdentificacion" class="form-label">Cédula de ciudadanía</label>
+                        <label for="txtIdentificacion" class="form-label">Cédula de ciudadanía <span class="text-danger">*</span></label>
                         <input type="number" class="form-control" id="txtIdentificacion" name="txtIdentificacion" value="" required>
                     </div>
                     <div class="mb-3">
-                        <label for="txtEmailOrden" class="form-label">Correo electrónico</label>
+                        <label for="txtEmailOrden" class="form-label">Correo electrónico <span class="text-danger">*</span></label>
                         <input type="email" class="form-control" id="txtEmailOrden" name="txtEmailOrden" required>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="listDepartamento" class="form-label">Departamento</label>
+                            <label for="listDepartamento" class="form-label">Departamento <span class="text-danger">*</span></label>
                             <select class="form-select" id="listDepartamento" name="listDepartamento" aria-label="Default select example" required></select>
                         </div>
                         </div>
                         <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="listCiudad" class="form-label">Ciudad</label>
+                            <label for="listCiudad" class="form-label">Ciudad <span class="text-danger">*</span></label>
                             <select class="form-select" id="listCiudad" name="listCiudad" aria-label="Default select example" required></select>
                         </div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="txtDireccion" class="form-label">Dirección</label>
+                        <label for="txtDireccion" class="form-label">Dirección <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Carrera, calle, barrio, etc..." required>
                     </div>
                     <div class="mb-3">
-                        <label for="txtTelefono" class="form-label">Teléfono</label>
+                        <label for="txtTelefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
                         <input type="number" class="form-control" id="txtTelefono" name="txtTelefono" value="" required>
                     </div>
                     <div class="mb-3">
-                        <label for="txtComentario" class="form-label">Escribe un comentario (opcional)</label>
+                        <label for="txtComentario" class="form-label">Escribe un comentario</label>
                         <textarea class="form-control" id="txtComentario" name="txtComentario" rows="5"></textarea>
                     </div>
                     <button type="submit" class="btn_content">Realizar pedido</button>
@@ -134,7 +134,7 @@
                                         He leido y acepto los <a href="<?= base_url()?>/terminos" target="_blank">Términos y Condiciones </a>y la<a href="<?= base_url()?>/politicas" target="_blank"> Política de Privacidad y de Cookies.</a>
                                     </label>
                                 </div>
-                                <button type="submit" class="btn_content">Registrarse</button>
+                                <button type="submit" class="btn_content mt-4">Registrarse</button>
                             </form>
                         </div>
                     </div>

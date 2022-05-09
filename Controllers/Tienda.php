@@ -59,7 +59,19 @@
 			$data['page_name'] = "carrito";
 			$this->views->getView($this,"carrito",$data);
         }
-
+        public function procesarPedido(){
+            if(empty($_SESSION['arrCarrito'])){
+                header('location: '.base_url());
+                die();
+            }
+            if(isset($_SESSION['login'])){
+                $this->setDetalleTemp();
+            }
+            $data['page_tag'] = "Procesar Pedido | ".NOMBRE_EMPRESA;
+            $data['page_title'] = "Procesar Pedido | ".NOMBRE_EMPRESA;
+            $data['page_name'] = "procesarpedido";
+            $this->views->getView($this,"procesarpedido",$data);
+        }
         /******************************Métodos de paginas************************************/
         public function getMuestras($params){
             $params = strClean($params);
@@ -285,8 +297,10 @@
                     $arrCuadro = array(
                         "idproducto"=> $requestCuadro['idproduct'],
                         "idcategoria"=>$intIdTopic,
+                        "titulo" => $requestCuadro['title'],
                         "autor" => $requestCuadro['author'],
                         "dimensiones" =>$requestCuadro['height']."cm X".$requestCuadro['width']."cm",
+                        "tecnica"=>$requestCuadro['tecnica'],
                         "cantidad"=>1,
                         "url"=>$requestCuadro['url'],
                         "precio" =>$requestCuadro['price']
@@ -349,6 +363,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">'.$request[$i]['title'].'</h5>
                             <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                            <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
                             <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
                             <p class="card-text">'.$price.'</p>
                             <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
@@ -364,9 +379,32 @@
             die();
         }
         public function getCuadrosAl(){
-            $autor = strClean($_POST['autor']);
-            $request = $this->getObrasAl($autor);
-            echo json_encode($request,JSON_UNESCAPED_UNICODE);
+            //$autor = strClean($_POST['autor']);
+            $request = $this->getObrasAl();
+            if(count($request)>0){
+                $html="";
+                for ($i=0; $i < count($request); $i++) {
+                    $route=base_url()."/tienda/producto/".$request[$i]['route'];
+                    $price=formatNum($request[$i]['price']);
+                    $html.='
+                    <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                        <img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">'.$request[$i]['title'].'</h5>
+                            <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                            <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
+                            <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
+                            <p class="card-text">'.$price.'</p>
+                            <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                        </div>
+                    </div>
+                    ';
+                }
+                $arrResponse = array("status"=>true,"html"=>$html);
+            }else{
+                $arrResponse = array("status"=>false,"msg"=>"No hay productos");
+            }
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             die();
         }
         public function carritoInfo(){
@@ -388,8 +426,10 @@
                             <td class="position-relative">
                                 <span class="cursor__pointer btn_content position-absolute top-0 start-0 pt-1 pb-1 pe-2 ps-2 mt-1 rounded-circle btnDelete" title="Eliminar" name="eliminar">x</span>
                                 <img src="'.$arrCarrito[$i]['url'].'" class="mb-2" style="height:100px; width:100px;">
-                                <p class="m-0 text-secondary"><strong>Autor: </strong>'.$arrCarrito[$i]['autor'].'</p>
+                                <p class="m-0 text-secondary"><strong>Título: </strong>'.$arrCarrito[$i]['titulo'].'</p>
                                 <p class="m-0 text-secondary"><strong>Dimensiones: </strong>'.$arrCarrito[$i]['dimensiones'].'</p>
+                                <p class="m-0 text-secondary"><strong>Técnica: </strong>'.$arrCarrito[$i]['tecnica'].'</p>
+                                <p class="m-0 text-secondary"><strong>Autor: </strong>'.$arrCarrito[$i]['autor'].'</p>
                             </td>
                             <td>1</td>
                             <td>'.$precio.'</td>
@@ -518,19 +558,6 @@
             }
             die();
         }
-        public function procesarPedido(){
-            if(empty($_SESSION['arrCarrito'])){
-                header('location: '.base_url());
-                die();
-            }
-            /*if(isset($_SESSION['login'])){
-                $this->setDetalleTemp();
-            }*/
-            $data['page_tag'] = "Procesar Pedido | ".NOMBRE_EMPRESA;
-            $data['page_title'] = "Procesar Pedido | ".NOMBRE_EMPRESA;
-            $data['page_name'] = "procesarpedido";
-            $this->views->getView($this,"procesarpedido",$data);
-        }
         public function totalCarrito(){
             if(isset($_SESSION['arrCarrito']) && !empty($_SESSION['arrCarrito'])){
                 $resumen=0;
@@ -542,7 +569,125 @@
             }
             die();
         }
-        /*
+        public function setDetalleTemp(){
+            $idsession = session_id();
+            $arrPedido = array("idcliente" =>$_SESSION['idUser'],
+                                "idtransaccion" => $idsession,
+                                "productos" => $_SESSION['arrCarrito']
+                                );
+            $this->insertDetalleTemp($arrPedido);
+        }
+        public function getSelectDepartamentos(){
+			$htmlDepartamento="";
+			$htmlCiudad="";
+			$arrDepartment = $this->selectDepartamento();
+			if(count($arrDepartment) > 0){
+				for ($i=0; $i < count($arrDepartment) ; $i++) { 
+					$htmlDepartamento .= '<option value="'.$arrDepartment[$i]['iddepartment'].'">'.$arrDepartment[$i]['department'].'</option>';
+				}
+			}
+			$arrResponse = array("department" =>$htmlDepartamento);
+			echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+			die();
+		}
+		public function getSelectCity($department){
+			$htmlCiudad="";
+			$arrData = $this->selectCiudad($department);
+			if(count($arrData)>0){
+				for ($i=0; $i < count($arrData); $i++) { 
+					$htmlCiudad .= '<option value="'.$arrData[$i]['idcity'].'" selected>'.$arrData[$i]['city'].'</option>';
+				}
+			}
+			$arrResponse = array("html"=>$htmlCiudad);
+			echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+		}
+        public function setPedido(){
+            if($_POST){
+                if(empty($_POST['txtNombreOrden']) || empty($_POST['txtApellidoOrden']) || empty($_POST['txtIdentificacion'])
+                || empty($_POST['txtEmailOrden']) || empty($_POST['listDepartamento']) || empty($_POST['listCiudad'])
+                || empty($_POST['txtDireccion']) || empty($_POST['txtTelefono'])){
+                    $arrResponse = array("status"=>true,"msg"=>"Datos incorrectos");
+                }else{
+
+                    $idUser = intval($_SESSION['idUser']);
+                    $strNombre = ucwords(strClean($_POST['txtNombreOrden']));
+                    $strApellido = ucwords(strClean($_POST['txtApellidoOrden']));
+                    $intIdentificacion = intval($_POST['txtIdentificacion']);
+                    $strEmail = strtolower(strClean($_POST['txtEmailOrden']));
+                    $intDepartamento = intval($_POST['listDepartamento']);
+                    $intCiudad = intval($_POST['listCiudad']);
+                    $strDireccion = strtolower(strClean($_POST['txtDireccion']));
+                    $strComentario = strClean($_POST['txtComentario']);
+                    $intTelefono = strClean($_POST['txtTelefono']);
+                    $status = "Pendiente";
+                    $intPrecio=0;
+
+                    for ($i=0; $i < count($_SESSION['arrCarrito']) ; $i++) { 
+                        $intPrecio += $_SESSION['arrCarrito'][$i]['cantidad'] * $_SESSION['arrCarrito'][$i]['precio'];
+                    }
+
+                    $request_pedido = $this->insertPedido($idUser,
+                                                    $strNombre,
+                                                    $strApellido,
+                                                    $intIdentificacion,
+                                                    $strEmail,
+                                                    $intDepartamento,
+                                                    $intCiudad,
+                                                    $strDireccion,
+                                                    $strComentario,
+                                                    $intTelefono,
+                                                    $intPrecio,
+                                                    $status
+                                                    );
+                    if($request_pedido>0){
+
+                        $arrPedido = array(
+                            "idpedido"=>$request_pedido,
+                            "idusuario"=>$idUser,
+                            "productos"=>$_SESSION['arrCarrito']
+                        );
+                        
+                        $request = $this->insertPedidoDetail($arrPedido);
+                        $pedidoInfo = $this->getPedido($request_pedido);
+                        $dataEmail = array('email_remitente' => EMAIL_REMITENTE, 
+                                            'email_usuario'=>$pedidoInfo['orden']['email'], 
+                                            'email_copia'=>EMAIL_COPIA,
+                                            'asunto' =>'Se ha creado la orden No - '.$request_pedido,
+                                            'pedido' =>$pedidoInfo);
+
+                        $sendEmail = sendEmail($dataEmail, 'email_notificacion_orden');
+                        $orden = openssl_encrypt($request_pedido,ENCRIPTADO,KEY);
+                        $arrResponse = array("status"=>true,"orden"=>$orden,"msg"=>"Pedido realizado");
+                        $_SESSION['ordendata'] = $arrResponse;
+                        unset($_SESSION['arrCarrito']);
+                        $this->deleteDetalleTemp($idUser);
+                        session_regenerate_id(true);
+                    }else{
+                        $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido, inténtelo más tarde.");
+                    }
+                    
+                }
+                
+            }else{
+                $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido, inténtelo más tarde.");
+            }
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function confirmarPedido(){
+            if(empty($_SESSION['ordendata'])){
+                header("location: ".base_url());
+            }else{
+                $dataorden = $_SESSION['ordendata'];
+				$idpedido = openssl_decrypt($dataorden['orden'], ENCRIPTADO, KEY);
+				$data['page_tag'] = "Confirmar Pedido";
+				$data['page_title'] = "Confirmar Pedido";
+				$data['page_name'] = "confirmarpedido";
+				$data['orden'] = $idpedido;
+				$this->views->getView($this,"confirmarpedido",$data);
+            }
+            unset($_SESSION['ordendata']);
+        }
 		public function setCliente(){
 			if($_POST){
 				if(empty($_POST['txtNombreCliente']) || empty($_POST['txtApellidoCliente']) || empty($_POST['txtEmailCliente']) || empty($_POST['txtPasswordCliente'])){
@@ -577,112 +722,5 @@
 			}
 			die();
 		}
-        public function setDetalleTemp(){
-            $idsession = session_id();
-            $arrPedido = array("idcliente" =>$_SESSION['idUser'],
-                                "idtransaccion" => $idsession,
-                                "productos" => $_SESSION['arrCarrito']
-                                );
-            $this->insertDetalleTemp($arrPedido);
-        }
-        public function setPedido(){
-            if($_POST){
-                if(empty($_POST['txtNombreOrden']) || empty($_POST['txtApellidoOrden']) || empty($_POST['txtIdentificacion'])
-                || empty($_POST['txtEmailOrden']) || empty($_POST['listDepartamento']) || empty($_POST['listCiudad'])
-                || empty($_POST['txtDireccion']) || empty($_POST['txtTelefono']) || empty($_POST['txtPrecio'])){
-                    $arrResponse = array("status"=>true,"msg"=>"Datos incorrectos");
-                }else{
-
-
-                    $idUser = intval($_SESSION['idUser']);
-                    $strNombre = ucwords(strClean($_POST['txtNombreOrden']));
-                    $strApellido = ucwords(strClean($_POST['txtApellidoOrden']));
-                    $intIdentificacion = intval($_POST['txtIdentificacion']);
-                    $strEmail = strtolower(strClean($_POST['txtEmailOrden']));
-                    $intDepartamento = intval($_POST['listDepartamento']);
-                    $intCiudad = intval($_POST['listCiudad']);
-                    $strDireccion = strtolower(strClean($_POST['txtDireccion']));
-                    $strComentario = strClean($_POST['txtComentario']);
-                    $intTelefono = strClean($_POST['txtTelefono']);
-                    $intPrecio = intval($_POST['txtPrecio']);
-                    $status = "Pendiente";
-
-                    $request_pedido = $this->insertPedido($idUser,
-                                                    $strNombre,
-                                                    $strApellido,
-                                                    $intIdentificacion,
-                                                    $strEmail,
-                                                    $intDepartamento,
-                                                    $intCiudad,
-                                                    $strDireccion,
-                                                    $strComentario,
-                                                    $intTelefono,
-                                                    $intPrecio,
-                                                    $status
-                                                    );
-                    if($request_pedido>0){
-                        foreach ($_SESSION['arrCarrito'] as $producto) {
-                            $idUser = $_SESSION['idUser'];
-                            $idproducto = $producto['idproducto'];
-                            $nombre = $producto['nombre'];
-                            $precio = $producto['precio'];
-                            $cantidad = $producto['cantidad'];
-                            $largo = $producto['largo'];
-                            $ancho = $producto['ancho'];
-                            $categoria = $producto['categoria'];
-                            $subcategoria = $producto['subcategoria'];
-                            $tipo = $producto['tipo'];
-
-                            $request = $this->insertPedidoDetail($request_pedido,
-                                                                $idUser,
-                                                                $idproducto,
-                                                                $nombre,
-                                                                $precio,
-                                                                $cantidad,
-                                                                $largo,
-                                                                $ancho,
-                                                                $categoria,
-                                                                $subcategoria,
-                                                                $tipo);
-                        }
-                        $pedidoInfo = $this->getPedido($request_pedido);
-                        $dataEmail = array('email_remitente' => EMAIL_REMITENTE, 
-                                            'email_usuario'=>$pedidoInfo['orden']['email'], 
-                                            'email_copia'=>EMAIL_COPIA,
-                                            'asunto' =>'Se ha creado la orden No - '.$request_pedido,
-                                            'pedido' =>$pedidoInfo);
-                        $sendEmail = sendEmail($dataEmail, 'email_notificacion_orden');
-                        $orden = openssl_encrypt($request_pedido,ENCRIPTADO,KEY);
-                        $arrResponse = array("status"=>true,"orden"=>$orden,"msg"=>"Pedido realizado");
-                        $_SESSION['ordendata'] = $arrResponse;
-                        unset($_SESSION['arrCarrito']);
-                        //session_regenerate_id(true);
-                    }else{
-                        $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido");
-                    }
-                    
-                }
-                
-            }else{
-                $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido");
-            }
-            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            die();
-        }
-        public function confirmarPedido(){
-            if(empty($_SESSION['ordendata'])){
-                header("location: ".base_url());
-            }else{
-                $dataorden = $_SESSION['ordendata'];
-				$idpedido = openssl_decrypt($dataorden['orden'], ENCRIPTADO, KEY);
-				$data['page_tag'] = "Confirmar Pedido";
-				$data['page_title'] = "Confirmar Pedido";
-				$data['page_name'] = "confirmarpedido";
-				$data['orden'] = $idpedido;
-				$this->views->getView($this,"confirmarpedido",$data);
-            }
-            unset($_SESSION['ordendata']);
-        }
-        */
     }
 ?>

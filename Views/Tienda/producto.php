@@ -51,8 +51,9 @@
                   <h1 class="position-relative underline"><strong><?=$producto['title']?></strong></h1>
                   <?=$precio?>
                   <ul class="mb-3">
-                    <li>Autor: <span id="autor"><?=$producto['author']?></span></li>
                     <li>Dimensiones: <?=$producto['height']?>cm X <?=$producto['width']?>cm</li>
+                    <li>Autor: <span id="autor"><?=$producto['author']?></span></li>
+                    <li>Técnica: <span id="tecnica"><?=$producto['tecnica']?></span></li>
                   </ul>
                   <p id="description"><?=$producto['description']?></p>
                   <div class="d-flex justify-content-center mt-2 ">

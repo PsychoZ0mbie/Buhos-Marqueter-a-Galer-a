@@ -1,5 +1,6 @@
 <?php headerPage($data);?>
 
+<main id="<?=$data['page_name']?>">
 <?php if(isset($_SESSION['login'])){?>
     <div class="container text-center mt-4">
         <div class="account">
@@ -73,11 +74,12 @@
                                 He leido y acepto los <a href="<?= base_url()?>/terminos" target="_blank">Términos y Condiciones </a>y la<a href="<?= base_url()?>/politicas" target="_blank"> Política de Privacidad y de Cookies.</a>
                             </label>
                         </div>
-                        <button type="submit" class="btn_content">Registrarse</button>
+                        <button type="submit" class="btn_content mt-4">Registrarse</button>
                     </form>
                 </div>
             </div>
         </div>
         <?php }?>
+</main>
 <?php footerPage($data)?>
 

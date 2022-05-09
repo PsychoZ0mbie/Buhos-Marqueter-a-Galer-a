@@ -34,7 +34,7 @@
 	//Datos envio de correo pruebas
 	const NOMBRE_REMITENTE= "Buhos Marquetería & Galería";
 	const EMAIL_REMITENTE = "davidstiven1999@hotmail.com";
-	//const EMAIL_COPIA = "davidstiven1999@hotmail.com";
+	const EMAIL_COPIA = "davidstiven1999@hotmail.com";
 	const REMITENTE_PASSWORD = "da197023";
 	
 	const NOMBRE_EMPRESA = "Buhos Marquetería & Galería";
