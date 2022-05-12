@@ -107,7 +107,7 @@ if(document.querySelector("#marqueteria")){
                             let image = measureItem.getAttribute("data-frame");
                             let reference = measureItem.getAttribute("title");
                             let border = parseInt(measureItem.getAttribute("data-border"));
-                            document.querySelector("#selectFrame").innerHTML = textType+" - "+reference;
+                            document.querySelector("#selectFrame").innerHTML = textType+` <span class="guide" title="Ayuda">?</span>`+" - "+reference;
                             if(image != null){
         
                                 let urlRequest = base_url+"/tienda/calcularMarco";
@@ -326,6 +326,8 @@ if(document.querySelector("#marqueteria")){
                         measureMargin.style.background = color;
                     })
                 }
+                document.querySelector(".color_border").classList.add("d-none");
+                document.querySelector("#txtBorde").innerHTML = "Sin borde";
             })
 
         }else if(selectMargin.value == 3){
@@ -386,6 +388,7 @@ if(document.querySelector("#marqueteria")){
                 document.querySelector("#txtMargenMedida").innerHTML  = margin+" cm";
                 document.querySelector("#txtMedidasMarco").innerHTML = (height+(margin*2))+"cm X "+(width+(margin*2))+"cm";
                 document.querySelector("#txtBorde").innerHTML = "Sin borde";
+                document.querySelector(".color_border").classList.add("d-none");
                 //document.querySelector("#txtVidrio").innerHTML = "Sin Vidrio";
     
             })
@@ -644,8 +647,11 @@ if(document.querySelector("#marqueteria")){
 
             
             
-
+            loading.style.display="flex";
+            addCart.setAttribute("disabled","");
             request(urlRequest,formData,"post").then(function(objData){
+                addCart.removeAttribute("disabled");
+                loading.style.display="none";
                 if(objData.status){
                     document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
                     Swal.fire("Agregado",objData.msg,"success");
@@ -666,9 +672,9 @@ if(document.querySelector("#marqueteria")){
 /*********************************************************************Gallery page************************************************************************ */
 if(document.querySelector("#galeria")){
     let url = base_url+"/tienda/getCuadros";
-    //loading.style.display = "flex";
+    loading.style.display = "flex";
     request(url,"","get").then(function(objData){
-        //loading.style.display ="none";
+        loading.style.display ="none";
         let parent = document.querySelector("#itemsGallery").parentElement;
         let child = document.querySelector("#itemsGallery");
         let fragment = document.createDocumentFragment();
@@ -688,7 +694,9 @@ if(document.querySelector("#galeria")){
                 id = id.replace("topic","");
                 
                 formData.append("topic",id);
+                loading.style.display = "flex";
                 request(url,formData,"post").then(function(objData){
+                    loading.style.display = "none";
                     let parent = document.querySelector("#itemsGallery").parentElement;
                     let child = document.querySelector("#itemsGallery");
                     let fragment = document.createDocumentFragment();
@@ -711,7 +719,9 @@ if(document.querySelector("#galeria")){
                 id = id.replace("tech","");
                 
                 formData.append("tech",id);
+                loading.style.display = "flex";
                 request(url,formData,"post").then(function(objData){
+                    loading.style.display = "none";
                     let parent = document.querySelector("#itemsGallery").parentElement;
                     let child = document.querySelector("#itemsGallery");
                     let fragment = document.createDocumentFragment();
@@ -745,7 +755,9 @@ if(document.querySelector("#galeria")){
     orderBy.addEventListener("change",function(){
         let formData = new FormData;
         formData.append("order",orderBy.value);
+        loading.style.display = "flex";
         request(url,formData,"post").then(function(objData){
+            loading.style.display = "none";
             let parent = document.querySelector("#itemsGallery").parentElement;
             let child = document.querySelector("#itemsGallery");
             let fragment = document.createDocumentFragment();
@@ -785,7 +797,11 @@ if(document.querySelector("#producto")){
 
             formData.append("id",id);
             formData.append("intIdTopic",2);
+            loading.style.display = "flex";
+            button.setAttribute("disabled","");
             request(urlRequest,formData,"post").then(function(objData){
+                button.removeAttribute("disabled");
+                loading.style.display = "none";
                 if(objData.status){
                     document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
                     Swal.fire("Agregado",objData.msg,"success");
@@ -914,6 +930,7 @@ if(document.querySelector("#procesarpedido")){
         let formOrden = document.querySelector("#formOrden");
         let url = base_url+"/tienda/getSelectDepartamentos";
         let listDepartamento = document.querySelector("#listDepartamento");
+        let btnOrder = document.querySelector("#btnOrder");
         request(url,"","get").then(function(objData){
             listDepartamento.innerHTML = objData.department;
         });
@@ -963,7 +980,11 @@ if(document.querySelector("#procesarpedido")){
             }
             let formData = new FormData(formOrden);
             let url=base_url+"/tienda/setPedido";
+            btnOrder.setAttribute("disabled","");
+            loading.style.display = "flex";
             request(url,formData,"post").then(function(objData){
+                loading.style.display = "none";
+                btnOrder.removeAttribute("disabled");
             if(objData.status){
                 window.location=base_url+"/tienda/confirmarPedido"
             }else{
@@ -975,6 +996,7 @@ if(document.querySelector("#procesarpedido")){
     if( document.querySelector("#formLogin")){
 
         let formLogin = document.querySelector("#formLogin");
+        let btnLogin = document.querySelector("#btnLogin");
         formLogin.addEventListener("submit",function(e){
             e.preventDefault();
             let strEmail = document.querySelector('#txtEmail').value;
@@ -986,21 +1008,25 @@ if(document.querySelector("#procesarpedido")){
             }else{
                 let url = base_url+'/Login/loginUser'; 
                 let formData = new FormData(formLogin);
-                //divLoading.style.display = "flex";
+                loading.style.display = "flex";
+                btnLogin.setAttribute("disabled","");
                 request(url,formData,"post").then(function(objData){
+                    btnLogin.removeAttribute("disabled");
+                    loading.style.display = "none";
                     if(objData.status){
                         window.location.reload(false);
                     }else{
                         Swal.fire("Atención", objData.msg, "error");
                         document.querySelector('#txtPassword').value = "";
                     }
-                    //divLoading.style.display = "none";
+                    divLoading.style.display = "none";
                 });
             }
         })
     }
     if(document.querySelector("#formRegister")){
         let formRegister = document.querySelector("#formRegister");
+        let btnRegister = document.querySelector("#btnRegister");
         formRegister.addEventListener("submit",function(e){
             e.preventDefault();
     
@@ -1027,11 +1053,13 @@ if(document.querySelector("#procesarpedido")){
                 Swal.fire("Error","Debes aceptar los términos y condiciones!","error");
                 return false;
             }
-            //divLoad.style.display = "flex";
+            loading.style.display = "flex";
             let url = base_url+"/Tienda/setCliente";
             let formData = new FormData(formRegister);
-    
+            btnRegister.setAttribute("disabled","");
             request(url,formData,"post").then(function(objData){
+                btnRegister.removeAttribute("disabled");
+                loading.style.display = "none";
                 if(objData.status){
                     Swal.fire({
                         icon: 'success',
@@ -1055,6 +1083,7 @@ if(document.querySelector("#cuenta")){
     if( document.querySelector("#formLogin")){
 
         let formLogin = document.querySelector("#formLogin");
+        let btnLogin = document.querySelector("#btnLogin");
         formLogin.addEventListener("submit",function(e){
             e.preventDefault();
             let strEmail = document.querySelector('#txtEmail').value;
@@ -1066,24 +1095,27 @@ if(document.querySelector("#cuenta")){
             }else{
                 let url = base_url+'/Login/loginUser'; 
                 let formData = new FormData(formLogin);
-                //divLoading.style.display = "flex";
+                loading.style.display = "flex";
+                btnLogin.setAttribute("disabled","");
                 request(url,formData,"post").then(function(objData){
+                    btnLogin.removeAttribute("disabled");
+                    loading.style.display = "none";
                     if(objData.status){
                         window.location.reload(false);
                     }else{
                         Swal.fire("Atención", objData.msg, "error");
                         document.querySelector('#txtPassword').value = "";
                     }
-                    //divLoading.style.display = "none";
                 });
             }
         })
     }
     if(document.querySelector("#formRegister")){
         let formRegister = document.querySelector("#formRegister");
+        let btnRegister = document.querySelector("#btnRegister");
         formRegister.addEventListener("submit",function(e){
             e.preventDefault();
-    
+            
             let strNombre = document.querySelector("#txtNombreCliente").value;
             let strApellido = document.querySelector("#txtApellidoCliente").value;
             let strEmail = document.querySelector("#txtEmailCliente").value;
@@ -1107,11 +1139,13 @@ if(document.querySelector("#cuenta")){
                 Swal.fire("Error","Debes aceptar los términos y condiciones!","error");
                 return false;
             }
-            //divLoad.style.display = "flex";
+            loading.style.display = "flex";
             let url = base_url+"/Tienda/setCliente";
             let formData = new FormData(formRegister);
-    
+            btnRegister.setAttribute("disabled","");
             request(url,formData,"post").then(function(objData){
+                btnRegister.removeAttribute("disabled");
+                loading.style.display = "none";
                 if(objData.status){
                     Swal.fire({
                         icon: 'success',
@@ -1129,14 +1163,64 @@ if(document.querySelector("#cuenta")){
         });
     }
 }
+/*********************************************************************Contact page************************************************************************ */
+if(document.querySelector("#contacto")){
+    let formContacto = document.querySelector("#formContacto");
+    let btnContact = document.querySelector("#btnContact");
+    formContacto.addEventListener("submit",function(e){
+        e.preventDefault();
+        let strNombre = document.querySelector("#txtNombre").value;
+        let strApellido = document.querySelector("#txtApellido").value;
+        let strEmail = document.querySelector("#txtEmail").value;
+        let intTelefono = document.querySelector("#txtTelefono").value;
+        let strComentario = document.querySelector("#txtComentario").value;
 
-/*********************************************************************header page************************************************************************ */
+        if(strNombre == "" || strApellido == "" || strEmail == "" || intTelefono == "" || strComentario == ""){
+            Swal.fire("Error","Todos los campos son obligatorios.","error");
+            return false;
+        }
+        if(!fntEmailValidate(strEmail)){
+            let html = `
+            <br>
+            <br>
+            <p>micorreo@hotmail.com</p>
+            <p>micorreo@outlook.com</p>
+            <p>micorreo@yahoo.com</p>
+            <p>micorreo@live.com</p>
+            <p>micorreo@gmail.com</p>
+            `;
+            Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
+            return false;
+        }
+        if(intTelefono.length < 10){
+            Swal.fire("Error","El número de teléfono debe tener 10 dígitos","error");
+            return false;
+        }
+
+        loading.style.display = "flex";
+        let url = base_url+"/contacto/setContacto";
+        let formData = new FormData(formContacto);
+        btnContact.setAttribute("disabled","");
+        request(url,formData,"post").then(function(objData){
+            btnContact.removeAttribute("disabled");
+            loading.style.display = "none";
+            if(objData.status){
+                formContacto.reset();
+                Swal.fire("Mensaje",objData.msg,"success");
+            }else{
+                Swal.fire("Error",objData.msg,"error");
+            } 
+        });
+
+    })
+}
+/*********************************************************************header************************************************************************ */
 if(document.querySelector("#header")){
     let logout = document.querySelector("#logout");
     logout.addEventListener("click",function(e){
         let url = base_url+"/logout";
         request(url,"","get").then(function(objData){
-            window.location = base_url;
+            window.location = base_url+"/cuenta";
         });
     });
 }

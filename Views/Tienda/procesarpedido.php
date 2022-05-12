@@ -73,7 +73,7 @@
                         <label for="txtComentario" class="form-label">Escribe un comentario</label>
                         <textarea class="form-control" id="txtComentario" name="txtComentario" rows="5"></textarea>
                     </div>
-                    <button type="submit" class="btn_content">Realizar pedido</button>
+                    <button type="submit" class="btn_content" id="btnOrder">Realizar pedido</button>
                 </form>
                 <?php }else{?>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -95,7 +95,7 @@
                                     <label for="txtPassword" class="form-label">Contraseña</label>
                                     <input type="password" class="form-control" id="txtPassword" name="txtPassword">
                                 </div>
-                                <button type="submit" class="btn_content">Iniciar sesión</button>
+                                <button type="submit" class="btn_content" id="btnLogin">Iniciar sesión</button>
                             </form>
                         </div>
                         <div class="tab-pane fade" id="registrar" role="tabpanel" aria-labelledby="registrar-tab">
@@ -134,7 +134,7 @@
                                         He leido y acepto los <a href="<?= base_url()?>/terminos" target="_blank">Términos y Condiciones </a>y la<a href="<?= base_url()?>/politicas" target="_blank"> Política de Privacidad y de Cookies.</a>
                                     </label>
                                 </div>
-                                <button type="submit" class="btn_content mt-4">Registrarse</button>
+                                <button type="submit" class="btn_content mt-4" id="btnRegister">Registrarse</button>
                             </form>
                         </div>
                     </div>

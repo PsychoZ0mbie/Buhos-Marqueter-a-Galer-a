@@ -37,9 +37,6 @@ html{
 .item{
     position: relative;
 }
-.item_list{
-    width: 800px;
-}
 .item_list .row{
     position: relative;
 }
@@ -82,6 +79,7 @@ html{
 .scroll_list{
     overflow: hidden;
     overflow-y: scroll;
+    width: 100%;
     height: 70vh;
 }
 /***********************************************Modal*******************************************************/
@@ -96,6 +94,43 @@ td{
 .modal_img img{
     width: 100%;
     height: 100%;
+}
+/***********************************************Format*******************************************************/
+.format__decoration{
+    background-color: #E05A10;
+    height: 25px;
+    width: 100%;
+}
+.format__info__logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    margin: 0;
+    flex-wrap: wrap;
+}
+.format__info__logo img{
+    width: 100px;
+    height: 100px;
+}
+.format__info__logo ul{
+    word-break: break-all;
+    list-style: none;
+    padding: 0;
+    margin-left: 10px;
+    margin-bottom: 0;
+    width: 250px;
+}
+.format__info__data{
+    text-align: center;
+    padding: 10px 20px;
+    margin: 0;
+}
+.format__info__data p{
+    margin: 0;
+}
+.format__customer__data p{
+    margin: 0;
 }
 /***********************************************Media query*******************************************************/
 
@@ -119,6 +154,11 @@ td{
         height:200px;
         width: 100%;
         border-radius: 0;
+    }
+}
+@media screen and (max-width: 576px){
+    .format__customer__order{
+        font-size: 10px;
     }
 }
 

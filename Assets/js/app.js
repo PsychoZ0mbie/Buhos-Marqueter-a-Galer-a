@@ -3,7 +3,8 @@ import Marqueteria from "./modules/marqueteriaClass.js";
 import MarqueteriaColores from "./modules/marqueteriaColoresClass.js";
 import Galeria from "./modules/galeriaClass.js";
 import Usuario from "./modules/usuarioClass.js";
-
+import Pedidos from "./modules/pedidosClass.js";
+import Mensaje from "./modules/mensajeClass.js";
 
 let loading = document.querySelector("#divLoading");
 
@@ -100,7 +101,6 @@ if(document.querySelector("#usuarios")){
         let url = base_url+"/Usuarios/setUsuario";
         loading.style.display="flex";
         request(url,formData,"post").then(function(objData){
-            loading.style.display="none";
             if(objData.status){
                 Swal.fire("Usuario",objData.msg,"success");
                 setTimeout(function(){
@@ -109,6 +109,7 @@ if(document.querySelector("#usuarios")){
             }else{
                 Swal.fire("Error",objData.msg,"error");
             }
+            loading.style.display="none";
         });
     });
     //buttons
@@ -335,7 +336,6 @@ if(document.querySelector("#cambiarcontraseña")){
     });
 }
 
-
 /*************************Gallery Page*******************************/
 
 if(document.querySelector("#galeria")){
@@ -349,7 +349,7 @@ if(document.querySelector("#galeria")){
             let strTitle = element.getAttribute("data-title").toLowerCase();
             let strTopic = element.getAttribute("data-topic").toLowerCase();
             let strTechnique = element.getAttribute("data-technique").toLowerCase();
-            let strAuthor = element.getAttribute("data-author").toLocaleLowerCase();
+            let strAuthor = element.getAttribute("data-author").toLowerCase();
             if(!strTitle.includes(value) && !strTopic.includes(value) && !strTechnique.includes(value) && !strAuthor.includes(value)){
                 element.classList.add("d-none");
             }else{
@@ -602,6 +602,125 @@ if(document.querySelector("#colores")){
                 }else if(element.name == "btnEdit"){
                     item.editItem(id);
                 }
+        });
+    }
+}
+
+/*************************Order Page*******************************/
+if(document.querySelector("#pedidos")){
+
+    let search = document.querySelector("#search");
+    search.addEventListener('input',function() {
+    let elements = document.querySelectorAll(".item");
+    let value = search.value.toLowerCase();
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            let strName = element.getAttribute("data-name").toLowerCase();
+            let strEmail = element.getAttribute("data-email").toLowerCase();
+            let strPhone = element.getAttribute("data-phone").toLowerCase();
+            let strStatus = element.getAttribute("data-status").toLocaleLowerCase();
+            if(!strName.includes(value) && !strEmail.includes(value) && !strPhone.includes(value) && !strStatus.includes(value)){
+                element.classList.add("d-none");
+            }else{
+                element.classList.remove("d-none");
+            }
+        }
+    })
+
+    let item = new Pedidos();
+    let element = document.querySelector("#listItem");
+    let orderBy = document.querySelector("#orderBy");
+    orderBy.addEventListener("change",function(){
+        item.orderItem(element,orderBy.value);
+    });
+
+    window.addEventListener("DOMContentLoaded",function() {
+        item.showItems(element);
+    })
+
+    //buttons
+    if(document.querySelector("#listItem")){
+        let listProduct = document.querySelector("#listItem");
+        listProduct.addEventListener("click",function(e) {
+                let element = e.target;
+                let id = element.getAttribute("data-id");
+                let idorder = element.getAttribute("data-order");
+                if(element.name == "btnDelete"){
+                    item.deleteItem(element,id,idorder);
+                }else if(element.name == "btnView"){
+                    item.viewItem(id,idorder);
+                }else if(element.name == "btnEdit"){
+                    item.editItem(id,idorder);
+                }
+        });
+    }
+        /*
+        
+        formOrder.addEventListener("submit",function(){
+            e.preventDefault();
+            let idorder = document.querySelector("#idpedido").value;
+            let idperson = document.querySelector("#idpersona").value;
+            let status = document.querySelector("#status").innerHTML;
+            let url = base_url+"/pedidos/updatePedido";
+            let formData = new FormData(formOrder);
+            request(url,formData,"post").then(function(objData){
+                console.log(objData);
+            });
+            console.log("existe");
+        })*/
+
+    let btnBack = document.querySelector("#btnBack");
+    btnBack.addEventListener("click",function(){
+        document.querySelector("#listItem").classList.remove("d-none");
+        document.querySelector("#detailItem").classList.add("d-none");
+    });
+
+
+}
+
+/*************************Message Page*******************************/
+if(document.querySelector("#mensaje")){
+
+    let search = document.querySelector("#search");
+    search.addEventListener('input',function() {
+        let elements = document.querySelectorAll(".item");
+        let value = search.value.toLowerCase();
+        for(let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            let strName = element.getAttribute("data-name").toLowerCase();
+            let strEmail = element.getAttribute("data-email").toLowerCase();
+            let strPhone = element.getAttribute("data-phone").toLowerCase();
+            if(!strName.includes(value) && !strEmail.includes(value) && !strPhone.includes(value)){
+                element.classList.add("d-none");
+            }else{
+                element.classList.remove("d-none");
+            }
+        }
+    })
+
+    let item = new Mensaje();
+    let element = document.querySelector("#listItem");
+    let orderBy = document.querySelector("#orderBy");
+
+    orderBy.addEventListener("change",function(){
+        item.orderItem(element,orderBy.value);
+    });
+
+    window.addEventListener("DOMContentLoaded",function() {
+        item.showItems(element);
+    })
+
+    //buttons
+    if(document.querySelector("#listItem")){
+        let listProduct = document.querySelector("#listItem");
+        listProduct.addEventListener("click",function(e) {
+            let element = e.target;
+            let id = element.getAttribute("data-id");
+            if(element.name == "btnDelete"){
+                item.deleteItem(element,id);
+            }else if(element.name == "btnView"){
+                item.viewItem(id);
+            }
         });
     }
 }

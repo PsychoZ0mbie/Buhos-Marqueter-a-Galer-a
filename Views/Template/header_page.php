@@ -62,7 +62,9 @@
     <meta name="google-site-verification" content="6ieP5zkMXFQodaRSo9W_d40VtMlW8zGO-jZ5s_xE7Sg" />
 </head>
 <body>
-
+   <div id="divLoading">
+    <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
+   </div>
    <header id="header">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">

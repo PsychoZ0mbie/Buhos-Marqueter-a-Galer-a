@@ -1,10 +1,5 @@
 <?php headerPage($data)?>   
-  <main>
-    <div id="divLoading">
-      <div>
-          <img src="<?= media(); ?>/images/loading/loading.svg" alt="Loading">
-      </div>
-    </div>
+  <main id="<?=$data['page_name']?>">
        <section>
          <div class="container contact">
            <div class="row">
@@ -37,7 +32,7 @@
                     <label for="txtComentario" class="form-label">Escribe tu comentario</label>
                     <textarea class="form-control" id="txtComentario" name="txtComentario" rows="10" required></textarea>
                   </div>
-                  <button type="submit" class="btn_content">Enviar</button>
+                  <button type="submit" class="btn_content" id="btnContact">Enviar</button>
                 </form>
              </div>
              <div class="col-lg-6 p-0">

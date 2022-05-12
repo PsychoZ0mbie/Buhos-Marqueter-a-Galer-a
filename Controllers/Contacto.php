@@ -47,9 +47,9 @@
                                             'apellido'=>$strApellido,
                                             'telefono'=>$strTelefono);
                     sendEmail($dataEmail,'email_contacto');
-                    $arrResponse = array("status"=>true,"msg"=>"El mensaje se ha enviado");
+                    $arrResponse = array("status"=>true,"msg"=>"El mensaje se ha enviado. Pronto responderemos tu mensaje.");
                 }else{
-                    $arrResponse = array("status"=>false,"msg"=>"No se ha podido enviar el mensaje");
+                    $arrResponse = array("status"=>false,"msg"=>"No se ha podido enviar el mensaje. Inténtelo de nuevo.");
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }

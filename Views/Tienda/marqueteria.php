@@ -27,11 +27,12 @@
                 </div>
                 <div class="col-lg-6 pages">
                     <div class="measures__dimensions page active">
-                        <h1 class="text-center fs-3 text__color"><strong>Enmarca lo que desees!</strong></h1>
-                        <h2 class="fs-5 mt-4 text-center">Ingresa las dimensiones de lo quieres enmarcar</h2>
+                        <h1 class="text-center fs-4 text__color"><strong>Enmarcación en línea, enmarca sin salir de casa</strong></h1>
+                        <h2 class="fs-5 mt-4 text-center">Ingresa las dimensiones de tu obra</h2>
                         <div class="btn_number flex-column align-items-center">
                             <p class="text__color fs-4"><strong>Alto (cm)</strong></p>
                             <p class="text-secondary">min 10cm - max 200cm</p>
+                            
                             <div class="d-flex align-items-center pr-2 mt-2">
                                 <input  type="number" id="intHeight" value="10" min="10">
                             </div>
@@ -50,7 +51,7 @@
                             <p class="fs-5 price m-0"></p>
                         </div>
                         <div class="d-flex">
-                            <p class="me-2"><strong>Elige el material y la moldura:</strong></p>
+                            <p class="me-2"><strong>Elige el material y la moldura</strong> <span class="guide" title="Ayuda">?</span></p>
                             <p id="selectFrame"></p>
                         </div>
                         <div>
@@ -71,7 +72,7 @@
                             <h2 class="fs-5 text__color m-0"><strong>Diseña tu marco</strong></h2>
                             <p class="fs-5 price m-0"></p>
                         </div>
-                        <p><strong>Elige el tipo de margen:</strong></p>
+                        <p><strong>Elige el tipo de margen </strong><span class="guide" title="Ayuda">?</span></p>
                         <select class="form-select" aria-label="Default select example" id="selectMargin">
                             <option value="1">Sin margen</option>
                             <option value="2">Caribe</option>
@@ -99,7 +100,7 @@
                             <p class="fs-5 price m-0"></p>
                         </div>
                         <div class="mt-3 d-none" id="border">
-                            <p><strong>Elige el borde interno:</strong></p>
+                            <p><strong>Elige el borde interno</strong> <span class="guide" title="Ayuda">?</span></p></p>
                             <select class="form-select" aria-label="Default select example" id="selectBorder">
                                 <option value="1">Sin borde</option>
                                 <option value="2">Bocel de madera</option>
@@ -115,7 +116,7 @@
                             </div>
                         </div>
                         <div class="mt-3" id="glass">
-                            <p><strong>Tipo de vidrio:</strong></p>
+                            <p><strong>Tipo de vidrio</strong> <span class="guide" title="Ayuda">?</span></p></p>
                             <select class="form-select" aria-label="Default select example" id="selectGlass">
                                 <option value="1">Sin vidrio</option>
                                 <option value="2">Antireflejo</option>
@@ -168,10 +169,48 @@
                             <input  type="number" id="addCant" class="me-4 text-center" value="1" min="1">
                             <button type="button" class="btn_content addCart"><i class="fas fa-shopping-cart"></i> Agregar</button>
                         </div>
+                        <div class="accordion pt-4" id="accordionExample">
+                            <p><strong>Información adicional</strong></p>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Tiempos de producción
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                    <ul>
+                                        <li>
+                                            <p>De acuerdo a la cantidad y moldura solicitada, se dará a conocer el tiempo estimado de producción
+                                            a partir del siguiente día hábil de haber realizado y confirmado el pedido.
+                                            </p>
+                                        </li>
+                                    </ul>
+                                    <a href="<?=base_url()?>/terminos" target="_blank">Más información</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Tiempos de entrega
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                    Realizamos envíos directos en Villavicencio. Para zonas no cubiertas, realizamos envíos con diferentes transportadoras del país, 
+                                    buscando siempre la mejor opción para nuestros clientes, 
+                                    los tiempos pueden variar de 3 días hasta 5 días hábiles según la ciudad o municipio destino, 
+                                    normalmente en ciudades principales las transportadoras entregan máximo en 3 días hábiles. 
+                                    <a href="<?=base_url()?>/terminos" target="_blank">Más información</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-4 mb-4">
                 <button class="btn_content me-4 d-none" id="btnPrevious">Atrás</button>
                 <button class="btn_content" id="btnNext">Siguiente</button>
             </div>

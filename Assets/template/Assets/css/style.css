@@ -10,6 +10,14 @@ input::-webkit-inner-spin-button {
    -webkit-appearance: none;
    margin: 0;
 }
+.guide{
+    padding: 3px 8px;
+    background-color: #10100D;
+    color:#fff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+}
 .item_hover:hover{
     background:#E05A10;
     color: #fff;
@@ -44,7 +52,7 @@ input::-webkit-inner-spin-button {
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 50;
+    z-index: 999;
 }
 .accordion-button:not(.collapsed){
     color:#10100D;
@@ -762,6 +770,9 @@ input[type=number] {
 }
 
 /*************************Account page**************************/
+.account{
+    height: 450px;
+}
 .account i{
     font-size: 200px;
 }

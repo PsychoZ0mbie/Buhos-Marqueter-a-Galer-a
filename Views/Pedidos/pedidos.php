@@ -1,142 +1,98 @@
-<?php headerAdmin($data);?> 
-<main class="app-content">
-
-<?php
-    getModal('modalPedido',$data);
-    if(empty($_SESSION['permisosMod']['r'])){
-?>
-    <p>Acceso denegado</p>
-
-    <?php 
-    }else{?>
+<?php headerAdmin($data); ?>
+    <main class="app-content" id="<?=$data['page_name']?>">
       <div class="app-title">
         <div>
-            <h1><i class="fa fa-truck"></i> <?= $data['page_title'] ?></h1>
+          <h1><i class="fa fa-picture-o"></i> <?=$data['page_title']?></h1>
         </div>
         <ul class="app-breadcrumb breadcrumb">
           <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-          <li class="breadcrumb-item"><a href="<?= base_url(); ?>/pedidos"><?= $data['page_title'] ?></a></li>
+          <li class="breadcrumb-item"><a href="#"><?=$data['page_title']?></a></li>
         </ul>
       </div>
-      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab" aria-controls="pills-products" aria-selected="true">Pedidos</a>
-        </li>
-        <?php if($_SESSION['permisosMod']['r']){?>
-        <li class="nav-item" role="presentation">
-          <a class="nav-link" id="pills-make-tab" data-toggle="pill" href="#pills-make" role="tab" aria-controls="pills-make" aria-selected="false">Detalle del pedido</a>
-        </li>
-        <?php }?>  
-      </ul>
-      <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-products" role="tabpanel" aria-labelledby="pills-products-tab">
+      <div id="modalItem"></div>
+      <div class="item_list" id="listItem" name="listItem">
           <div class="row">
-              <div class="col-md-12">
-                <div class="tile">
-                  <div class="tile-body">
-                    <div class="table-responsive">
-                      <table class="table table-hover table-bordered w-100" id="tablePedidos">
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Nombres</th>
-                            <th>Apellidos</th>
-                            <th>Fecha</th>
-                            <th>Total</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                    </div>
+            <div class="col-md-6">
+              <input class="form-control" type="search" placeholder="buscar" aria-label="Search" id="search" name="search">
+            </div>
+            <div class="col-md-6">
+              <select class="form-control form-control" aria-label="Default select example" id="orderBy" name="orderBy">
+                <option value="1">Ordenar por más reciente</option>
+                <option value="2">Ordenar por más antiguo</option>
+                <option value="3">Ordenar por estado</option>
+              </select>
+            </div>
+          </div>
+      </div>
+      <div id="detailItem" class="d-none">
+        <button class="btn btn-info" id="btnBack">Regresar</button>
+        <div class="format mt-4">
+          <div class="format__decoration"></div>
+          <div class="format__info row">
+            <div class="format__info__logo col-md-6">
+              <img src="<?=media();?>/template/Assets/images/uploads/logo.png" alt="">
+              <ul>
+                <li><?=NOMBRE_EMPRESA?></li>
+                <li><?=DIRECCION?></li>
+                <li><?=TELEFONO?></li>
+                <li><?=EMAIL_REMITENTE?></li>
+              </ul>
+            </div>
+            <div class="format__info__data col-md-6">
+              <h2 class="text-secondary">Factura</h2>
+              <p class="text-info">Fecha</p>
+              <p id="fecha">10/05/2022</p>
+              <p class="text-info">Nro. de factura</p>
+              <p id="orden">1</p>
+            </div>
+          </div>
+          <div class="format__customer">
+              <div class="format__customer__data mb-3 mt-5 row">
+                  <div class="col-md-4">
+                    <p class="text-info mb-4 mt-2"><strong>Cliente</strong></p>
+                    <p id="nombre">David Parrado</p>
+                    <p id="identificacion">1121964592</p>
+                    <p id="email">davidstiven1999@hotmail.com</p>
+                    <p id="telefono">3193094264</p>
                   </div>
-                </div>
+                  <div class="col-md-4">
+                    <p class="text-info mb-4 mt-2"><strong>Datos de envio</strong></p>
+                    <p id="lugar">Villavicencio/meta</p>
+                    <p id="direccion">cra 36 n 15a-03</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="text-info mb-4 mt-2"><strong>Observaciones/Comentarios</strong></p>
+                    <p id="comentario">Villavicencio/meta</p>
+                  </div>
               </div>
+              <div class="format__customer__order">
+                <table class="table">
+                  <thead class="format__decoration text-white">
+                    <tr>
+                      <th scope="col" >Descripción</th>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">Precio</th>
+                      <th scope="col">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="productos">
+                    
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                        <th colspan="3" class="text-right">Subtotal:</th>
+                        <td class="text-right" id="subtotal">$50.000</td>
+                      </tr>
+                      <tr>
+                        <th colspan="3" class="text-right">Total:</th>
+                        <td class="text-right" id="total">$25.000.000</td>
+                      </tr>
+                  </tfoot>
+                </table>
+              </div> 
           </div>
-        </div>
-        <div class="tab-pane fade" id="pills-make" role="tabpanel" aria-labelledby="pills-make-tab">
-          <div class="container factura">
-            <div class="row">
-              <div class="col-md-6 d-flex flex-column align-items-center">
-                  <img src="<?=media()?>/images/uploads/logo.png" width="150px" height="150px">
-                  <P><?=DIRECCION?></P>
-                  <P><?=TELEFONO?></P>
-                  <P><?=EMAIL_REMITENTE?></P>
-              </div>
-              <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-                <h2>Orden</h2>
-                <strong>Fecha</strong>
-                <p id="fecha"></p>
-                <strong>N° de orden</strong>
-                <p id="numOrden"></p>
-              </div>
-            </div>
-            <hr>
-            <div class="row d-flex justify-content-center">
-              <div class="col-md-6">
-                <h3>Datos del cliente</h3>
-                <ul>
-                  <li><strong>Nombre: </strong><p id="nombre"></p></li>
-                  <li><strong>CC: </strong><p id="identificacion"></p></li>
-                  <li><strong>Email: </strong><p id="email"></p></li>
-                  <li><strong>Teléfono: </strong><p id="telefono"></p></li>
-                </ul>
-              </div>
-              <div class="col-md-6">
-                <h3>Datos de envio</h3>
-                <ul>
-                  <li><strong>Departamento: </strong><p id="departamento"></p></li>
-                  <li><strong>Ciudad: </strong><p id="ciudad"></p></li>
-                  <li><strong>Dirección: </strong><p id="direccion"></p></li>
-                </ul>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <h5>Mensaje: </h3>
-                <p id="mensaje"></p>
-              </div>
-            </div>
-            <table class="w-100">
-              <thead>
-                <tr class="bg-warning">
-                  <th>Descripción</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody id="detalle">
-                <tr>
-                  <td id="descripcion"></td>
-                  <td id="precio"></td>
-                  <td id="cantidad"></td>
-                  <td id="total"></td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th colspan="3" class="text-right">Subtotal:</th>
-                  <td id="subtotal"></td>
-                </tr>
-                <tr>
-                  <th colspan="3" class="text-right">Envío:</th>
-                  <td><?=MS.number_format(ENVIO,0,DEC,MIL)." ".MD;?></td>
-                </tr>
-                <tr>
-                  <th colspan="3" class="text-right">Total:</th>
-                  <td id="totalprecio"></td>
-                </tr>
-              </tfoot>
-            </table>
-            <button id ="btnCancel" class="btn btn-secondary btn-lg btn-block" onclick="location.reload()" type="button" data-dismiss="modal">Regresar</button>
-          </div>
+          <div class="format__decoration"></div>
         </div>
       </div>
-        
-        <?php }?>
     </main>
 <?php footerAdmin($data); ?>
-    

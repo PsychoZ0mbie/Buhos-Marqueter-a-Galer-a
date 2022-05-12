@@ -19,7 +19,7 @@
         private $strStatus;
 
 
-        public function registroCliente($strNombre,$strApellido,$strEmail,$strPassword,$rolid){
+        public function registroCliente($strNombre,$strApellido,$strPicture,$strEmail,$strPassword,$rolid){
             $this->con = new Mysql();
             $this->strNombre = $strNombre;
             $this->strApellido = $strApellido;
@@ -31,9 +31,10 @@
             $sql = "SELECT * FROM person WHERE email = '$this->strEmail'";
             $request = $this->con->select_all($sql);
             if(empty($request)){
-                $query = "INSERT INTO person(firstname,lastname,email,department,city,password,roleid) VALUE(?,?,?,?,?,?,?)";
+                $query = "INSERT INTO person(firstname,lastname,picture,email,department,city,password,roleid) VALUE(?,?,?,?,?,?,?,?)";
                 $arrData = array($this->strNombre,
                                 $this->strApellido,
+                                $strPicture,
                                 $this->strEmail,
                                 5,
                                 1,

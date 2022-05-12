@@ -697,9 +697,10 @@
                     $strApellido = ucwords(strClean($_POST['txtApellidoCliente']));
                     $strEmail = strtolower(strClean($_POST['txtEmailCliente']));
                     $strPassword = hash("SHA256",$_POST['txtPasswordCliente']);
+                    $strPicture = "avatar.png";
                     $rolid = 2;
 
-                    $request = $this->registroCliente($strNombre,$strApellido,$strEmail,$strPassword,$rolid);
+                    $request = $this->registroCliente($strNombre,$strApellido,$strPicture,$strEmail,$strPassword,$rolid);
                     if($request > 0){
                         
 						$_SESSION['idUser'] = $request;

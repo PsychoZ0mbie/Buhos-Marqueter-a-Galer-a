@@ -5,13 +5,6 @@ headerAdmin($data);
 
 ?>
 <main class="app-content">
-<?php
-  if(empty($_SESSION['permisosMod']['r'])){
-?>
-  <p>Acceso denegado</p>
-    <?php
-      }else{?>
-    
       <div class="app-title">
         <div>
           <h1><i class="fa fa-dashboard"></i> <?= $data['page_title'];?></h1>
@@ -39,26 +32,18 @@ headerAdmin($data);
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="widget-small warning coloured-icon"><i class="icon fa fa-archive fa-3x"></i>
-            <div class="info">
-              <h4>Productos</h4>
-              <p><b><?=$data['productos']?></b></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="widget-small primary coloured-icon"><i class="icon fa fa-usd fa-3x"></i>
-            <div class="info">
-              <h4>Ventas</h4>
-              <p><b><?=$data['ventas']?></b></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
           <div class="widget-small danger coloured-icon"><i class="icon fa fa-envelope fa-3x"></i>
             <div class="info">
               <h4>Mensajes</h4>
               <p><b><?=$data['mensajes']?></b></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="widget-small warning coloured-icon"><i class="icon fa fa-usd fa-3x"></i>
+            <div class="info">
+              <h4>Ventas</h4>
+              <p><b><?=$data['ventas']?></b></p>
             </div>
           </div>
         </div>
@@ -82,9 +67,5 @@ headerAdmin($data);
           </div>
         </div>
       </div>
-      
-      <?php
-        }
-      ?>
     </main>
-    <?php footerAdmin($data);?>
+<?php footerAdmin($data);?>

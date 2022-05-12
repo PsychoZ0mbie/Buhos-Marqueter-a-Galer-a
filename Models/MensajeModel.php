@@ -5,7 +5,17 @@
             parent::__construct();
         }
 
-        public function selectMensajes(){
+        public function selectMensajes($options){
+            if($options == 1){
+				$options=" ORDER BY id DESC";
+			}else if($options == 2){
+				$options=" ORDER BY id ASC";
+			}else if($options == 3){
+				$options=" ORDER BY firstname";
+			}else{
+				$options=" ORDER BY id DESC";
+			}
+
             $sql = "SELECT  id,
                             firstname,
                             lastname,
@@ -16,7 +26,8 @@
                             device,
                             useragent,
                             DATE_FORMAT(date, '%Y-%m-%d') as date
-                            FROM contact";
+                            FROM contact
+                            $options";
             $request = $this->select_all($sql);
             return $request;
         }
@@ -36,6 +47,10 @@
             $request = $this->select($sql);
             return $request;
         }
-        
+        public function deleteMensaje($id){
+            $sql = "DELETE FROM contact WHERE id = $id";
+            $request = $this->delete($sql);
+            return $request;
+        }
     }
 ?>

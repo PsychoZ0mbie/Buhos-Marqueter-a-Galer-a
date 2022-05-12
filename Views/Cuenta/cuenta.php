@@ -29,15 +29,10 @@
                             <label for="txtPassword" class="form-label">Contraseña</label>
                             <input type="password" class="form-control" id="txtPassword" name="txtPassword">
                         </div>
-                        <button type="submit" class="btn_content">Iniciar sesión</button>
+                        <button type="submit" class="btn_content" id="btnLogin">Iniciar sesión</button>
                     </form>
                 </div>
                 <div class="col-md-6">
-                    <div id="divLoading">
-                        <div>
-                            <img src="<?= media(); ?>/images/loading/loading.svg" alt="Loading">
-                        </div>
-                    </div>
                     <h2>Soy nuevo</h2>
                     <form id="formRegister" name="formRegister" class="p-4">
                         <div class="row">
@@ -74,7 +69,7 @@
                                 He leido y acepto los <a href="<?= base_url()?>/terminos" target="_blank">Términos y Condiciones </a>y la<a href="<?= base_url()?>/politicas" target="_blank"> Política de Privacidad y de Cookies.</a>
                             </label>
                         </div>
-                        <button type="submit" class="btn_content mt-4">Registrarse</button>
+                        <button type="submit" class="btn_content mt-4" id="btnRegister">Registrarse</button>
                     </form>
                 </div>
             </div>

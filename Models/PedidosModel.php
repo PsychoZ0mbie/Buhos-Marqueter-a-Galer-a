@@ -7,8 +7,17 @@
             parent::__construct();
         }
 
-        public function selectPedidos($idpersona,$idrol){
+        public function selectPedidos($options,$idpersona,$idrol){
             $datos="";
+            if($options == 1){
+				$options=" ORDER BY idorderdata DESC";
+			}else if($options == 2){
+				$options=" ORDER BY idorderdata ASC";
+			}else if($options == 3){
+				$options=" ORDER BY status";
+			}else{
+				$options=" ORDER BY idorderdata DESC";
+			}
             if($idrol==1){
                 $datos="";
             }else{
@@ -18,10 +27,12 @@
                             firstname,
                             lastname,
                             personid,
-                            DATE_FORMAT(date, '%d-%m-%Y') as date,
+                            email,
+                            phone,
+                            DATE_FORMAT(date, '%Y-%m-%d') as date,
                             price,
                             status
-                    FROM orderdata$datos";
+                    FROM orderdata $datos $options";
 
             $request = $this->select_all($sql);
             return $request;
@@ -31,6 +42,7 @@
             $this->intIdpedido = $idpedido;
             $this->intIdpersona = $idpersona;
             $sql = "SELECT o.idorderdata,
+                            o.personid,
                             o.firstname,
                             o.lastname,
                             o.identification,
@@ -40,7 +52,7 @@
                             o.address,
                             o.comment,
                             o.phone,
-                            DATE_FORMAT(o.date, '%d-%m-%Y') as date,
+                            DATE_FORMAT(o.date, '%Y-%m-%d') as date,
                             o.price,
                             o.status,
                             c.idcity,
@@ -64,14 +76,19 @@
                             d.orderdataid,
                             d.personid,
                             d.productid,
+                            d.topicid,
                             d.title,
-                            d.price,
+                            d.author,
+                            d.dimensions,
+                            d.technique,
+                            d.margintype,
+                            d.bordertype,
+                            d.glasstype,
+                            d.margin,
+                            d.measureimage,
+                            d.measureframe,
                             d.quantity,
-                            d.length,
-                            d.width,
-                            d.topic,
-                            d.subtopic,
-                            d.type,
+                            d.price,
                             o.idorderdata,
                             o.personid
                     FROM orderdetail d

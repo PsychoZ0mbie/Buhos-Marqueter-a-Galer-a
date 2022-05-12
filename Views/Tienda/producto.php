@@ -82,11 +82,6 @@
                             <div class="accordion-body">
                               <ul>
                                 <li>
-                                    <p>Para marcos, retablos, y bastidores a medida, de acuerdo a la cantidad solicitada, se dará a conocer el tiempo estimado de producción
-                                      a partir del siguiente día hábil de haber realizado y confirmado el pedido.
-                                    </p>
-                                </li>
-                                <li>
                                     <p>Para obras de arte sobre lienzo disponibles en la tienda, su envío se realizará 2 días después a partir del siguiente día hábil de haber realizado
                                       y confirmado el pedido.
                                     </p>
