@@ -10,10 +10,11 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <a href="<?=base_url()?>/tienda/marqueteria">
-                    <img src="<?=media();?>/template/Assets/images/uploads/banner1.gif" class="d-block w-100" alt="Dale estilo a tus cuadros con las mejores molduras">
-                    <div class="carousel-caption">
-                        <p>Dale estilo a tus cuadros con las mejores molduras</p>
-                    </div>
+                        <img src="<?=media();?>/template/Assets/images/uploads/banner1.gif" class="d-block w-100" alt="Dale estilo a tus cuadros con las mejores molduras">
+                        <div class="carousel-caption">
+                            <p>Dale estilo a tus cuadros con las mejores molduras</p>
+                            <button class="btn_content">Ver más</button>
+                        </div>
                     </a>
                 </div>
                 <div class="carousel-item">
@@ -21,6 +22,7 @@
                     <img src="<?=media();?>/template/Assets/images/uploads/banner2.gif" class="d-block w-100" alt="Obras cargadas con emoción y creatividad">
                     <div class="carousel-caption">
                         <p>Obras cargadas con emoción y creatividad</p>
+                        <button class="btn_content">Ver más</button>
                     </div>
                     </a>
                 </div>

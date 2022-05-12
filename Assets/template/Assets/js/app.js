@@ -1355,7 +1355,7 @@ if(document.querySelector("#contacto")){
     })
 }
 /*********************************************************************header************************************************************************ */
-if(document.querySelector("#header")){
+if(document.querySelector("#logout")){
     let logout = document.querySelector("#logout");
     logout.addEventListener("click",function(e){
         let url = base_url+"/logout";
