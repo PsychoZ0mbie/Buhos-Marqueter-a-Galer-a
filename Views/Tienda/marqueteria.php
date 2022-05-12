@@ -5,8 +5,8 @@
     <main id="<?=$data['page_name']?>">
         <div class="container measures mt-4">
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="measures__container">
+                <div class="col-lg-6 mb-4">
+                    <div class="measures__container ">
                         <div class="measures__frame">
                             <img src="<?=media()?>/template/Assets/images/uploads/logo.png" alt="">
                         </div>
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 pages">
+                <div class="col-lg-6 pages mb-4">
                     <div class="measures__dimensions page active">
                         <h1 class="text-center fs-4 text__color"><strong>Enmarcación en línea, enmarca sin salir de casa</strong></h1>
                         <h2 class="fs-5 mt-4 text-center">Ingresa las dimensiones de tu obra <span class="guide" title="Ayuda">?</span></h2>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="measures__custom d-none page">
-                        <div class="d-flex justify-content-between mt-3 mb-3 align-items-center">
+                        <div class="d-flex justify-content-between flex-wrap mt-3 mb-3 align-items-center">
                             <h2 class="fs-5 text__color m-0"><strong>Diseña tu marco</strong></h2>
                             <p class="fs-5 price m-0"></p>
                         </div>
@@ -280,8 +280,8 @@
                             <strong>Margen:</strong> es el espacio que hay entre el marco y la obra.<br>
                             <ul>
                                 <strong>Tipo de margen:</strong>
-                                <li>Caribe: hecho de triplex con variedad de colores</li>
-                                <li>Passepartout: hecho a mano con cartón paja y opalina de único color, recomendado para fotografías, diplomas o títulos.</li>
+                                <li><strong>Caribe:</strong> hecho de triplex con variedad de colores</li>
+                                <li><strong>Passepartout:</strong> hecho a mano con cartón paja y opalina de único color, recomendado para fotografías, diplomas o títulos.</li>
                             </ul>
                         </p>
                         <img src="<?= media();?>/images/uploads/enmarcacion.png" alt="enmarcación" style="width:100%; height:300px;">
@@ -302,11 +302,11 @@
                             <ul>
                                 <strong>Tipo de borde:</strong>
                                 <li class="mt-1">
-                                    Bocel de madera: bocel de 4mm, recomendado para fotografías, diplomas o títulos.<br>
+                                    <strong>Bocel de madera:</strong> bocel de 4mm, recomendado para fotografías, diplomas o títulos.<br>
                                     <img src="<?= media();?>/images/uploads/bocel.png" alt="bocel de madera" class="mt-1" style="width:100%; height:250px;">
                                 </li>
                                 <li class="mt-1">
-                                    Bastidor: bastidor de madera de 2.5cm X 2.5cm X 2.5cm, recomendado para fotografías, diplomas, títulos y obras sobre lienzo.<br>
+                                    <strong>Bastidor:</strong> bastidor de madera de 2.5cm X 2.5cm X 2.5cm, recomendado para fotografías, diplomas, títulos y obras sobre lienzo.<br>
                                     <img src="<?= media();?>/images/uploads/bastidor.png" alt="bastidor de madera" class="mt-1" style="width:100%; height:250px;">
                                 </li>
                             </ul>
