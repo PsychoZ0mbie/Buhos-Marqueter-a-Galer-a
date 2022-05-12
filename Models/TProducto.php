@@ -35,6 +35,39 @@ require_once("Libraries/Core/Mysql.php");
             }
             return $request;
         }
+        public function getMoldurasTipo($tipo){
+            $this->con = new Mysql();
+            $waste="";
+            if($tipo == 2){
+                $waste = " AND waste < 33"; 
+            }else if($tipo == 3){
+                $waste = " AND waste > 33 AND waste < 49"; 
+            }else if($tipo == 4){
+                $waste = " AND waste > 49"; 
+            }
+            $sql = "SELECT 
+                            idproduct,
+                            title,
+                            topicid,
+                            subtopicid,
+                            price,
+                            waste,
+                            DATE_FORMAT(datecreated, '%Y-%m-%d') as date,
+                            route,
+                            status
+                    FROM product
+                    WHERE topicid = 1 AND subtopicid = 2 AND status = 1 $waste ORDER BY title DESC";
+             
+            $request = $this->con->select_all($sql);
+            for ($i=0; $i <count($request) ; $i++) { 
+                $idproduct = $request[$i]['idproduct'];
+                $sqlimg = "SELECT * FROM productimage WHERE productid=$idproduct";
+                $requestimg = $this->con->select_all($sqlimg);
+                $request[$i]['url'][0] = base_url()."/Assets/images/uploads/".$requestimg[0]['title'];
+                $request[$i]['url'][1] = $requestimg[1]['title'];
+            }
+            return $request;
+        }
         public function getColores(){
             $this->con = new Mysql();
             

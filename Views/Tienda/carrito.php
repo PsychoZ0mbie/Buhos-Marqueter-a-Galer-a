@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="bg-info p-2 border border-1 border-primary rounded">
+                    <div class="bg-light p-2 border border-1 border-dark rounded">
                         <strong>Nota:</strong>
                         <p>Después de recibir tu pedido, nos comunicaremos contigo para confirmar sus datos y organizar el pago.</p>
                     </div>
@@ -58,9 +58,12 @@
         </form>
         <div class="container mt-4 d-none" id="without">
             <div class="alert alert-danger " role="alert">
-                <h3 class="pb-4">No hay productos en el carrito</h3>
-                <a href="<?=base_url();?>/tienda/marqueteria" class="btn_content">Ver marquetería</a>
-                <a href="<?=base_url();?>/tienda/galeria" class="btn_content">Ver galería</a>
+                <h3 class="pb-4 text-center">No hay productos en el carrito</h3>
+                <div class="d-flex justify-content-center flex-wrap">
+                    <a href="<?=base_url();?>/tienda/marqueteria" class="btn_content m-2">Ver marquetería</a>
+                    <a href="<?=base_url();?>/tienda/galeria" class="btn_content m-2">Ver galería</a>
+                </div>
+                
             </div>
         </div>
     </section>

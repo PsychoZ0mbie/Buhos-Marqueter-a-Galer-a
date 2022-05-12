@@ -91,6 +91,24 @@
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             die();
         }
+        public function getMuestrasTipo($params){
+            $params = strClean($params);
+            $params = str_replace(" ","",$params);
+            $tipo = intval($params);
+            $html="";
+            $request = $this->getMoldurasTipo($tipo);
+            for ($i=0; $i < count($request) ; $i++) { 
+                $idproduct = openssl_encrypt($request[$i]['idproduct'], ENCRIPTADO,KEY);
+                $html.='
+                    <div class="measures__item" id="'.$idproduct.'" data-frame="'.$request[$i]['url'][1].'" data-border="'.$request[$i]['waste'].'" title="'.$request[$i]['title'].'">
+                        <img src="'.$request[$i]['url'][0].'" alt="">
+                    </div>
+                ';
+            }
+            $arrResponse = array("status"=>true,"msg"=>"Molduras recuperadas","html"=>$html);
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
         public function getColor(){
             $request = $this->getColores();
             echo json_encode($request,JSON_UNESCAPED_UNICODE);
@@ -107,8 +125,8 @@
                 $intVidrio = 9;
 
                 $id = openssl_decrypt($_POST['id'],ENCRIPTADO,KEY);
-                $intHeight = intval($_POST['height']);
-                $intWidth = intval($_POST['width']);
+                $intHeight = floatval($_POST['height']);
+                $intWidth = floatval($_POST['width']);
                 $intHeightMargin = 0;
                 $intWidthMargin = 0;
                 $intMargin = 0;
@@ -177,7 +195,7 @@
                 }
                 
                 $resultado = $resultado * $request['price']+$area+$borde+$vidrio;
-                echo json_encode($resultado,JSON_UNESCAPED_UNICODE);
+                echo json_encode(intval($resultado),JSON_UNESCAPED_UNICODE);
             }
             die();
         }
@@ -198,8 +216,8 @@
 
                     }else{
                         $intId = openssl_decrypt($_POST['intId'],ENCRIPTADO,KEY);
-                        $intHeight = intVal($_POST['intHeight']);
-                        $intWidth = intval($_POST['intWidth']);
+                        $intHeight = floatval($_POST['intHeight']);
+                        $intWidth = floatval($_POST['intWidth']);
                         $intMargin = intval($_POST['intMargin']) * 2;
                         $intMarginType = intval($_POST['intMarginType']);
                         $intBorderType = intval($_POST['intBorderType']);
@@ -359,9 +377,9 @@
                     $price=formatNum($request[$i]['price']);
                     $html.='
                     <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                        <img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">'.$request[$i]['title'].'</h5>
+                        <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
+                        <div class="card-body text-center tex">
+                            <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
                             <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
                             <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
                             <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
@@ -388,9 +406,9 @@
                     $price=formatNum($request[$i]['price']);
                     $html.='
                     <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                        <img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">'.$request[$i]['title'].'</h5>
+                        <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
+                        <div class="card-body text-center tex">
+                            <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
                             <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
                             <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
                             <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>

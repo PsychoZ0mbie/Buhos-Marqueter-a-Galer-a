@@ -5,19 +5,13 @@ body{
 textarea{
     resize: none;
 }
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
    -webkit-appearance: none;
    margin: 0;
 }
-.guide{
-    padding: 3px 8px;
-    background-color: #10100D;
-    color:#fff;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 10px;
-}
+
 .item_hover:hover{
     background:#E05A10;
     color: #fff;
@@ -42,6 +36,11 @@ input::-webkit-inner-spin-button {
     overflow: hidden;
     overflow-x: scroll;
     height: 100px;
+}
+.scrollY{
+    overflow: hidden;
+    overflow-Y: scroll;
+    height: 80%;
 }
 
 #divLoading{
@@ -680,6 +679,56 @@ input[type=number] {
     text-align: center;
     width: 50px;
 }
+/*************************Frame Page**************************/
+.guide{
+    padding: 3px 8px;
+    background-color: #10100D;
+    color:#fff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+}
+.guide__panel{
+    position: fixed;
+    height: 100%;
+    width: 30%;
+    top:0;
+    right: -100%;
+    z-index: 9999;
+    background-color:#F8F9FA;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+.guide__panel.active{
+    right: 0;
+    transition: all 0.3s ease;
+}
+.guide__panel__close{
+    display: block;
+    text-align: right;
+    font-size: 20px;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background-color: #E05A10;
+    color: #FFF;
+}
+.btn__guide{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#10100D;
+    width: 100px;
+    padding: 10px;
+    color: #FFF;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 9998;
+    border-radius: 10px;
+    border: none;
+    margin: 10px;
+}
 /*************************Services Page**************************/
 
 .services_item{
@@ -851,6 +900,9 @@ footer ul li a{
 }
 
 /*************************Cards**************************/
+.card a:hover{
+    color: #E05A10;
+}
 .card_container{
     position: relative;
     height:250px;
@@ -964,6 +1016,9 @@ footer ul li a{
     .confirm_price p{
         font-size: 15px;
     }
+    .guide__panel{
+        width: 100%;
+    }
 }
 
 
@@ -994,6 +1049,12 @@ footer ul li a{
     }
     .carousel-caption p{
         font-size: 25px;
+    }
+    table{
+        font-size: 11px;
+    }
+    table tbody tr td{
+        font-size: 10px;
     }
 }
 

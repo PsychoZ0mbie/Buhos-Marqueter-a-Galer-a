@@ -51,7 +51,6 @@
     <!--My functions-->
     <script type="text/javascript" src="<?= media(); ?>/js/functions.js?n=1"></script>
     <script src="<?=media();?>/template/Assets/js/app.js?n=1"></script>
-    <script src="<?= media() ?>/js/functions_login.js?n=1"></script>
     <script type="application/ld+json">
         {
         "@context": "https://schema.org/",
