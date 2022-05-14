@@ -8,10 +8,12 @@
     Class Tienda extends Controllers{
         use TProducto, TCategorias,TClientes;
         public $login;
+        private $mano_obra;
         public function __construct(){
             parent::__construct();
             session_start();
             $this->login = new LoginModel();
+            $this->mano_obra= 1.05;
         }
         
         /******************************Paginas************************************/
@@ -118,11 +120,12 @@
             //dep($_POST);
             if($_POST){
 
-                $intTriplex = 17;
+                $intTriplex = 13.5;
                 $intPassepartout = 10;
                 $intDobleMarco = 114;
-                $intBocel = 30;
+                $intBocel = 40;
                 $intVidrio = 9;
+                //$intBastidor = 133;
 
                 $id = openssl_decrypt($_POST['id'],ENCRIPTADO,KEY);
                 $intHeight = floatval($_POST['height']);
@@ -194,7 +197,8 @@
                     }
                 }
                 
-                $resultado = $resultado * $request['price']+$area+$borde+$vidrio;
+                $resultado = ($resultado * $request['price'])+$area+$borde+$vidrio;
+                $resultado = $resultado *$this->mano_obra;
                 echo json_encode(intval($resultado),JSON_UNESCAPED_UNICODE);
             }
             die();
@@ -231,10 +235,10 @@
                         $requestMoldura = $this->getMoldura($intId);
                         if(!empty($requestMoldura)){
 
-                            $triplexPrecio = 17;
+                            $triplexPrecio = 13.5;
                             $passepartoutPrecio = 10;
                             $dobleMarcoPrecio = 114;
-                            $bocelPrecio = 30;
+                            $bocelPrecio = 40;
                             $vidrioPrecio = 9;
 
                             $precio = $requestMoldura['price'];
@@ -262,7 +266,8 @@
                             if($intGlassType == 2){
                                 $vidrio = $area * $vidrioPrecio;
                             }
-                            $precioMarco = ($perimetro*$precio) +$vidrio+$borde+$margin;
+                            $precioMarco = (($perimetro*$precio) +$vidrio+$borde+$margin);
+                            $precioMarco = $precioMarco*$this->mano_obra;
 
                             $arrMarco = array(
                                 "idproducto"=>$intId,

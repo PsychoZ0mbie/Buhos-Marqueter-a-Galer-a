@@ -114,7 +114,7 @@
                             <select class="form-select" aria-label="Default select example" id="selectBorder">
                                 <option value="1">Sin borde</option>
                                 <option value="2">Bocel</option>
-                                <option value="3">Bastidor</option>
+                                <option value="3">Marco</option>
                             </select>
                             <div class="color_border mt-3 d-none">
                                 <div class="d-flex">
@@ -281,7 +281,7 @@
                             <ul>
                                 <strong>Tipo de margen:</strong>
                                 <li><strong>Caribe:</strong> hecho de triplex con variedad de colores</li>
-                                <li><strong>Passepartout:</strong> hecho a mano con cartón paja y opalina de único color, recomendado para fotografías, diplomas o títulos.</li>
+                                <li><strong>Passepartout:</strong> hecho a mano con cartón paja y opalina con variedad de colores, recomendado para fotografías, diplomas o títulos.</li>
                             </ul>
                         </p>
                         <img src="<?= media();?>/images/uploads/enmarcacion.png" alt="enmarcación" style="width:100%; height:300px;">
@@ -306,7 +306,7 @@
                                     <img src="<?= media();?>/images/uploads/bocel.png" alt="bocel de madera" class="mt-1" style="width:100%; height:250px;">
                                 </li>
                                 <li class="mt-1">
-                                    <strong>Bastidor:</strong> bastidor de madera de 2.5cm X 2.5cm X 2.5cm, recomendado para fotografías, diplomas, títulos y obras sobre lienzo.<br>
+                                    <strong>Marco de madera:</strong> marco de madera de 1.5cm X 2.5cm, recomendado para fotografías, diplomas, títulos y obras sobre lienzo.<br>
                                     <img src="<?= media();?>/images/uploads/bastidor.png" alt="bastidor de madera" class="mt-1" style="width:100%; height:250px;">
                                 </li>
                             </ul>

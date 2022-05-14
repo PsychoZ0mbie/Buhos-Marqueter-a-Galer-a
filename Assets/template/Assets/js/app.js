@@ -453,19 +453,18 @@ if(document.querySelector("#marqueteria")){
 
             measureMargin.style.height = String(height+dimensionDefault)+"px";
             measureMargin.style.width = String(width+dimensionDefault)+"px";
-            measureMargin.style.background ="#f5f5dc";
-            measureFrame.style.border = "none";
+            measureMargin.style.background ="#FFF";
             rangeFrame.value = 0;
             selectBorder.value = 1;
             selectGlass.value= 1;
 
             document.querySelector("#txtPrice").innerHTML =  document.querySelector(".measures__custom .price").innerHTML;
             document.querySelector("#rangeData").innerHTML = "0 cm";
-            document.querySelector("#txtMargen").innerHTML = "Passepartout";
+            document.querySelector("#txtMargen").innerHTML = textType;
             document.querySelector("#txtMargenMedida").innerHTML = "0 cm";
             document.querySelector(".rangeInfo").classList.remove("d-none");
-            document.querySelector(".color_margin").classList.add("d-none");
             document.querySelector(".color_border").classList.add("d-none");
+            document.querySelector(".color_margin").classList.remove("d-none");
             document.querySelector("#txtBorde").innerHTML = selectBorder.options[selectBorder.selectedIndex].text;
             document.querySelector("#txtVidrio").innerHTML = selectGlass.options[selectGlass.selectedIndex].text;
             document.querySelector("#border").classList.remove("d-none");
@@ -494,7 +493,19 @@ if(document.querySelector("#marqueteria")){
                     formData.append("width",width);
                     formData.append("margin",margin);
                     formData.append("glass",selectGlass.value);
-                    
+
+                    let marginColor = document.querySelectorAll(".color_margin_item");
+                    for (let i = 0; i < marginColor.length; i++) {
+                        let element = marginColor[i];
+                        element.addEventListener("click",function(e){
+                            //document.querySelector("#txtMargen").innerHTML = textType;
+                            let color = "#"+element.getAttribute("data-color");
+                            let title = element.getAttribute("title");
+                            document.querySelector("#txtMargen").innerHTML = textType+" - "+title;
+                            document.querySelector("#selectedMarginColor").innerHTML = title;
+                            measureMargin.style.background = color;
+                        })
+                    }
                     
                     request(urlRequest,formData,"post").then(function(objData){
                         document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$`+formatNum(objData,".")+" COP";
