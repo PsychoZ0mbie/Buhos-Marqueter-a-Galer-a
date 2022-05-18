@@ -458,6 +458,26 @@ if(document.querySelector("#marqueteria")){
             selectBorder.value = 1;
             selectGlass.value= 1;
 
+            let url = base_url+"/tienda/getColor";
+            request(url,"","get").then(function(objData){
+                let parentMargin = document.querySelector(".color_margin");
+                let childMargin = document.querySelector(".color_margin .scroll_listX");
+                let fragmentMargin = document.createDocumentFragment();
+                let htmlMargin ="";
+
+                for (let i = 0; i < objData.length; i++) {
+                    htmlMargin += `
+                    <div class="color_block color_margin_item" style="background: #${objData[i]['hex']};" data-id="${objData[i]['id']}" 
+                    title="${objData[i]['title']}" data-color="${objData[i]['hex']}">
+                    </div>
+                    `
+                }
+                childMargin.innerHTML = htmlMargin;
+                fragmentMargin.appendChild(childMargin);
+                parentMargin.appendChild(fragmentMargin);
+
+            });
+            
             document.querySelector("#txtPrice").innerHTML =  document.querySelector(".measures__custom .price").innerHTML;
             document.querySelector("#rangeData").innerHTML = "0 cm";
             document.querySelector("#txtMargen").innerHTML = textType;

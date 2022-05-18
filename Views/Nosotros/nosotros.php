@@ -56,7 +56,7 @@
                 <div class="card_container">
                   <div class="cards">
                     <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro1.jpg" alt="Miembro 1">
+                      <img src="<?=media();?>/template/Assets/images/uploads/miembro1.png" alt="Miembro 1">
                     </div>
                     <div class="card_back">
                       <h2>Oswaldo Parrado</h2>
@@ -67,10 +67,10 @@
                 <div class="card_container">
                   <div class="cards">
                     <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro2.jpg" alt="Miembro 2">
+                      <img src="<?=media();?>/template/Assets/images/uploads/miembro2.png" alt="Miembro 2">
                     </div>
                     <div class="card_back">
-                      <h2>José Alejandro</h2>
+                      <h2>Alejandro Zapata</h2>
                       <p>Marquetero y Pintor</p>
                     </div>
                   </div>
@@ -78,7 +78,7 @@
                 <div class="card_container">
                   <div class="cards">
                     <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro3.jpg" alt="Miembro 3">
+                      <img src="<?=media();?>/template/Assets/images/uploads/miembro3.png" alt="Miembro 3">
                     </div>
                     <div class="card_back">
                       <h2>David Parrado</h2>

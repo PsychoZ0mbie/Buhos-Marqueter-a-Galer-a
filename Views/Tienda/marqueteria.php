@@ -7,14 +7,16 @@
             <div class="row">
                 <div class="col-lg-6 mb-4">
                     <div class="measures__container ">
+                        
+                        <label for="measuresImg" title="Subir foto"><a class="btn_content btnUp mt-4"><i class="fas fa-camera"></i></a></label>
+                        <input class="d-none" type="file" id="measuresImg" name="measuresImg">
                         <div class="measures__frame">
                             <img src="<?=media()?>/template/Assets/images/uploads/logo.png" alt="">
                         </div>
                         <div class="measures__margin">
 
                         </div>
-                        <!--<label for="measuresImg"><a class="btn btn-info btnUp">Subir foto</a></label>
-                        <input class="d-none" type="file" id="measuresImg" name="measuresImg"> -->
+                        
                         <div class="measures__zoom w-100">
                             <div class="d-flex justify-content-between align-items-center">
                                 <i class="fas fa-search-minus"></i>

@@ -11,7 +11,6 @@ input::-webkit-inner-spin-button {
    -webkit-appearance: none;
    margin: 0;
 }
-
 .item_hover:hover{
     background:#E05A10;
     color: #fff;
@@ -446,6 +445,11 @@ input[type=number] {
     position: relative;
     overflow: hidden;
 }
+.measures__img{
+    width: 200px;
+    height: 200px;
+    background-color: #0000FF;
+}
 .measures__zoom{
     position: absolute;
     bottom: 0;
@@ -474,15 +478,12 @@ input[type=number] {
     transition: all 0.3s ease;
 }
 
-.measures__container label a{
-    color:rgb(255, 255, 255);
-}
 .measures__container label{
     position: absolute;
-    left:50%;
-    bottom: 10px;
-    transform: translate(-50%,0);
+    top: 5%;
+    left:0;
     z-index: 200;
+    cursor: pointer;
 }
 
 .measures__dimensions{
@@ -900,7 +901,7 @@ footer ul li a{
 }
 
 /*************************Cards**************************/
-.card a:hover{
+.card a.text__color:hover{
     color: #E05A10;
 }
 .card_container{
@@ -929,7 +930,6 @@ footer ul li a{
 .card_front img{
     height: 100%;
     width: 100%;
-    object-fit: cover;
     border-radius: 50%;
 }
 .card_back{
