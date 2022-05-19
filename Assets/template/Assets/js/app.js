@@ -1183,6 +1183,23 @@ if(document.querySelector("#procesarpedido")){
 
         let formLogin = document.querySelector("#formLogin");
         let btnLogin = document.querySelector("#btnLogin");
+        let btnForget = document.querySelector("#btnForget");
+        let btnBack = document.querySelector("#btnBack");
+        let formRecovery = document.querySelector("#formRecovery");
+        let changeTitle = document.querySelector("#changeTitle");
+        
+
+        btnForget.addEventListener("click",function(e){
+            formLogin.classList.add("d-none");
+            formRecovery.classList.remove("d-none");
+            changeTitle.innerHTML="Recuperar contraseña";
+        });
+        btnBack.addEventListener("click",function(e){
+            formLogin.classList.remove("d-none");
+            formRecovery.classList.add("d-none");
+            changeTitle.innerHTML="Soy cliente";
+        });
+
         formLogin.addEventListener("submit",function(e){
             e.preventDefault();
             let strEmail = document.querySelector('#txtEmail').value;
@@ -1205,10 +1222,54 @@ if(document.querySelector("#procesarpedido")){
                         Swal.fire("Atención", objData.msg, "error");
                         document.querySelector('#txtPassword').value = "";
                     }
-                    divLoading.style.display = "none";
                 });
             }
-        })
+        });
+
+        formRecovery.addEventListener("submit",function(e){
+            e.preventDefault();
+    
+            let strEmail = document.querySelector("#txtEmailRecovery").value;
+            let url = base_url+'/tienda/resetPass'; 
+            let formData = new FormData(formRecovery);
+            if(strEmail == ""){
+                swal("Por favor", "Escribe tu correo electrónico.","error");
+                return false;
+            }
+            if(!fntEmailValidate(strEmail)){
+                let html = `
+                <br>
+                <br>
+                <p>micorreo@hotmail.com</p>
+                <p>micorreo@outlook.com</p>
+                <p>micorreo@yahoo.com</p>
+                <p>micorreo@live.com</p>
+                <p>micorreo@gmail.com</p>
+                `;
+                Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
+                return false;
+            }
+    
+            loading.style.display = "flex";
+            request(url,formData,"post").then(function(objData){
+                if(objData.status){
+                    Swal.fire({
+                        title: "Recuperar contraseña",
+                        text: objData.msg,
+                        icon: "success",
+                        confirmButtonText: 'Ok',
+                        showCancelButton: true,
+                    }).then(function(result){
+                        if(result.isConfirmed){
+                            window.location = base_url+"/tienda/procesarPedido";
+                        }
+                    });
+                }else{
+                    swal("Atención",objData.msg,"error");
+                }
+                loading.style.display = "none";
+            });
+        });
     }
     if(document.querySelector("#formRegister")){
         let formRegister = document.querySelector("#formRegister");
@@ -1270,6 +1331,23 @@ if(document.querySelector("#cuenta")){
 
         let formLogin = document.querySelector("#formLogin");
         let btnLogin = document.querySelector("#btnLogin");
+        let btnForget = document.querySelector("#btnForget");
+        let btnBack = document.querySelector("#btnBack");
+        let formRecovery = document.querySelector("#formRecovery");
+        let changeTitle = document.querySelector("#changeTitle");
+        
+
+        btnForget.addEventListener("click",function(e){
+            formLogin.classList.add("d-none");
+            formRecovery.classList.remove("d-none");
+            changeTitle.innerHTML="Recuperar contraseña";
+        });
+        btnBack.addEventListener("click",function(e){
+            formLogin.classList.remove("d-none");
+            formRecovery.classList.add("d-none");
+            changeTitle.innerHTML="Soy cliente";
+        });
+
         formLogin.addEventListener("submit",function(e){
             e.preventDefault();
             let strEmail = document.querySelector('#txtEmail').value;
@@ -1294,7 +1372,54 @@ if(document.querySelector("#cuenta")){
                     }
                 });
             }
-        })
+        });
+
+        formRecovery.addEventListener("submit",function(e){
+            e.preventDefault();
+    
+            let strEmail = document.querySelector("#txtEmailRecovery").value;
+            let url = base_url+'/tienda/resetPass'; 
+            let formData = new FormData(formRecovery);
+            if(strEmail == ""){
+                swal("Por favor", "Escribe tu correo electrónico.","error");
+                return false;
+            }
+            if(!fntEmailValidate(strEmail)){
+                let html = `
+                <br>
+                <br>
+                <p>micorreo@hotmail.com</p>
+                <p>micorreo@outlook.com</p>
+                <p>micorreo@yahoo.com</p>
+                <p>micorreo@live.com</p>
+                <p>micorreo@gmail.com</p>
+                `;
+                Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
+                return false;
+            }
+    
+            loading.style.display = "flex";
+            request(url,formData,"post").then(function(objData){
+                if(objData.status){
+                    Swal.fire({
+                        title: "Recuperar contraseña",
+                        text: objData.msg,
+                        icon: "success",
+                        confirmButtonText: 'Ok',
+                        showCancelButton: true,
+                    }).then(function(result){
+                        if(result.isConfirmed){
+                            window.location = base_url+"/cuenta";
+                        }
+                    });
+                }else{
+                    swal("Atención",objData.msg,"error");
+                }
+                loading.style.display = "none";
+            });
+        });
+        
+        
     }
     if(document.querySelector("#formRegister")){
         let formRegister = document.querySelector("#formRegister");
@@ -1348,6 +1473,58 @@ if(document.querySelector("#cuenta")){
             });
         });
     }
+}
+
+if(document.querySelector("#recuperar")){
+    let formReset = document.querySelector("#formReset");
+    formReset.addEventListener("submit",function(e){
+        e.preventDefault();
+        
+        let strPassword = document.querySelector("#txtPassword").value;
+        let strPasswordConfirm = document.querySelector("#txtPasswordConfirm").value;
+        let idUser = document.querySelector("#idUsuario").value;
+        let strEmail = document.querySelector("#txtEmail").value;
+        let strToken = document.querySelector("#txtToken").value;
+        let url = base_url+'/tienda/setPassword'; 
+        let formData = new FormData(formReset);
+        
+        formData.append("txtToken",strToken);
+        formData.append("txtEmail",strEmail);
+        formData.append("idUsuario",idUser);
+
+        if(strPassword == "" || strPasswordConfirm==""){
+            Swal.fire("Por favor", "Escribe la nueva contraseña.", "error");
+            return false;
+        }else{
+            if(strPassword.length < 8){
+                Swal.fire("Atención", "La contraseña debe tener un mínimo de 8 carácteres.","info");
+                return false;
+            }if(strPassword != strPasswordConfirm){
+                Swal.fire("Atención", "Las contraseñas no coinciden.", "error");
+                return false;
+            }
+
+            loading.style.display = "flex";
+            request(url,formData,"post").then(function(objData){
+                if(objData.status){
+                    Swal.fire({
+                        title: "Por favor, inicia sesión",
+                        text: objData.msg,
+                        icon: "success",
+                        confirmButtonText: 'Ok',
+                        showCancelButton: true,
+                    }).then(function(result){
+                        if(result.isConfirmed){
+                            window.location = base_url+"/cuenta";
+                        }
+                    });
+                }else{
+                    Swal.fire("Atención",objData.msg,"error");
+                }
+                loading.style.display = "none";
+            });
+        }
+    });
 }
 /*********************************************************************Contact page************************************************************************ */
 if(document.querySelector("#contacto")){

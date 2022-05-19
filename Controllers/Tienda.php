@@ -7,7 +7,7 @@
 
     Class Tienda extends Controllers{
         use TProducto, TCategorias,TClientes;
-        public $login;
+        private $login;
         private $mano_obra;
         public function __construct(){
             parent::__construct();
@@ -75,6 +75,7 @@
             $this->views->getView($this,"procesarpedido",$data);
         }
         /******************************Métodos de paginas************************************/
+        /******************************Marquetería************************************/
         public function getMuestras($params){
             $params = strClean($params);
             $params = str_replace(" ","",$params);
@@ -360,6 +361,7 @@
             }
             die();
         }
+        /******************************Galería************************************/
         public function getCuadros(){
             $options=array();
             //dep($_POST);
@@ -430,6 +432,7 @@
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             die();
         }
+        /******************************Carrito************************************/
         public function carritoInfo(){
             $cantidad=0;
             if(isset($_SESSION['arrCarrito']) && !empty($_SESSION['arrCarrito'])){
@@ -600,6 +603,7 @@
                                 );
             $this->insertDetalleTemp($arrPedido);
         }
+        /******************************Pedidos************************************/
         public function getSelectDepartamentos(){
 			$htmlDepartamento="";
 			$htmlCiudad="";
@@ -711,6 +715,7 @@
             }
             unset($_SESSION['ordendata']);
         }
+        /******************************Cuenta************************************/
 		public function setCliente(){
 			if($_POST){
 				if(empty($_POST['txtNombreCliente']) || empty($_POST['txtApellidoCliente']) || empty($_POST['txtEmailCliente']) || empty($_POST['txtPasswordCliente'])){
@@ -744,6 +749,77 @@
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 
 			}
+			die();
+		}
+        public function resetPass(){
+			if($_POST){
+				if(empty($_POST['txtEmailRecovery'])){
+					$arrResponse = array('status' => false, 'msg' => 'Error de datos');
+				}else{
+					$token = token();
+					$strEmail = strtolower(strClean($_POST['txtEmailRecovery']));
+					$arrData = $this->login->getUserEmail($strEmail);
+					if(empty($arrData)){
+						$arrResponse = array('status' => false, 'msg' => 'El usuario no existe');
+					}else{
+						$idpersona = $arrData['idperson'];
+						$nombreUsuario = $arrData['firstname'].' '.$arrData['lastname'];
+
+						$url_recovery = base_url().'/cuenta/recuperar/'.$strEmail.'/'.$token;
+						$requestUpdate = $this->login->setTokenUser($idpersona,$token);
+
+						$dataUsuario = array('nombreUsuario'=> $nombreUsuario, 'email_remitente' => EMAIL_REMITENTE, 'email_usuario'=>$strEmail, 'asunto' =>'Recuperar cuenta - '.NOMBRE_REMITENTE,'url_recovery' => $url_recovery);
+
+
+						if($requestUpdate){
+							
+							$sendEmail = sendEmail($dataUsuario, 'email_cambioPassword');
+
+							if($sendEmail){
+								$arrResponse = array('status' => true, 'msg' => 'Se ha enviado un correo para cambiar la contraseña');
+								
+							}else{
+								$arrResponse = array('status' => false, 'msg' => 'No es posible realizar el proceso, intenta más tarde.');
+							}
+							
+						}else{
+							$arrResponse = array('status' => false, 'msg' => 'No es posible realizar el proceso, intenta más tarde.');
+						}
+					}
+				}
+				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+			}
+			die();
+		}
+        public function setPassword(){
+			if(empty($_POST['idUsuario']) || empty($_POST['txtEmail']) || empty($_POST['txtPassword']) || empty($_POST['txtToken']) || empty($_POST['txtPasswordConfirm'])){
+				$arrResponse = array('status' => false,'msg' => 'Error de datos');
+			}else{
+				$intIdpersona = intval($_POST['idUsuario']);
+				$strPassword = $_POST['txtPassword'];
+				$strEmail = strClean($_POST['txtEmail']);
+				$strToken = strClean($_POST['txtToken']);
+				$strPasswordConfirm = $_POST['txtPasswordConfirm'];
+
+				if($strPassword != $strPasswordConfirm){
+					$arrResponse = array('status' => false,'msg'=>'Las contraseñas no coinciden');
+				}else{
+					$arrResponseUser = $this->login->getUsuario($strEmail, $strToken);
+					if(empty($arrResponseUser)){
+						$arrResponse = array('status' => false,'msg'=>'Error de datos.');
+					}else{
+						$strPassword = hash("SHA256",$strPassword);
+						$requestPass = $this->login->insertPassword($intIdpersona, $strPassword);
+
+						if($requestPass){
+							$arrResponse = array('status' => true, 'msg' => 'Contraseña actualizada');
+						}else{
+							$arrResponse = array('status' => false, 'msg' => 'No es posible realizar el proceso, intente más tarde.');
+						}
+					}
+				}
+			}
+			echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
 			die();
 		}
     }

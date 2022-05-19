@@ -847,6 +847,10 @@ video{
 .account i{
     font-size: 200px;
 }
+#formReset{
+    margin: auto;
+    width: 300px;
+}
 
 /*************************Footer**************************/
 footer{

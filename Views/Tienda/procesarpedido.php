@@ -95,7 +95,20 @@
                                     <label for="txtPassword" class="form-label">Contraseña</label>
                                     <input type="password" class="form-control" id="txtPassword" name="txtPassword">
                                 </div>
-                                <button type="submit" class="btn_content" id="btnLogin">Iniciar sesión</button>
+                                <div class="d-flex justify-content-between flex-wrap">
+                                    <button type="submit" class="btn_content" id="btnLogin">Iniciar sesión</button>
+                                    <a href="#" id="btnForget">¿Olvidaste la contraseña?</a>
+                                </div>
+                            </form>
+                            <form name="formRecovery" id="formRecovery" action="" class="p-4 d-none">
+                                <div class="mb-3">
+                                    <label for="txtEmail" class="form-label">Correo electrónico</label>
+                                    <input type="email" class="form-control" id="txtEmailRecovery" name="txtEmailRecovery" aria-describedby="emailHelp">
+                                </div>
+                                <div class="d-flex justify-content-between flex-wrap">
+                                    <button type="submit" class="btn_content" id="btnForgetForm">Enviar</button>
+                                    <a href="#" id="btnBack">iniciar sesión</a>
+                                </div>
                             </form>
                         </div>
                         <div class="tab-pane fade" id="registrar" role="tabpanel" aria-labelledby="registrar-tab">
