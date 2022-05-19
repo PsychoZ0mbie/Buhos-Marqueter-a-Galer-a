@@ -1,6 +1,21 @@
 'use strict'
 let loading = document.querySelector("#divLoading");
 
+/*********************************************************************Home page************************************************************************ */
+if(document.querySelector("#home")){
+    let url = base_url+"/tienda/getCuadrosAl";
+    request(url,"","get").then(function(objData){
+        //loading.style.display ="none";
+        let parent = document.querySelector("#itemsGallery").parentElement;
+        let child = document.querySelector("#itemsGallery");
+        let fragment = document.createDocumentFragment();
+
+        child.innerHTML = objData.html;
+        fragment.appendChild(child);
+        parent.appendChild(fragment); 
+    });
+}
+
 /*********************************************************************Frame page************************************************************************ */
 
 if(document.querySelector("#marqueteria")){

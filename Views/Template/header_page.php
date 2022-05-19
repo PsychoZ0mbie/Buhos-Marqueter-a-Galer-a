@@ -47,7 +47,7 @@
     <!--Resources styles-->
     <link rel="stylesheet" href="<?=media();?>/template/Assets/css/bootstrap/bootstrap.min.css">
     <!-- My css -->
-    <link rel="stylesheet" href="<?=media();?>/template/Assets/css/style.css?n=1">
+    <link rel="stylesheet" href="<?=media();?>/template/Assets/css/style.css?v=<?php echo rand();?>">
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8MPBNE6BYH"></script>

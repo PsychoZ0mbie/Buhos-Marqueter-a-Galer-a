@@ -4,50 +4,52 @@
     $galeria = $data['galeria'];
     $urlProducto = base_url()."/catalogo/producto/";*/
 ?>
-<main id="<?=$data['page_name']?>">
+<main  id="<?=$data['page_name']?>">
     <section>
-        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a href="<?=base_url()?>/tienda/marqueteria">
-                        <img src="<?=media();?>/template/Assets/images/uploads/banner1.gif" class="d-block w-100" alt="Dale estilo a tus cuadros con las mejores molduras">
-                        <div class="carousel-caption">
-                            <p>Dale estilo a tus cuadros con las mejores molduras</p>
-                            <button class="btn_content">Ver más</button>
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="<?=base_url()?>/tienda/galeria">
-                    <img src="<?=media();?>/template/Assets/images/uploads/banner2.gif" class="d-block w-100" alt="Obras cargadas con emoción y creatividad">
-                    <div class="carousel-caption">
-                        <p>Obras cargadas con emoción y creatividad</p>
-                        <button class="btn_content">Ver más</button>
-                    </div>
-                    </a>
-                </div>
+        <div class="presentation_video">
+            <video autoplay="autoplay" loop="loop" muted playsinline preload="auto" oncontextmenu="return false;">
+                <source src="<?=media();?>/images/uploads/video.mp4" type="video/mp4">
+            </video>
+            <div class="presentation_title text-center">
+                <h1>Marquetería tradicional y moderna, enmarca sin salir de casa!</h1>
+                <a href="<?=base_url()?>/tienda/marqueteria" class="btn_content">Empezar ya</a>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
-        <div class="container presentation d-none mt-4">
-            <h1 class=""><strong>Tienda en línea de marcos a medida y obras de arte. Venta directa al público</strong></h1>
-            <p class="mt-3">
-                Somos la <strong>mejor marquetería</strong> del departamento del Meta/Colombia. Si lo que desea son marcos para espejos, diplomas,
-                cuadros, fotos, lienzos... Somos su tienda ideal. Disponemos de un amplio catálogo de 
-                <strong>molduras</strong>.
-            </p>
-            <p>
-                Visite nuestra <strong>galería de arte</strong>, encontrará
-                cuadros de distintas categorías y técnicas. 
-            </p>
+    </section>
+    <section>
+        <div class="container services">
+          <h2 class="text__color text-center mt-4"><strong>Marquetería y galería a tu gusto</strong></h1>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="services_item">
+                <i class="fas fa-certificate"></i>
+                <h3>Material de calidad</h3>
+                <p>Todos nuestros materiales son escogidos para garantizar la conservación de todos nuestros trabajos.
+                </p>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="services_item">
+                <i class="fas fa-ruler"></i>
+                <h3>Hecho a mano y a medida</h3>
+                <p>Todos nuestros marcos y obras son hechos a mano y a las medidas requeridas por el cliente.</p>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="services_item">
+                <i class="fas fa-grin-beam"></i>
+                <h3>Satisfacción garantizada</h3>
+                <p>Las mejores soluciones para las necesidades de nuestros clientes, garantizando siempre el gusto y la satisfacción por nuestro trabajo.</p>
+              </div>
+            </div>
+          </div>
         </div>
+    </section>
+    <section>
+        <div class="container text-center cover_presentation">
+            <h2><strong>Nuestras obras</strong></h2>
+        </div>
+        <div class="d-flex justify-content-center flex-wrap position-relative mt-4" id="itemsGallery"></div>
     </section>
 </main>
 <?php footerPage($data);?>    

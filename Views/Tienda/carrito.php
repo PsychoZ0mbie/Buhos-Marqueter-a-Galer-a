@@ -52,7 +52,7 @@
                         <p>Después de recibir tu pedido, nos comunicaremos contigo para confirmar sus datos y organizar el pago.</p>
                     </div>
                     <hr>
-                    <a href="<?=base_url()?>/tienda/procesarPedido" class="btn_content" id="btn_pedido">Procesar pedido</a>
+                    <a href="<?=base_url()?>/tienda/procesarPedido" class="btn_content bg-dark text-white" id="btn_pedido">Procesar pedido</a>
                 </div>
             </div>
         </form>

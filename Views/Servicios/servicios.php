@@ -9,38 +9,7 @@
         <div class="container text-center mt-4 cover_presentation">
           <h2><strong>¿Qué podemos hacer por ti?</strong></h2>
         </div>
-        <div class="container services">
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="services_item">
-                <i class="fas fa-crop-alt"></i>
-                <h3>Marquetería</h3>
-                <p>Marquetería tradicional y moderna para diplomas, fotografías, afiches y obras de arte. Fabricamos
-                  bastidores y retablos.
-                </p>
-                <a href="<?=base_url()?>/contacto" class="btn_content">Contactar</a>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="services_item">
-                <i class="fas fa-palette"></i>
-                <h3>Obras personalizadas</h3>
-                <p>Obras de arte a tu gusto, trae tu boceto o imágen y nosotros te aportamos
-                  la mejor solución.</p>
-                  <a href="<?=base_url()?>/contacto" class="btn_content">Contactar</a>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="services_item">
-                <i class="fas fa-undo"></i>
-                <h3>Restauración</h3>
-                <p>Restauramos tus obras de arte, esculturas, marcos, muebles y objetos artísticos.</p>
-                <a href="<?=base_url()?>/contacto" class="btn_content">Contactar</a>
-              </div>
-            </div>
-          </div>
-          
-        </div>
+        
        </section>
        <section class="m-4">
             <div class="container why_content">

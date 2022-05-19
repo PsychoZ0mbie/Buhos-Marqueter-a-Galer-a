@@ -12,7 +12,7 @@
 		public function home($params){
 			$data['page_tag'] = NOMBRE_EMPRESA;
 			$data['page_title'] = NOMBRE_EMPRESA;
-			$data['page_name'] = NOMBRE_EMPRESA;
+			$data['page_name'] = "home";
 			$this->views->getView($this,"home",$data); 
 		}
 

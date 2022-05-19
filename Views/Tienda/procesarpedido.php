@@ -73,7 +73,7 @@
                         <label for="txtComentario" class="form-label">Escribe un comentario</label>
                         <textarea class="form-control" id="txtComentario" name="txtComentario" rows="5"></textarea>
                     </div>
-                    <button type="submit" class="btn_content" id="btnOrder">Realizar pedido</button>
+                    <button type="submit" class="btn_content bg-dark text-white" id="btnOrder">Realizar pedido</button>
                 </form>
                 <?php }else{?>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
