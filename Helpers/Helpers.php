@@ -63,6 +63,10 @@
         $token = $r1.'-'.$r2.'-'.$r3.'-'.$r4;
         return $token;
     }
+    function code(){
+        $code = bin2hex(random_bytes(3));;
+        return $code;
+    }
     //Producción
     /*function sendEmail($data,$template){
         $mail = new PHPMailer(true);

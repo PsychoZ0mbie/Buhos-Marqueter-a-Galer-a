@@ -716,33 +716,67 @@
             unset($_SESSION['ordendata']);
         }
         /******************************Cuenta************************************/
-		public function setCliente(){
-			if($_POST){
+        public function confirmCliente(){
+            if($_POST){
 				if(empty($_POST['txtNombreCliente']) || empty($_POST['txtApellidoCliente']) || empty($_POST['txtEmailCliente']) || empty($_POST['txtPasswordCliente'])){
                     $arrResponse=array("status" => false, "msg" => "Datos incorrectos");
                 }else{
                     $strNombre = ucwords(strClean($_POST['txtNombreCliente']));
                     $strApellido = ucwords(strClean($_POST['txtApellidoCliente']));
                     $strEmail = strtolower(strClean($_POST['txtEmailCliente']));
-                    $strPassword = hash("SHA256",$_POST['txtPasswordCliente']);
-                    $strPicture = "avatar.png";
-                    $rolid = 2;
-
-                    $request = $this->registroCliente($strNombre,$strApellido,$strPicture,$strEmail,$strPassword,$rolid);
-                    if($request > 0){
+                    $codigo = code(); 
+                    $dataUsuario = array('nombreUsuario'=> $strNombre." ".$strApellido, 
+                                        'email_remitente' => EMAIL_REMITENTE, 
+                                        'email_usuario'=>$strEmail, 
+                                        'asunto' =>'Código - '.NOMBRE_REMITENTE,
+                                        'codigo' => $codigo);
+                    $_SESSION['codigo'] = $codigo;
+                    $sendEmail = sendEmail($dataUsuario,'email_confirmar_cliente');
+                    if($sendEmail){
+                        $arrResponse = array("status"=>true,"msg"=>"Se ha enviado un código a tu correo para validar tus datos.");
                         
-						$_SESSION['idUser'] = $request;
-						$_SESSION['login'] = true;
-
-						$arrData = $this->login->sessionLogin($_SESSION['idUser']);
-						sessionUser($_SESSION['idUser']);
-
-                        $arrResponse = array("status" => true,"msg"=>"Te has registrado exitosamente.");
-                    }else if($request =="exist"){
-                        $arrResponse = array("status" => false,"msg"=>"El usuario ya existe, por favor inicia sesión.");
                     }else{
-                        $arrResponse = array("status" => false,"msg"=>"No es posible almacenar datos, inténtelo más tarde");
+                        $arrResponse = array("status"=>false,"msg"=>"Ha ocurrido un error, inténtelo más tarde.");
+                    }
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 
+			}
+			die();
+        }
+		public function setCliente(){
+			if($_POST){
+				if(empty($_POST['txtNombreCliente']) || empty($_POST['txtApellidoCliente']) || empty($_POST['txtEmailCliente']) || empty($_POST['txtPasswordCliente']) || empty($_POST['codigo'])){
+                    $arrResponse=array("status" => false, "msg" => "Datos incorrectos");
+                }else{
+                    if($_POST['codigo'] == $_SESSION['codigo']){
+                        unset($_SESSION['codigo']);
+
+                        $strNombre = ucwords(strClean($_POST['txtNombreCliente']));
+                        $strApellido = ucwords(strClean($_POST['txtApellidoCliente']));
+                        $strEmail = strtolower(strClean($_POST['txtEmailCliente']));
+                        $strPassword = hash("SHA256",$_POST['txtPasswordCliente']);
+                        $strPicture = "avatar.png";
+                        $rolid = 2;
+    
+                        $request = $this->registroCliente($strNombre,$strApellido,$strPicture,$strEmail,$strPassword,$rolid);
+                        if($request > 0){
+                            
+                            $_SESSION['idUser'] = $request;
+                            $_SESSION['login'] = true;
+    
+                            $arrData = $this->login->sessionLogin($_SESSION['idUser']);
+                            sessionUser($_SESSION['idUser']);
+    
+                            $arrResponse = array("status" => true,"msg"=>"Te has registrado exitosamente.");
+                        }else if($request =="exist"){
+                            $arrResponse = array("status" => false,"msg"=>"El usuario ya existe, por favor inicia sesión.");
+                        }else{
+                            $arrResponse = array("status" => false,"msg"=>"No es posible almacenar datos, inténtelo más tarde");
+    
+                        }
+                    }else{
+                        $arrResponse = array("status" => false,"msg"=>"Código incorrecto, inténtalo de nuevo.");
                     }
 
                 }

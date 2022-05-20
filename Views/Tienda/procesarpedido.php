@@ -117,13 +117,13 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="txtNombreCliente" class="form-label">Nombres</label>
-                                            <input type="text" class="form-control" id="txtNombreCliente" name="txtNombreCliente" required>
+                                            <input type="text" class="form-control" id="txtNombreCliente" name="txtNombreCliente" placeholder="Jhon" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="txtApellidoCliente" class="form-label">Apellidos</label>
-                                            <input type="text" class="form-control" id="txtApellidoCliente" name="txtApellidoCliente" required>
+                                            <input type="text" class="form-control" id="txtApellidoCliente" name="txtApellidoCliente" placeholder="Doe" required>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +147,14 @@
                                         He leido y acepto los <a href="<?= base_url()?>/terminos" target="_blank">Términos y Condiciones </a>y la<a href="<?= base_url()?>/politicas" target="_blank"> Política de Privacidad y de Cookies.</a>
                                     </label>
                                 </div>
-                                <button type="submit" class="btn_content mt-4" id="btnRegister">Registrarse</button>
+                                <button type="button" class="btn_content mt-4" id="btnSendCode">Registrarse</button>
+                            </form>
+                            <form class="d-none p-4" id="sendCode">
+                                <div class="mb-3">
+                                    <label for="intCodigo" class="form-label">Código de validación</label>
+                                    <input type="text" class="form-control" id="intCodigo" name="intCodigo" aria-describedby="emailHelp" required>
+                                </div>
+                                <button type="button" class="btn_content mt-4" id="btnRegister">Enviar</button>
                             </form>
                         </div>
                     </div>

@@ -1274,9 +1274,9 @@ if(document.querySelector("#procesarpedido")){
     if(document.querySelector("#formRegister")){
         let formRegister = document.querySelector("#formRegister");
         let btnRegister = document.querySelector("#btnRegister");
-        formRegister.addEventListener("submit",function(e){
-            e.preventDefault();
-    
+        let btnSendCode = document.querySelector("#btnSendCode");
+
+        btnSendCode.addEventListener("click",function(){
             let strNombre = document.querySelector("#txtNombreCliente").value;
             let strApellido = document.querySelector("#txtApellidoCliente").value;
             let strEmail = document.querySelector("#txtEmailCliente").value;
@@ -1301,8 +1301,52 @@ if(document.querySelector("#procesarpedido")){
                 return false;
             }
             loading.style.display = "flex";
+            let url = base_url+"/Tienda/confirmCliente";
+            let formData = new FormData(formRegister);
+            btnSendCode.setAttribute("disabled","");
+            request(url,formData,"post").then(function(objData){
+                btnSendCode.removeAttribute("disabled");
+                loading.style.display = "none";
+                if(objData.status){
+                    Swal.fire("",objData.msg,"success");
+                    document.querySelector("#sendCode").classList.remove("d-none");
+                    formRegister.classList.add("d-none");
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                } 
+            });
+        });
+
+        btnRegister.addEventListener("click",function(){
+            let strNombre = document.querySelector("#txtNombreCliente").value;
+            let strApellido = document.querySelector("#txtApellidoCliente").value;
+            let strEmail = document.querySelector("#txtEmailCliente").value;
+            let strPassword = document.querySelector("#txtPasswordCliente").value;
+            let intCodigo = document.querySelector("#intCodigo").value;
+
+            if(strNombre == "" || strApellido == "" || strEmail == "" || strPassword == ""){
+                Swal.fire("Error","Todos los campos son obligatorios.","error");
+                return false;
+            }
+            if(!fntEmailValidate(strEmail)){
+                Swal.fire("Error","El correo electrónico ingresado no es valido.","error");
+                return false;
+            }
+            if(strPassword.length < 8){
+                Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres.","error");
+                return false;
+            }
+
+            if(intCodigo == ""){
+                Swal.fire("Error","Debes introducir el código que se te envió al correo.","error");
+                return false;
+            }
+
+            loading.style.display = "flex";
             let url = base_url+"/Tienda/setCliente";
             let formData = new FormData(formRegister);
+            formData.append("codigo",intCodigo);
+
             btnRegister.setAttribute("disabled","");
             request(url,formData,"post").then(function(objData){
                 btnRegister.removeAttribute("disabled");
@@ -1321,7 +1365,7 @@ if(document.querySelector("#procesarpedido")){
                     Swal.fire("Error",objData.msg,"error");
                 } 
             });
-        });
+        })
     }
 }
 
@@ -1424,9 +1468,9 @@ if(document.querySelector("#cuenta")){
     if(document.querySelector("#formRegister")){
         let formRegister = document.querySelector("#formRegister");
         let btnRegister = document.querySelector("#btnRegister");
-        formRegister.addEventListener("submit",function(e){
-            e.preventDefault();
-            
+        let btnSendCode = document.querySelector("#btnSendCode");
+
+        btnSendCode.addEventListener("click",function(){
             let strNombre = document.querySelector("#txtNombreCliente").value;
             let strApellido = document.querySelector("#txtApellidoCliente").value;
             let strEmail = document.querySelector("#txtEmailCliente").value;
@@ -1451,8 +1495,52 @@ if(document.querySelector("#cuenta")){
                 return false;
             }
             loading.style.display = "flex";
+            let url = base_url+"/Tienda/confirmCliente";
+            let formData = new FormData(formRegister);
+            btnSendCode.setAttribute("disabled","");
+            request(url,formData,"post").then(function(objData){
+                btnSendCode.removeAttribute("disabled");
+                loading.style.display = "none";
+                if(objData.status){
+                    Swal.fire("",objData.msg,"success");
+                    document.querySelector("#sendCode").classList.remove("d-none");
+                    formRegister.classList.add("d-none");
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                } 
+            });
+        });
+
+        btnRegister.addEventListener("click",function(){
+            let strNombre = document.querySelector("#txtNombreCliente").value;
+            let strApellido = document.querySelector("#txtApellidoCliente").value;
+            let strEmail = document.querySelector("#txtEmailCliente").value;
+            let strPassword = document.querySelector("#txtPasswordCliente").value;
+            let intCodigo = document.querySelector("#intCodigo").value;
+
+            if(strNombre == "" || strApellido == "" || strEmail == "" || strPassword == ""){
+                Swal.fire("Error","Todos los campos son obligatorios.","error");
+                return false;
+            }
+            if(!fntEmailValidate(strEmail)){
+                Swal.fire("Error","El correo electrónico ingresado no es valido.","error");
+                return false;
+            }
+            if(strPassword.length < 8){
+                Swal.fire("Error","La contraseña debe tener mínimo 8 carácteres.","error");
+                return false;
+            }
+
+            if(intCodigo == ""){
+                Swal.fire("Error","Debes introducir el código que se te envió al correo.","error");
+                return false;
+            }
+
+            loading.style.display = "flex";
             let url = base_url+"/Tienda/setCliente";
             let formData = new FormData(formRegister);
+            formData.append("codigo",intCodigo);
+
             btnRegister.setAttribute("disabled","");
             request(url,formData,"post").then(function(objData){
                 btnRegister.removeAttribute("disabled");
@@ -1471,7 +1559,7 @@ if(document.querySelector("#cuenta")){
                     Swal.fire("Error",objData.msg,"error");
                 } 
             });
-        });
+        })
     }
 }
 
