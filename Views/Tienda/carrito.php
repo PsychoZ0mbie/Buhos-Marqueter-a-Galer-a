@@ -49,7 +49,7 @@
                     <hr>
                     <div class="bg-light p-2 border border-1 border-dark rounded">
                         <strong>Nota:</strong>
-                        <p>Después de recibir tu pedido, nos comunicaremos contigo para confirmar sus datos y organizar el pago.</p>
+                        <p>Después de recibir tu pedido, nos comunicaremos contigo para confirmar sus datos y organizar la entrega.</p>
                     </div>
                     <hr>
                     <a href="<?=base_url()?>/tienda/procesarPedido" class="btn_content bg-dark text-white" id="btn_pedido">Procesar pedido</a>

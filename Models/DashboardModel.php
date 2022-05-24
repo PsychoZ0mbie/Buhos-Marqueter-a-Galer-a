@@ -24,8 +24,14 @@
             $total = $request['total'];
             return $total;
         }
-        public function selectProductos(){
-            $sql ="SELECT COUNT(*) as total FROM product";
+        public function selectMolduras(){
+            $sql ="SELECT COUNT(*) as total FROM product WHERE topicid =1 ";
+            $request=$this->select($sql);
+            $total = $request['total'];
+            return $total;
+        }
+        public function selectCuadros(){
+            $sql ="SELECT COUNT(*) as total FROM product WHERE topicid =2";
             $request=$this->select($sql);
             $total = $request['total'];
             return $total;
@@ -43,7 +49,7 @@
         }
 
         public function selectVentas(){
-            $sql ="SELECT * FROM orderdata WHERE status ='Enviado'";
+            $sql ="SELECT * FROM orderdata WHERE status ='approved'";
             $request=$this->select_all($sql);
             $total=0;
             if(count($request)>0){

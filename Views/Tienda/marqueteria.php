@@ -11,7 +11,7 @@
                         <label for="measuresImg" title="Subir foto"><a class="btn_content btnUp mt-4"><i class="fas fa-camera"></i></a></label>
                         <input class="d-none" type="file" id="measuresImg" name="measuresImg">
                         <div class="measures__frame">
-                            <img src="<?=media()?>/template/Assets/images/uploads/logo.png" alt="">
+                            <img src="<?=media()?>/template/Assets/images/uploads/logo.png" alt="" id="printImg">
                         </div>
                         <div class="measures__margin">
 
@@ -25,6 +25,7 @@
                             </div> 
                             <p id="rangeZoomData" class="text-center m-0">100%</p>
                         </div>
+                        <div id="quality"></div>
                     </div>
                 </div>
                 <div class="col-lg-6 pages mb-4">

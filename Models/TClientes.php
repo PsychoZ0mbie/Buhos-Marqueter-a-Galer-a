@@ -17,6 +17,7 @@
         private $intTelefono;
         private $intPrice;
         private $strStatus;
+        private $strTipoPago;
 
 
         public function registroCliente($strNombre,$strApellido,$strPicture,$strEmail,$strPassword,$rolid){
@@ -152,7 +153,6 @@
             $this->intTelefono = $intTelefono;
             $this->intPrice = $intPrice;
             $this->strStatus = $status;
-
             $sql = "INSERT INTO orderdata(personid,firstname,lastname,identification,email,departmentid,cityid,address,comment,phone,price,status)
                     VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
             $arrData = array($this->intIdUser,
@@ -194,13 +194,14 @@
                                     );
                     $requestPro = $this->con->insert($query,$arrData);
                 }else if($pro['idcategoria'] == 1){
-                    $query = "INSERT INTO orderdetail(orderdataid,personid,productid,topicid,title,margintype,bordertype,glasstype,margin,measureimage,
-                                        measureframe,quantity,price)
-                            VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    $query = "INSERT INTO orderdetail(orderdataid,personid,productid,topicid,picture,title,margintype,bordertype,glasstype,margin,measureimage,
+                                        measureframe,print,quantity,price)
+                            VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     $arrData=array($intIdPedido,
                                     $this->intIdUser,
                                     $pro['idproducto'],
                                     $pro['idcategoria'],
+                                    $pro['img'],
                                     $pro['referenciaMoldura'],
                                     $pro['tipoMargen'],
                                     $pro['tipoBorde'],
@@ -208,6 +209,7 @@
                                     $pro['margen'],
                                     $pro['medidasImagen'],
                                     $pro['medidasMarco'],
+                                    $pro['impresion'],
                                     $pro['cantidad'],
                                     $pro['precio'],
                                     );
@@ -215,6 +217,18 @@
                 }
             }
             return $requestPro;
+        }
+        public function updatePedido($idpedido,$payment,$status){
+            $this->con = new Mysql();
+            $sql = "UPDATE orderdata SET paymenttype=?, status=? WHERE idorderdata = $idpedido";
+            $array = array($payment,$status);
+            $request = $this->con->update($sql,$array);
+        }
+        public function updateProducto($idproducto){
+            $this->con = new Mysql();
+            $sql = "UPDATE product SET status = ? WHERE idproduct = $idproducto";
+            $array =array(2);
+            $this->con->update($sql,$array);
         }
         public function getPedido($pedido){
             $this->con = new Mysql();
@@ -257,6 +271,7 @@
                                         o.margin,
                                         o.measureimage,
                                         o.measureframe,
+                                        o.print,
                                         o.quantity,
                                         o.price,
                                         p.idproduct
@@ -294,7 +309,9 @@
 			$request = $this->con->select_all($sql);
 			return $request;
 		}
-        public function deleteDetalleTemp(){
+        public function deleteDetalleTemp($idUser){
+            $this->intIdUser = $idUser;
+            $this->con = new Mysql();
             $sql = "DELETE FROM tempdetail
                 WHERE personid = $this->intIdUser";
             $requestDel = $this->con->delete($sql);

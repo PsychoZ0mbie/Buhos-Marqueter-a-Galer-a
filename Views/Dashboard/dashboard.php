@@ -32,6 +32,22 @@ headerAdmin($data);
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
+          <div class="widget-small primary coloured-icon"><i class="icon fa fa-crop fa-3x"></i>
+            <div class="info">
+              <h4>Molduras</h4>
+              <p><b><?=$data['molduras']?></b></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="widget-small warning coloured-icon"><i class="icon fa fa-caret-square-o-right fa-3x"></i>
+            <div class="info">
+              <h4>Cuadros</h4>
+              <p><b><?=$data['cuadros']?></b></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
           <div class="widget-small danger coloured-icon"><i class="icon fa fa-envelope fa-3x"></i>
             <div class="info">
               <h4>Mensajes</h4>
@@ -47,7 +63,7 @@ headerAdmin($data);
             </div>
           </div>
         </div>
-        <div class="col-md-12">
+        <!--<div class="col-md-12">
           <div class="tile">
             <h3 class="tile-title">Últimos pedidos</h3>
             <div class="table-responsive">
@@ -65,7 +81,7 @@ headerAdmin($data);
               </table>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
     </main>
 <?php footerAdmin($data);?>

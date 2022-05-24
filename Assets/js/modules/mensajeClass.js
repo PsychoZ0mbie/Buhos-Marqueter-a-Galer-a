@@ -19,7 +19,7 @@ export default class Mensaje extends Interface{
             let html=""
     
             for (let i = 0; i < objData.length; i++) {
-                let url = base_url+"/assets/images/uploads/mensaje.png";
+                let url = base_url+"/Assets/images/uploads/mensaje.png";
                 let name = objData[i]['firstname']+" "+objData[i]['lastname'];
 
                 html += `
@@ -59,7 +59,7 @@ export default class Mensaje extends Interface{
             let html="";
     
             for (let i = 0; i < objData.length; i++) {
-                let url = base_url+"/assets/images/uploads/mensaje.png";
+                let url = base_url+"/Assets/images/uploads/mensaje.png";
                 let name = objData[i]['firstname']+" "+objData[i]['lastname'];
 
                 html += `

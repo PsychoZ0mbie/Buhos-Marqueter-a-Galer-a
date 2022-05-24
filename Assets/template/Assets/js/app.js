@@ -21,13 +21,28 @@ if(document.querySelector("#home")){
 if(document.querySelector("#marqueteria")){
     /******************************Dimensions frame******************************** */
     let dimensionDefault = 200;
-    if(document.querySelector("#measuresImg")){
-        let img = document.querySelector("#measuresImg");
-        let imgLocation = ".measures__frame img";
-        img.addEventListener("change",function(){
-            uploadImg(img,imgLocation);
-        });
-    }
+    let img = document.querySelector("#measuresImg");
+    let picture = document.querySelector("#printImg");
+    let imgLocation = ".measures__frame img";
+    let tamaño = "";
+    let flag =false;
+
+    img.addEventListener("change",function(){
+        uploadImg(img,imgLocation);
+        setTimeout(function() {
+            flag = true;
+            let height = document.querySelector("#intHeight").value;
+            let width = document.querySelector("#intWidth").value;
+            let resolution = resolutionImg(height,width,picture);
+            if(resolution){
+                document.querySelector("#quality").innerHTML = `<p class="text-center text-success">Imágen apta para impresión</p>`;
+            }else{
+                document.querySelector("#quality").innerHTML = `
+                <p class="text-center text-danger m-0">La imágen no es apta <br> para las dimensiones</p>
+                `;
+            }
+        }, 100);
+    });
 
     let inputMeasure = document.querySelectorAll(".btn_number div.d-flex");
     let measureFrame = document.querySelector(".measures__frame");
@@ -47,14 +62,28 @@ if(document.querySelector("#marqueteria")){
             measureFrame.style.border="none";
             measureMargin.style.border ="none";
             measureMargin.style.background ="none";
-            
+
+            let height = document.querySelector("#intHeight").value;
+            let width = document.querySelector("#intWidth").value;
+
             if(e.target.value < 10 || e.target.value > 200){
                 Swal.fire("Error","Las dimensiones deben ser mínimo de 10 cm o máximo 200 cm!","error");
                 e.target.value = 10;
                 return false;
             }
-            document.querySelector("#txtMedidasImg").innerHTML = document.querySelector("#intHeight").value+"cm X "+document.querySelector("#intWidth").value+"cm";
-            
+            document.querySelector("#txtMedidasImg").innerHTML = height+"cm X "+width+"cm";
+            if(flag){
+                let resolution = resolutionImg(height,width,picture);
+                if(resolution){
+                    document.querySelector("#quality").innerHTML = `<p class="text-center text-success">Imágen apta para impresión</p>`;
+                }else{
+                    document.querySelector("#quality").innerHTML = `
+                    <p class="text-center text-danger m-0">La imágen no es apta <br> para las dimensiones</p>
+                    `;
+                }
+
+            }
+
             let inputValue = String(parseFloat(e.target.value)+dimensionDefault)+"px";
             if(i==0){  
                 measureFrame.style.height = inputValue;
@@ -63,6 +92,8 @@ if(document.querySelector("#marqueteria")){
                 measureFrame.style.width = inputValue;
                 measureMargin.style.width = inputValue;
             }
+
+
         })
     }
 
@@ -95,8 +126,8 @@ if(document.querySelector("#marqueteria")){
             measureMargin.style.background ="none";
 
             document.querySelector(".measures__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$0 COP`;
-            document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$$0 COP`;
-            document.querySelector(".measures__border__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$$0 COP`;
+            document.querySelector(".measures__margin__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$0 COP`;
+            document.querySelector(".measures__border__custom .price").innerHTML = `<strong class="text__color">Precio: </strong>$0 COP`;
             document.querySelector("#txtPrice").innerHTML = "$0 COP";
             document.querySelector("#txtMolduras").innerHTML = textType;
             document.querySelector("#selectMoldura").classList.remove("d-none");
@@ -703,23 +734,6 @@ if(document.querySelector("#marqueteria")){
         document.querySelector("#rangeZoomData").innerHTML = rangeValue+"%";
     }); 
 
-    /*measureContainer.addEventListener("mousemove",function(e){
-        let clientX = e.clientX-measureContainer.offsetLeft;
-        let clientY = e.clientY-measureContainer.offsetTop;
-        let mWidth = measureContainer.offsetWidth;
-        let mheight = measureContainer.offsetHeight;
-
-        clientX = clientX / mWidth * 100;
-        clientY = clientY / mheight * 100;
-        
-        measureMargin.style.transform = "translate(-"+clientX+"%,-"+clientY+"%) scale(2)";
-        measureFrame.style.transform = "translate(-"+clientX+"%,-"+clientY+"%) scale(2)";
-    })
-    measureContainer.addEventListener("mouseleave",function(){
-        measureMargin.style.transform = "translate(-50%,-50%) scale(1)";
-        measureFrame.style.transform = "translate(-50%,-50%) scale(1)";
-    })*/
-
     /******************************Next & Previous buttons******************************** */
 
     btnNext.addEventListener("click",function(){
@@ -790,14 +804,7 @@ if(document.querySelector("#marqueteria")){
             let strMargin = document.querySelector("#txtMargen").innerHTML;
             let strBorder = document.querySelector("#txtBorde").innerHTML;
             let strGlass = document.querySelector("#txtVidrio").innerHTML;
-            
-            let urlRequest = base_url+"/tienda/agregarCarrito";
             let formData = new FormData();
-
-            if(intAddCant < 0){
-                return false;
-            }
-
             formData.append("intId",intId);
             formData.append("strMargin",strMargin);
             formData.append("strBorder",strBorder);
@@ -810,22 +817,135 @@ if(document.querySelector("#marqueteria")){
             formData.append("intBorderType",intBorderType);
             formData.append("intGlassType",intGlassType);
             formData.append("intIdTopic",1);
+            if(intAddCant < 0){
+                return false;
+            }
 
-            
-            
             loading.style.display="flex";
             addCart.setAttribute("disabled","");
-            request(urlRequest,formData,"post").then(function(objData){
-                addCart.removeAttribute("disabled");
-                loading.style.display="none";
-                if(objData.status){
-                    document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
-                    Swal.fire("Agregado",objData.msg,"success");
-                    
+            if(flag){
+                let height = document.querySelector("#intHeight").value;
+                let width = document.querySelector("#intWidth").value;
+                let resolution = resolutionImg(height,width,picture);
+                if(resolution){
+
+                    let url = base_url+"/tienda/calcularImpresion";
+                    loading.style.display = "flex";
+                    request(url,formData,"post").then(function(objData){
+                        let html = `¿Desea incluir la impresión de la imágen por <strong>${objData}</strong>?`;
+                        loading.style.display = "none";
+                        Swal.fire({
+                            title:"Impresión de imágen",
+                            html: html,
+                            showCancelButton:true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText:"Sí",
+                            cancelButtonText:"No"
+                        }).then(function(result){
+                            if(result.isConfirmed){
+                                let url = base_url+"/tienda/agregarCarrito";
+                                formData.append("boolPrint",true);
+                                formData.append("archivo",img.files[0]);
+                                loading.style.display = "flex";
+                                request(url,formData,"post").then(function(objData){
+                                    addCart.removeAttribute("disabled");
+                                    loading.style.display = "none";
+                                    if(objData.status){
+                                        document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                                        Swal.fire("Agregado",objData.msg,"success");
+                                    }else{
+                                        Swal.fire("Error",objData.msg,"error");
+                                    }
+                                });
+                            }else{
+                                let url = base_url+"/tienda/agregarCarrito";
+                                request(url,formData,"post").then(function(objData){
+                                    addCart.removeAttribute("disabled");
+                                    loading.style.display="none";
+                                    if(objData.status){
+                                        document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                                        Swal.fire("Agregado",objData.msg,"success");
+                                        
+                                    }else{
+                                        Swal.fire("Error",objData.msg,"error");
+                                    }
+                                });
+                            }
+                        });
+                    });
                 }else{
-                    Swal.fire("Error",objData.msg,"error");
+                    let url = base_url+"/tienda/calcularImpresion";
+                    loading.style.display = "flex";
+                    request(url,formData,"post").then(function(objData){
+                        let html = `
+                                    <p class="text-start">La imágen no es <strong class="text-danger">apta</strong>, puede hacer lo siguiente:</p><br>
+                                    <ul class="text-start">
+                                        <li>Agregar una imágen de mayor resolución</li>
+                                        <li>Reducir las dimensiones</li>
+                                    </ul>
+                                    <p>¿Desea incluir la impresión de la imágen de todas formas por <strong>${objData}</strong>?</p>`;
+                        loading.style.display = "none";
+                        Swal.fire({
+                            title:"Impresión de imágen",
+                            html: html,
+                            showDenyButton: true,
+                            showCancelButton:true,
+                            confirmButtonColor: '#3085d6',
+                            denyButtonColor:'#d33',
+                            confirmButtonText:"Sí",
+                            denyButtonText:"No",
+                            cancelButtonText:"Cancelar"
+                        }).then(function(result){
+                            if(result.isConfirmed){
+                                let url = base_url+"/tienda/agregarCarrito";
+                                formData.append("boolPrint",true);
+                                formData.append("archivo",img.files[0]);
+                                loading.style.display = "flex";
+                                request(url,formData,"post").then(function(objData){
+                                    addCart.removeAttribute("disabled");
+                                    loading.style.display = "none";
+                                    if(objData.status){
+                                        document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                                        Swal.fire("Agregado",objData.msg,"success");
+                                    }else{
+                                        Swal.fire("Error",objData.msg,"error");
+                                    }
+                                });
+                            }else if(result.isDenied){
+                                let url = base_url+"/tienda/agregarCarrito";
+                                request(url,formData,"post").then(function(objData){
+                                    addCart.removeAttribute("disabled");
+                                    loading.style.display="none";
+                                    if(objData.status){
+                                        document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                                        Swal.fire("Agregado",objData.msg,"success");
+                                        
+                                    }else{
+                                        Swal.fire("Error",objData.msg,"error");
+                                    }
+                                });
+                            }else{
+                                addCart.removeAttribute("disabled");
+                            }
+                        });
+                    });
                 }
-            });
+            }else{
+                let url = base_url+"/tienda/agregarCarrito";
+                request(url,formData,"post").then(function(objData){
+                    addCart.removeAttribute("disabled");
+                    loading.style.display="none";
+                    if(objData.status){
+                        document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
+                        Swal.fire("Agregado",objData.msg,"success");
+                        
+                    }else{
+                        Swal.fire("Error",objData.msg,"error");
+                    }
+                });
+            }
+            
             
         }else{
             Swal.fire("Error","No has elegido el marco.","error");
@@ -1070,6 +1190,7 @@ if(document.querySelector("#carrito")){
                         let margen =  element.getAttribute("m");
                         let medidasImagen =  element.getAttribute("mi");
                         let medidasMarco =  element.getAttribute("mm");
+                        let impresion= element.getAttribute("imp");
                         let url = base_url+"/tienda/actualizarCarrito"
                         let formData = new FormData();
     
@@ -1082,6 +1203,7 @@ if(document.querySelector("#carrito")){
                         formData.append("medidasImagen",medidasImagen);
                         formData.append("medidasMarco",medidasMarco);
                         formData.append("cantidad",cantidad);
+                        formData.append("impresion",impresion);
                         
                         request(url,formData,"post").then(function(objData){
                             if(objData.status){
@@ -1126,7 +1248,7 @@ if(document.querySelector("#procesarpedido")){
                 document.querySelector("#listCiudad").innerHTML = objData.html;
             });
         });
-        formOrden.addEventListener("submit",function(e){
+        btnOrder.addEventListener("click",function(e){
             e.preventDefault();
             let strNombre = document.querySelector("#txtNombreOrden").value;
             let strApellido = document.querySelector("#txtApellidoOrden").value;
@@ -1164,6 +1286,7 @@ if(document.querySelector("#procesarpedido")){
                 Swal.fire("Error","El correo ingresado es inválido, solo permite los siguientes correos: "+html,"error");
                 return false;
             }
+            //btnOrder.setAttribute("onclick","checkout.open()");
             let formData = new FormData(formOrden);
             let url=base_url+"/tienda/setPedido";
             btnOrder.setAttribute("disabled","");
@@ -1171,12 +1294,12 @@ if(document.querySelector("#procesarpedido")){
             request(url,formData,"post").then(function(objData){
                 loading.style.display = "none";
                 btnOrder.removeAttribute("disabled");
-            if(objData.status){
-                window.location=base_url+"/tienda/confirmarPedido"
-            }else{
-                Swal.fire("Error",objData.msg,"error");
-            }
-        })
+                if(objData.status){
+                    checkout.open();
+                }else{
+                    Swal.fire("Error",objData.msg,"error");
+                }
+            });
         });
     }
     if( document.querySelector("#formLogin")){
@@ -1562,7 +1685,6 @@ if(document.querySelector("#cuenta")){
         })
     }
 }
-
 if(document.querySelector("#recuperar")){
     let formReset = document.querySelector("#formReset");
     formReset.addEventListener("submit",function(e){

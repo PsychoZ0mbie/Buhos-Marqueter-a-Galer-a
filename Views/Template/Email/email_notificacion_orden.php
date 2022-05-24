@@ -106,7 +106,8 @@ $detalle = $data['pedido']['detalle'];
 				  <strong>Tipo de vidrio: </strong><?=$producto['glasstype']?><br>
 				  <strong>Margen: </strong><?=$producto['margin']?><br>
 				  <strong>Medidas de la imágen: </strong><?=$producto['measureimage']?><br>
-				  <strong>Medidas del marco: </strong><?=$producto['measureframe']?>
+				  <strong>Medidas del marco: </strong><?=$producto['measureframe']?><br>
+				  <strong>Impresión: </strong><?=$producto['print']?>
 			  </td>
 		      <td class="text-right"><?=formatNum($producto['price'])?></td>
 		      <td class="text-center"><?= $producto['quantity'] ?></td>
@@ -148,9 +149,7 @@ $detalle = $data['pedido']['detalle'];
 		  </tfoot>
 		</table>
 		<div class="text-center">
-			<p>Como todavía no ofrecemos el pago a través del sitio web,<br> 
-				nos comunicaremos contigo por WhatsApp, teléfono o correo electrónico<br> 
-				para organizar la entrega y el pago de tu compra</p>
+			<p>Pronto nos comunicaremos contigo para organizar la entrega.</p>
 			<h4>¡Gracias por confiar en nosotros!</h4>			
 		</div>
 	</div>									

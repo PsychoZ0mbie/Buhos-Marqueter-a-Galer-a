@@ -74,7 +74,56 @@
             $data['page_name'] = "procesarpedido";
             $this->views->getView($this,"procesarpedido",$data);
         }
+        public function confirmarPedido(){
+            if(empty($_SESSION['ordendata'])){
+                header("location: ".base_url());
+            }else{
+                $idUser = $_SESSION['idUser'];
+                $dataorden = $_SESSION['ordendata'];
+				$idpedido = openssl_decrypt($dataorden['orden'], ENCRIPTADO, KEY);
+                $payment = strClean($_GET['payment_type']);
+                $status = strClean($_GET['status']);
+
+                $this->updatePedido($idpedido,$payment,$status);
+
+                $pedidoInfo = $this->getPedido($idpedido);
+                $arrCarrito = $_SESSION['arrCarrito'];
+                for ($i=0; $i < count($arrCarrito) ; $i++) { 
+                   if($arrCarrito[$i]['idcategoria'] == 2){
+                       $this->updateProducto($arrCarrito[$i]['idproducto']);
+                   }
+                }
+                $dataEmail = array('email_remitente' => EMAIL_REMITENTE, 
+                                    'email_usuario'=>$pedidoInfo['orden']['email'], 
+                                    'email_copia'=>EMAIL_COPIA,
+                                    'asunto' =>'Se ha creado la orden No - '.$idpedido,
+                                    'pedido' =>$pedidoInfo);
+                $sendEmail = sendEmail($dataEmail, 'email_notificacion_orden');
+
+                $this->deleteDetalleTemp($idUser);
+                unset($_SESSION['arrCarrito']);
+                session_regenerate_id(true);
+
+				$data['page_tag'] = "Confirmar Pedido";
+				$data['page_title'] = "Confirmar Pedido";
+				$data['page_name'] = "confirmarpedido";
+				$data['orden'] = $idpedido;
+				$this->views->getView($this,"confirmarpedido",$data);
+            }
+            unset($_SESSION['ordendata']);
+        }
+        public function falloPedido(){
+            if(empty($_SESSION['arrCarrito'])){
+                header('location: '.base_url());
+                die();
+            }
+            $data['page_tag'] = "Fallo";
+            $data['page_title'] = "Fallo";
+            $data['page_name'] = "fallopedido";
+            $this->views->getView($this,"fallopedido",$data);
+        }
         /******************************Métodos de paginas************************************/
+
         /******************************Marquetería************************************/
         public function getMuestras($params){
             $params = strClean($params);
@@ -115,6 +164,16 @@
         public function getColor(){
             $request = $this->getColores();
             echo json_encode($request,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function calcularImpresion(){
+            if($_POST){
+                $intImagen = 30;
+                $intHeight = floatval($_POST['intHeight']);
+                $intWidth = floatval($_POST['intWidth']);
+                $resultado = ($intWidth * $intHeight)*$intImagen;
+                echo json_encode(formatNum($resultado),JSON_UNESCAPED_UNICODE);
+            }
             die();
         }
         public function calcularMarco(){
@@ -241,6 +300,22 @@
                             $dobleMarcoPrecio = 114;
                             $bocelPrecio = 40;
                             $vidrioPrecio = 9;
+                            $intImagen = 30;
+                            $impresion =0;
+                            $tipoImpresion="Sin impresion";
+                            $fotoData = "";
+                            $foto_name="";
+                            $url="";
+                            if(!empty($_POST['boolPrint'])){
+                                if($_POST['boolPrint']){
+                                    $impresion = ($intWidth*$intHeight)*$intImagen;
+                                    $tipoImpresion ="Con impresion";
+                                    $fotoData = $_FILES['archivo'];
+                                    $foto_name= 'impresion_'.bin2hex(random_bytes(6)).'.png';
+                                    $url = media()."/images/uploads/".$foto_name;
+                                    uploadImage($fotoData,$foto_name);
+                                }
+                            }
 
                             $precio = $requestMoldura['price'];
                             $desperdicio = $requestMoldura['waste'];
@@ -248,7 +323,7 @@
                             $margin = 0;
                             $borde = 0;
                             $vidrio = 0;
-
+                            
                             $area = ($intWidth + $intMargin)*($intHeight + $intMargin);
                             $perimetro = (($intWidth + $intHeight + $intMargin+$intMargin)*2) + $desperdicio;
 
@@ -268,7 +343,7 @@
                                 $vidrio = $area * $vidrioPrecio;
                             }
                             $precioMarco = (($perimetro*$precio) +$vidrio+$borde+$margin);
-                            $precioMarco = $precioMarco*$this->mano_obra;
+                            $precioMarco = ($precioMarco+$impresion)*$this->mano_obra;
 
                             $arrMarco = array(
                                 "idproducto"=>$intId,
@@ -281,7 +356,10 @@
                                 "medidasImagen"=>$intHeight."cm X ".$intWidth."cm",
                                 "medidasMarco"=>($intHeight+$intMargin)."cm X ".($intWidth+$intMargin)."cm",
                                 "cantidad"=>$intAddCant,
-                                "precio"=>$precioMarco                   
+                                "precio"=>$precioMarco,
+                                "impresion"=>$tipoImpresion,
+                                "img"=>$foto_name,
+                                "url"=> $url                   
                             );
 
                             if(isset($_SESSION['arrCarrito'])){
@@ -291,7 +369,8 @@
                                     if($arrCarrito[$i]['idproducto'] == $arrMarco['idproducto'] && $arrCarrito[$i]['referenciaMoldura'] == $arrMarco['referenciaMoldura']
                                     && $arrCarrito[$i]['tipoMargen'] == $arrMarco['tipoMargen'] && $arrCarrito[$i]['tipoBorde'] == $arrMarco['tipoBorde']
                                     && $arrCarrito[$i]['tipoVidrio'] == $arrMarco['tipoVidrio'] && $arrCarrito[$i]['margen'] == $arrMarco['margen'] 
-                                    && $arrCarrito[$i]['medidasImagen'] == $arrMarco['medidasImagen'] && $arrCarrito[$i]['medidasMarco'] == $arrMarco['medidasMarco']){
+                                    && $arrCarrito[$i]['medidasImagen'] == $arrMarco['medidasImagen'] && $arrCarrito[$i]['medidasMarco'] == $arrMarco['medidasMarco']
+                                    && $arrCarrito[$i]['impresion'] == $arrMarco['impresion']){
                                         $arrCarrito[$i]['cantidad'] += $intAddCant;
                                         $flag = false;
                                     }
@@ -382,19 +461,36 @@
                 for ($i=0; $i < count($request); $i++) {
                     $route=base_url()."/tienda/producto/".$request[$i]['route'];
                     $price=formatNum($request[$i]['price']);
-                    $html.='
-                    <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                        <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
-                        <div class="card-body text-center tex">
-                            <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
-                            <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
-                            <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
-                            <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
-                            <p class="card-text">'.$price.'</p>
-                            <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                    if($request[$i]['status'] == 2){
+                        $html.='
+                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
+                            <div class="card-body text-center tex">
+                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
+                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
+                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                <p class="card-text text-danger">Vendido</p>
+                                <a href="'.$route.'" class="btn_content"><i class="fas fa-eye"></i> Ver más</a>
+                            </div>
                         </div>
-                    </div>
-                    ';
+                        ';
+                    }else{
+
+                        $html.='
+                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
+                            <div class="card-body text-center tex">
+                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
+                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
+                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                <p class="card-text">'.$price.'</p>
+                                <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                            </div>
+                        </div>
+                        ';
+                    }
                 }
                 $arrResponse = array("status"=>true,"html"=>$html);
             }else{
@@ -411,19 +507,36 @@
                 for ($i=0; $i < count($request); $i++) {
                     $route=base_url()."/tienda/producto/".$request[$i]['route'];
                     $price=formatNum($request[$i]['price']);
-                    $html.='
-                    <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                        <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
-                        <div class="card-body text-center tex">
-                            <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
-                            <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
-                            <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
-                            <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
-                            <p class="card-text">'.$price.'</p>
-                            <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                    if($request[$i]['status'] == 2){
+                        $html.='
+                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
+                            <div class="card-body text-center tex">
+                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
+                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
+                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                <p class="card-text text-danger">Vendido</p>
+                                <a href="'.$route.'" class="btn_content"><i class="fas fa-eye"></i> Ver más</a>
+                            </div>
                         </div>
-                    </div>
-                    ';
+                        ';
+                    }else{
+
+                        $html.='
+                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
+                            <div class="card-body text-center tex">
+                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
+                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
+                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                <p class="card-text">'.$price.'</p>
+                                <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
+                            </div>
+                        </div>
+                        ';
+                    }
                 }
                 $arrResponse = array("status"=>true,"html"=>$html);
             }else{
@@ -465,12 +578,17 @@
                     }else if($arrCarrito[$i]['idcategoria'] == 1){
                         $precioTotal = $arrCarrito[$i]['cantidad']*$arrCarrito[$i]['precio'];
                         $precioTotal = formatNum($precioTotal);
+                        $img ="";
+                        if($arrCarrito[$i]['url']!=""){
+                            $img='<img src="'.$arrCarrito[$i]['url'].'" class="mb-2" style="height:100px; width:100px;">';
+                        }
                         $html.= '
-                        <tr id="'.$id.'" idc="'.$arrCarrito[$i]['idcategoria'].'" tm="'.$arrCarrito[$i]['tipoMargen'].'" tb="'.$arrCarrito[$i]['tipoBorde'].'"
+                        <tr imp="'.$arrCarrito[$i]['impresion'].'" id="'.$id.'" idc="'.$arrCarrito[$i]['idcategoria'].'" tm="'.$arrCarrito[$i]['tipoMargen'].'" tb="'.$arrCarrito[$i]['tipoBorde'].'"
                         tv="'.$arrCarrito[$i]['tipoVidrio'].'" m="'.$arrCarrito[$i]['margen'].'" mi="'.$arrCarrito[$i]['medidasImagen'].'" mm="'.$arrCarrito[$i]['medidasMarco'].'"
                         >
                             <td class="position-relative">
                                 <span class="cursor__pointer btn_content position-absolute top-0 start-0 pt-1 pb-1 pe-2 ps-2 mt-1 rounded-circle btnDelete" title="Eliminar" name="eliminar">x</span>
+                                "'.$img.'"
                                 <p class="m-0 mt-4 text-secondary"><strong>Referencia: </strong>'.$arrCarrito[$i]['referenciaMoldura'].'</p>
                                 <p class="m-0 text-secondary"><strong>Tipo de margen: </strong>'.$arrCarrito[$i]['tipoMargen'].'</p>
                                 <p class="m-0 text-secondary"><strong>Tipo de borde: </strong>'.$arrCarrito[$i]['tipoBorde'].'</p>
@@ -478,6 +596,7 @@
                                 <p class="m-0 text-secondary"><strong>Margen: </strong>'.$arrCarrito[$i]['margen'].'</p>
                                 <p class="m-0 text-secondary"><strong>Medidas de la imágen: </strong>'.$arrCarrito[$i]['medidasImagen'].'</p>
                                 <p class="m-0 text-secondary"><strong>Medidas del marco: </strong>'.$arrCarrito[$i]['medidasMarco'].'</p>
+                                <p class="m-0 text-secondary"><strong>Impresión: </strong>'.$arrCarrito[$i]['impresion'].'</p>
                             </td>
                             <td><input  type="number" class="text-center w-50" value="'.$arrCarrito[$i]['cantidad'].'" min="1" name="actualizar"></td>
                             <td>'.$precio.'</td>
@@ -549,6 +668,7 @@
                 $medidasImagen = strClean($_POST['medidasImagen']);
                 $medidasMarco = strClean($_POST['medidasMarco']);
                 $actualizarCant = intval($_POST['cantidad']);
+                $impresion = strClean($_POST['impresion']);
                 
                 if(is_numeric($id)){
                     if($actualizarCant > 0){
@@ -560,7 +680,8 @@
                             if($arrCarrito[$i]['idproducto'] == $id && $arrCarrito[$i]['tipoMargen'] == $tipoMargen 
                             && $arrCarrito[$i]['tipoBorde'] == $tipoBorde
                             && $arrCarrito[$i]['tipoVidrio'] == $tipoVidrio && $arrCarrito[$i]['margen'] == $margen 
-                            && $arrCarrito[$i]['medidasImagen'] == $medidasImagen && $arrCarrito[$i]['medidasMarco'] == $medidasMarco){
+                            && $arrCarrito[$i]['medidasImagen'] == $medidasImagen && $arrCarrito[$i]['medidasMarco'] == $medidasMarco
+                            && $arrCarrito[$i]['impresion'] == $impresion){
                                 $arrCarrito[$i]['cantidad'] = $actualizarCant;
                                 $precioTotal = $actualizarCant*$arrCarrito[$i]['precio'];
                                 break;
@@ -633,9 +754,8 @@
                 if(empty($_POST['txtNombreOrden']) || empty($_POST['txtApellidoOrden']) || empty($_POST['txtIdentificacion'])
                 || empty($_POST['txtEmailOrden']) || empty($_POST['listDepartamento']) || empty($_POST['listCiudad'])
                 || empty($_POST['txtDireccion']) || empty($_POST['txtTelefono'])){
-                    $arrResponse = array("status"=>true,"msg"=>"Datos incorrectos");
+                    $arrResponse = array("status"=>false,"msg"=>"Datos incorrectos");
                 }else{
-
                     $idUser = intval($_SESSION['idUser']);
                     $strNombre = ucwords(strClean($_POST['txtNombreOrden']));
                     $strApellido = ucwords(strClean($_POST['txtApellidoOrden']));
@@ -646,9 +766,9 @@
                     $strDireccion = strtolower(strClean($_POST['txtDireccion']));
                     $strComentario = strClean($_POST['txtComentario']);
                     $intTelefono = strClean($_POST['txtTelefono']);
-                    $status = "Pendiente";
-                    $intPrecio=0;
-
+                    $intPrecio = 0;
+                    $status = "pendent";
+                    
                     for ($i=0; $i < count($_SESSION['arrCarrito']) ; $i++) { 
                         $intPrecio += $_SESSION['arrCarrito'][$i]['cantidad'] * $_SESSION['arrCarrito'][$i]['precio'];
                     }
@@ -675,20 +795,10 @@
                         );
                         
                         $request = $this->insertPedidoDetail($arrPedido);
-                        $pedidoInfo = $this->getPedido($request_pedido);
-                        $dataEmail = array('email_remitente' => EMAIL_REMITENTE, 
-                                            'email_usuario'=>$pedidoInfo['orden']['email'], 
-                                            'email_copia'=>EMAIL_COPIA,
-                                            'asunto' =>'Se ha creado la orden No - '.$request_pedido,
-                                            'pedido' =>$pedidoInfo);
-
-                        $sendEmail = sendEmail($dataEmail, 'email_notificacion_orden');
                         $orden = openssl_encrypt($request_pedido,ENCRIPTADO,KEY);
                         $arrResponse = array("status"=>true,"orden"=>$orden,"msg"=>"Pedido realizado");
                         $_SESSION['ordendata'] = $arrResponse;
-                        unset($_SESSION['arrCarrito']);
-                        $this->deleteDetalleTemp($idUser);
-                        session_regenerate_id(true);
+                        
                     }else{
                         $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido, inténtelo más tarde.");
                     }
@@ -698,22 +808,9 @@
             }else{
                 $arrResponse = array("status" =>false,"msg","No se ha podido realizar el pedido, inténtelo más tarde.");
             }
+            
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             die();
-        }
-        public function confirmarPedido(){
-            if(empty($_SESSION['ordendata'])){
-                header("location: ".base_url());
-            }else{
-                $dataorden = $_SESSION['ordendata'];
-				$idpedido = openssl_decrypt($dataorden['orden'], ENCRIPTADO, KEY);
-				$data['page_tag'] = "Confirmar Pedido";
-				$data['page_title'] = "Confirmar Pedido";
-				$data['page_name'] = "confirmarpedido";
-				$data['orden'] = $idpedido;
-				$this->views->getView($this,"confirmarpedido",$data);
-            }
-            unset($_SESSION['ordendata']);
         }
         /******************************Cuenta************************************/
         public function confirmCliente(){

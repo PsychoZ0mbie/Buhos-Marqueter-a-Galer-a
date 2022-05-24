@@ -85,6 +85,7 @@ input[type=number] {
     border-radius: 10px;
     color: #10100D;
     transition: 0.3s;
+    cursor: pointer;
 }
 .btn_content:hover{
     background-color:#E05A10;
@@ -670,6 +671,7 @@ video{
     height: 600px;
 
 }
+
 /*************************Confirm page**************************/
 .confirm{
     background-color: #E05A10;

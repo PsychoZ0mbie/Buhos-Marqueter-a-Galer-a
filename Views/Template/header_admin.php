@@ -24,7 +24,7 @@
         <img src="<?= media();?>/images/loading/loading.svg" alt="Loading">
     </div>
     <!-- Navbar-->
-    <header class="app-header"><a class="app-header__logo" href="<?=base_url();?>/dashboard">Buhos</a>
+    <header class="app-header"><a class="app-header__logo" href="<?=base_url();?>" target="_blank">Buhos</a>
       <!-- Sidebar toggle button--><a class="app-sidebar__toggle fa fa-bars pt-3 pb-2" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
       <!-- Navbar Right Menu-->
       <ul class="app-nav">

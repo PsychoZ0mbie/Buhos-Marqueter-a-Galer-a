@@ -23,7 +23,8 @@
             $data['clientes'] = $this->model->selectClientes();
             $data['mensajes'] = $this->model->selectMensajes();
             $data['ventas'] = $this->model->selectVentas();
-            $data['productos'] = $this->model->selectProductos();
+            $data['molduras'] = $this->model->selectMolduras();
+            $data['cuadros'] = $this->model->selectCuadros();
 
 
             $this->views->getView($this,"dashboard",$data);

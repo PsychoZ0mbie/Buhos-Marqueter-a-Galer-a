@@ -20,14 +20,14 @@ export default class Galeria extends Interface{
     
             for (let i = 0; i < objData.data.length; i++) {
                 let price = formatNum(parseInt(objData.data[i]['price']),".");
-                let url = base_url+"/assets/images/uploads/pedido.png";
+                let url = base_url+"/Assets/images/uploads/pedido.png";
                 let status="";
                 let name = objData.data[i]['firstname']+" "+objData.data[i]['lastname'];
 
-                if(objData.data[i]['status'] == "Pendiente" || objData.data[i]['status'] == "En proceso"){
-                    status = `<span class="badge badge-warning">${objData.data[i]['status']}</span>`;
-                }else if(objData.data[i]['status'] == "Terminado" || objData.data[i]['status'] == "Enviado"){
+                if(objData.data[i]['status'] == "approved"){
                     status = `<span class="badge badge-success">${objData.data[i]['status']}</span>`;
+                }else if(objData.data[i]['status'] == "pendent"){
+                    status = `<span class="badge badge-warning">${objData.data[i]['status']}</span>`;
                 }else{
                     status = `<span class="badge badge-danger">${objData.data[i]['status']}</span>`;
                 }
@@ -98,14 +98,14 @@ export default class Galeria extends Interface{
     
             for (let i = 0; i < objData.data.length; i++) {
                 let price = formatNum(parseInt(objData.data[i]['price']),".");
-                let url = base_url+"/assets/images/uploads/pedido.png";
+                let url = base_url+"/Assets/images/uploads/pedido.png";
                 let status="";
                 let name = objData.data[i]['firstname']+" "+objData.data[i]['lastname'];
 
-                if(objData.data[i]['status'] == "Pendiente" || objData.data[i]['status'] == "En proceso"){
-                    status = `<span class="badge badge-warning">${objData.data[i]['status']}</span>`;
-                }else if(objData.data[i]['status'] == "Terminado" || objData.data[i]['status'] == "Enviado"){
+                if(objData.data[i]['status'] == "approved"){
                     status = `<span class="badge badge-success">${objData.data[i]['status']}</span>`;
+                }else if(objData.data[i]['status'] == "pendent"){
+                    status = `<span class="badge badge-warning">${objData.data[i]['status']}</span>`;
                 }else{
                     status = `<span class="badge badge-danger">${objData.data[i]['status']}</span>`;
                 }
@@ -181,19 +181,25 @@ export default class Galeria extends Interface{
             if(objData.status){ 
                 let productos = objData.detalle;
                 let html ="";
+                
                 for (let i = 0; i < productos.length; i++) {
                     if(productos[i]['topicid'] == 1){
-
+                        let img="";
+                        if(productos[i]['picture']!=""){
+                            img = `<img src="${base_url+"/Assets/images/uploads/"+productos[i]['picture']}" class="mb-2" style="height:100px; width:100px;"><br>`;
+                        }
                         html+=`
                         <tr>
                             <td>
+                                ${img}
                                 <strong>Referencia: </strong>${productos[i]['title']}<br>
                                 <strong>Tipo de margen: </strong>${productos[i]['margintype']}<br>
                                 <strong>Tipo de borde: </strong>${productos[i]['bordertype']}<br>
                                 <strong>Tipo de vidrio: </strong>${productos[i]['glasstype']}<br>
                                 <strong>Margen: </strong>${productos[i]['margin']}<br>
                                 <strong>Medidas de la imágen: </strong>${productos[i]['measureimage']}<br>
-                                <strong>Medidas del marco: </strong>${productos[i]['measureframe']}
+                                <strong>Medidas del marco: </strong>${productos[i]['measureframe']}<br>
+                                <strong>Impresión: </strong>${productos[i]['print']}
                             </td>
                             <td>${productos[i]['quantity']}</td>
                             <td>${productos[i]['price']}</td>
@@ -276,6 +282,10 @@ export default class Galeria extends Interface{
                                         <tr>
                                             <td>Monto: </td>
                                             <td>${objData.orden.price}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tipo de pago: </td>
+                                            <td>${objData.orden.paymenttype}</td>
                                         </tr>
                                     </tbody>
                                 </table>

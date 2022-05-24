@@ -17,7 +17,6 @@
             $data['page_name'] = "pedidos";
             $this->views->getView($this,"pedidos",$data);
         }
-
         public function getPedidos(){
             $admin=false;
             $idpersona = $_SESSION['idUser'];
@@ -31,17 +30,15 @@
             }
             $arrData = $this->model->selectPedidos($options,$idpersona,$idrol);
             $arrResponse = array("data"=>$arrData,"admin"=>$admin);
-            //$_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
 			die();
         }
-
         public function getPedido(){
             if($_POST){
 
                 $idpedido = intval($_POST['idpedido']);
                 $idpersona = intval($_POST['idpersona']);
-                $arrEstado = array("Pendiente","En proceso","Terminado","Enviado","Cancelado");
+                $arrEstado = array("approved","canceled");
 
                 $arrData = $this->model->selectPedido($idpedido,$idpersona);
                 $arrData['price'] = formatNum($arrData['price']);
@@ -58,7 +55,6 @@
             }
             die();
         }
-
         public function updatePedido(){
             if($_POST){
                 if($_SESSION['userData']['roleid'] == 1){
@@ -72,7 +68,6 @@
                     }else{
                         $arrResponse = array("status"=>false,"msg"=>"No se ha podido actualizar, inténtelo más tarde");
                     }
-                    sleep(3);
                     echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 }else{
                     header('Location: '.base_url().'/logout');
@@ -80,7 +75,6 @@
             }
             die();
         }
-
         public function getPedidoDetalle(){
             if($_POST){
                 $idpedido = intval($_POST['idpedido']);
@@ -104,7 +98,6 @@
             }
             die();
         }
-
         public function delPedido(){
             if($_POST){
                 if($_SESSION['userData']['roleid'] == 1){

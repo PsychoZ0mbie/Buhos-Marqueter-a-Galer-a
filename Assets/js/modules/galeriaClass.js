@@ -125,8 +125,6 @@ export default class Galeria extends Interface{
             let html=""
             
             let topicList = document.querySelectorAll("#topicList option");
-            let subtopicList = document.querySelectorAll("#subtopicList option");
-            let statusList = document.querySelectorAll("#statusList option");
             let topic ="";
             let subtopic="";
             let status="";
@@ -142,18 +140,12 @@ export default class Galeria extends Interface{
                     }
                     
                 }
-                for (let k = 0; k < subtopicList.length; k++) {
-                    if(subtopicList[k].value == objData[i]['techniqueid']){
-                        subtopic = subtopicList[k].textContent;
-                        break;
-                    }
+                if(objData[i]['status'] == 1){
+                    status = `<span class="text-success">Disponible</span>`;
+                }else{
+                    status = `<span class="text-danger">No disponible</span>`;
                 }
-                for (let l = 0; l < statusList.length; l++) {
-                    if(statusList[l].value == objData[i]['status']){
-                        status = statusList[l].textContent;
-                        break;
-                    }
-                }
+
                 html += `
                 
                 <div class="row mt-2 bg-body rounded item" data-title="${objData[i]['title']}" data-topic="${topic}" data-technique="${subtopic}" data-author="${objData[i]['author']}">
@@ -165,9 +157,9 @@ export default class Galeria extends Interface{
                         <p><strong>Título: </strong>${objData[i]['title']}</p>
                         <ul>
                             <li class="text-secondary"><strong>Categoria: </strong>${topic}</li>
-                            <li class="text-secondary"><strong>Técnica: </strong>${subtopic}</li>
                             <li class="text-secondary"><strong>Dimensiones: </strong>${objData[i]['height']}cm X ${objData[i]['width']}cm</li>
                             <li class="text-secondary"><strong>Autor: </strong>${objData[i]['author']}</li>
+                            <li class="text-secondary"><strong>Disponibilidad: </strong>${status}</li>
                             <li class="text-secondary"><strong>Precio: </strong>$${price}</li>
                         </ul>
                     </div>
@@ -193,8 +185,6 @@ export default class Galeria extends Interface{
             let fragment = document.createDocumentFragment();
             let html=""
             let topicList = document.querySelectorAll("#topicList option");
-            let subtopicList = document.querySelectorAll("#subtopicList option");
-            let statusList = document.querySelectorAll("#statusList option");
             let topic ="";
             let subtopic="";
             let status="";
@@ -208,20 +198,14 @@ export default class Galeria extends Interface{
                         topic = topicList[j].textContent;
                         break;
                     }
-                    
                 }
-                for (let k = 0; k < subtopicList.length; k++) {
-                    if(subtopicList[k].value == objData[i]['techniqueid']){
-                        subtopic = subtopicList[k].textContent;
-                        break;
-                    }
+                
+                if(objData[i]['status'] == 1){
+                    status = `<span class="text-success">Disponible</span>`;
+                }else{
+                    status = `<span class="text-danger">No disponible</span>`;
                 }
-                for (let l = 0; l < statusList.length; l++) {
-                    if(statusList[l].value == objData[i]['status']){
-                        status = statusList[l].textContent;
-                        break;
-                    }
-                }
+
                 html += `
                 
                 <div class="row mt-2 bg-body rounded item" data-title="${objData[i]['title']}" data-topic="${topic}" data-technique="${subtopic}" data-author="${objData[i]['author']}">
@@ -233,9 +217,9 @@ export default class Galeria extends Interface{
                         <p><strong>Título: </strong>${objData[i]['title']}</p>
                         <ul>
                             <li class="text-secondary"><strong>Categoria: </strong>${topic}</li>
-                            <li class="text-secondary"><strong>Técnica: </strong>${subtopic}</li>
                             <li class="text-secondary"><strong>Dimensiones: </strong>${objData[i]['height']}cm X ${objData[i]['width']}cm</li>
                             <li class="text-secondary"><strong>Autor: </strong>${objData[i]['author']}</li>
+                            <li class="text-secondary"><strong>Disponibilidad: </strong>${status}</li>
                             <li class="text-secondary"><strong>Precio: </strong>$${price}</li>
                         </ul>
                     </div>

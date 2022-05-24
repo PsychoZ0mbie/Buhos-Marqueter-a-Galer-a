@@ -1,15 +1,32 @@
 <?php 
     headerPage($data);
-    /*foreach ($_SESSION['arrCarrito'] as $key) {
-        if($key['cantidad']>= 12){
-            $total = $key['cantidad']* $key['precio'];
-            $total = $total * 0.9;
-        }else{
-            $total = $key['cantidad']* $key['precio'];
-        }
-        $subtotal += $total;
-    }*/
+    require_once("Libraries/vendor/autoload.php");
+    MercadoPago\SDK::setAccessToken('TEST-4176339145081428-052112-dbb9f9b57ecc8919100c4eb8b9a554fa-212344732');
+
+    $preference = new MercadoPago\Preference();
+    $item = new MercadoPago\Item();
+    $productos = $_SESSION['arrCarrito'];
+    $total = 0;
+    for ($i=0; $i < count($productos) ; $i++) { 
+        $total += $productos[$i]['cantidad'] * $productos[$i]['precio'];
+    }
+
+    $item->title = "productos";
+    $item->quantity = 1;
+    $item->unit_price = $total;
+
+    $preference->items = array($item);
+    $preference->back_urls = array(
+        "success" => base_url()."/tienda/confirmarPedido",
+        "failure" => base_url()."/tienda/falloPedido"
+    );
+    $preference->auto_return = "approved";
+    $preference->binary_mode = true;
+    $preference->save();
+    
+   
 ?>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 <main id="<?=$data['page_name']?>">
     <div id="divLoading">
       <div>
@@ -73,7 +90,6 @@
                         <label for="txtComentario" class="form-label">Escribe un comentario</label>
                         <textarea class="form-control" id="txtComentario" name="txtComentario" rows="5"></textarea>
                     </div>
-                    <button type="submit" class="btn_content bg-dark text-white" id="btnOrder">Realizar pedido</button>
                 </form>
                 <?php }else{?>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -177,10 +193,25 @@
                         </div>
                     </div>
                 </div>
+                <?php if(isset($_SESSION['login'])){
+                ?>
+                <button type="button" class="btn_content bg-dark w-100 text-white text-center fs-5" id="btnOrder">Pagar</button>
+                <?php }?>
             </div>
         </div>
     </section>
 </main>
+    
+    <script>
+        const mp = new MercadoPago('TEST-c947b46a-607a-4912-9606-ada7d4bc5e37', {
+            locale: 'en-US'
+        })
+        const checkout = mp.checkout({
+            preference: {
+                id: '<?php echo $preference->id; ?>'
+            }
+        });
+    </script>
 <?php
     footerPage($data);
 ?>

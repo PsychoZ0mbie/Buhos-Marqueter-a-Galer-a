@@ -46,7 +46,6 @@
     <script type="text/javascript" src="<?= media(); ?>/js/plugins/sweetalert.js?n=1"></script>
     <script src="<?=media();?>/template/Assets/js/bootstrap/popper.min.js?n=1"></script>
     <script src="<?=media();?>/template/Assets/js/bootstrap/bootstrap.min.js?n=1"></script>
-    
 
     <!--My functions-->
     <script type="text/javascript" src="<?= media(); ?>/js/functions.js?n=1"></script>
