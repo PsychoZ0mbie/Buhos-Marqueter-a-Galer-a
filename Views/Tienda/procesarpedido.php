@@ -10,6 +10,7 @@
     for ($i=0; $i < count($productos) ; $i++) { 
         $total += $productos[$i]['cantidad'] * $productos[$i]['precio'];
     }
+    $total = $total*(1+IVA);
 
     $item->title = "productos";
     $item->quantity = 1;
@@ -46,13 +47,13 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="txtNombreOrden" class="form-label">Nombres <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="txtNombreOrden" name="txtNombreOrden" required>
+                                <input type="text" class="form-control" id="txtNombreOrden" name="txtNombreOrden" value="<?=$_SESSION['userData']['firstname']?>" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="txtApellidoOrden" class="form-label">Apellidos <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="txtApellidoOrden" name="txtApellidoOrden" required>
+                                <input type="text" class="form-control" id="txtApellidoOrden" name="txtApellidoOrden" value="<?=$_SESSION['userData']['lastname']?>" required>
                             </div>
                         </div>
                     </div>
@@ -62,7 +63,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="txtEmailOrden" class="form-label">Correo electrónico <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="txtEmailOrden" name="txtEmailOrden" required>
+                        <input type="email" class="form-control" id="txtEmailOrden" name="txtEmailOrden" value="<?=$_SESSION['userData']['email']?>" required>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -84,7 +85,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="txtTelefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="txtTelefono" name="txtTelefono" value="" required>
+                        <input type="number" class="form-control" id="txtTelefono" name="txtTelefono" value="<?=$_SESSION['userData']['phone']?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="txtComentario" class="form-label">Escribe un comentario</label>
@@ -184,10 +185,12 @@
                         <div class="row">
                             <div class="col-5">
                                 <p><strong>Subtotal</strong></p>
+                                <p><strong>IVA</strong></p>
                                 <p><strong>Total</strong></p>
                             </div>
                             <div class="col-7">
                                 <p><strong id="subtotal"></strong></p>
+                                <p><strong id="iva"></strong></p>
                                 <p><strong id="total"></strong></p>
                             </div>
                         </div>

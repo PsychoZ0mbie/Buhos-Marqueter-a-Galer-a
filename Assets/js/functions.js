@@ -28,7 +28,7 @@ function resolutionImg(height,width,picture){
     if(mpx >= mpxCustom){
         data = true;
     }else{
-        data = false
+        data = false;
     }
 
     return data;

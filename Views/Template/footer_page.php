@@ -48,8 +48,8 @@
     <script src="<?=media();?>/template/Assets/js/bootstrap/bootstrap.min.js?n=1"></script>
 
     <!--My functions-->
-    <script type="text/javascript" src="<?= media(); ?>/js/functions.js?n=1"></script>
-    <script src="<?=media();?>/template/Assets/js/app.js?n=1"></script>
+    <script type="text/javascript" src="<?= media(); ?>/js/functions.js?v=<?php echo rand();?>"></script>
+    <script src="<?=media();?>/template/Assets/js/app.js?v=<?php echo rand();?>"></script>
     <script type="application/ld+json">
         {
         "@context": "https://schema.org/",

@@ -181,7 +181,7 @@ export default class Galeria extends Interface{
             if(objData.status){ 
                 let productos = objData.detalle;
                 let html ="";
-                
+    
                 for (let i = 0; i < productos.length; i++) {
                     if(productos[i]['topicid'] == 1){
                         let img="";
@@ -233,7 +233,8 @@ export default class Galeria extends Interface{
                 document.querySelector("#lugar").innerHTML=`<strong>Departamento/ciudad: </strong>`+objData.orden.departamento+"/"+objData.orden.ciudad;
                 document.querySelector("#direccion").innerHTML=`<strong>Dirección: </strong>`+objData.orden.address;
                 document.querySelector("#comentario").innerHTML= objData.orden.comment;
-                document.querySelector("#subtotal").innerHTML=objData.orden.price;
+                document.querySelector("#subtotal").innerHTML=objData.orden.subtotal;
+                document.querySelector("#iva").innerHTML=objData.orden.iva;
                 document.querySelector("#total").innerHTML=objData.orden.price;
                 document.querySelector("#productos").innerHTML = html;
 

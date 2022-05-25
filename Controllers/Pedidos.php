@@ -81,15 +81,21 @@
                 $idpersona = intval($_POST['idpersona']);
                 $arrOrden = $this->model->selectPedido($idpedido,$idpersona);
                 $arrOrdenDetalle = $this->model->selectPedidoDetalle($idpedido,$idpersona);
-                $subtotal ="";
+                $subtotal =0;
 
                 if(!empty($arrOrden)){
                     for ($i=0; $i < count($arrOrdenDetalle); $i++) { 
+                        
                         $total = $arrOrdenDetalle[$i]['price'] * $arrOrdenDetalle[$i]['quantity'];
+                        $subtotal += $total;
                         $arrOrdenDetalle[$i]['total'] = formatNum($total);
                         $arrOrdenDetalle[$i]['price'] = formatNum($arrOrdenDetalle[$i]['price']);
                     }
-                    $arrOrden['price'] = formatNum($arrOrden['price']);
+                    $iva = $subtotal*IVA;
+                    $total = $subtotal*(1+IVA);
+                    $arrOrden['subtotal'] = formatNum($subtotal);
+                    $arrOrden['iva'] = formatNum($iva);
+                    $arrOrden['price'] = formatNum($total);
                     $arrResponse = array("status"=>true,"orden"=>$arrOrden,"detalle"=>$arrOrdenDetalle);
                 }else{
                     $arrResponse = array("status"=>false,"msg"=>"No existe el pedido o ha ocurrido un error.");

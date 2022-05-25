@@ -8,12 +8,10 @@
     Class Tienda extends Controllers{
         use TProducto, TCategorias,TClientes;
         private $login;
-        private $mano_obra;
         public function __construct(){
             parent::__construct();
             session_start();
             $this->login = new LoginModel();
-            $this->mano_obra= 1.05;
         }
         
         /******************************Paginas************************************/
@@ -172,6 +170,7 @@
                 $intHeight = floatval($_POST['intHeight']);
                 $intWidth = floatval($_POST['intWidth']);
                 $resultado = ($intWidth * $intHeight)*$intImagen;
+                $resultado = ($resultado * COMISION)+TASA;
                 echo json_encode(formatNum($resultado),JSON_UNESCAPED_UNICODE);
             }
             die();
@@ -257,8 +256,7 @@
                     }
                 }
                 
-                $resultado = ($resultado * $request['price'])+$area+$borde+$vidrio;
-                $resultado = $resultado *$this->mano_obra;
+                $resultado = ((($resultado * $request['price'])+$area+$borde+$vidrio)*COMISION)+TASA;
                 echo json_encode(intval($resultado),JSON_UNESCAPED_UNICODE);
             }
             die();
@@ -309,6 +307,7 @@
                             if(!empty($_POST['boolPrint'])){
                                 if($_POST['boolPrint']){
                                     $impresion = ($intWidth*$intHeight)*$intImagen;
+                                    $impresion = ($impresion * COMISION)+TASA;
                                     $tipoImpresion ="Con impresion";
                                     $fotoData = $_FILES['archivo'];
                                     $foto_name= 'impresion_'.bin2hex(random_bytes(6)).'.png';
@@ -342,8 +341,8 @@
                             if($intGlassType == 2){
                                 $vidrio = $area * $vidrioPrecio;
                             }
-                            $precioMarco = (($perimetro*$precio) +$vidrio+$borde+$margin);
-                            $precioMarco = ($precioMarco+$impresion)*$this->mano_obra;
+                            $precioMarco = ((($perimetro*$precio) +$vidrio+$borde+$margin)*COMISION)+TASA;
+                            $precioMarco = $precioMarco+$impresion;
 
                             $arrMarco = array(
                                 "idproducto"=>$intId,
@@ -396,6 +395,7 @@
                 }else if($intIdTopic == 2){
                     $id = openssl_decrypt($_POST['id'],ENCRIPTADO,KEY);
                     $requestCuadro  = $this->getObra($id);
+                    $precio = ($requestCuadro['price']*COMISION)+TASA;
                     $arrCarrito=array();
                     $arrCuadro = array(
                         "idproducto"=> $requestCuadro['idproduct'],
@@ -605,7 +605,18 @@
                         ';
                     }
                 }
-                $arrResponse = array("status"=>true,"msg"=>"Hay productos","html"=>$html,"resumen"=>formatNum($resumen),"cantidad"=>$cantidad);
+                $subtotal = $resumen;
+                $iva = $resumen*IVA;
+                $total = $subtotal+$iva;
+                $arrResponse = array(
+                    "status"=>true,
+                    "msg"=>"Hay productos",
+                    "html"=>$html,
+                    "subtotal"=>formatNum($subtotal),
+                    "iva"=>formatNum($iva),
+                    "total"=>formatNum($total),
+                    "cantidad"=>$cantidad
+                );
             }else{
                 $arrResponse = array("status"=>false,"msg"=>"No hay productos","cantidad"=>$cantidad);
             }
@@ -649,7 +660,17 @@
                         $cantidad += $key['cantidad'];
                         $resumen += $key['cantidad'] * $key['precio'];
                     } 
-                    $arrResponse = array("status"=>true,"msg"=>"Producto eliminado","resumen"=>formatNum($resumen),"cantidad"=>$cantidad);
+                    $subtotal = $resumen;
+                    $iva = $resumen*IVA;
+                    $total = $subtotal+$iva;
+                    $arrResponse = array(
+                        "status"=>true,
+                        "msg"=>"Producto eliminado",
+                        "subtotal"=>formatNum($subtotal),
+                        "iva"=>formatNum($iva),
+                        "total"=>formatNum($total),
+                        "cantidad"=>$cantidad
+                    );
                 }else{
                     $arrResponse = array("status"=>false,"msg"=>"Ha ocurrido un problema, inténtelo de nuevo.");
                 }
@@ -692,9 +713,21 @@
                             $cantidad += $key['cantidad'];
                             $resumen += $key['cantidad'] * $key['precio'];
                         } 
-                        $resumen = formatNum($resumen);
+
+                        $subtotal = $resumen;
+                        $iva = $resumen*IVA;
+                        $total = $subtotal+$iva;
+
                         $precioTotal = formatNum($precioTotal);
-                        $arrResponse = array("status"=>true,"msg"=>"Producto actualizado","resumen"=>$resumen,"cantidad"=>$cantidad,"total"=>$precioTotal);
+                        $arrResponse = array(
+                            "status"=>true,
+                            "msg"=>"Producto actualizado",
+                            "subtotal"=>formatNum($subtotal),
+                            "iva"=>formatNum($iva),
+                            "total"=>formatNum($total),
+                            "cantidad"=>$cantidad,
+                            "precio"=>$precioTotal
+                        );
                     }else{
                         $arrResponse = array("status"=>false,"msg"=>"La cantidad debe ser mayor a cero, inténtelo de nuevo.");
                     }
@@ -711,8 +744,15 @@
                 for ($i=0; $i < count($_SESSION['arrCarrito']) ; $i++) { 
                     $resumen += $_SESSION['arrCarrito'][$i]['cantidad'] * $_SESSION['arrCarrito'][$i]['precio'];
                 }
-                $resumen = formatNum($resumen);
-                echo json_encode($resumen,JSON_UNESCAPED_UNICODE);
+                $subtotal = $resumen;
+                $iva = $resumen*IVA;
+                $total = $subtotal+$iva;
+                $arrResponse = array(
+                    "subtotal"=>formatNum($subtotal),
+                    "iva"=>formatNum($iva),
+                    "total"=>formatNum($total)
+                );
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }
@@ -772,6 +812,7 @@
                     for ($i=0; $i < count($_SESSION['arrCarrito']) ; $i++) { 
                         $intPrecio += $_SESSION['arrCarrito'][$i]['cantidad'] * $_SESSION['arrCarrito'][$i]['precio'];
                     }
+                    $intPrecio = ($intPrecio*(1+IVA));
 
                     $request_pedido = $this->insertPedido($idUser,
                                                     $strNombre,

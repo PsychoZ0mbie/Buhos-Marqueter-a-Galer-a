@@ -92,8 +92,10 @@ $detalle = $data['pedido']['detalle'];
 		  	<?php 
 		  		if(count($detalle) > 0){
 		  			$subtotal = 0;
+					$totalProductos =0;
 		  			foreach ($detalle as $producto) {
 						$subtotal = $producto['quantity']*$producto['price'];
+						$totalProductos+=$subtotal;
 						if($producto['topicid'] == 1){
 							
 						
@@ -140,11 +142,15 @@ $detalle = $data['pedido']['detalle'];
 		  <tfoot>
 		  		<tr>
 		  			<th colspan="3" class="text-right">Subtotal:</th>
-		  			<td class="text-right"><?= MS.number_format($orden['price'],0,DEC,MIL)." ".MD?></td>
+		  			<td class="text-right"><?= formatNum($totalProductos)?></td>
+		  		</tr>
+				<tr>
+		  			<th colspan="3" class="text-right">IVA:</th>
+		  			<td class="text-right"><?= formatNum($totalProductos*IVA)?></td>
 		  		</tr>
 		  		<tr>
 		  			<th colspan="3" class="text-right">Total:</th>
-		  			<td class="text-right"><?= MS.number_format($orden['price'],0,DEC,MIL)." ".MD ?></td>
+		  			<td class="text-right"><?= formatNum($orden['price'])?></td>
 		  		</tr>
 		  </tfoot>
 		</table>

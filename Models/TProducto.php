@@ -127,6 +127,7 @@ require_once("Libraries/Core/Mysql.php");
                 $sqlImg = "SELECT * FROM productimage WHERE productid = $idproduct";
                 $requestImg = $this->con->select_all($sqlImg);
                 $request[$i]['url'] = base_url()."/Assets/images/uploads/".$requestImg[0]['title'];
+                $request[$i]['price'] = ($request[$i]['price']*COMISION) + TASA;
             }
             return $request;
         }
@@ -158,6 +159,7 @@ require_once("Libraries/Core/Mysql.php");
                 $sqlImg = "SELECT * FROM productimage WHERE productid = $idproduct";
                 $requestImg = $this->con->select_all($sqlImg);
                 $request[$i]['url'] = base_url()."/Assets/images/uploads/".$requestImg[0]['title'];
+                $request[$i]['price'] = ($request[$i]['price']*COMISION) + TASA;
             }
             return $request;
         }
@@ -187,6 +189,7 @@ require_once("Libraries/Core/Mysql.php");
             $request = $this->con->select($sql);
             $requestImg = $this->con->select($sqlImg);
             $request['url'] = base_url()."/Assets/images/uploads/".$requestImg['title'];
+            $request['price'] = ($request['price']*COMISION) + TASA;
             return $request;
         }
         public function getProducto($params){
@@ -219,6 +222,7 @@ require_once("Libraries/Core/Mysql.php");
                 for ($i=0; $i < count($requestImage); $i++) { 
                     $request['url'][$i] = base_url()."/Assets/images/uploads/".$requestImage[$i]['title'];
                 }
+                $request['price'] = ($request['price']*COMISION) + TASA;
                 $return = $request;
             }else{
                 $return = "no existe";

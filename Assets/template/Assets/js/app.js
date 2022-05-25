@@ -34,12 +34,14 @@ if(document.querySelector("#marqueteria")){
             let height = document.querySelector("#intHeight").value;
             let width = document.querySelector("#intWidth").value;
             let resolution = resolutionImg(height,width,picture);
-            if(resolution){
-                document.querySelector("#quality").innerHTML = `<p class="text-center text-success">Imágen apta para impresión</p>`;
+            if(!resolution){
+                document.querySelector("#quality").innerHTML = `<div class="bg-danger p-2 border border-1 border-dark rounded">
+                <strong class="text-white">Nota:</strong>
+                <p class="text-white">La imagen no tiene resolución suficiente para esas medidas. La impresión podría quedar pixelada o poco nítida. 
+                Prueba con un tamaño más pequeño, o con una imagen de mayor resolución</p>
+                </div>`;
             }else{
-                document.querySelector("#quality").innerHTML = `
-                <p class="text-center text-danger m-0">La imágen no es apta <br> para las dimensiones</p>
-                `;
+                document.querySelector("#quality").innerHTML = "";
             }
         }, 100);
     });
@@ -74,12 +76,14 @@ if(document.querySelector("#marqueteria")){
             document.querySelector("#txtMedidasImg").innerHTML = height+"cm X "+width+"cm";
             if(flag){
                 let resolution = resolutionImg(height,width,picture);
-                if(resolution){
-                    document.querySelector("#quality").innerHTML = `<p class="text-center text-success">Imágen apta para impresión</p>`;
+                if(!resolution){
+                    document.querySelector("#quality").innerHTML = `<div class="bg-danger p-2 border border-1 border-dark rounded">
+                    <strong class="text-white">Nota:</strong>
+                    <p class="text-white">La imagen no tiene resolución suficiente para esas medidas. La impresión podría quedar pixelada o poco nítida. 
+                    Prueba con un tamaño más pequeño, o con una imagen de mayor resolución</p>
+                    </div>`;
                 }else{
-                    document.querySelector("#quality").innerHTML = `
-                    <p class="text-center text-danger m-0">La imágen no es apta <br> para las dimensiones</p>
-                    `;
+                    document.querySelector("#quality").innerHTML = "";
                 }
 
             }
@@ -879,11 +883,8 @@ if(document.querySelector("#marqueteria")){
                     loading.style.display = "flex";
                     request(url,formData,"post").then(function(objData){
                         let html = `
-                                    <p class="text-start">La imágen no es <strong class="text-danger">apta</strong>, puede hacer lo siguiente:</p><br>
-                                    <ul class="text-start">
-                                        <li>Agregar una imágen de mayor resolución</li>
-                                        <li>Reducir las dimensiones</li>
-                                    </ul>
+                                    <p class="text-center">La imagen no tiene resolución suficiente para esas medidas. La impresión podría quedar pixelada o poco nítida. 
+                                    Prueba con un tamaño más pequeño, o con una imagen de mayor resolución</p>
                                     <p>¿Desea incluir la impresión de la imágen de todas formas por <strong>${objData}</strong>?</p>`;
                         loading.style.display = "none";
                         Swal.fire({
@@ -1129,8 +1130,9 @@ if(document.querySelector("#carrito")){
             document.querySelector("#with").classList.remove("d-none");
             document.querySelector("#without").classList.add("d-none");
             document.querySelector("tbody").innerHTML = objData.html;
-            document.querySelector("#subtotal").innerHTML = objData.resumen;
-            document.querySelector("#total").innerHTML = objData.resumen;
+            document.querySelector("#subtotal").innerHTML = objData.subtotal;
+            document.querySelector("#iva").innerHTML = objData.iva;
+            document.querySelector("#total").innerHTML = objData.total;
         }else{
             document.querySelector("#with").classList.add("d-none");
             document.querySelector("#without").classList.remove("d-none");
@@ -1163,8 +1165,9 @@ if(document.querySelector("#carrito")){
                 
                 request(url,formData,"post").then(function(objData){
                     if(objData.status){
-                        document.querySelector("#subtotal").innerHTML = objData.resumen;
-                        document.querySelector("#total").innerHTML = objData.resumen;
+                        document.querySelector("#subtotal").innerHTML = objData.subtotal;
+                        document.querySelector("#iva").innerHTML = objData.iva;
+                        document.querySelector("#total").innerHTML = objData.total;
                         document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
                         element.remove();
                         if(objData.cantidad == 0){
@@ -1207,10 +1210,11 @@ if(document.querySelector("#carrito")){
                         
                         request(url,formData,"post").then(function(objData){
                             if(objData.status){
-                                document.querySelector("#subtotal").innerHTML = objData.resumen;
-                                document.querySelector("#total").innerHTML = objData.resumen;
+                                document.querySelector("#subtotal").innerHTML = objData.subtotal;
+                                document.querySelector("#iva").innerHTML = objData.iva;
+                                document.querySelector("#total").innerHTML = objData.total;
                                 document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
-                                element.children[3].innerHTML = objData.total;
+                                element.children[3].innerHTML = objData.precio;
                             }else{
                                 Swal.fire("Error",objData.msg,"error");
                                 input.value = 1;
@@ -1231,8 +1235,9 @@ if(document.querySelector("#carrito")){
 if(document.querySelector("#procesarpedido")){
     let url = base_url+"/tienda/totalCarrito";
     request(url,"","get").then(function(objData){
-        document.querySelector("#subtotal").innerHTML = objData;
-        document.querySelector("#total").innerHTML = objData;
+        document.querySelector("#subtotal").innerHTML = objData.subtotal;
+        document.querySelector("#iva").innerHTML = objData.iva;
+        document.querySelector("#total").innerHTML = objData.total;
     });
     if(document.querySelector("#formOrden")){
         let formOrden = document.querySelector("#formOrden");
