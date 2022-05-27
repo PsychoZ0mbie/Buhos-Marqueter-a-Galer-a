@@ -83,10 +83,10 @@
                         <th colspan="3" class="text-right">Subtotal:</th>
                         <td class="text-right" id="subtotal">$50.000</td>
                       </tr>
-                      <tr>
+                      <!--<tr>
                         <th colspan="3" class="text-right">IVA:</th>
                         <td class="text-right" id="iva">$50.000</td>
-                      </tr>
+                      </tr>-->
                       <tr>
                         <th colspan="3" class="text-right">Total:</th>
                         <td class="text-right" id="total">$25.000.000</td>

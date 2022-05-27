@@ -1131,8 +1131,8 @@ if(document.querySelector("#carrito")){
             document.querySelector("#without").classList.add("d-none");
             document.querySelector("tbody").innerHTML = objData.html;
             document.querySelector("#subtotal").innerHTML = objData.subtotal;
-            document.querySelector("#iva").innerHTML = objData.iva;
-            document.querySelector("#total").innerHTML = objData.total;
+            //document.querySelector("#iva").innerHTML = objData.iva;
+            document.querySelector("#total").innerHTML = objData.subtotal;
         }else{
             document.querySelector("#with").classList.add("d-none");
             document.querySelector("#without").classList.remove("d-none");
@@ -1166,8 +1166,8 @@ if(document.querySelector("#carrito")){
                 request(url,formData,"post").then(function(objData){
                     if(objData.status){
                         document.querySelector("#subtotal").innerHTML = objData.subtotal;
-                        document.querySelector("#iva").innerHTML = objData.iva;
-                        document.querySelector("#total").innerHTML = objData.total;
+                        //document.querySelector("#iva").innerHTML = objData.iva;
+                        document.querySelector("#total").innerHTML = objData.subtotal;
                         document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
                         element.remove();
                         if(objData.cantidad == 0){
@@ -1211,8 +1211,8 @@ if(document.querySelector("#carrito")){
                         request(url,formData,"post").then(function(objData){
                             if(objData.status){
                                 document.querySelector("#subtotal").innerHTML = objData.subtotal;
-                                document.querySelector("#iva").innerHTML = objData.iva;
-                                document.querySelector("#total").innerHTML = objData.total;
+                                //document.querySelector("#iva").innerHTML = objData.iva;
+                                document.querySelector("#total").innerHTML = objData.subtotal;
                                 document.querySelector("#cantCarrito i").innerHTML = " ("+objData.cantidad+")";
                                 element.children[3].innerHTML = objData.precio;
                             }else{
@@ -1236,8 +1236,8 @@ if(document.querySelector("#procesarpedido")){
     let url = base_url+"/tienda/totalCarrito";
     request(url,"","get").then(function(objData){
         document.querySelector("#subtotal").innerHTML = objData.subtotal;
-        document.querySelector("#iva").innerHTML = objData.iva;
-        document.querySelector("#total").innerHTML = objData.total;
+        //document.querySelector("#iva").innerHTML = objData.iva;
+        document.querySelector("#total").innerHTML = objData.subtotal;
     });
     if(document.querySelector("#formOrden")){
         let formOrden = document.querySelector("#formOrden");

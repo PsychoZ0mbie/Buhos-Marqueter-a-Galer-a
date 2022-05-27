@@ -95,7 +95,7 @@
                     $total = $subtotal*(1+IVA);
                     $arrOrden['subtotal'] = formatNum($subtotal);
                     $arrOrden['iva'] = formatNum($iva);
-                    $arrOrden['price'] = formatNum($total);
+                    $arrOrden['price'] = formatNum($subtotal);
                     $arrResponse = array("status"=>true,"orden"=>$arrOrden,"detalle"=>$arrOrdenDetalle);
                 }else{
                     $arrResponse = array("status"=>false,"msg"=>"No existe el pedido o ha ocurrido un error.");

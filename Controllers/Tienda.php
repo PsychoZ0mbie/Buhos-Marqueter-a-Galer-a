@@ -812,7 +812,7 @@
                     for ($i=0; $i < count($_SESSION['arrCarrito']) ; $i++) { 
                         $intPrecio += $_SESSION['arrCarrito'][$i]['cantidad'] * $_SESSION['arrCarrito'][$i]['precio'];
                     }
-                    $intPrecio = ($intPrecio*(1+IVA));
+                    //$intPrecio = ($intPrecio*(1+IVA));
 
                     $request_pedido = $this->insertPedido($idUser,
                                                     $strNombre,

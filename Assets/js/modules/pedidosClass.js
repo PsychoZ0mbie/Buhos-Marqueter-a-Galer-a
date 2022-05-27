@@ -234,7 +234,7 @@ export default class Galeria extends Interface{
                 document.querySelector("#direccion").innerHTML=`<strong>Dirección: </strong>`+objData.orden.address;
                 document.querySelector("#comentario").innerHTML= objData.orden.comment;
                 document.querySelector("#subtotal").innerHTML=objData.orden.subtotal;
-                document.querySelector("#iva").innerHTML=objData.orden.iva;
+                //document.querySelector("#iva").innerHTML=objData.orden.iva;
                 document.querySelector("#total").innerHTML=objData.orden.price;
                 document.querySelector("#productos").innerHTML = html;
 

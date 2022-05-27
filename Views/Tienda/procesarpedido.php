@@ -10,12 +10,11 @@
     for ($i=0; $i < count($productos) ; $i++) { 
         $total += $productos[$i]['cantidad'] * $productos[$i]['precio'];
     }
-    $total = $total*(1+IVA);
-
+    //$total = $total*(1+IVA);
     $item->title = "productos";
     $item->quantity = 1;
-    $item->unit_price = $total;
-
+    $item->unit_price = round($total);
+    $item->currency_id="COP";
     $preference->items = array($item);
     $preference->back_urls = array(
         "success" => base_url()."/tienda/confirmarPedido",
@@ -185,12 +184,12 @@
                         <div class="row">
                             <div class="col-5">
                                 <p><strong>Subtotal</strong></p>
-                                <p><strong>IVA</strong></p>
+                                <!--<p><strong>IVA</strong></p>-->
                                 <p><strong>Total</strong></p>
                             </div>
                             <div class="col-7">
                                 <p><strong id="subtotal"></strong></p>
-                                <p><strong id="iva"></strong></p>
+                                <!--<p><strong id="iva"></strong></p>-->
                                 <p><strong id="total"></strong></p>
                             </div>
                         </div>

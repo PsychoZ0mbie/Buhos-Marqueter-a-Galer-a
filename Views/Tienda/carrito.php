@@ -35,12 +35,12 @@
                             <div class="row">
                                 <div class="col-5">
                                     <p><strong>Subtotal</strong></p>
-                                    <p><strong>IVA</strong></p>
+                                    <!--<p><strong>IVA</strong></p>-->
                                     <p><strong>Total</strong></p>
                                 </div>
                                 <div class="col-7">
                                     <p><strong id="subtotal"></strong></p>
-                                    <p><strong id="iva"></strong></p>
+                                    <!--<p><strong id="iva"></strong></p>-->
                                     <p><strong id="total"></strong></p>
                                 </div>
                             </div>
