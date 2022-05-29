@@ -29,6 +29,9 @@
                     </ul>
                 </div>
                 <div class="col-lg-12 footer_legal p-4 d-flex flex-column">
+                    <div class="container">
+                        <img src="<?=media();?>/template/Assets/images/uploads/metodopago.gif" class="img-fluid" alt="métodos de pago">
+                    </div>
                     <a href="<?=base_url()?>/politicas">Politica de privacidad - Política de Cookies</a>
                     <a href="<?=base_url()?>/terminos">Términos y condiciones</a>
                     <p>Copyright 2022 / Buho's Marquetería & Galería - Todos los derechos reservados</p>
