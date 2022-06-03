@@ -81,8 +81,8 @@
               <h3 class="text-center text-white">Empieza con nosotros ahora</h3>
           </div>
           <div class="d-flex justify-content-center flex-wrap">
-            <a href="<?=base_url()?>/tienda/marquetería" class="btn_content mt-3 me-3">Marquetería</a>
-            <a href="<?=base_url()?>/tienda/marquetería" class="btn_content mt-3 ms-3">Galería</a>
+            <a href="<?=base_url()?>/tienda/marqueteria" class="btn_content mt-3 me-3">Marquetería</a>
+            <a href="<?=base_url()?>/tienda/galeria" class="btn_content mt-3 ms-3">Galería</a>
           </div>
         </div>
        </section>
