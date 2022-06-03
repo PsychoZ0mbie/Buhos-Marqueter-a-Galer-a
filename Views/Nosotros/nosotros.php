@@ -1,94 +1,89 @@
 <?php headerPage($data)?>   
    <main>
        <section>
-        <div class="cover">
-          <img src="<?=media();?>/template/Assets/images/uploads/banner3.gif" alt="Conócenos">
+        <div class="cover bg-dark">
           <h1 class="text-center"><strong>Conócenos</strong></h1>
         </div>
-        <div class="container presentation mt-4">
-            <p class="text-center">
-              En el año 1996 trabajaba en Bogotá como auxiliar de Kardex en Pvmetal Ltda. 
-              Renuncié para residir en Villavicencio/Meta e inicié a trabajar cómo cobrador de cuadros 
-              a crédito. En este trabajo me interesó el negocio y tuve mis propios vendedores. 
-              Fue cuándo vi la necesidad de enmarcar yo mismo los cuadros que tenía para la venta, 
-              saqué en arriendo un local en el año 1999 en el barrio san benito de Villavicencio, donde
-              empíricamente empecé a cortar, armar y pintar mis propios marcos para los 
-              cuadros que se vendían. <br>
-              Así empezó Buho's Marquetería y Galería
-            </p>
-        </div>
-        <div class="container about">
-          
-          <div class="learn_content">
-            <div class="learn_text">
-                <a href="">
-                    <h2><strong>Nuestra Misión</strong> </h2>
-                </a>
-                <p>Nuestra misión es lograr la satisfacción total de las necesidades y expectativas de
+        <div class="container mb-5 ">
+          <div class="row mt-5">
+            <div class="col-md-6 mb-3">
+              <h2 class="fw-bold">¿Por qué <strong class="text__color">nosotros</strong>?</h2>
+              <p class="text-break mt-4"><strong>Buhos Marquetería y galería </strong>inició en 1999 en el barrio San benito de villavicencio, donde empíricamente se empezó a cortar,
+            armar y pintar marcos para todos los cuadros. Con más de 20 años de experiencia, hemos entregado trabajos de calidad a nuestros clientes.</p>
+              <ul>
+                <li>Todos nuestros materiales son escogidos para garantizar la conservación de todos nuestros trabajos.</li>
+                <li>Todos nuestros marcos y obras son hechos a mano y a las medidas requeridas por el cliente.</li>
+                <li>Ofrecemos las mejores soluciones para las necesidades de nuestros clientes, garantizando siempre el gusto y la satisfacción por nuestro trabajo.</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Misión
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                    Nuestra misión es lograr la satisfacción total de las necesidades y expectativas de
                   nuestros clientes, brindándoles productos de alta calidad, pero lo más importante, prestándoles 
-                  un excelente servicio.
-                </p>
-            </div>
-            <div class="learn_image">
-                <img src="<?=media();?>/template/Assets/images/uploads/mision.jpg" alt="Nuestra misión">
-            </div>
-          </div>
-          <div class="learn_content">
-              <div class="learn_text">
-                  <a href="">
-                      <h2><strong>Nuestra visión</strong> </h2>
-                  </a>
-                  <p>Ser reconocidos en el mercado a nivel nacional e internacional como una empresa líder
+                  un excelente servicio
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      Visión
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                    Ser reconocidos en el mercado a nivel nacional e internacional como una empresa líder
                     en marquetería y arte, siendo así una marca reconocida y posicionada en el mercado
                     al que pertenecemos.
-                  </p>
-              </div>
-              <div class="learn_image">
-                  <img src="<?=media();?>/template/Assets/images/uploads/vision.jpg" alt="Nuestra visión">
-              </div>
-          </div>
-          <section>
-            <div class="about_team">
-              <div class="container text-center mt-4 cover_presentation">
-                <h2><strong>Nuestro equipo</strong></h2>
-              </div>
-              <div>
-                <div class="card_container">
-                  <div class="cards">
-                    <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro1.png" alt="Miembro 1">
-                    </div>
-                    <div class="card_back">
-                      <h2>Oswaldo Parrado</h2>
-                      <p>Marquetero Y Artista</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="card_container">
-                  <div class="cards">
-                    <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro2.png" alt="Miembro 2">
-                    </div>
-                    <div class="card_back">
-                      <h2>Alejandro Zapata</h2>
-                      <p>Marquetero y Pintor</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="card_container">
-                  <div class="cards">
-                    <div class="card_front">
-                      <img src="<?=media();?>/template/Assets/images/uploads/miembro3.png" alt="Miembro 3">
-                    </div>
-                    <div class="card_back">
-                      <h2>David Parrado</h2>
-                      <p>Artista</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+        </div>
+        <div class="container mb-5">
+          <div class="row">
+            <h2 class="text-right fw-bold">Nuestro <strong class="text__color">equipo</strong></h2>
+            <div class="col-md-4">
+              <div class="team">
+                <img src="<?=media();?>/template/Assets/images/uploads/miembro1.png" alt="Miembro 1">
+                <p class="fs-4 fw-bold mb-0">Oswaldo Parrado</p>
+                <p class="text__color fs-5">Marquetero y artista</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="team">
+                <img src="<?=media();?>/template/Assets/images/uploads/miembro2.png" alt="Miembro 2">
+                <p class="fs-4 fw-bold mb-0">Alejandro Zapata</p>
+                <p class="text__color fs-5">Marquetero y pintor</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="team">
+                <img src="<?=media();?>/template/Assets/images/uploads/miembro3.png" alt="Miembro 3">
+                <p class="fs-4 fw-bold mb-0">David Parrado</p>
+                <p class="text__color fs-5">Artista</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about d-flex justify-content-center align-items-center flex-column">
+          <div>
+              <h3 class="text-center text-white">Empieza con nosotros ahora</h3>
+          </div>
+          <div class="d-flex justify-content-center flex-wrap">
+            <a href="<?=base_url()?>/tienda/marquetería" class="btn_content mt-3 me-3">Marquetería</a>
+            <a href="<?=base_url()?>/tienda/marquetería" class="btn_content mt-3 ms-3">Galería</a>
+          </div>
         </div>
        </section>
     </main>

@@ -117,11 +117,11 @@
           </div>
        </section>
        <section>
-            <div class="container text-center cover_presentation">
-                <h2><strong>También te puede interesar</strong></h2>
-            </div>
-            <div class="d-flex justify-content-center flex-wrap position-relative mt-4" id="itemsGallery"></div>
-        </section>
+        <div class="container">
+          <h3 class="text__color text-center"><strong>Te puede interesar</strong></h3>
+          <div class="row mb-5" id="itemsGallery"></div>
+        </div>
+       </section>
     </main>
 <?php 
     footerPage($data);

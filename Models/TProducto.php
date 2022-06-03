@@ -152,7 +152,7 @@ require_once("Libraries/Core/Mysql.php");
                     FROM product p
                     INNER JOIN techniques t
                     WHERE p.topicid =2 AND t.idtechnique = p.techniqueid
-                    ORDER BY RAND() limit 3";
+                    ORDER BY RAND() limit 4";
             $request = $this->con->select_all($sql);
             for ($i=0; $i < count($request); $i++) { 
                 $idproduct = $request[$i]['idproduct'];

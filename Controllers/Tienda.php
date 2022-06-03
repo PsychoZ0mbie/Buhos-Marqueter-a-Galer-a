@@ -463,14 +463,18 @@
                     $price=formatNum($request[$i]['price']);
                     if($request[$i]['status'] == 2){
                         $html.='
-                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
-                            <div class="card-body text-center tex">
-                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
-                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
-                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
-                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
-                                <p class="card-text text-danger">Vendido</p>
+                        <div class="col-md-3 mt-3 mb-3" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <div class="gallery">
+                                <div class="gallery-img">
+                                    <img src="'.$request[$i]['url'].'" alt="'.$request[$i]['author'].'">
+                                </div>
+                                <div class="gallery-content">
+                                    <h4 class="mt-4 fs-5 text__color">'.$request[$i]['title'].'</h4>
+                                    <p class="text-secondary fs-6 mb-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                    <h5 class="fs-6">'.$request[$i]['tecnica'].'</h5>
+                                    <p class="text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                    <p>Vendido</p>
+                                </div>
                                 <a href="'.$route.'" class="btn_content"><i class="fas fa-eye"></i> Ver más</a>
                             </div>
                         </div>
@@ -478,14 +482,18 @@
                     }else{
 
                         $html.='
-                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
-                            <div class="card-body text-center tex">
-                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
-                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
-                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
-                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
-                                <p class="card-text">'.$price.'</p>
+                        <div class="col-md-3 mt-3 mb-3" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <div class="gallery">
+                                <div class="gallery-img">
+                                    <img src="'.$request[$i]['url'].'" alt="'.$request[$i]['author'].'">
+                                </div>
+                                <div class="gallery-content">
+                                    <h4 class="mt-4 fs-5 text__color">'.$request[$i]['title'].'</h4>
+                                    <p class="text-secondary fs-6 mb-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                    <h5 class="fs-6">'.$request[$i]['tecnica'].'</h5>
+                                    <p class="text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                    <p>'.$price.'</p>
+                                </div>
                                 <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
                             </div>
                         </div>
@@ -509,14 +517,18 @@
                     $price=formatNum($request[$i]['price']);
                     if($request[$i]['status'] == 2){
                         $html.='
-                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
-                            <div class="card-body text-center tex">
-                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
-                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
-                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
-                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
-                                <p class="card-text text-danger">Vendido</p>
+                        <div class="col-md-3 mt-3 mb-3" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <div class="gallery">
+                                <div class="gallery-img">
+                                    <img src="'.$request[$i]['url'].'" alt="'.$request[$i]['author'].'">
+                                </div>
+                                <div class="gallery-content">
+                                    <h4 class="mt-4 fs-5 text__color">'.$request[$i]['title'].'</h4>
+                                    <p class="text-secondary fs-6 mb-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                    <h5 class="fs-6">'.$request[$i]['tecnica'].'</h5>
+                                    <p class="text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                    <p>Vendido</p>
+                                </div>
                                 <a href="'.$route.'" class="btn_content"><i class="fas fa-eye"></i> Ver más</a>
                             </div>
                         </div>
@@ -524,14 +536,18 @@
                     }else{
 
                         $html.='
-                        <div class="card ms-1 mb-3 me-1" style="width: 18rem;" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
-                            <a href="'.$route.'" ><img src="'.$request[$i]['url'].'" class="card-img-top " alt="'.$request[$i]['author'].'"></a>
-                            <div class="card-body text-center tex">
-                                <a class="text__color text-decoration-none" href="'.$route.'" ><h5 class="card-title">'.$request[$i]['title'].'</h5></a>
-                                <p class="card-text m-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
-                                <p class="card-text text-secondary">'.$request[$i]['tecnica'].'</p>
-                                <p class="card-text text-secondary">Artista - '.$request[$i]['author'].'</p>
-                                <p class="card-text">'.$price.'</p>
+                        <div class="col-md-3 mt-3 mb-3" data-title="'.$request[$i]['title'].'" data-author="'.$request[$i]['author'].'">
+                            <div class="gallery">
+                                <div class="gallery-img">
+                                    <img src="'.$request[$i]['url'].'" alt="'.$request[$i]['author'].'">
+                                </div>
+                                <div class="gallery-content">
+                                    <h4 class="mt-4 fs-5 text__color">'.$request[$i]['title'].'</h4>
+                                    <p class="text-secondary fs-6 mb-0">'.$request[$i]['height'].'cm x '.$request[$i]['width'].'cm</p>
+                                    <h5 class="fs-6">'.$request[$i]['tecnica'].'</h5>
+                                    <p class="text-secondary">Artista - '.$request[$i]['author'].'</p>
+                                    <p>'.$price.'</p>
+                                </div>
                                 <a href="'.$route.'" class="btn_content"><i class="fas fa-shopping-cart"></i> Agregar</a>
                             </div>
                         </div>
