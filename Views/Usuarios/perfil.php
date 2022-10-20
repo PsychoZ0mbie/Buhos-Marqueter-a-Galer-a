@@ -1,99 +1,90 @@
-<?php 
-  headerAdmin($data); 
-
-  $img="";
-
-  if($_SESSION['userData']['picture'] ==""){
-    $img = media()."/images/uploads/avatar.png";
-  }else{
-    $img = media()."/images/uploads/".$_SESSION['userData']['picture'];
-  }
-  
-?>
-    <main class="app-content">
-      <div class="row user">
-        <div class="col-md-3">
-          <div class="tile p-0">
-            <ul class="nav flex-column nav-tabs user-tabs">
-              <li class="nav-item"><a class="nav-link active" href="#user-timeline" data-toggle="tab">Mi perfil</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-9">
-          <div class="tab-content">
-            <div class="tab-pane active" id="user-timeline">
-              <div class="timeline-post">
-                <div class="post-media">
-                    <h5>Datos personales</h5>
-                </div>
-                <form id="formPerfil" name="formPerfil" class="form-horizontal mt-4">
-                  <div class="profile-image">
-                    <img src="<?= $img;?>">
-                    <label for="profile-img"><i class="fas fa-cloud-upload-alt"></i></label>
-                    <input type="file" id="profile-img" name="profile-img">
-                  </div>
-                  <div class="form-row mt-4">
-                      <div class="form-group col-md-6">
-                          <label for="txtNombre">Nombre</label>
-                          <input type="text" class="form-control" id="txtNombre" name="txtNombre" value="<?= $_SESSION['userData']['firstname']; ?>" required="">
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="txtApellido">Nombre</label>
-                          <input type="text" class="form-control" id="txtApellido" name="txtApellido" value="<?= $_SESSION['userData']['lastname']; ?>" required="">
-                      </div>
-                  </div>
-                  <div class="form-row">
-                      <div class="form-group col-md-6">
-                          <label for="txtEmail">Email</label>
-                          <input type="email" class="form-control valid validEmail" id="txtEmail" name="txtEmail" value="<?= $_SESSION['userData']['email']; ?>" required="" readonly disabled >
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="txtTelefono">Teléfono</label>
-                          <input type="text" class="form-control valid validNumber" id="txtTelefono" name="txtTelefono" value="<?= $_SESSION['userData']['phone']; ?>" required="" onkeypress="return controlTag(event);">
-                      </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for ="listDepartamento">Departamento</label>
-                        <select name="listDepartamento" id="listDepartamento" class="form-control" data-live-search="true"></select>
+<?php headerAdmin($data)?>
+<div id="modalItem"></div>
+<div class="body flex-grow-1 px-3" id="<?=$data['page_name']?>">
+    <div class="container-lg">
+        <div class="card">
+            <div class="card-body">
+                <form id="formProfile" name="formProfile" class="mb-4">
+                    <input type="hidden" id="idUser" name="idUser" value="<?=$_SESSION['idUser']?>">
+                    <div class="mb-3 uploadImg">
+                        <img src="<?=media()?>/images/uploads/<?=$_SESSION['userData']['image']?>">
+                        <label for="txtImg"><a class="btn btn-info text-white"><i class="fas fa-camera"></i></a></label>
+                        <input class="d-none" type="file" id="txtImg" name="txtImg" accept="image/*"> 
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for ="listCiudad">Ciudad</label>
-                        <select name="listCiudad" id="listCiudad" class="form-control" data-live-search="true"></select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="txtFirstName" class="form-label">Nombres <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="txtFirstName" name="txtFirstName" value="<?=$_SESSION['userData']['firstname']?>" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="txtLastName" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="txtLastName" name="txtLastName" value="<?=$_SESSION['userData']['lastname']?>" required>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="form-row">
-                      <div class="form-group col-md-6">
-                          <label for="txtDir">Dirección</label>
-                          <input type="text" class="form-control" id="txtDir" name="txtDir" value="<?=$_SESSION['userData']['address']?>" required="">
-                      </div>
-
-                      <div class="form-group col-md-6">
-                          <label for="txtId">Cédula de ciudadania</label>
-                          <input type="text" class="form-control" id="txtId" name="txtId" value="<?=$_SESSION['userData']['identification']?>" required="">
-                      </div>
-                  </div>
-                  <div class="post-media mt-4">
-                    <h5>Cambiar contraseña</h5>
-                  </div>
-                  <div class="form-row">
-                      <div class="form-group col-md-6">
-                          <label for="txtPassword">Contraseña</label>
-                          <input type="password" class="form-control" id="txtPassword" name="txtPassword" >
-                      </div>
-                      <div class="form-group col-md-6">
-                          <label for="txtPasswordConfirm">Confirmar contraseña</label>
-                          <input type="password" class="form-control" id="txtPasswordConfirm" name="txtPasswordConfirm" >
-                      </div>
-                  </div>
-                  <div class="tile-footer">
-                      <button id="btnActionForm" class="btn btn-info" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i><span id="btnText">Actualizar</span></button>
-                  </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="txtEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="txtEmail" name="txtEmail" value="<?=$_SESSION['userData']['email']?>" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="txtPhone" class="form-label">Teléfono <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="txtPhone" name="txtPhone" value="<?=$_SESSION['userData']['phone']?>" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="countryList" class="form-label">País <span class="text-danger">*</span></label>
+                                <select class="form-control" aria-label="Default select example" id="countryList" name="countryList" required></select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="stateList" class="form-label">Estado/departamento <span class="text-danger">*</span></label>
+                                <select class="form-control" aria-label="Default select example" id="stateList" name="stateList" required></select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="cityList" class="form-label">Ciudad <span class="text-danger">*</span></label>
+                                <select class="form-control" aria-label="Default select example" id="cityList" name="cityList" required></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtAddress" class="form-label">Dirección <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="txtAddress" name="txtAddress" value="<?=$_SESSION['userData']['address']?>" required>
+                    </div>
+                    <div class="row">
+                        <hr>
+                        <p class="fs-4 fw-bold">Cambiar contraseña</p>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="txtPassword" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="txtPassword" name="txtPassword">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="txtConfirmPassword" class="form-label">Confirmar contraseña</label>
+                                <input type="password" class="form-control" id="txtConfirmPassword" name="txtConfirmPassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="btnAdd"> Actualizar</button>
+                    </div>
                 </form>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </main>
-<?php footerAdmin($data); ?>
+    </div>
+</div>
+<?php footerAdmin($data)?>        

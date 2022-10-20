@@ -1,0 +1,21 @@
+@media screen and (max-width: 1400px) {
+
+}
+@media screen and (max-width: 768px){
+
+}
+@media screen and (max-width: 576px){
+    .items{
+        thead{
+            display: none;
+        }
+    }
+    .item{
+        td{
+            display: block;
+            strong{
+                display:block;
+            }
+        }
+    }
+}

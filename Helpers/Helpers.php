@@ -6,6 +6,45 @@
     require_once('Libraries/PHPMailer/PHPMailer.php');
     require_once('Libraries/PHPMailer/SMTP.php');
 
+    function getCompanyInfo(){
+        require_once('Models/CompanyModel.php');
+        $con = new CompanyModel();
+        $data = $con->selectCompany();
+        $data['password'] = openssl_encrypt($data['password'],METHOD,KEY);
+        return $data;
+    }
+    function getCredentials(){
+        require_once('Models/CompanyModel.php');
+        $con = new CompanyModel();
+        $data = $con->selectCredentials();
+        return $data;
+    }
+    function getSocialMedia(){
+        require_once('Models/CompanyModel.php');
+        $con = new CompanyModel();
+        $request = $con->selectSocial();
+        $arrSocial = array(
+            array("name"=>"facebook",
+                "link"=>$request['facebook']
+            ),
+            array("name"=>"twitter",
+                "link"=>$request['twitter']
+            ),
+            array("name"=>"youtube",
+                "link"=>$request['youtube']
+            ),
+            array("name"=>"instagram",
+                "link"=>$request['instagram']
+            ),
+            array("name"=>"linkedin",
+                "link"=>$request['linkedin']
+            ),
+            array("name"=>"whatsapp",
+                "link"=>str_replace("+","",$request['whatsapp'])
+            ),
+        );
+        return $arrSocial;
+    }
     function base_url(){
         return BASE_URL;
     }
@@ -44,6 +83,23 @@
         $format .= print_r('</pre>');
         return $format;
     }
+    function formatNum(int $num){
+        $companyData = getCompanyInfo();
+        $num = $companyData['currency']['symbol'].number_format($num,0,DEC,MIL)." ".$companyData['currency']['code'];
+        return $num;
+    }
+    function emailNotification(){
+        require_once("Models/StoreModel.php");
+        $obj = new StoreModel();
+        $request = $obj->selectMails();
+        $total = 0;
+        if(!empty($request)){
+            foreach ($request as $email) {
+                if($email['status']!=1)$total++;
+            }
+        }
+        return $total;
+    }
     function sessionUser(int $idpersona){
         require_once("Models/LoginModel.php");
         $objLogin = new LoginModel();
@@ -59,7 +115,28 @@
         $token = $r1.'-'.$r2.'-'.$r3.'-'.$r4;
         return $token;
     }
-    function sendEmail($data,$template){
+    function code(){
+        $code = bin2hex(random_bytes(3));;
+        return $code;
+    }
+    function statusCoupon(){
+        require_once("Models/CustomerTrait.php");
+        class CouponSt{
+            use CustomerTrait;
+            public function getStatusCoupon(){
+                return $this->statusCouponSuscriberT();
+            }
+
+        }
+        $s = new CouponSt();
+        $arrStatus = array();
+        if(!empty($s->getStatusCoupon())){
+            $arrStatus = array("code"=>$s->getStatusCoupon()['code'],"discount"=>$s->getStatusCoupon()['discount']);
+        }
+        return $arrStatus;
+    }
+    //Producción
+    /*function sendEmail($data,$template){
         $mail = new PHPMailer(true);
         $mail->CharSet = 'UTF-8';
 
@@ -103,23 +180,155 @@
         $mail->Body    = $mensaje;
 
         return $mail->send();
-    }
-    function getPermisos($idmodulo){
-        //dep($idmodulo);exit;
-        require_once("Models/PermisosModel.php");
-        $objPermisos = new PermisosModel();
-        $idrol = intval($_SESSION['userData']['idrole']);
-        $arrPermisos = $objPermisos->permisosModulo($idrol);
-        //dep($arrPermisos);exit;
-        $permisos = '';
-        $permisosmod ='';
+    }*/
+    //Pruebas
+    function sendEmail($data,$template){
+        $companyData = getCompanyInfo();
 
+        $mail = new PHPMailer(true);
+        $mail->CharSet = 'UTF-8';
+
+        $asunto = $data['asunto'];
+        $emailDestino = $data['email_usuario'];
+        $nombre="";
+        if(!empty($data['nombreUsuario'])){
+            $nombre= $data['nombreUsuario'];
+        }
+        $empresa = $companyData['name'];
+        $remitente = $companyData['email'];
+        ob_start();
+        require_once("Views/Template/Email/".$template.".php");
+        $mensaje = ob_get_clean();
+
+        //Server settings
+        $mail->SMTPDebug = 0;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.office365.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true; 
+        $mail->Username   = $remitente;
+        $mail->Password   = openssl_decrypt($companyData['password'],METHOD,KEY);
+                                //Enable SMTP authentication
+                             //SMTP username
+                                       //SMTP password
+        $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+        $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        
+        //Recipients
+        $mail->setFrom($remitente,$empresa);
+        $mail->addAddress($emailDestino, $nombre);     //Add a recipient
+        if(!empty($data['email_copia'])){
+            $mail->addBCC($data['email_copia']);
+            $mail->addBCC($remitente);
+        }
+        
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = $asunto;
+        $mail->Body    = $mensaje;
+
+        return $mail->send();
+    }
+    function orderFiles($files,$prefijo){
+        $arrFiles = [];
+        for ($i=0; $i < count($files['name']) ; $i++) { 
+            $data = array("tmp_name"=>$files['tmp_name'][$i]);
+            $rename =$prefijo.'_'.bin2hex(random_bytes(6)).'.png';
+            $arrFile = array(
+                "name"=>$files['name'][$i],
+                "rename"=>$rename,
+            );
+            uploadImage($data, $rename);
+            array_push($arrFiles,$arrFile);
+        }
+        return $arrFiles;
+    }
+    function getTokenPaypal(){
+        $credentials = getCredentials();
+        $payLogin = curl_init(URLPAYPAL."/v1/oauth2/token");
+        curl_setopt($payLogin, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($payLogin, CURLOPT_RETURNTRANSFER,TRUE);
+        curl_setopt($payLogin, CURLOPT_USERPWD, $credentials['client'].":".$credentials['secret']);
+        curl_setopt($payLogin, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+        $result = curl_exec($payLogin);
+        $err = curl_error($payLogin);
+        curl_close($payLogin);
+        if($err){
+            $request = "CURL Error #:" . $err;
+        }else{
+            $objData = json_decode($result);
+            $request =  $objData->access_token;
+        }
+        return $request;
+    }
+
+    function curlConnectionGet(string $ruta, string $contentType = null, string $token){
+        $content_type = $contentType != null ? $contentType : "application/x-www-form-urlencoded";
+        if($token != null){
+            $arrHeader = array('Content-Type:'.$content_type,
+                            'Authorization: Bearer '.$token);
+        }else{
+            $arrHeader = array('Content-Type:'.$content_type);
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $ruta);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $arrHeader);
+        $result = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+        if($err){
+            $request = "CURL Error #:" . $err;
+        }else{
+            $request = json_decode($result);
+        }
+        return $request;
+    }
+    function curlConnectionPost(string $ruta, string $contentType = null, string $token){
+        $content_type = $contentType != null ? $contentType : "application/x-www-form-urlencoded";
+        if($token != null){
+            $arrHeader = array('Content-Type:'.$content_type,
+                            'Authorization: Bearer '.$token);
+        }else{
+            $arrHeader = array('Content-Type:'.$content_type);
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $ruta);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $arrHeader);
+        $result = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+        if($err){
+            $request = "CURL Error #:" . $err;
+        }else{
+            $request = json_decode($result);
+        }
+        return $request;
+    }
+    function getFile(string $url, $data){
+        ob_start();
+        require_once("Views/{$url}.php");
+        $file = ob_get_clean();
+        return $file;        
+    }
+    function getPermits($idmodulo){
+        //dep($idmodulo);exit;
+        require_once("Models/RolesModel.php");
+        $roleModel = new RolesModel();
+        $idrol = intval($_SESSION['userData']['roleid']);
+        $arrPermisos = $roleModel->permitsModule($idrol);
+        $permisos = '';
+        $permisosMod ='';
         if(count($arrPermisos)>0){
             $permisos = $arrPermisos;
             $permisosMod = isset($arrPermisos[$idmodulo]) ? $arrPermisos[$idmodulo] : "";
         }
-        $_SESSION['permisos'] = $permisos;
-        $_SESSION['permisosMod'] = $permisosMod;
+        $_SESSION['permit'] = $permisos;
+        $_SESSION['permitsModule'] = $permisosMod;
     }
 
     function uploadImage(array $data, string $name){
@@ -133,20 +342,20 @@
         unlink('Assets/images/uploads/'.$name);
     }
     
-    function Meses(){
-        $meses = array("Enero", 
-                      "Febrero", 
-                      "Marzo", 
-                      "Abril", 
-                      "Mayo", 
-                      "Junio", 
-                      "Julio", 
-                      "Agosto", 
-                      "Septiembre", 
-                      "Octubre", 
-                      "Noviembre", 
-                      "Diciembre");
-        return $meses;
+    function months(){
+        $months = array("January", 
+                      "February", 
+                      "March", 
+                      "April", 
+                      "May", 
+                      "June", 
+                      "July", 
+                      "August", 
+                      "September", 
+                      "October", 
+                      "November", 
+                      "Dicember");
+        return $months;
     }
     //Elimina exceso de espacios entre palabras
     function strClean($strCadena){
@@ -179,6 +388,7 @@
         $string = str_ireplace("[","",$string);
         $string = str_ireplace("]","",$string);
         $string = str_ireplace("==","",$string);
+        $string = str_ireplace("#","",$string);
         return $string;
     }
 

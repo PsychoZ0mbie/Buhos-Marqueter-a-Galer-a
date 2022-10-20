@@ -1,273 +1,437 @@
-<?php 
+<?php
+    class Usuarios extends Controllers{
 
-	class Usuarios extends Controllers{
-		public function __construct()
-		{
-			
-			parent::__construct();
-			session_start();
-			if(empty($_SESSION['login']))
-			{
-				header('Location: '.base_url().'/login');
-				die();
-			}
-			getPermisos(2);
-		}
+        public function __construct(){
+            session_start();
+            if(empty($_SESSION['login'])){
+                header("location: ".base_url());
+                die();
+            }
+            parent::__construct();
+            getPermits(2);
+        }
+        public function usuarios(){
+            if($_SESSION['permitsModule']['r']){
+                $data['page_tag'] = "Usuario";
+                $data['page_title'] = "Usuarios";
+                $data['page_name'] = "user";
+                $data['data'] = $this->getUsers();
+                $data['app'] = "functions_user.js";
+                $this->views->getView($this,"usuarios",$data);
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+        }
+        public function getUsers($option=null,$params=null){
+            if($_SESSION['permitsModule']['r']){
+                $html="";
+                $request="";
+                if($option == 1){
+                    $request = $this->model->search($params);
+                }else if($option == 2){
+                    $request = $this->model->sort($params);
+                }else{
+                    $request = $this->model->selectUsers();
+                }
+                if(count($request)>0){
+                    for ($i=0; $i < count($request); $i++) { 
 
-		public function Usuarios(){
-			if(empty($_SESSION['permisosMod']['r'])){
-				header("Location:".base_url().'/dashboard');
-			}
-			$data['page_tag'] = "Usuarios | ".NOMBRE_EMPRESA;
-			$data['page_title'] = "Usuarios";
-			$data['page_name'] = "usuarios";
-			$data['page_functions'] = "functions_usuarios.js";
-			$this->views->getView($this,"usuarios",$data);
-		}
+                        $btnEdit="";
+                        $btnDelete="";
+                        $btnView = '<button class="btn btn-info m-1" type="button" title="Watch" data-id="'.$request[$i]['idperson'].'" name="btnView"><i class="fas fa-eye"></i></button>';
+                        
+                        if($_SESSION['permitsModule']['u'] && $request[$i]['roleid'] != 1 || $_SESSION['idUser'] == 1){
+                            $btnEdit = '<button class="btn btn-success m-1" type="button" title="Edit" data-id="'.$request[$i]['idperson'].'" name="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
+                        }
+                        if($_SESSION['permitsModule']['d'] && $request[$i]['roleid'] != 1 || $_SESSION['idUser'] == 1){
+                            $btnDelete = '<button class="btn btn-danger m-1" type="button" title="Delete" data-id="'.$request[$i]['idperson'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
+                        }
+                        if($request[$i]['status']==1){
+                            $status='<span class="badge me-1 bg-success">Activo</span>';
+                        }else{
+                            $status='<span class="badge me-1 bg-danger">Inactivo</span>';
+                        }
+                        if($request[$i]['idperson'] != 1 && $request[$i]['roleid'] != 2){
+                            $html.='
+                                <tr class="item" data-name="'.$request[$i]['firstname'].'" data-lastname="'.$request[$i]['lastname'].'" data-email="'.$request[$i]['email'].'" data-phone="'.$request[$i]['phone'].'">
+                                    <td>
+                                        <img src="'.$request[$i]['image'].'">
+                                    </td>
+                                    <td>'.$request[$i]['firstname'].'</td>
+                                    <td>'.$request[$i]['lastname'].'</td>
+                                    <td>'.$request[$i]['email'].'</td>
+                                    <td>'.$request[$i]['phone'].'</td>
+                                    <td>'.$request[$i]['date'].'</td>
+                                    <td>'.$request[$i]['role'].'</td>
+                                    <td>'.$status.'</td>
+                                    <td class="item-btn">'.$btnView.$btnEdit.$btnDelete.'</td>
+                                </tr>
+                            ';
+                        }
+                    }
+                    $arrResponse = array("status"=>true,"data"=>$html);
+                }else{
+                    $arrResponse = array("status"=>false,"data"=>"No hay datos");
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            
+            return $arrResponse;
+        }
+        public function getUser(){
+            if($_SESSION['permitsModule']['r']){
 
-		public function setUsuario(){
-			if(!empty($_SESSION['permisosMod']['w'])){
-				if($_POST){
-					if(empty($_POST['txtNombre']) || empty($_POST['txtApellido']) || empty($_POST['txtTelefono']) || empty($_POST['listRolid']))
-					{
-						$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
-					}else{ 
-						$idUsuario = intval($_POST['idUsuario']);
-						$strNombre = ucwords(strClean($_POST['txtNombre']));
-						$strApellido = ucwords(strClean($_POST['txtApellido']));
-						$intTelefono = intval(strClean($_POST['txtTelefono']));
-						$strEmail = strtolower(strClean($_POST['txtEmail']));
-						$intTipoId = intval(strClean($_POST['listRolid']));
-						$request_user = "";
-					
-						if($idUsuario == 0)
-						{
-							$option = 1;
-							$strPassword =  empty($_POST['txtPassword']) ? hash("SHA256",passGenerator()) : hash("SHA256",$_POST['txtPassword']);
-							if($_SESSION['permisosMod']['w']){
-								$request_user = $this->model->insertUsuario($strNombre, 
-																			$strApellido, 
-																			$intTelefono, 
-																			$strEmail,
-																			$strPassword, 
-																			$intTipoId);
-							}
-						}else{
-							$option = 2;
-							$strPassword =  empty($_POST['txtPassword']) ? "" : hash("SHA256",$_POST['txtPassword']);
-							if($_SESSION['permisosMod']['u']){
-								$request_user = $this->model->updateUsuario($idUsuario, 
-																			$strNombre,
-																			$strApellido, 
-																			$intTelefono, 
-																			$strEmail,
-																			$strPassword, 
-																			$intTipoId);
-							}
+                if($_POST){
+                    if(empty($_POST)){
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
+                    }else{
+                        $idUser = intval($_POST['idUser']);
+                        $request = $this->model->selectUser($idUser);
+                        if(!empty($request)){
+                            $request['image'] = media()."/images/uploads/".$request['image'];
+                            $arrResponse = array("status"=>true,"data"=>$request);
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"Error, intenta de nuevo."); 
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            die();
+        }
+        public function setUser(){
+            if($_SESSION['permitsModule']['r']){
+                if($_POST){
+                    if(empty($_POST['txtFirstName']) || empty($_POST['txtLastName']) || empty($_POST['txtPhone']) || empty($_POST['typeList'] ) || empty($_POST['statusList'] )
+                    || empty($_POST['txtEmail'])){
+                        $arrResponse = array("status" => false, "msg" => 'Error de datos');
+                    }else{ 
+                        $idUser = intval($_POST['idUser']);
+                        $strName = ucwords(strClean($_POST['txtFirstName']));
+                        $strLastName = ucwords(strClean($_POST['txtLastName']));
+                        $intPhone = intval(strClean($_POST['txtPhone']));
+                        $strEmail = strtolower(strClean($_POST['txtEmail']));
+                        $strPassword = strClean($_POST['txtPassword']);
+                        $intRolId = intval(strClean($_POST['typeList']));
+                        $intStatus = intval($_POST['statusList']);
+                        $password =$strPassword;
+                        $request_user = "";
+                        $photo = "";
+                        $photoProfile="";
+                        $company = getCompanyInfo();
+                        if($idUser == 0){
+                            if($_SESSION['permitsModule']['w']){
 
-						}
+                                $option = 1;
 
-						if($request_user > 0 )
-						{
-							if($option == 1){
-								$arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
-							}else{
-								$arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
-							}
-						}else if($request_user == 'exist'){
-							$arrResponse = array('status' => false, 'msg' => '¡Atención! el email ó el teléfono ya está registrado, ingrese otro.');		
-						}else{
-							$arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
-						}
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-				
-				die();
-			}
-		}
+                                if($_FILES['txtImg']['name'] == ""){
+                                    $photoProfile = "user.jpg";
+                                }else{
+                                    $photo = $_FILES['txtImg'];
+                                    $photoProfile = 'profile_'.bin2hex(random_bytes(6)).'.png';
+                                }
 
-        public function getUsuarios(){
-			if($_SESSION['permisosMod']['r']){
-				$arrData = $this->model->selectUsuarios();
-				for ($i=0; $i < count($arrData); $i++) {
-	
-					$btnView = '';
-					$btnEdit = '';
-					$btnDelete = '';
-	
-					if($_SESSION['permisosMod']['u']){
-						if(($_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'] ==1) || ($_SESSION['userData']['idrole'] ==1 and $arrData[$i]['idrole']!=1 )){	
-							$btnEdit = '<button class="btn btn-primary btn-sm btnEditUsuario" onClick="fntEditUsuario(this,'.$arrData[$i]['idperson'].')" title="Editar Usuario"><i class="fas fa-pencil-alt"></i></button>';
-						}else{
-							$btnEdit = '<button class="btn btn-secondary btn-sm" disabled ><i class="fas fa-pencil-alt"></i></button>';
-						}		
-					}
-					if($_SESSION['permisosMod']['d']){
-						if(($_SESSION['idUser'] == 1 and $_SESSION['userData']['idrole'] == 1) || ($_SESSION['userData']['idrole'] == 1 and $arrData[$i]['idrole'] != 1) and ($_SESSION['userData']['idperson'] != $arrData[$i]['idperson'] )){
-							$btnDelete = '<button class="btn btn-danger btn-sm btnDelUsuario" onClick="fntDelUsuario('.$arrData[$i]['idperson'].')" title="Eliminar Usuario"><i class="far fa-trash-alt"></i></button>';
-						}else{
-							$btnDelete = '<button class="btn btn-secondary btn-sm" disabled ><i class="far fa-trash-alt"></i></button>';
-						}
-					}
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnEdit.' '.$btnDelete.'</div>';
-				}
-				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-			}
+                                if($strPassword !=""){
+                                    $strPassword =  hash("SHA256",$strPassword);
+                                }else{
+                                    $password =bin2hex(random_bytes(4));
+                                    $strPassword =  hash("SHA256",$password);
+                                }
+
+                                $request_user = $this->model->insertUser(
+                                    $strName, 
+                                    $strLastName,
+                                    $photoProfile, 
+                                    $intPhone, 
+                                    $strEmail,
+                                    $strPassword,
+                                    $intStatus,
+                                    $intRolId
+                                );
+                            }
+                        }else{
+                            if($_SESSION['permitsModule']['u']){
+
+                                $option = 2;
+                                $request = $this->model->selectUser($idUser);
+
+                                if($_FILES['txtImg']['name'] == ""){
+                                    $photoProfile = $request['image'];
+                                }else{
+                                    if($request['image'] != "user.jpg"){
+                                        deleteFile($request['image']);
+                                    }
+                                    $photo = $_FILES['txtImg'];
+                                    $photoProfile = 'profile_'.bin2hex(random_bytes(6)).'.png';
+                                }
+
+                                if($strPassword!=""){
+                                    $strPassword =  hash("SHA256",$strPassword);
+                                }
+                                
+                                $request_user = $this->model->updateUser(
+                                    $idUser, 
+                                    $strName, 
+                                    $strLastName,
+                                    $photoProfile, 
+                                    $intPhone, 
+                                    $strEmail,
+                                    $strPassword, 
+                                    $intStatus,
+                                    $intRolId
+                                );
+                            }
+                        }
+    
+                        if($request_user > 0 ){
+                            if($photo!=""){
+                                uploadImage($photo,$photoProfile);
+                            }
+                            
+                            if($option == 1){
+                                $data['nombreUsuario'] = $strName." ".$strLastName;
+                                $data['asunto']="Credentials";
+                                $data['email_usuario'] = $strEmail;
+                                $data['email_remitente'] = $company['email'];
+                                $data['company'] = $company;
+                                $data['password'] = $password;
+                                sendEmail($data,"email_credentials");
+                                $arrResponse = $this->getUsers();
+                                $arrResponse['msg'] = 'Datos guardados. Se ha enviado un correo electrónico al usuario con las credenciales.';
+                            }else{
+                                if($strPassword!=""){
+                                    $data['nombreUsuario'] = $strName." ".$strLastName;
+                                    $data['asunto']="Credentials";
+                                    $data['email_usuario'] = $strEmail;
+                                    $data['email_remitente'] = $company['email'];
+                                    $data['company'] = $company;
+                                    $data['password'] = $password;
+                                    sendEmail($data,"email_passwordUpdated");
+                                    $arrResponse = $this->getUsers();
+                                    $arrResponse['msg'] = 'La contraseña ha sido actualizada, se ha enviado un correo electrónico con la nueva contraseña.';
+                                }else{
+                                    $arrResponse = $this->getUsers();
+                                    $arrResponse['msg'] = 'Datos actualizados';
+                                }
+                                
+                            }
+                        }else if($request_user == 'exist'){
+                            $arrResponse = array('status' => false, 'msg' => '¡Atención! el correo electrónico o el número de teléfono ya están registrados, pruebe con otro.');		
+                        }else{
+                            $arrResponse = array("status" => false, "msg" => 'No es posible guardar los datos');
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
 			die();
 		}
+        public function getRoles(){
+            $html="";
+            $request = $this->model->selectRoles();
+            if(count($request)>0){
+                for ($i=0; $i < count($request); $i++) { 
+                    if($_SESSION['idUser'] == 1){
+                        $html.='<option value="'.$request[$i]['idrole'].'">'.$request[$i]['name'].'</option>';
+                    }else if($request[$i]['idrole'] != 1){
+                        $html.='<option value="'.$request[$i]['idrole'].'">'.$request[$i]['name'].'</option>';
+                    }
+                }
+                $arrResponse = array("data"=>$html);
+            }else{
+                $arrResponse = array("data"=>"");
+            }
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function delUser(){
+            if($_SESSION['permitsModule']['d']){
 
-		public function getUsuario($idpersona){
-			if($_SESSION['permisosMod']['r']){
-				$idusuario = intval($idpersona);
-				if($idusuario > 0){
-					$arrData = $this->model->selectUsuario($idusuario);
-					if(empty($arrData)){
-					
-						$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
-					}else{
-						$arrResponse = array('status' => true, 'data' => $arrData);
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
+                if($_POST){
+                    if(empty($_POST['idUser'])){
+                        $arrResponse=array("status"=>false,"Error de datos");
+                    }else{
+                        $id = intval($_POST['idUser']);
+                        
+                        $request = $this->model->selectUser($id);
+                        if($request['image'] !="user.jpg"){
+                            deleteFile($request['image']);
+                        }
 
-		public function getSelectUsuario(){
-			$htmlOptions = "";
-			$arrData = $this->model->selectUsuariosPicker();
-			if(count($arrData) > 0 ){
-				for ($i=0; $i < count($arrData); $i++) { 
-					$htmlOptions .= '<option value="'.$arrData[$i]['idperson'].'">'.$arrData[$i]['firstname'].' '.$arrData[$i]['lastname'].'</option>';
-				}
-			}
-			echo $htmlOptions;
-			die();	
-		}
-		public function delUsuario(){
-			if($_POST){
-				if($_SESSION['permisosMod']['d']){
-					$intIdUsuario = intval($_POST['idUsuario']);
-					$requestDelete = $this->model->deleteUsuario($intIdUsuario);
-					if($requestDelete == 'ok')
-					{
-						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado el usuario');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar el usuario.');
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-		public function perfil(){
-			$data['page_tag'] = "Perfil";
-			$data['page_title'] = "Perfil";
-			$data['page_name'] = "perfil";
-			$data['page_functions'] = "functions_usuarios.js";
-			$this->views->getView($this,"perfil",$data);
-		}
-		
+                        $request = $this->model->deleteUser($id);
+                        if($request=="ok"){
+                            $arrResponse = $this->getUsers();
+                            $arrResponse['msg'] = "Se ha eliminado";
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"No es posible eliminar, intenta de nuevo");
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            die();
+        }
+        public function search($params){
+            if($_SESSION['permitsModule']['r']){
+                $search = strClean($params);
+                $arrResponse = $this->getUsers(1,$search);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        public function sort($params){
+            if($_SESSION['permitsModule']['r']){
+                $sort = intval($params);
+                $arrResponse = $this->getUsers(2,$sort);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        /*************************Profile methods*******************************/
+        public function perfil(){
+            $data['page_tag'] = "Perfil";
+            $data['page_title'] = "Perfil";
+            $data['page_name'] = "profile";
+            $data['app'] = "functions_profile.js";
+            $this->views->getView($this,"perfil",$data);
+        }
+        public function updateProfile(){
+            if($_POST){
+                if(empty($_POST['txtFirstName']) || empty($_POST['txtLastName']) || empty($_POST['txtPhone']) || empty($_POST['countryList'] ) || empty($_POST['stateList'] )
+                || empty($_POST['txtEmail']) || empty($_POST['cityList'] ) || empty($_POST['txtAddress'] )){
+                    $arrResponse = array("status" => false, "msg" => 'Error de datos');
+                }else{ 
+                    $idUser = intval($_POST['idUser']);
+                    $strName = ucwords(strClean($_POST['txtFirstName']));
+                    $strLastName = ucwords(strClean($_POST['txtLastName']));
+                    $intPhone = intval(strClean($_POST['txtPhone']));
+                    $strEmail = strtolower(strClean($_POST['txtEmail']));
+                    $strPassword = strClean($_POST['txtPassword']);
+                    $strAddress = strClean($_POST['txtAddress']);
+                    $intCountry = intval(strClean($_POST['countryList']));
+                    $intState = intval($_POST['stateList']);
+                    $intCity = intval($_POST['cityList']);
 
-		public function putPerfil(){
-			if($_POST){
-				if(empty($_POST['txtNombre']) ||empty($_POST['txtApellido'])  || empty($_POST['txtTelefono']) ||empty($_POST['txtId'])){
-					$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
-				}else{
-					$idUsuario = $_SESSION['idUser'];
-					$strNombre = strClean($_POST['txtNombre']);
-					$strApellido = strClean($_POST['txtApellido']);
-					$intTelefono = intval(strClean($_POST['txtTelefono']));
-					$intDepartment = intval($_POST['listDepartamento']);
-					$intCity = intval($_POST['listCiudad']);
-					$strDireccion = strClean($_POST['txtDir']);
-					$strId = strClean($_POST['txtId']);
-					$foto = "";
-					$foto_perfil="";
+                    $request_user = "";
+                    $photo = "";
+                    $photoProfile="";
 
-					$request = $this->model->selectUsuario($idUsuario);
-					if($_FILES['profile-img']['name'] ==""){
-						$foto_perfil =$request['picture'];
-					}else{
-						deleteFile($request['picture']);
-						$foto = $_FILES['profile-img'];
-						$foto_perfil = 'perfil_'.bin2hex(random_bytes(6)).'.jpg';
-					}
-					
-						
-					
-					
+                    $option = 2;
+                    $request = $this->model->selectUser($idUser);
 
-					$strPassword = "";
-					if(!empty($_POST['txtPassword'])){
-						$strPassword = hash("SHA256",$_POST['txtPassword']);
-					}
-	
-					$request_user = $this->model->updatePerfil($idUsuario,
-																$strNombre,
-																$strApellido,
-																$foto_perfil,
-																$intTelefono,
-																$strDireccion,
-																$intDepartment,
-																$intCity,
-																$strId,
-																$strPassword);
-					
-					if($request_user){
-						if($foto!=""){
-							uploadImage($foto,$foto_perfil);
-						}
-						sessionUser($_SESSION['idUser']);
-						$arrResponse = array('status'=> true, 'msg' => 'Datos Actualizados correctamente.');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'No es posible almacenar los datos');
-					}
-				}
-				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-			}
-			die();
-		}
-		
-		public function getSelectDepartamentos(){
-			$htmlDepartamento="";
-			$htmlCiudad="";
-			$arrDepartment = $this->model->selectDepartamento();
-			$arrCity = $this->model->selectCiudad($_SESSION['userData']['departmentid']);
-			if(count($arrDepartment) > 0){
-				for ($i=0; $i < count($arrDepartment) ; $i++) { 
-					if($_SESSION['userData']['departmentid']== $arrDepartment[$i]['iddepartment']){
-						$htmlDepartamento .= '<option value="'.$arrDepartment[$i]['iddepartment'].'" selected>'.$arrDepartment[$i]['department'].'</option>';
-					}else{
-						$htmlDepartamento .= '<option value="'.$arrDepartment[$i]['iddepartment'].'">'.$arrDepartment[$i]['department'].'</option>';
-					}
-				}
-			}
-			if(count($arrCity) > 0){
-				for ($i=0; $i < count($arrCity); $i++) { 
-					if($_SESSION['userData']['cityid']== $arrCity[$i]['idcity']){
-						$htmlCiudad .= '<option value="'.$arrCity[$i]['idcity'].'" selected>'.$arrCity[$i]['city'].'</option>';
-					}else{
-						$htmlCiudad .= '<option value="'.$arrCity[$i]['idcity'].'">'.$arrCity[$i]['city'].'</option>';
-					}
-				}
-			}
-			$arrResponse = array("department" =>$htmlDepartamento, "city"=>$htmlCiudad);
-			echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-			die();
-		}
+                    if($_FILES['txtImg']['name'] == ""){
+                        $photoProfile = $request['image'];
+                    }else{
+                        if($request['image'] != "user.jpg"){
+                            deleteFile($request['image']);
+                        }
+                        $photo = $_FILES['txtImg'];
+                        $photoProfile = 'profile_'.bin2hex(random_bytes(6)).'.png';
+                    }
 
-		public function getSelectCity($department){
-			$htmlCiudad="";
-			$arrData = $this->model->selectCiudad($department);
-			if(count($arrData)>0){
-				for ($i=0; $i < count($arrData); $i++) { 
-					$htmlCiudad .= '<option value="'.$arrData[$i]['idcity'].'" selected>'.$arrData[$i]['city'].'</option>';
-				}
-			}
-			echo $htmlCiudad;
-		}
+                    if($strPassword!=""){
+                        $strPassword =  hash("SHA256",$strPassword);
+                    }
+                    
+                    $request_user = $this->model->updateProfile(
+                        $idUser, 
+                        $strName, 
+                        $strLastName,
+                        $photoProfile, 
+                        $intPhone, 
+                        $strAddress,
+                        $intCountry,
+                        $intState,
+                        $intCity,
+                        $strEmail,
+                        $strPassword
+                    );
+                        
+                    if($request_user > 0 ){
+                        if($photo!=""){
+                            uploadImage($photo,$photoProfile);
+                        }
+                        $arrResponse = array('status' => true, 'msg' => 'Datos actualizados');
+                    }else if($request_user == 'exist'){
+                        $arrResponse = array('status' => false, 'msg' => '¡Atención! el correo electrónico o el número de teléfono ya están registrados, pruebe con otro.');		
+                    }else{
+                        $arrResponse = array("status" => false, "msg" => 'No es posible guardar los datos');
+                    }
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        public function getSelectLocationInfo(){
 
-	}
- ?>
+            $idCountry = $_SESSION['userData']['countryid'];
+            $idState = $_SESSION['userData']['stateid'];
+            $idCity = $_SESSION['userData']['cityid'];
+
+            $countries = $this->model->selectCountries();
+            $states = $this->model->selectStates($idCountry);
+            $cities = $this->model->selectCities($idState);
+
+            $countrieshtml="";
+            $stateshtml="";
+            $citieshtml="";
+
+            for ($i=0; $i < count($countries) ; $i++) { 
+                if($idCountry == $countries[$i]['id']){
+                    $countrieshtml.='<option value="'.$countries[$i]['id'].'" selected>'.$countries[$i]['name'].'</option>';
+                    
+                }else{
+                    $countrieshtml.='<option value="'.$countries[$i]['id'].'">'.$countries[$i]['name'].'</option>';
+                }
+            }
+            for ($i=0; $i < count($states) ; $i++) { 
+                if($idState == $states[$i]['id']){
+                    $stateshtml.='<option value="'.$states[$i]['id'].'" selected>'.$states[$i]['name'].'</option>';
+                    
+                }else{
+                    $stateshtml.='<option value="'.$states[$i]['id'].'">'.$states[$i]['name'].'</option>';
+                }
+            }
+            for ($i=0; $i < count($cities) ; $i++) { 
+                if($idCity == $cities[$i]['id']){
+                    $citieshtml.='<option value="'.$cities[$i]['id'].'" selected>'.$cities[$i]['name'].'</option>';
+                }else{
+                    $citieshtml.='<option value="'.$cities[$i]['id'].'">'.$cities[$i]['name'].'</option>';
+                }
+            }
+            $arrResponse = array("countries"=>$countrieshtml,"states"=>$stateshtml,"cities"=>$citieshtml);
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function getSelectCountry($id){
+            $request = $this->model->selectStates($id);
+            $html="";
+            for ($i=0; $i < count($request) ; $i++) { 
+                $html.='<option value="'.$request[$i]['id'].'">'.$request[$i]['name'].'</option>';
+            }
+            echo json_encode($html,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function getSelectState($id){
+            $request = $this->model->selectCities($id);
+            $html="";
+            for ($i=0; $i < count($request) ; $i++) { 
+                $html.='<option value="'.$request[$i]['id'].'">'.$request[$i]['name'].'</option>';
+            }
+            echo json_encode($html,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+    }
+?>

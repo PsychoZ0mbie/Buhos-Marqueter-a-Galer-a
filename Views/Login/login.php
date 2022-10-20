@@ -1,79 +1,108 @@
 <!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="Abel OSH">
-    <meta name="theme-color" content="#009688">
-    <link rel="shortcut icon" href="<?= media();?>/images/uploads/icon.gif">
-    <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/main.css">
-    <link rel="stylesheet" type="text/css" href="<?= media();?>/css/style.css">
-    
-    <title><?= $data['page_tag']; ?></title>
-  </head>
-  <body>
-    <section class="material-half-bg">
-      <div class="cover"></div>
-    </section>
-    <section class="login-content">
-      <div class="logo">
-        <h1><?= $data['page_title']; ?></h1>
-      </div>
-      <div class="login-box">
-        <div id="divLoading" >
-          <div>
-            <img src="<?= media(); ?>/images/loading/loading.svg" alt="Loading">
-          </div>
-        </div>
-        <form class="login-form" name="formLogin" id="formLogin" action="">
-          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>INICIAR SESIÓN</h3>
-          <div class="form-group">
-            <label class="control-label">USUARIO</label>
-            <input id="txtEmail" name="txtEmail" class="form-control" type="email" placeholder="Email" autofocus>
-          </div>
-          <div class="form-group">
-            <label class="control-label">CONTRASEÑA</label>
-            <input id="txtPassword" name="txtPassword" class="form-control" type="password" placeholder="Contraseña">
-          </div>
-          <div class="form-group">
-            <div class="utility">
-              <p class="semibold-text mb-2"><a href="#" data-toggle="flip">¿Olvidaste tu contraseña?</a></p>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?=$data['page_title']?></title>
+    <!-- Font Awesome 5-->
+    <link href="<?=media()?>/css/icons/font-awesome.min.css">
+    <!-- AdminKit CSS file -->
+    <link href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/css/style.css" rel="stylesheet">
+    <!-- My Styles -->
+    <link rel="stylesheet" href="<?=media()?>/css/style.css">
+</head>
+<body>
+    <div class="bg-light min-vh-100 d-flex flex-row align-items-center" id=<?=$data['page_name']?>>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card-group d-block d-md-flex row">
+                        <div class="card col-md-12 p-4 mb-0">
+                            <div class="card-body" id="cardLogin">
+                                <h1>Login</h1>
+                                <p class="text-medium-emphasis">Login to your account</p>
+                                <form id="formLogin">
+                                    <div class="input-group mb-3"><span class="input-group-text">
+                                        <svg class="icon">
+                                            <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                                        </svg></span>
+                                        <input class="form-control" type="text" placeholder="Your email" id="txtEmail" name="txtEmail">
+                                    </div>
+                                    <div class="input-group mb-4"><span class="input-group-text">
+                                        <svg class="icon">
+                                            <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                                        </svg></span>
+                                        <input class="form-control" type="password" placeholder="Your password" id="txtPassword" name="txtPassword">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 d-flex justify-content-center">
+                                            <button class="btn btn-primary px-4 w-100" type="submit" id="btnLogin">Login</button>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 text-end d-flex justify-content-center">
+                                            <button class="btn btn-link px-0" type="button" id="btnResetPass">Forgot your password?</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-body d-none" id="cardReset">
+                                <h1>Forgot my password</h1>
+                                <p class="text-medium-emphasis">We will send you an email with a link to reset your password</p>
+                                <form id="formReset">
+                                    <div class="input-group mb-3"><span class="input-group-text">
+                                        <svg class="icon">
+                                            <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                                        </svg></span>
+                                        <input class="form-control" type="text" placeholder="Your email" id="txtEmailReset" name="txtEmailReset">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 d-flex justify-content-center">
+                                            <button class="btn btn-primary px-4 w-100" type="submit" id="btnReset">Reset my password</button>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 text-end d-flex justify-content-center">
+                                            <button class="btn btn-link px-0" type="button" id="btnSession">Login</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div id="alertLogin" class="text-center"></div>
-          <div class="form-group btn-container">
-            <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN</button>
-          </div>
-        </form>
-        <form id="formResetPass" name="formResetPass" class="forget-form" action="">
-          <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>¿Olvidaste contraseña?</h3>
-          <div class="form-group">
-            <label class="control-label">EMAIL</label>
-            <input id="txtEmailReset" name="txtEmailReset" class="form-control" type="email" placeholder="Email">
-          </div>
-          <div class="form-group btn-container">
-            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-unlock fa-lg fa-fw"></i>REINICIAR</button>
-          </div>
-          <div class="form-group mt-3">
-            <p class="semibold-text mb-0"><a href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw"></i> Iniciar sesión</a></p>
-          </div>
-        </form>
-      </div>
-    </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/plugins/unescaped-markup/prism-unescaped-markup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/plugins/normalize-whitespace/prism-normalize-whitespace.js"></script>
+    <!-- Essential javascripts for application to work-->
+    <script src="<?= media(); ?>/js/bootstrap/popper.min.js?n=1"></script>
+    <script src="<?= media(); ?>/js/bootstrap/bootstrap.min.js?n=1"></script>
+    <script src="<?= media();?>/js/icons/fontawesome.js"></script>
+    <script src="<?= media();?>/js/plugins/sweetalert.js"></script>
+    <!-- AdminKit JS file -->
+    <script src="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/simplebar/js/simplebar.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/plugins/unescaped-markup/prism-unescaped-markup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/plugins/normalize-whitespace/prism-normalize-whitespace.js"></script>
+
+    <script src="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/chart.js/js/chart.min.js"></script>
+    <script src="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
+    <script src="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/utils/js/coreui-utils.js"></script>
+    <script src="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/js/main.js"></script>
+
+    <!-- My scripts -->
     <script>
         const base_url = "<?= base_url(); ?>";
+        const MS = "<?=MS;?>";
+        const MD = "<?=MD?>";
     </script>
-    <!-- Essential javascripts for application to work-->
-    <script src="<?= media(); ?>/js/jquery-3.3.1.min.js"></script>
-    <script src="<?= media(); ?>/js/popper.min.js"></script>
-    <script src="<?= media(); ?>/js/bootstrap.min.js"></script>
-    <script src="<?= media(); ?>/js/fontawesome.js"></script>
-    <script src="<?= media(); ?>/js/main.js"></script>
-    <!-- The javascript plugin to display page loading on top-->
-    <script src="<?= media(); ?>/js/plugins/pace.min.js"></script>
-    <script type="text/javascript" src="<?= media();?>/js/plugins/sweetalert.min.js"></script>
-    <script src="<?= media(); ?>/js/<?= $data['page_functions']; ?>"></script>
-  </body>
+    
+    <script type="text/javascript" src="<?= media(); ?>/js/functions.js"></script>
+    <script type="module" src="<?= media(); ?>/js/app.js"></script>
+</body>
 </html>

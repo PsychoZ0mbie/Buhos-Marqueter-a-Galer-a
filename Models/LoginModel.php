@@ -2,8 +2,8 @@
 
 	class LoginModel extends Mysql
 	{
-        private $intIdUsuario;
-        private $strUsuario;
+        private $intIdUser;
+        private $strEmail;
         private $strPassword;
         private $strToken;
 
@@ -12,70 +12,55 @@
 			parent::__construct();
         }	
         
-        public function loginUser(string $usuario, string $password)
-		{
-			$this->strUsuario = $usuario;
+        public function loginUser(string $email, string $password){
+			$this->strEmail = $email;
 			$this->strPassword = $password;
-			$sql = "SELECT idperson,email FROM person WHERE 
-					email = '$this->strUsuario' and 
+			$sql = "SELECT idperson,email,status FROM person WHERE 
+					email = '$this->strEmail' AND 
 					password = '$this->strPassword'";
 			$request = $this->select($sql);
 			return $request;
         }
         
         public function sessionLogin(int $iduser){
-            $this->intIdUsuario = $iduser;
-            //BUSCAR ROL
-            $sql = "SELECT p.idperson,
-                            p.firstname,
-                            p.lastname,
-                            p.picture,
-                            p.phone,
-                            p.address,
-                            p.email,
-                            p.departmentid,
-                            p.cityid,
-                            p.identification,
-                            r.idrole,
-                            r.role
-                    FROM person p
-                    INNER JOIN role r
-                    WHERE p.idperson = $this->intIdUsuario AND p.roleid = r.idrole";
+            $this->intIdUser = $iduser;
+
+            $sql = "SELECT  *  FROM person WHERE idperson = $this->intIdUser";
             $request = $this->select($sql);
             $_SESSION['userData'] = $request;
             return $request;
         }
 
         public function getUserEmail(string $email){
-            $this->strUsuario = $email;
+            $this->strEmail = $email;
             $sql = "SELECT idperson, firstname, lastname FROM person WHERE
-                    email='$this->strUsuario'";
+                    email='$this->strEmail'";
             $request = $this->select($sql);
             return $request;
         }
 
         public function setTokenUser(int $idpersona,string $token){
-            $this->intIdUsuario = $idpersona;
+            $this->intIdUser = $idpersona;
             $this->strToken = $token;
-            $sql = "UPDATE person SET token = ? WHERE idperson = $this->intIdUsuario";
+            $sql = "UPDATE person SET token = ? WHERE idperson = $this->intIdUser";
             $arrData = array($this->strToken);
             $request = $this->update($sql,$arrData);
             return $request;
         }
 
-        public function getUsuario(string $email, string $token){
-            $this->strUsuario=$email;
+        public function getUser(string $email, string $token){
+            $this->strEmail=$email;
             $this->strToken = $token;
             $sql ="SELECT idperson FROM person WHERE
-                    email = '$this->strUsuario' and token= '$this->strToken'";
+                    email = '$this->strEmail' and token= '$this->strToken'";
             $request =$this->select($sql);
             return $request;
         }
 
-        public function insertPassword(int $idpersona, string $pass){
-            $this->intIdUsuario = $idpersona;
+        public function insertPassword(int $idperson, string $pass){
+            $this->intIdUser = $idperson;
             $this->strPassword = $pass;
-            $sql = "UPDATE person SET password = ?, token = ? WHERE idperson = $this->intIdUsuario";
+            $sql = "UPDATE person SET password = ?, token = ? WHERE idperson = $this->intIdUser";
             $arrData = array($this->strPassword,"");
             $request = $this->update($sql,$arrData);
             return $request;

@@ -1,43 +1,44 @@
-<?php headerAdmin($data);?> 
-<main class="app-content">
-<?php
-    getModal('modalRoles',$data);
-?>
-  <div id="contentAjax"></div> 
-      <div class="app-title">
-        <div>
-            <h1><i class="fas fa-user-tag"></i> <?= $data['page_title'] ?>
-            <?php if($_SESSION['permisosMod']['w']){ ?>
-                <button class="btn btn-primary" type="button" onclick="openModal();" ><i class="fas fa-plus-circle"></i> Nuevo</button>
-            <?php } ?> 
-            </h1>
-        </div>
-        <ul class="app-breadcrumb breadcrumb">
-          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-          <li class="breadcrumb-item"><a href="<?= base_url(); ?>/roles"><?= $data['page_title'] ?></a></li>
-        </ul>
-      </div>
-      <div class="row">
-            <div class="col-md-12">
-              <div class="tile">
-                <div class="tile-body">
-                  <div class="table-responsive">
-                    <table class="table table-hover table-bordered" id="tableRoles">
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Nombre</th>
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                  </div>
+<?php headerAdmin($data)?>
+<div id="modalItem"></div>
+<div class="body flex-grow-1 px-3" id="<?=$data['page_name']?>">
+    <div class="container-lg">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center"><?=$data['page_title']?></h2>
+                <button type="button" class="btn btn-success text-white" id="exportExcel" data-name="table<?=$data['page_title']?>" title="Export to excel" ><i class="fas fa-file-excel"></i></button>
+                <div class="row mb-3">
+                    <div class="col-md-6 mt-3">
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <div class="row">
+                            <div class="col-md-3 d-flex align-items-center text-end">
+                                <span>Ordenar por: </span>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control" aria-label="Default select example" id="sortBy" name="sortBy" required>
+                                    <option value="1">Más reciente</option>
+                                    <option value="2">Más antiguo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                <div class="scroll-y">
+                    <table class="table text-center items align-middle" id="table<?=$data['page_title']?>">
+                        <thead>
+                            <tr>
+                                <th>Rol</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listItem">
+                            <?=$data['data']['data']?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        
-    </main>
-<?php footerAdmin($data); ?>
+    </div>
+</div>
+<?php footerAdmin($data)?>        

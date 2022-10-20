@@ -1,0 +1,41 @@
+
+
+
+@import "components/mixin";
+@import "components/buttons";
+@import "components/cards";
+@import "components/utilities";
+@import "components/header";
+@import "components/login";
+@import "components/home";
+@import "components/frame";
+@import "components/about";
+@import "components/service";
+@import "components/footer";
+@import "components/mediaqueries";
+
+.form-select{
+    border:none; 
+    &:focus{
+        outline: none;
+        box-shadow: 0 .5rem 1rem rgba($color1,.15)!important;
+        border:none; 
+    }
+}
+.form-control{
+    border:none; 
+    &:focus{
+        outline: none;
+        box-shadow: 0 .5rem 1rem rgba($color1,.15)!important;
+        border:none; 
+    }
+}
+a{
+    text-decoration: none;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}

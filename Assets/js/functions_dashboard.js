@@ -1,88 +1,69 @@
-window.addEventListener("load",function(){
-    if(document.querySelector("#ultimosPedidos")){
-        let request = (window.XMLHttpRequest) ? new XMLHttpRequest : new ActiveXObject("Microsoft.XMLHTTP");
-        let ajaxUrl = base_url+"/dashboard/getPedidos";
+'use strict';
 
-        request.open("POST",ajaxUrl,true);
-        request.send();
-        request.onreadystatechange = function(){
-            if(request.status == 200 && request.readyState == 4){
-                let objData = JSON.parse(request.responseText);
-                let html = "";
-                if(objData.status){
-                    let orden = objData.orden;
-                    for (let i = 0; i < orden.length; i++) {
-                        html += `
-                                <tr>
-                                    <td>${orden[i]['idorderdata']}</td>
-                                    <td>${orden[i]['firstname']} ${orden[i]['lastname']}</td>
-                                    <td>${orden[i]['status']}</td>
-                                    <td>${orden[i]['price']}</td>
-                                </tr>
-                        
-                                `;
-                        
-                    }
-                }else{
-                    html= `<p>${objData.msg}</p>`;
-                }
-                document.querySelector("#ultimosPedidos").innerHTML=html;
-            }
-        }
+$('.date-picker').datepicker( {
+    closeText: 'Cerrar',
+    prevText: 'atrás',
+    nextText: 'siguiente',
+    currentText: 'Hoy',
+    monthNames: ['1 -', '2 -', '3 -', '4 -', '5 -', '6 -', '7 -', '8 -', '9 -', '10 -', '11 -', '12 -'],
+    monthNamesShort: ['Enero','Febrero','Marzo','Abril', 'Mayo','Junio','Julio','Agosto','Septiembre', 'Octubre','Noviembre','Diciembre'],
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    dateFormat: 'MM yy',
+    showDays: false,
+    onClose: function(dateText, inst) {
+        $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
     }
-},false);
+});
 
-/*
-function fntViewInfo(idpedido,idpersona){
-    let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    let ajaxUrl = base_url+"/pedidos/getPedidoDetalle";
-    let formData =new FormData();
-    formData.append("idpedido",idpedido);
-    formData.append("idpersona",idpersona);
-
-    request.open("POST",ajaxUrl,true);
-    request.send(formData);
-    request.onreadystatechange=function(){
-        if(request.readyState == 4 && request.status == 200){
-            let objData = JSON.parse(request.responseText);
-            console.log(objData);
-            if(objData.status){
-                document.querySelector("#fecha").innerHTML = objData.orden.date;
-                document.querySelector("#numOrden").innerHTML = objData.orden.idorderdata;
-                document.querySelector("#nombre").innerHTML = objData.orden.firstname+" "+objData.orden.lastname;
-                document.querySelector("#identificacion").innerHTML = objData.orden.identification;
-                document.querySelector("#email").innerHTML = objData.orden.email;
-                document.querySelector("#telefono").innerHTML = objData.orden.phone;
-                document.querySelector("#departamento").innerHTML = objData.orden.departamento;
-                document.querySelector("#ciudad").innerHTML = objData.orden.ciudad;
-                document.querySelector("#direccion").innerHTML = objData.orden.address;
-                document.querySelector("#subtotal").innerHTML = objData.orden.price;
-                document.querySelector("#totalprecio").innerHTML = objData.orden.price;
-                let arrDetalle = objData.detalle;
-                let html="";
-                for (let i = 0; i < arrDetalle.length; i++) {
-                    let largo = arrDetalle[i]['length'];
-                    let ancho = arrDetalle[i]['width'];
-                    let medidas="";
-                    if( largo != 0 && ancho != 0){
-                        medidas = `<p>${largo}cm X ${ancho}cm</p>`;
-                    }
-                    html+=` <tr>
-                                <td>
-                                    <p>${arrDetalle[i]['title']}</p>
-                                    ${medidas}
-                                    <p>${arrDetalle[i]['subtopic']}</p>
-                                    <p>${arrDetalle[i]['type']}</p>
-                                </td>
-                                <td>${arrDetalle[i]['price']}</td>
-                                <td>${arrDetalle[i]['quantity']}</td>
-                                <td>${arrDetalle[i]['total']}</td>
-                            </tr>`;
-                }
-                document.querySelector("#detalle").innerHTML = html;
-
-            }
-        }
+let btnSalesMonth = document.querySelector("#btnSalesMonth");
+let btnSalesYear = document.querySelector("#btnSalesYear");
+btnSalesMonth.addEventListener("click",function(){
+    let salesMonth = document.querySelector(".salesMonth").value;
+    if(salesMonth==""){
+        Swal.fire("Error", "Elija una fecha", "error");
+        return false;
     }
+    btnSalesMonth.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    btnSalesMonth.setAttribute("disabled","");
+    let formData = new FormData();
+    formData.append("date",salesMonth);
+    request(base_url+"/dashboard/getSalesMonth",formData,"post").then(function(objData){
+        btnSalesMonth.innerHTML=`<i class="fas fa-search"></i>`;
+        btnSalesMonth.removeAttribute("disabled");
+        $("#salesMonth").html(objData);
+    });
+});
+btnSalesYear.addEventListener("click",function(){
+    
+    let salesYear = document.querySelector("#sYear").value;
+    let strYear = salesYear.toString();
 
-}*/
+    if(salesYear==""){
+        Swal.fire("Error", "Por favor, ponga un año", "error");
+        document.querySelector("#sYear").value ="";
+        return false;
+    }
+    if(strYear.length>4){
+        Swal.fire("Error", "La fecha es incorrecta.", "error");
+        document.querySelector("#sYear").value ="";
+        return false;
+    }
+    btnSalesYear.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    btnSalesYear.setAttribute("disabled","");
+
+    let formData = new FormData();
+    formData.append("date",salesYear);
+    request(base_url+"/dashboard/getSalesYear",formData,"post").then(function(objData){
+        btnSalesYear.innerHTML=`<i class="fas fa-search"></i>`;
+        btnSalesYear.removeAttribute("disabled");
+        console.log(objData);
+        if(objData.status){
+            $("#salesYear").html(objData.script);
+        }else{
+            Swal.fire("Error", objData.msg, "error");
+            document.querySelector("#sYear").value ="";
+        }
+    });
+});

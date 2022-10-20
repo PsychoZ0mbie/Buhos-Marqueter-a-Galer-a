@@ -1,672 +1,596 @@
-<?php 
+<?php
     class Marqueteria extends Controllers{
-		public function __construct()
-		{
-			session_start();
-			if(empty($_SESSION['login']))
-			{
-				header('Location: '.base_url().'/login');
-				die();
-			}
-			parent::__construct();
-			getPermisos(3);
-		}
-		/******************************Products************************************/
-		public function Productos(){
-			if(empty($_SESSION['permisosMod']['r'])){
-				header("Location:".base_url().'/dashboard');
-			}
-			$data['page_tag'] = "Marquetería | Productos";
-			$data['page_title'] = "Marquetería | Productos";
-			$data['page_name'] = "productos";
-			$data['page_functions'] = "functions_marqueteria.js";
-			$this->views->getView($this,"productos",$data);
-		}
+        public function __construct(){
+            session_start();
+            if(empty($_SESSION['login'])){
+                header("location: ".base_url());
+                die();
+            }
+            parent::__construct();
+            getPermits(4);
+            
+        }
+        public function molduras(){
+            if($_SESSION['permitsModule']['r']){
+                $data['page_tag'] = "Molduras";
+                $data['page_title'] = "Molduras";
+                $data['page_name'] = "moldura";
+                $data['products'] = $this->getProducts();
+                $data['app'] = "functions_molding.js";
+                $this->views->getView($this,"molduras",$data);
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+        }
+        public function colores(){
+            if($_SESSION['permitsModule']['r']){
+                $data['page_tag'] = "Colores";
+                $data['page_title'] = "Colores";
+                $data['page_name'] = "colores";
+                $data['colores'] = $this->getColors();
+                $data['app'] = "functions_colors.js";
+                $this->views->getView($this,"colores",$data);
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+        }
+        public function materiales(){
+            if($_SESSION['permitsModule']['r']){
+                $data['page_tag'] = "Materiales";
+                $data['page_title'] = "Materiales";
+                $data['page_name'] = "materiales";
+                $data['colores'] = $this->getMaterials();
+                $data['app'] = "functions_materials.js";
+                $this->views->getView($this,"materiales",$data);
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+        }
+        /*************************Product methods*******************************/
+        public function getProducts($option=null,$params=null){
+            if($_SESSION['permitsModule']['r']){
+                $html="";
+                $request="";
+                if($option == 1){
+                    $request = $this->model->searchm($params);
+                }else if($option == 2){
+                    $request = $this->model->sortm($params);
+                }else{
+                    $request = $this->model->selectProducts();
+                }
+                if(count($request)>0){
+                    for ($i=0; $i < count($request); $i++) { 
 
-		public function getProductos(){
-			if($_SESSION['permisosMod']['r']){
-				$arrData = $this->model->selectProductos();
-				for ($i=0; $i < count($arrData); $i++) { 
-					$btnView = "";
-					$btnEdit = "";
-					$btnDelete = "";
-
-					if($arrData[$i]['status'] == 1){
-						$arrData[$i]['status'] = '<span class="badge badge-success">Activo</span>';
-					}else{
-						$arrData[$i]['status'] = '<span class="badge badge-danger">Inactivo</span>';
-					}
-					$url = base_url()."/catalogo/producto/".$arrData[$i]['route'];
-					$btnView = '<a class="btn btn-info btn-sm title="Ver" href="'.$url.'" target="_blank"><i class="far fa-eye"></i></a>';
-
-					if($_SESSION['permisosMod']['u']){
-						$btnEdit = '<button class="btn btn-primary btn-sm " onClick="fntEditInfo('.$arrData[$i]['idproduct'].')" title="Editar"><i class="fas fa-pencil-alt"></i></button>';
-					}else{
-						$btnEdit = '<button class="btn btn-secondary btn-sm" disabled ><i class="fas fa-pencil-alt"></i></button>';
-					}
-					if($_SESSION['permisosMod']['d']){
-						$btnDelete = '<button class="btn btn-danger btn-sm " onClick="fntDelInfo('.$arrData[$i]['idproduct'].')" title="Eliminar"><i class="far fa-trash-alt"></i></button>';
-					}else{
-						$btnDelete = '<button class="btn btn-secondary btn-sm" disabled ><i class="far fa-trash-alt"></i></button>';
-					}
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnView.' '.$btnEdit.' '.$btnDelete.'</div>';
-					$arrData[$i]['price'] = MS.number_format($arrData[$i]['price'],0,DEC,MIL);
-				}
-				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-			}
-			die();
-		}
-
-		public function setProducto(){
-			if($_SESSION['permisosMod']['w']){
-				if($_POST){
-					if(empty($_POST['txtNombre']) || empty($_POST['listCategoria']) || empty($_POST['listTecnica']) || empty($_POST['listStatus'])
-					|| empty($_POST['txtPrecio']) || empty($_POST['txtCantidad'])){
-						
-						$arrResponse = array("status" =>false,"msg"=>"Datos incorrectos.");
-					}else{
-						$intIdProducto = intval($_POST['idProducto']);
-						$strProducto = ucwords(strClean($_POST['txtNombre']));
-						$intIdCategoria = 1;
-						$intIdSubcategoria = intval($_POST['listCategoria']);
-						$intIdTecnica = intval($_POST['listTecnica']);
-						$floatPrecio = intval($_POST['txtPrecio']);
-						$intCantidad = intval($_POST['txtCantidad']);
-						$strDescripcion = strClean($_POST['txtDescripcion']);
-						$intStatus = intval($_POST['listStatus']);
-						
-						//$strReferencia = str_replace(" ","",$strProducto);
-						//$strRefNombre =substr($strReferencia,0,2).substr($strReferencia,-2);
-						$strReferencia = "ma".$intIdCategoria.$intIdSubcategoria.$intIdTecnica;
-						
-
-						$ruta = $strReferencia.strtolower(clear_cadena($strProducto));
-						$ruta = str_replace(" ","-",$ruta);
-						$ruta = str_replace("?","",$ruta);
-						$ruta = str_replace("¿","",$ruta);
-						//$strReferencia = $ruta;
-						if($intIdProducto == 0){
-							if($_SESSION['permisosMod']['w']){
-								$request = $this->model->insertProducto($strReferencia,
-																		$strProducto,
-																		$intIdCategoria,
-																		$intIdSubcategoria,
-																		$intIdTecnica,
-																		$floatPrecio,
-																		$intCantidad,
-																		$strDescripcion,
-																		$ruta,
-																		$intStatus);
-								$option = 1;
-							}
-						}else{
-							if($_SESSION['permisosMod']['u']){
-								$request = $this->model->updateProducto($intIdProducto,
-																		$strReferencia,
-																		$strProducto,
-																		$intIdCategoria,
-																		$intIdSubcategoria,
-																		$intIdTecnica,
-																		$floatPrecio,
-																		$intCantidad,
-																		$strDescripcion,
-																		$ruta,
-																		$intStatus);
-								$option = 2;
-							}
-						}
-						if($request > 0){
-							if($option == 1){
-								$arrResponse = array('status'=>true,'idproducto'=>$request,'msg' => 'Datos guardados correctamente');
-							}else{
-								$arrResponse = array("status" =>true,"idproducto" =>$intIdProducto,"msg" =>"Datos actualizados correctamente");
-							}
-						}else if($request =="exist"){
-							$arrResponse = array("status" =>false,"msg"=>"Ya existe el producto, revisa la papelera o intente con un nombre distinto.");
-						}else{
-							$arrResponse = array("status" =>false,"msg"=>"Ha ocurrido un problema, inténtelo más tarde");
-						}
-					}
-					echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
-				}
-				die();
-			}
-		}
-
-		public function getProducto($producto){
-			if($_SESSION['permisosMod']['r']){
-				$idProducto = intval($producto);
-				if($idProducto > 0){
-					$arrData = $this->model->selectProducto($idProducto);
-					if(empty($arrData)){
-						$arrResponse = array("status"=>true,"msg"=>"Datos no encontrador");
-					}else{
-						$arrImg = $this->model->selectImage($idProducto);
-						if(count($arrImg)){
-							for ($i=0; $i < count($arrImg); $i++) { 
-								$arrImg[$i]['url'] = media()."/images/uploads/".$arrImg[$i]['title'];
-							}
-						}
-					}
-
-					$arrData['img'] = $arrImg;
-					$arrResponse = array("status"=>true,"data"=>$arrData);
-				}
-				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-			}
-			die();
-		}
-
-		public function delProducto(){
-			if($_POST){
-				if($_SESSION['permisosMod']['d']){
-
-					$intIdProducto = intval($_POST['idproducto']);
-					$requestDelete = $this->model->deleteProducto($intIdProducto);
-					if($requestDelete == 'ok'){
-						$arrResponse = array('status' => true, 'msg' => 'Se ha enviado a la papelera');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar');
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-	
-		public function setImage(){
-			if($_POST){
-				if(empty($_POST['idProducto'])){
-					$arrResponse = array('status' => false, 'msg' => 'Error, inténtelo más tarde.');
-				}else{
-					$idProducto = intval($_POST['idProducto']);
-					$foto      = $_FILES['foto'];
-					$imgNombre = 'pro_'.bin2hex(random_bytes(6)).'.gif';
-					$request_image = $this->model->insertImage($idProducto,$imgNombre);
-					if($request_image){
-						$uploadImage = uploadImage($foto,$imgNombre);
-						$arrResponse = array('status' => true, 'imgname' => $imgNombre, 'msg' => 'Imagen cargada.');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error, inténtelo más tarde.');
-					}
-				}
-				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-			}
-			die();
-		}
-
-		public function delFile(){
-			if($_POST){
-				if(empty($_POST['idProducto']) || empty($_POST['file'])){
-					$arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
-				}else{
-					//Eliminar de la DB
-					$idProducto = intval($_POST['idProducto']);
-					$imgNombre  = strClean($_POST['file']);
-					$request_image = $this->model->deleteImage($idProducto,$imgNombre);
-
-					if($request_image){
-						$deleteFile =  deleteFile($imgNombre);
-						$arrResponse = array('status' => true, 'msg' => 'Archivo eliminado');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar');
-					}
-				}
-				echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-			}
-			die();
-		}
-
-		public function getPapelera(){
-			if($_SESSION['permisosMod']['r']){
-
-                $arrData = $this->model->selectPapelera();
-				for ($i=0; $i < count($arrData); $i++) {
-	
-					$btnRecovery = '';
-					$btnDelete = '';
-	
-					if($_SESSION['permisosMod']['u']){
-						$btnRecovery = '<button class="btn btn-info btn-sm " onClick="fntRecoveryInfo('.$arrData[$i]['idproduct'].')" title="Recuperar"><i class="fas fa-undo"></i></button>';
-					}else{
-						$btnRecovery = '<button class="btn btn-secondary btn-sm" disabled ><i class="fas fa-undo"></i></button>';
-					}
-					if($_SESSION['permisosMod']['d']){
-						$btnDelete = '<button class="btn btn-danger btn-sm " onClick="fntDelfEver('.$arrData[$i]['idproduct'].')" title="Eliminar"><i class="far fa-trash-alt"></i></button>';
-					}else{
-						$btnDelete = '<button class="btn btn-secondary btn-sm" disabled ><i class="far fa-trash-alt"></i></button>';
-					}
-
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnRecovery.' '.$btnDelete.'</div>';
-				}
-				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-			}
-			die();
-		}
-		public function getRecoveryProducto($idproducto){
-			if($_SESSION['permisosMod']['u']){
-				$idproducto = intval($idproducto);
-				if($idproducto > 0){
-					$arrData = $this->model->recovery($idproducto);
-					if(empty($arrData)){
-						$arrResponse = array("status"=>false,"msg"=>"Ha ocurrido un problema, inténtelo más tarde.");
-					}else{
-						$arrResponse = array("status"=>true,"msg"=>"Se ha recuperado.");
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-		public function deleteRecovery($idproducto){
-			if($_SESSION['permisosMod']['d']){
-
-				$idproducto = intval($idproducto);
-				if($idproducto > 0){
-					$arrImg = $this->model->selectImage($idproducto);
-					if(count($arrImg)){
-						for ($i=0; $i < count($arrImg); $i++) { 
-							deleteFile($arrImg[$i]['title']);
-						}
-					}
-					$arrData = $this->model->deleteRecoveryInfo($idproducto);
-					if($arrData=="ok"){
-						$arrResponse = array("status"=>true,"msg"=>"Se ha eliminado.");
-					}else{
-						$arrResponse = array("status"=>false,"msg"=>"Error, inténtelo más tarde.");
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-        /******************************SubTopics************************************/
-		public function Subcategorias(){
-			if(empty($_SESSION['permisosMod']['r'])){
-				header("Location:".base_url().'/dashboard');
-			}
-			$data['page_tag'] = "Marquetería | Categorias";
-			$data['page_title'] = "Marquetería | Categorias";
-			$data['page_name'] = "Categorias";
-			$data['page_functions'] = "functions_sub.js";
-			$this->views->getView($this,"subcategorias",$data);
-		}
-        public function setSubcategoria(){
-            if($_SESSION['permisosMod']['w']){
+                        $status="";
+                        $type="";
+                        $btnView = '<button class="btn btn-info m-1" type="button" title="Watch" data-id="'.$request[$i]['id'].'" name="btnView"><i class="fas fa-eye"></i></button>';
+                        $btnEdit="";
+                        $btnDelete="";
+                        $price = formatNum($request[$i]['price']);
+                        if($request[$i]['discount']>0){
+                            $discount = '<span class="text-success">'.$request[$i]['discount'].'% OFF</span>';
+                        }else{
+                            $discount = '<span class="text-danger">0%</span>';
+                        }
+                        if($_SESSION['permitsModule']['u']){
+                            $btnEdit = '<button class="btn btn-success m-1" type="button" title="Edit" data-id="'.$request[$i]['id'].'" name="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
+                        }
+                        if($_SESSION['permitsModule']['d']){
+                            $btnDelete = '<button class="btn btn-danger m-1" type="button" title="Delete" data-id="'.$request[$i]['id'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
+                        }
+                        if($request[$i]['status']==1){
+                            $status='<span class="badge me-1 bg-success">Activo</span>';
+                        }else{
+                            $status='<span class="badge me-1 bg-warning">Inactivo</span>';
+                        }
+                        if($request[$i]['type']==1){
+                            $type='Moldura en madera';
+                        }else{
+                            $type='Moldura importada';
+                        }
+                        $html.='
+                            <tr class="item">
+                                <td>
+                                    <img src="'.$request[$i]['image'].'" class="rounded">
+                                </td>
+                                <td><strong>Referencia:</strong>'.$request[$i]['reference'].'</td>
+                                <td><strong>Tipo:</strong>'.$type.'</td>
+                                <td><strong>Desperdicio:</strong>'.$request[$i]['waste'].' cm</td>
+                                <td><strong>Precio:</strong>'.$price.' x cm</td>
+                                <td><strong>Descuento:</strong>'.$discount.'</td>
+                                <td><strong>Estado:</strong>'.$status.'</td>
+                                <td class="item-btn">'.$btnView.$btnEdit.$btnDelete.'</td>
+                            </tr>
+                        ';
+                    }
+                    $arrResponse = array("status"=>true,"data"=>$html);
+                }else{
+                    $html = '<tr><td colspan="20">No hay datos</td></tr>';
+                    $arrResponse = array("status"=>false,"data"=>$html);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            
+            return $arrResponse;
+        }
+        public function getProduct(){
+            //dep($_POST);exit;
+            if($_SESSION['permitsModule']['r']){
                 if($_POST){
-                    if(empty($_POST['txtNombre'])){
-                        $arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
+                    if(empty($_POST)){
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }else{
+                        $id = intval($_POST['idProduct']);
+                        $request = $this->model->selectProduct($id);
+                        if(!empty($request)){
+                            $this->model->deleteTmpImage();
+                            $request['priceFormat'] = formatNum($request['price']);
+                            $arrImages = $this->model->selectImages($id);
+                            for ($i=0; $i < count($arrImages) ; $i++) { 
+                                $this->model->insertTmpImage($arrImages[$i]['name'],$arrImages[$i]['rename']);
+                            }
+                            $arrResponse = array("status"=>true,"data"=>$request);
+                        }else{
+                            $this->model->deleteTmpImage();
+                            $arrResponse = array("status"=>false,"msg"=>"No hay datos"); 
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            die();
+        }
+        public function setProduct(){
+            //dep($_POST);exit;
+            if($_SESSION['permitsModule']['r']){
+                if($_POST){
+                    if(empty($_POST['txtReference']) || empty($_POST['statusList']) || empty($_POST['molduraList'])
+                    || empty($_POST['txtWaste']) || empty($_POST['txtPrice'])){
+                        $arrResponse = array("status" => false, "msg" => 'Error de datos');
+                    }else{ 
+                        $idProduct = intval($_POST['idProduct']);
+                        $strReference = strtoupper(strClean($_POST['txtReference']));
+                        $intType = strClean($_POST['molduraList']);
+                        $intWaste = intval($_POST['txtWaste']);
+                        $intPrice = intval($_POST['txtPrice']);
+                        $intDiscount = intval($_POST['txtDiscount']);
+                        $intStatus = intval($_POST['statusList']);
+                        
+                        $imgInfo = "";
+                        $imgName="";
 
-                        $intIdSubcategoria = intval($_POST['idSubcategoria']);
-                        $strSubcategoria =  ucwords(strClean($_POST['txtNombre']));
-						$intIdCategoria = 1;
-
-						$ruta = strtolower(clear_cadena($strSubcategoria));
-						$ruta = str_replace(" ","-",$ruta);
-
-                        if($intIdSubcategoria == 0)
-                        {
-                            //Crear
-                            if($_SESSION['permisosMod']['w']){
-
-                                $request_categoria = $this->model->insertSubcategoria($strSubcategoria,$intIdCategoria,$ruta);
+                        $photos = $this->model->selectTmpImages();
+                        if($idProduct == 0){
+                            if($_SESSION['permitsModule']['w']){
                                 $option = 1;
+
+                                if($_FILES['txtFrame']['name'] == ""){
+                                    $photoCategory = "category.jpg";
+                                }else{
+                                    $imgInfo = $_FILES['txtFrame'];
+                                    $imgName = 'frame_'.bin2hex(random_bytes(6)).'.png';
+                                }
+
+                                $request= $this->model->insertProduct($strReference,$intType, $intWaste, $intPrice, $intDiscount, $intStatus, $imgName, $photos);
                             }
                         }else{
-                            //Actualizar
-                            if($_SESSION['permisosMod']['u']){
-
-                                $request_categoria = $this->model->updateSubcategoria($intIdSubcategoria, $strSubcategoria,$intIdCategoria,$ruta);
+                            if($_SESSION['permitsModule']['u']){
                                 $option = 2;
+                                $request = $this->model->selectProduct($idProduct);
+                                if($_FILES['txtFrame']['name'] == ""){
+                                    $imgName = $request['frame'];
+                                }else{
+                                    if($request['frame'] != "category.jpg"){
+                                        deleteFile($request['frame']);
+                                    }
+                                    $imgInfo = $_FILES['txtFrame'];
+                                    $imgName = 'frame_'.bin2hex(random_bytes(6)).'.png';
+                                }
+                                $request= $this->model->updateProduct($idProduct,$strReference,$intType, $intWaste, $intPrice, $intDiscount, $intStatus, $imgName, $photos);
                             }
                         }
-
-                        if($request_categoria > 0 )
-                        {
-                            if($option == 1)
-                            {
-                                $arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
-                            }else{
-                                $arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
+                        if($request > 0 ){
+                            $this->model->deleteTmpImage();
+                            if($imgInfo!=""){
+                                uploadImage($imgInfo,$imgName);
                             }
-                        }else if($request_categoria == 'exist'){
-                            
-                            $arrResponse = array('status' => false, 'msg' => '¡Atención! La categoría ya existe.');
+                            if($option == 1){
+                                $arrResponse = $this->getProducts();
+                                $arrResponse['msg'] = 'Datos guardados.';
+                            }else{
+                                $arrResponse = $this->getProducts();
+                                $arrResponse['msg'] = 'Datos actualizados';
+                            }
+                        }else if($request == 'exist'){
+                            $arrResponse = array('status' => false, 'msg' => '¡Atención! La moldura ya existe, pruebe con otra referencia.');		
                         }else{
                             $arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
                         }
                     }
                     echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 }
+            }else{
+                header("location: ".base_url());
                 die();
-            }	
-		}
-        public function getSubcategorias(){
-			if($_SESSION['permisosMod']['r']){
-
-                $arrData = $this->model->selectSubcategorias();
-				for ($i=0; $i < count($arrData); $i++) {
-	
-					$btnEdit = '';
-					$btnDelete = '';
-	
-					if($_SESSION['permisosMod']['u']){
-						$btnEdit = '<button class="btn btn-primary btn-sm " onClick="fntEditInfo(this,'.$arrData[$i]['idsubtopic'].')" title="Editar"><i class="fas fa-pencil-alt"></i></button>';
-					}
-					if($_SESSION['permisosMod']['d']){
-						$btnDelete = '<button class="btn btn-danger btn-sm " onClick="fntDelInfo('.$arrData[$i]['idsubtopic'].')" title="Eliminar"><i class="far fa-trash-alt"></i></button>';
-					}
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnEdit.' '.$btnDelete.'</div>';
-				}
-				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-			}
+            }
 			die();
 		}
-        public function getSubcategoria($idSubcategoria){
-			if($_SESSION['permisosMod']['r']){
-				$intIdSubcategoria = intval($idSubcategoria);
-				if($intIdSubcategoria > 0){
-					$arrData = $this->model->selectSubcategoria($intIdSubcategoria);
-					if(empty($arrData)){
-					
-						$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
-					}else{
-                        //$arrData['url_portada'] = media().'/images/uploads/'.$arrData['image'];
-						$arrResponse = array('status' => true, 'data' => $arrData);
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-        public function delSubcategoria(){
-			if($_POST){
-				if($_SESSION['permisosMod']['d']){
-
-					$intIdSubcategoria = intval($_POST['idSubcategoria']);
-
-					$requestDelete = $this->model->deleteSubcategoria($intIdSubcategoria);
-					if($requestDelete == 'ok'){
-						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado');
-					}else if($requestDelete == 'exist'){
-						$arrResponse = array('status' => false, 'msg' => 'No es posible eliminar si está asociado a un producto.');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar.');
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-		public function getSelectSubcategorias(){
-			$html = "";
-			$arrData =$this->model->selectSubcategorias();
-			if(count($arrData)>0){
-				for ($i=0; $i < count($arrData); $i++) { 
-					$html .= '<option value="'.$arrData[$i]['idsubtopic'].'">'.$arrData[$i]['title'].'</option>';
-				}
-			}
-			echo $html;
-			die();
-		}
-
-		/******************************Techniques************************************/
-		public function Tecnicas(){
-			if(empty($_SESSION['permisosMod']['r'])){
-				header("Location:".base_url().'/dashboard');
-			}
-			$data['page_tag'] = "Marquetería | Subcategorias";
-			$data['page_title'] = "Marquetería | Subcategorias";
-			$data['page_name'] = "tecnicas";
-			$data['page_functions'] = "functions_tec.js";
-			$this->views->getView($this,"tecnicas",$data);
-		}
-		
-        public function setTecnica(){
-            if($_SESSION['permisosMod']['w']){
+        public function delProduct(){
+            if($_SESSION['permitsModule']['d']){
                 if($_POST){
-                    if(empty($_POST['txtNombre'])){
-                        $arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
+                    if(empty($_POST['idProduct'])){
+                        $arrResponse=array("status"=>false,"msg"=>"Error de datos");
                     }else{
-
-                        $intIdTecnica = intval($_POST['idTecnica']);
-                        $strTecnica =  ucwords(strClean($_POST['txtNombre']));
-						$intIdCategoria = 1;
-
-						$ruta = strtolower(clear_cadena($strTecnica));
-						$ruta = str_replace(" ","-",$ruta);
-
-                        if($intIdTecnica == 0)
-                        {
-                            //Crear
-                            if($_SESSION['permisosMod']['w']){
-
-                                $request_tecnica = $this->model->insertTecnica($strTecnica,$intIdCategoria,$ruta);
-                                $option = 1;
-                            }
-                        }else{
-                            //Actualizar
-                            if($_SESSION['permisosMod']['u']){
-
-                                $request_tecnica = $this->model->updateTecnica($intIdTecnica, $strTecnica,$intIdCategoria,$ruta);
-                                $option = 2;
-                            }
+                        $id = intval($_POST['idProduct']);
+                        $request = $this->model->selectProduct($id);
+                        if($request['frame']!="category.jpg"){
+                            deleteFile($request['frame']);
                         }
-
-                        if($request_tecnica > 0 )
-                        {
-                            if($option == 1)
-                            {
-                                $arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
-                            }else{
-                                $arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
-                            }
-                        }else if($request_tecnica == 'exist'){
-                            
-                            $arrResponse = array('status' => false, 'msg' => '¡Atención! La categoría ya existe.');
+                        $request = $this->model->deleteProduct($id);
+                        if($request=="ok"){
+                            $this->model->deleteTmpImage();
+                            $arrResponse = array("status"=>true,"msg"=>"Se ha eliminado.","data"=>$this->getProducts()['data']);
                         }else{
-                            $arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
+                            $arrResponse = array("status"=>false,"msg"=>"No se ha podido eliminar, inténta de nuevo.");
                         }
                     }
                     echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 }
+            }else{
+                header("location: ".base_url());
                 die();
-            }	
-		}
+            }
+            die();
+        }
+        public function setImg(){ 
+            $arrImages = orderFiles($_FILES['txtImg'],"molding");
+            for ($i=0; $i < count($arrImages) ; $i++) { 
+                $request = $this->model->insertTmpImage($arrImages[$i]['name'],$arrImages[$i]['rename']);
+            }
+            $arrResponse = array("msg"=>"Uploaded");
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function delImg(){
+            $images = $this->model->selectTmpImages();
+            $image = $_POST['image'];
+            for ($i=0; $i < count($images) ; $i++) { 
+                if($image == $images[$i]['name']){
+                    deleteFile($images[$i]['rename']);
+                    $this->model->deleteTmpImage($images[$i]['rename']);
+                    break;
+                }
+            }
+            $arrResponse = array("msg"=>"Deleted");
+            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            die();
+        }
+        public function searchm($params){
+            if($_SESSION['permitsModule']['r']){
+                $search = strClean($params);
+                $arrResponse = $this->getProducts(1,$params);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        public function sortm($params){
+            if($_SESSION['permitsModule']['r']){
+                $params = intval($params);
+                $arrResponse = $this->getProducts(2,$params);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        /*************************Color methods*******************************/
+        public function getColors($option=null,$params=null){
+            if($_SESSION['permitsModule']['r']){
+                $html="";
+                $request="";
+                if($option == 1){
+                    $request = $this->model->searchc($params);
+                }else if($option == 2){
+                    $request = $this->model->sortc($params);
+                }else{
+                    $request = $this->model->selectColors();
+                }
+                if(count($request)>0){
+                    for ($i=0; $i < count($request); $i++) { 
 
-        public function getTecnicas(){
-			if($_SESSION['permisosMod']['r']){
-
-                $arrData = $this->model->selectTecnicas();
-				for ($i=0; $i < count($arrData); $i++) {
-	
-					$btnEdit = '';
-					$btnDelete = '';
-	
-					if($_SESSION['permisosMod']['u']){
-						$btnEdit = '<button class="btn btn-primary btn-sm " onClick="fntEditInfo(this,'.$arrData[$i]['idtechnique'].')" title="Editar"><i class="fas fa-pencil-alt"></i></button>';
-					}
-					if($_SESSION['permisosMod']['d']){
-						$btnDelete = '<button class="btn btn-danger btn-sm " onClick="fntDelInfo('.$arrData[$i]['idtechnique'].')" title="Eliminar"><i class="far fa-trash-alt"></i></button>';
-					}
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnEdit.' '.$btnDelete.'</div>';
-				}
-				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-			}
-			die();
-		}
-
-        public function getTecnica($idTecnica){
-			if($_SESSION['permisosMod']['r']){
-				$intIdTecnica = intval($idTecnica);
-				if($intIdTecnica > 0){
-					$arrData = $this->model->selectTecnica($intIdTecnica);
-					if(empty($arrData)){
-					
-						$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
-					}else{
-                        //$arrData['url_portada'] = media().'/images/uploads/'.$arrData['image'];
-						$arrResponse = array('status' => true, 'data' => $arrData);
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-
-        public function delTecnica(){
-			if($_POST){
-				if($_SESSION['permisosMod']['d']){
-
-					$intIdTecnica = intval($_POST['idtecnica']);
-
-					$requestDelete = $this->model->deleteTecnica($intIdTecnica);
-					if($requestDelete == 'ok'){
-						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado');
-					}else if($requestDelete == 'exist'){
-						$arrResponse = array('status' => false, 'msg' => 'No es posible eliminar si está asociado a un producto.');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar.');
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-		public function getSelectTecnica(){
-			$html="";
-			$arrData = $this->model->selectTecnicas();
-			if(count($arrData)>0){
-				for ($i=0; $i < count($arrData); $i++) { 
-					$html .= '<option value="'.$arrData[$i]['idtechnique'].'">'.$arrData[$i]['title'].'</option>';
-				}
-			}
-			echo $html;
-			die();
-		}
-		/******************************Attributes************************************/
-		public function Atributos(){
-			if(empty($_SESSION['permisosMod']['r'])){
-				header("Location:".base_url().'/dashboard');
-			}
-			$data['page_tag'] = "Marquetería | Atributos";
-			$data['page_title'] = "Marquetería | Atributos";
-			$data['page_name'] = "atributos";
-			$data['page_functions'] = "functions_att.js";
-			$this->views->getView($this,"atributos",$data);
-		}
-		
-        public function setAtributo(){
-            if($_SESSION['permisosMod']['w']){
-                if($_POST){
-                    if(empty($_POST['txtNombre']) || empty($_POST['listCategoria'])){
-                        $arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
-                    }else{
-
-                        $intIdAtributo = intval($_POST['idAtributo']);
-						$intIdSubcategoria = intval($_POST['listCategoria']);
-						$strPrice = intval(($_POST['txtPrecio']));
-                        $strAtributo =  ucwords(strClean($_POST['txtNombre']));
-						$intIdCategoria = 1;
-
-
-                        if($intIdAtributo == 0)
-                        {
-                            //Crear
-                            if($_SESSION['permisosMod']['w']){
-
-                                $request_atributo = $this->model->insertAtributo($strAtributo,$intIdCategoria,$intIdSubcategoria,$strPrice);
-                                $option = 1;
-                            }
-                        }else{
-                            //Actualizar
-                            if($_SESSION['permisosMod']['u']){
-
-                                $request_atributo = $this->model->updateAtributo($intIdAtributo, $strAtributo,$intIdCategoria,$intIdSubcategoria,$strPrice);
-                                $option = 2;
-                            }
+                        $btnEdit="";
+                        $btnDelete="";
+                        $status="";
+                        
+                        if($_SESSION['permitsModule']['u']){
+                            $btnEdit = '<button class="btn btn-success m-1" type="button" title="Edit" data-id="'.$request[$i]['id'].'" name="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
                         }
-
-                        if($request_atributo > 0 )
-                        {
-                            if($option == 1)
-                            {
-                                $arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
-                            }else{
-                                $arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
-                            }
-                        }else if($request_atributo == 'exist'){
-                            
-                            $arrResponse = array('status' => false, 'msg' => '¡Atención! ya existe.');
+                        if($_SESSION['permitsModule']['d']){
+                            $btnDelete = '<button class="btn btn-danger m-1" type="button" title="Delete" data-id="'.$request[$i]['id'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
+                        }
+                        if($request[$i]['status']==1){
+                            $status='<span class="badge me-1 bg-success">Activo</span>';
                         }else{
-                            $arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
+                            $status='<span class="badge me-1 bg-warning">Inactivo</span>';
+                        }
+                        $html.='
+                            <tr class="item" data-name="'.$request[$i]['name'].'">
+                                <td class="d-flex justify-content-center"><div style="height: 50px;width: 50px; border:1px solid #000;background-color:#'.$request[$i]['color'].'"></div></td>
+                                <td><strong>Nombre: </strong>'.$request[$i]['name'].'</td>
+                                <td><strong>Código hexadecimal:</strong>#'.$request[$i]['color'].'</td>
+                                <td><strong>Estado: </strong>'.$status.'</td>
+                                <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
+                            </tr>
+                        ';
+                    }
+                    $arrResponse = array("status"=>true,"data"=>$html);
+                }else{
+                    $html = '<tr><td colspan="20">No hay datos</td></tr>';
+                    $arrResponse = array("status"=>false,"data"=>$html);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            
+            return $arrResponse;
+        }
+        public function getColor(){
+            if($_SESSION['permitsModule']['r']){
+
+                if($_POST){
+                    if(empty($_POST)){
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
+                    }else{
+                        $idColor = intval($_POST['idColor']);
+                        $request = $this->model->selectColor($idColor);
+                        if(!empty($request)){
+                            $arrResponse = array("status"=>true,"data"=>$request);
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"Error, intenta de nuevo"); 
                         }
                     }
                     echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 }
+            }else{
+                header("location: ".base_url());
                 die();
-            }	
-		}
+            }
+            die();
+        }
+        public function setColor(){
+            if($_SESSION['permitsModule']['r']){
+                if($_POST){
+                    if(empty($_POST['txtName']) || empty($_POST['txtColor']) || empty($_POST['statusList'])){
+                        $arrResponse = array("status" => false, "msg" => 'Error de datos');
+                    }else{ 
+                        $idColor = intval($_POST['idColor']);
+                        $strName = ucwords(strClean($_POST['txtName']));
+                        $strColor = strClean($_POST['txtColor']);
+                        $intStatus = intval($_POST['statusList']);
 
-        public function getAtributos(){
-			if($_SESSION['permisosMod']['r']){
+                        if($idColor == 0){
+                            if($_SESSION['permitsModule']['w']){
+                                $option = 1;
 
-                $arrData = $this->model->selectAtributos();
-				for ($i=0; $i < count($arrData); $i++) {
-	
-					$btnEdit = '';
-					$btnDelete = '';
-	
-					if($_SESSION['permisosMod']['u']){
-						$btnEdit = '<button class="btn btn-primary btn-sm " onClick="fntEditInfo(this,'.$arrData[$i]['idattribute'].')" title="Editar"><i class="fas fa-pencil-alt"></i></button>';
-					}
-					if($_SESSION['permisosMod']['d']){
-						$btnDelete = '<button class="btn btn-danger btn-sm " onClick="fntDelInfo('.$arrData[$i]['idattribute'].')" title="Eliminar"><i class="far fa-trash-alt"></i></button>';
-					}
-					$arrData[$i]['options'] = '<div class="text-center">'.$btnEdit.' '.$btnDelete.'</div>';
-					$arrData[$i]['price'] = MS.number_format($arrData[$i]['price'],0,DEC,MIL);
-				}
-				echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
-			}
+                                $request= $this->model->insertColor($strName,$strColor,$intStatus);
+                            }
+                        }else{
+                            if($_SESSION['permitsModule']['u']){
+                                $option = 2;
+                                $request = $this->model->updateColor($idColor,$strName,$strColor,$intStatus);
+                            }
+                        }
+                        if($request > 0 ){
+                            if($option == 1){
+                                $arrResponse = $this->getColors();
+                                $arrResponse['msg'] = 'Datos guardados.';
+                            }else{
+                                $arrResponse = $this->getColors();
+                                $arrResponse['msg'] = 'Datos actualizados.';
+                            }
+                        }else if($request == 'exist'){
+                            $arrResponse = array('status' => false, 'msg' => 'El color ya existe, prueba con otro nombre.');		
+                        }else{
+                            $arrResponse = array("status" => false, "msg" => 'No es posible guardar los datos.');
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
 			die();
 		}
+        public function delColor(){
+            if($_SESSION['permitsModule']['d']){
 
-        public function getAtributo($idAtributo){
-			if($_SESSION['permisosMod']['r']){
-				$intIdAtributo= intval($idAtributo);
-				if($intIdAtributo > 0){
-					$arrData = $this->model->selectAtributo($intIdAtributo);
-					if(empty($arrData)){
-					
-						$arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
-					}else{
-                        //$arrData['url_portada'] = media().'/images/uploads/'.$arrData['image'];
-						$arrResponse = array('status' => true, 'data' => $arrData);
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
+                if($_POST){
+                    if(empty($_POST['idColor'])){
+                        $arrResponse=array("status"=>false,"msg"=>"Error de datos");
+                    }else{
+                        $id = intval($_POST['idColor']);
+                        $request = $this->model->deleteColor($id);
+
+                        if($request=="ok"){
+                            $arrResponse = array("status"=>true,"msg"=>"Se ha eliminado.","data"=>$this->getColors()['data']);
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"No es posible eliminar, intenta de nuevo.");
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            die();
+        }
+        public function searchc($params){
+            if($_SESSION['permitsModule']['r']){
+                $search = strClean($params);
+                $arrResponse = $this->getColors(1,$params);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        public function sortc($params){
+            if($_SESSION['permitsModule']['r']){
+                $params = intval($params);
+                $arrResponse = $this->getColors(2,$params);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        /*************************Materials methods*******************************/
+        public function getMaterials($option=null,$params=null){
+            if($_SESSION['permitsModule']['r']){
+                $html="";
+                $request="";
+                if($option == 1){
+                    $request = $this->model->searchma($params);
+                }else{
+                    $request = $this->model->selectMaterials();
+                }
+                if(count($request)>0){
+                    for ($i=0; $i < count($request); $i++) { 
+
+                        $btnEdit="";
+                        $btnDelete="";
+                        
+                        if($_SESSION['permitsModule']['u']){
+                            $btnEdit = '<button class="btn btn-success m-1" type="button" title="Edit" data-id="'.$request[$i]['id'].'" name="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
+                        }
+                        if($_SESSION['permitsModule']['d']){
+                            $btnDelete = '<button class="btn btn-danger m-1" type="button" title="Delete" data-id="'.$request[$i]['id'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
+                        }
+                        $html.='
+                            <tr class="item" data-name="'.$request[$i]['name'].'">
+                                <td><strong>Nombre: </strong>'.$request[$i]['name'].'</td>
+                                <td><strong>Costo:</strong>'.formatNum($request[$i]['price']).' X '.$request[$i]['unit'].'</td>
+                                <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
+                            </tr>
+                        ';
+                    }
+                    $arrResponse = array("status"=>true,"data"=>$html);
+                }else{
+                    $html = '<tr><td colspan="20">No hay datos</td></tr>';
+                    $arrResponse = array("status"=>false,"data"=>$html);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            
+            return $arrResponse;
+        }
+        public function getMaterial(){
+            if($_SESSION['permitsModule']['r']){
+
+                if($_POST){
+                    if(empty($_POST)){
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
+                    }else{
+                        $idMaterial = intval($_POST['idMaterial']);
+                        $request = $this->model->selectMaterial($idMaterial);
+                        if(!empty($request)){
+                            $arrResponse = array("status"=>true,"data"=>$request);
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"Error, intenta de nuevo"); 
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            die();
+        }
+        public function setMaterial(){
+            if($_SESSION['permitsModule']['r']){
+                if($_POST){
+                    if(empty($_POST['txtName']) || empty($_POST['txtPrice']) || empty($_POST['txtUnit'])){
+                        $arrResponse = array("status" => false, "msg" => 'Error de datos');
+                    }else{ 
+                        $idMaterial = intval($_POST['idMaterial']);
+                        $strName = ucwords(strClean($_POST['txtName']));
+                        $intPrice = intval($_POST['txtPrice']);
+                        $strUnit = strClean($_POST['txtUnit']);
+                        $strPre = strtolower(str_replace(" ","",$strName));
+                        if($idMaterial == 0){
+                            if($_SESSION['permitsModule']['w']){
+                                $option = 1;
+
+                                $request= $this->model->insertMaterial($strName,$strUnit,$intPrice,$strPre);
+                            }
+                        }else{
+                            if($_SESSION['permitsModule']['u']){
+                                $option = 2;
+                                $request = $this->model->updateMaterial($idMaterial,$strName,$strUnit,$intPrice,$strPre);
+                            }
+                        }
+                        if($request > 0 ){
+                            if($option == 1){
+                                $arrResponse = $this->getMaterials();
+                                $arrResponse['msg'] = 'Datos guardados.';
+                            }else{
+                                $arrResponse = $this->getMaterials();
+                                $arrResponse['msg'] = 'Datos actualizados.';
+                            }
+                        }else if($request == 'exist'){
+                            $arrResponse = array('status' => false, 'msg' => 'El material ya existe, prueba con otro nombre.');		
+                        }else{
+                            $arrResponse = array("status" => false, "msg" => 'No es posible guardar los datos.');
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
 			die();
 		}
+        public function delMaterial(){
+            if($_SESSION['permitsModule']['d']){
 
-        public function delAtributo(){
-			if($_POST){
-				if($_SESSION['permisosMod']['d']){
+                if($_POST){
+                    if(empty($_POST['idMaterial'])){
+                        $arrResponse=array("status"=>false,"msg"=>"Error de datos");
+                    }else{
+                        $id = intval($_POST['idMaterial']);
+                        $request = $this->model->deleteMaterial($id);
 
-					$intIdAtributo = intval($_POST['idatributo']);
+                        if($request=="ok"){
+                            $arrResponse = array("status"=>true,"msg"=>"Se ha eliminado.","data"=>$this->getMaterials()['data']);
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"No es posible eliminar, intenta de nuevo.");
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            die();
+        }
+        public function searchma($params){
+            if($_SESSION['permitsModule']['r']){
+                $search = strClean($params);
+                $arrResponse = $this->getMaterials(1,$params);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+    }
 
-					$requestDelete = $this->model->deleteAtributo($intIdAtributo);
-					if($requestDelete == 'ok'){
-						$arrResponse = array('status' => true, 'msg' => 'Se ha eliminado');
-					}else{
-						$arrResponse = array('status' => false, 'msg' => 'Error al eliminar');
-					}
-					echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-				}
-			}
-			die();
-		}
-	}
-    
 ?>
