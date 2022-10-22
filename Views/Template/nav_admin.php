@@ -2,8 +2,8 @@
   <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
     <div class="sidebar-brand d-none d-md-flex">
         <a href="<?=base_url()?>" class="fs-4 m-0 text-decoration-none text-white d-flex align-items-center justify-content-between">
-            <img src="<?=media()."/images/uploads/".$companyData['logo']?>" alt="MediaStore Logo" width="50" height="46">
-            <?=$companyData['name']?>
+            <img src="<?=media()."/images/uploads/".$companyData['logo']?>" alt="MediaStore Logo" width="50" height="46" class="me-2 rounded">
+            <p class="m-0 fs-6"><?=$companyData['name']?></p>
         </a>
     </div>
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="init">
@@ -132,27 +132,9 @@
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/cupones"><span class="nav-icon"></span> Cupones</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/correo"><span class="nav-icon"></span> Correo <?=$emails?></a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/suscriptores"><span class="nav-icon"></span> Suscriptores</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/envio"><span class="nav-icon"></span> Envio</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/envios"><span class="nav-icon"></span> Envio</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/about"><span class="nav-icon"></span> Nosotros</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/policies"><span class="nav-icon"></span> Politicas</a></li>
-                                </ul>
-                            </li>
-                            <?php 
-                                }
-                            ?>
-                            <?php 
-                                if($_SESSION['permit'][7]['r']){
-                            ?>
-                            <li class="nav-group">
-                                <a class="nav-link nav-group-toggle" href="#">
-                                    <svg class="nav-icon">
-                                        <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-pencil"></use>
-                                    </svg> Blog
-                                </a>
-                                <ul class="nav-group-items">
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/post/category"><span class="nav-icon"></span> Categorias</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/post/subcategory"><span class="nav-icon"></span> Subcategorias</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/post/articles"><span class="nav-icon"></span> Articulos</a></li>
                                 </ul>
                             </li>
                             <?php 
@@ -162,7 +144,7 @@
                                 if($_SESSION['idUser']==1){
                             ?>
                             <li class="nav-item mt-5">
-                                <a class="nav-link" href="<?=base_url()?>/compañia">
+                                <a class="nav-link" href="<?=base_url()?>/empresa">
                                     <svg class="nav-icon">
                                         <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-storage"></use>
                                     </svg> Empresa

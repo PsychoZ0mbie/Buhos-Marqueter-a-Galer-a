@@ -119,7 +119,7 @@ $company = $data['company'];
                 </div>
                 <div class="row">
                     <div class="col-6 text-start">
-                        <a href="<?=base_url()?>/Orders" class="btn btn-secondary text-white"><i class="fas fa-arrow-circle-left"></i> Regresar</a>
+                        <a href="<?=base_url()?>/pedidos" class="btn btn-secondary text-white"><i class="fas fa-arrow-circle-left"></i> Regresar</a>
                     </div>
                     <div class="col-6 text-end">
                         <button type="button" id="btnPrint" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>

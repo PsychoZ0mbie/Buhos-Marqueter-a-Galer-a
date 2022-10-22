@@ -1,5 +1,5 @@
 <?php 
-    class OrdersModel extends Mysql{
+    class PedidosModel extends Mysql{
         private $intIdOrder;
         private $intIdUser;
         private $intIdTransaction;

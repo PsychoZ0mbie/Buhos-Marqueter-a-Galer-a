@@ -44,7 +44,7 @@ formProfile.addEventListener("submit",function(e){
     let strAddress = document.querySelector("#txtAddress");
     let strPassword = document.querySelector("#txtPassword").value;
     let strConfirmPassword = document.querySelector("#txtConfirmPassword").value;
-    let idusuarios = document.querySelector("#idusuarios").value;
+    let idusuarios = document.querySelector("#idUser").value;
 
     if(strFirstName == "" || strLastName == "" || strEmail == "" || strPhone == "" || intCountry == "" || intState == ""
     || intCity == "" || strAddress ==""){
@@ -76,7 +76,7 @@ formProfile.addEventListener("submit",function(e){
     btnAdd.setAttribute("disabled","");
     request(url,formData,"post").then(function(objData){
         if(objData.status){
-            Swal.fire("Profile",objData.msg,"success");
+            Swal.fire("Perfil",objData.msg,"success");
         }else{
             Swal.fire("Error",objData.msg,"error");
         }

@@ -1,5 +1,5 @@
 <?php
-    class Store extends Controllers{
+    class Administracion extends Controllers{
         public function __construct(){
             session_start();
             if(empty($_SESSION['login'])){
@@ -11,44 +11,44 @@
         }
 
         /*************************Views*******************************/
-        public function coupon(){
+        public function cupones(){
             if($_SESSION['permitsModule']['r']){
-                $data['page_tag'] = "Couponones";
+                $data['page_tag'] = "Cupones";
                 $data['page_title'] = "Cupones";
-                $data['page_name'] = "coupon";
-                $data['app'] = "coupon.js";
-                $this->views->getView($this,"coupon",$data);
+                $data['page_name'] = "cupones";
+                $data['app'] = "functions_coupon.js";
+                $this->views->getView($this,"cupones",$data);
             }else{
                 header("location: ".base_url());
                 die();
             }
         }
-        public function mailbox(){
+        public function correo(){
             if($_SESSION['permitsModule']['r']){
                 $data['inbox'] = $this->getMails();
                 $data['sent'] = $this->getSentMails();
                 $data['page_tag'] = "Correo";
                 $data['page_title'] = "Correo";
-                $data['page_name'] = "mailbox";
-                $data['app'] = "mailbox.js";
-                $this->views->getView($this,"mailbox",$data);
+                $data['page_name'] = "correo";
+                $data['app'] = "functions_mailbox.js";
+                $this->views->getView($this,"correo",$data);
             }else{
                 header("location: ".base_url());
                 die();
             }
         }
-        public function message($params){
+        public function mensaje($params){
             if($_SESSION['permitsModule']['r']){
                 if(is_numeric($params)){
                     $id = intval($params);
                     $data['message'] = $this->model->selectMail($id);
                     $data['page_tag'] = "Mensaje";
                     $data['page_title'] = "Mensaje";
-                    $data['page_name'] = "message";
-                    $data['app'] = "mailbox.js";
-                    $this->views->getView($this,"message",$data);
+                    $data['page_name'] = "mensaje";
+                    $data['app'] = "functions_mailbox.js";
+                    $this->views->getView($this,"mensaje",$data);
                 }else{
-                    header("location: ".base_url()."/store/mailbox");
+                    header("location: ".base_url()."/administracion/mailbox");
                     die();
                 }
             }else{
@@ -56,17 +56,17 @@
                 die();
             }
         }
-        public function sent($params){
+        public function enviados($params){
             if($_SESSION['permitsModule']['r']){
                 if(is_numeric($params)){
                     $id = intval($params);
                     $data['message'] = $this->model->selectSentMail($id);
-                    $data['page_tag'] = "Mensaje";
-                    $data['page_title'] = "Mensaje";
-                    $data['page_name'] = "sent";
-                    $this->views->getView($this,"sent",$data);
+                    $data['page_tag'] = "Enviados";
+                    $data['page_title'] = "Enviados";
+                    $data['page_name'] = "enviados";
+                    $this->views->getView($this,"enviados",$data);
                 }else{
-                    header("location: ".base_url()."/store/mailbox");
+                    header("location: ".base_url()."/administracion/mailbox");
                     die();
                 }
             }else{
@@ -74,28 +74,28 @@
                 die();
             }
         }
-        public function subscribers(){
+        public function suscriptores(){
             if($_SESSION['permitsModule']['r']){
                 $data['page_tag'] = "Suscriptores";
                 $data['page_title'] = "Suscriptores";
-                $data['page_name'] = "subscribers";
+                $data['page_name'] = "suscriptores";
                 $data['subscribers'] = $this->model->selectSubscribers();
-                $this->views->getView($this,"subscribers",$data);
+                $this->views->getView($this,"suscriptores",$data);
             }else{
                 header("location: ".base_url());
                 die();
             }
         }
-        public function shipping(){
+        public function envios(){
             if($_SESSION['permitsModule']['r']){
-                $data['page_tag'] = "Envio";
-                $data['page_title'] = "Envio";
-                $data['page_name'] = "shipping";
+                $data['page_tag'] = "Envios";
+                $data['page_title'] = "Envios";
+                $data['page_name'] = "envios";
                 $data['countries'] = $this->model->selectCountries();
                 $data['ShippingCities'] = $this->getShippingCities();
                 $data['flat'] = $this->model->selectFlatRate();
-                $data['app'] = "shipping.js";
-                $this->views->getView($this,"shipping",$data);
+                $data['app'] = "functions_shipping.js";
+                $this->views->getView($this,"envios",$data);
             }else{
                 header("location: ".base_url());
                 die();
@@ -146,9 +146,9 @@
                             $btnDelete = '<button class="btn btn-danger m-1" type="button" title="Delete" data-id="'.$request[$i]['id'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
                         }
                         if($request[$i]['status']==1){
-                            $status='<span class="badge me-1 bg-success">Active</span>';
+                            $status='<span class="badge me-1 bg-success">Activo</span>';
                         }else{
-                            $status='<span class="badge me-1 bg-danger">Inactive</span>';
+                            $status='<span class="badge me-1 bg-danger">Inactivo</span>';
                         }
                         $html.='
                             <tr class="item" data-name="'.$request[$i]['code'].'">
@@ -271,7 +271,7 @@
                 if(count($request)>0){
                     for ($i=0; $i < count($request); $i++) { 
                         $status ="";
-                        $url = base_url()."/store/message/".$request[$i]['id'];
+                        $url = base_url()."/administracion/message/".$request[$i]['id'];
                         if($request[$i]['status'] == 1){
                             $status="text-black-50";
                         }else{
@@ -371,7 +371,7 @@
                         $status ="";
                         $total = 0;
                         $email = explode("@",$request[$i]['email']);
-                        $url = base_url()."/store/sent/".$request[$i]['id'];
+                        $url = base_url()."/administracion/sent/".$request[$i]['id'];
                         $html.='
                         <div class="mail-item text-black-50">
                             <div class="row position-relative">

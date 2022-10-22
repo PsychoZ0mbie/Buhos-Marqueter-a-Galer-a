@@ -7,21 +7,21 @@
     require_once('Libraries/PHPMailer/SMTP.php');
 
     function getCompanyInfo(){
-        require_once('Models/CompanyModel.php');
-        $con = new CompanyModel();
+        require_once('Models/EmpresaModel.php');
+        $con = new EmpresaModel();
         $data = $con->selectCompany();
         $data['password'] = openssl_encrypt($data['password'],METHOD,KEY);
         return $data;
     }
     function getCredentials(){
-        require_once('Models/CompanyModel.php');
-        $con = new CompanyModel();
+        require_once('Models/EmpresaModel.php');
+        $con = new EmpresaModel();
         $data = $con->selectCredentials();
         return $data;
     }
     function getSocialMedia(){
-        require_once('Models/CompanyModel.php');
-        $con = new CompanyModel();
+        require_once('Models/EmpresaModel.php');
+        $con = new EmpresaModel();
         $request = $con->selectSocial();
         $arrSocial = array(
             array("name"=>"facebook",
@@ -89,8 +89,8 @@
         return $num;
     }
     function emailNotification(){
-        require_once("Models/StoreModel.php");
-        $obj = new StoreModel();
+        require_once("Models/AdministracionModel.php");
+        $obj = new AdministracionModel();
         $request = $obj->selectMails();
         $total = 0;
         if(!empty($request)){

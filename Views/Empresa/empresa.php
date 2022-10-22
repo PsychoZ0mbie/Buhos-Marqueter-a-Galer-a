@@ -129,11 +129,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="txtKeywords" class="form-label">Palabras clave</label>
-                                <input type="text" class="form-control" id="txtKeywords" name="txtKeywords" placeholder="clothes,shoes" value="<?=$data['company']['keywords']?>"></input>
+                                <input type="text" class="form-control" id="txtKeywords" name="txtKeywords" placeholder="ropa,zapatos" value="<?=$data['company']['keywords']?>"></input>
                             </div>
                             <div class="mb-3">
                                 <label for="txtDescription" class="form-label">Descripción</label>
-                                <textarea class="form-control" id="txtDescription" name="txtDescription" rows="5" placeholder="E-commerce description"><?=$data['company']['description']?></textarea>
+                                <textarea class="form-control" id="txtDescription" name="txtDescription" rows="5" placeholder="Descripción del negocio"><?=$data['company']['description']?></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary" id="btnCompany"> Guardar</button>

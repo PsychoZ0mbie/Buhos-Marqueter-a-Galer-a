@@ -1,6 +1,6 @@
 <?php
     
-    class Company extends Controllers{
+    class Empresa extends Controllers{
         public function __construct(){
             session_start();
             if(empty($_SESSION['login'])){
@@ -10,12 +10,12 @@
             parent::__construct();
         }
 
-        public function company(){
+        public function empresa(){
             if($_SESSION['idUser'] == 1){
-                $data['page_tag'] = "Company";
-                $data['page_title'] = "Compañia";
-                $data['page_name'] = "company";
-                $data['app'] = "company.js";
+                $data['page_tag'] = "Empresa";
+                $data['page_title'] = "Empresa";
+                $data['page_name'] = "empresa";
+                $data['app'] = "functions_company.js";
                 $data['company'] = $this->model->selectCompany();
                 $data['currencies'] = $this->model->selectCurrencies();
                 $data['countries'] = $this->model->selectCountries();
@@ -23,7 +23,7 @@
                 $data['cities'] = $this->model->selectCities($data['company']['state']);
                 $data['social'] = $this->model->selectSocial();
                 $data['paypal'] = $this->model->selectCredentials();
-                $this->views->getView($this,"company",$data);
+                $this->views->getView($this,"empresa",$data);
             }else{
                 header("location: ".base_url());
                 die();

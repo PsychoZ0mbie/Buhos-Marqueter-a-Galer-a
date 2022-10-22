@@ -1,5 +1,5 @@
 <?php 
-    class CompanyModel extends Mysql{
+    class EmpresaModel extends Mysql{
         private $logo;
         private $strName;
         private $intCurrency;

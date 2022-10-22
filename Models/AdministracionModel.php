@@ -1,5 +1,5 @@
 <?php 
-    class StoreModel extends Mysql{
+    class AdministracionModel extends Mysql{
         private $intIdCoupon;
 		private $strCode;
         private $intDiscount;

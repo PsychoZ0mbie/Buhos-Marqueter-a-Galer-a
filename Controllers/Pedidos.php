@@ -1,6 +1,6 @@
 <?php
-    require_once("Controllers/Product.php");
-    class Orders extends Controllers{
+    require_once("Controllers/Inventario.php");
+    class Pedidos extends Controllers{
         private $objProduct;
         public function __construct(){
             
@@ -13,22 +13,22 @@
             getPermits(6);
         }
 
-        public function orders(){
+        public function pedidos(){
             if($_SESSION['permitsModule']['r']){
                 $data['page_tag'] = "Pedidos";
                 $data['page_title'] = "Pedidos";
-                $data['page_name'] = "orders";
+                $data['page_name'] = "pedidos";
                 $data['orders'] = $this->getOrders();
                 $data['products'] = $this->getProducts();
                 
-                $data['app'] = "orders.js";
-                $this->views->getView($this,"orders",$data);
+                $data['app'] = "functions_orders.js";
+                $this->views->getView($this,"pedidos",$data);
             }else{
                 header("location: ".base_url());
                 die();
             }
         }
-        public function order($idOrder){
+        public function pedido($idOrder){
             if($_SESSION['permitsModule']['r']){
                 if(is_numeric($idOrder)){
                     $idPerson ="";
@@ -37,13 +37,13 @@
                     }
                     $data['orderdata'] = $this->model->selectOrder($idOrder,$idPerson);
                     $data['orderdetail'] = $this->model->selectOrderDetail($idOrder);
-                    $data['page_tag'] = "Order";
-                    $data['page_title'] = "Order";
-                    $data['page_name'] = "order";
+                    $data['page_tag'] = "Pedido";
+                    $data['page_title'] = "Pedido";
+                    $data['page_name'] = "pedido";
                     $data['company'] = getCompanyInfo();
-                    $this->views->getView($this,"order",$data);
+                    $this->views->getView($this,"pedido",$data);
                 }else{
-                    header("location: ".base_url()."/Orders");
+                    header("location: ".base_url()."/pedidos");
                 }
                 
             }else{
@@ -51,18 +51,18 @@
                 die();
             }
         }
-        public function transaction($idTransaction){
+        public function transaccion($idTransaction){
             if($_SESSION['permitsModule']['r']){
                 $idPerson ="";
                 if($_SESSION['userData']['roleid'] == 2 ){
                     $idPerson= $_SESSION['idUser'];
                 }
                 $data['transaction'] = $this->model->selectTransaction($idTransaction,$idPerson);
-                $data['page_tag'] = "Transaction";
-                $data['page_title'] = "Transaction";
-                $data['page_name'] = "transaction";
-                $data['app'] = "orders.js";
-                $this->views->getView($this,"transaction",$data);
+                $data['page_tag'] = "Transacción";
+                $data['page_title'] = "Transacción";
+                $data['page_name'] = "transaccion";
+                $data['app'] = "functions_orders.js";
+                $this->views->getView($this,"transaccion",$data);
                 
             }else{
                 header("location: ".base_url());
@@ -83,12 +83,12 @@
                 if(count($request)>0){
                     for ($i=0; $i < count($request); $i++) { 
 
-                        $btnView='<a href="'.base_url().'/orders/order/'.$request[$i]['idorder'].'" class="btn btn-info text-white m-1" type="button" title="View order" name="btnView"><i class="fas fa-eye"></i></a>';
+                        $btnView='<a href="'.base_url().'/pedidos/pedido/'.$request[$i]['idorder'].'" class="btn btn-info text-white m-1" type="button" title="View order" name="btnView"><i class="fas fa-eye"></i></a>';
                         $btnPaypal='';
                         $btnDelete ="";
 
                         if($request[$i]['type'] == "paypal"){
-                            $btnPaypal = '<a href="'.base_url().'/orders/transaction/'.$request[$i]['idtransaction'].'" class="btn btn-info m-1 text-white " type="button" title="View Transaction" name="btnPaypal"><i class="fab fa-paypal"></i></a>';
+                            $btnPaypal = '<a href="'.base_url().'/pedidos/transaccion/'.$request[$i]['idtransaction'].'" class="btn btn-info m-1 text-white " type="button" title="View Transaction" name="btnPaypal"><i class="fab fa-paypal"></i></a>';
                         }
 
                         if($_SESSION['permitsModule']['d'] && $_SESSION['userData']['roleid'] == 1){
@@ -123,7 +123,7 @@
                     }
                     $arrResponse = array("status"=>true,"data"=>$html);
                 }else{
-                    $html = '<tr><td colspan="7">No hay datos</td></tr>';
+                    $html = '<tr><td colspan="20">No hay datos</td></tr>';
                     $arrResponse = array("status"=>false,"data"=>$html);
                 }
             }else{
