@@ -76,6 +76,7 @@
                                     </svg> Marqueteria
                                 </a>
                                 <ul class="nav-group-items">
+                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/marqueteria/categorias"><span class="nav-icon"></span> Categorias</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/marqueteria/molduras"><span class="nav-icon"></span> Molduras</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/marqueteria/colores"><span class="nav-icon"></span> Colores</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/marqueteria/materiales"><span class="nav-icon"></span> Materiales</a></li>
@@ -85,11 +86,11 @@
                                 <a class="nav-link nav-group-toggle" href="#">
                                     <svg class="nav-icon">
                                         <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-inbox"></use>
-                                    </svg> Tienda
+                                    </svg> Inventario
                                 </a>
                                 <ul class="nav-group-items">
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/inventario/categoria"><span class="nav-icon"></span> Categorias</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/inventario/subcategoria"><span class="nav-icon"></span> Subcategorias</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/inventario/categorias"><span class="nav-icon"></span> Categorias</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/inventario/subcategorias"><span class="nav-icon"></span> Subcategorias</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/inventario/productos"><span class="nav-icon"></span> Productos</a></li>
                                 </ul>
                             </li>

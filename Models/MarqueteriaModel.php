@@ -1,6 +1,7 @@
 <?php 
     class MarqueteriaModel extends Mysql{
         private $intIdProduct;
+        private $intIdCategory;
         private $strReference;
         private $intPrice;
         private $intWaste;
@@ -15,6 +16,10 @@
         private $intMaterialPrice;
         private $strColor;
         private $strHexColor;
+        private $strRoute;
+        private $strDescription;
+        private $strPhoto;
+        private $strName;
 
         public function __construct(){
             parent::__construct();
@@ -144,11 +149,6 @@
                     }
                 }
             }
-            return $request;
-        }
-        public function selectCategories(){
-            $sql = "SELECT * FROM category ORDER BY idcategory ASC";       
-            $request = $this->select_all($sql);
             return $request;
         }
         public function insertTmpImage(string $name, string $rename){
@@ -372,6 +372,87 @@
         }
         public function searchma($search){
             $sql = "SELECT * FROM moldingmaterial WHERE name LIKE '%$search%'";
+            $request = $this->select_all($sql);
+            return $request;
+        }
+
+        /*************************Category methods*******************************/
+        public function insertCategory(string $photo,string $strName, string $strDescription, string $strRoute, int $intStatus){
+
+			$this->strName = $strName;
+			$this->strRoute = $strRoute;
+            $this->strDescription = $strDescription;
+            $this->strPhoto = $photo;
+            $this->intStatus = $intStatus;
+			$return = 0;
+
+			$sql = "SELECT * FROM moldingcategory WHERE 
+					name = '{$this->strName}'";
+			$request = $this->select_all($sql);
+
+			if(empty($request))
+			{ 
+				$query_insert  = "INSERT INTO moldingcategory(image,name,description,route,status) 
+								  VALUES(?,?,?,?,?)";
+	        	$arrData = array($this->strPhoto,$this->strName,$this->strDescription,$this->strRoute,$this->intStatus);
+	        	$request_insert = $this->insert($query_insert,$arrData);
+	        	$return = $request_insert;
+			}else{
+				$return = "exist";
+			}
+	        return $return;
+		}
+        public function updateCategory(int $intIdCategory,string $photo, string $strName, string $strDescription,string $strRoute, int $intStatus){
+            $this->intIdCategory = $intIdCategory;
+            $this->strName = $strName;
+            $this->strDescription = $strDescription;
+            $this->intStatus = $intStatus;
+			$this->strRoute = $strRoute;
+            $this->strPhoto = $photo;
+            
+
+			$sql = "SELECT * FROM moldingcategory WHERE name = '{$this->strName}' AND id != $this->intIdCategory";
+			$request = $this->select_all($sql);
+
+			if(empty($request)){
+
+                $sql = "UPDATE moldingcategory SET image=?, name=?,description=?, route=?, status=? WHERE id = $this->intIdCategory";
+                $arrData = array($this->strPhoto,$this->strName,$this->strDescription,$this->strRoute,$this->intStatus);
+				$request = $this->update($sql,$arrData);
+			}else{
+				$request = "exist";
+			}
+			return $request;
+		
+		}
+        public function deleteCategory($id){
+            $this->intIdCategory = $id;
+            $sql = "DELETE FROM moldingcategory WHERE id = $this->intIdCategory";
+            $return = $this->delete($sql);
+            return $return;
+        }
+        public function selectCategories(){
+            $sql = "SELECT * FROM moldingcategory ORDER BY id DESC";       
+            $request = $this->select_all($sql);
+            return $request;
+        }
+        public function selectCategory($id){
+            $this->intIdCategory = $id;
+            $sql = "SELECT * FROM moldingcategory WHERE id = $this->intIdCategory";
+            $request = $this->select($sql);
+            return $request;
+        }
+        public function searchca($search){
+            $sql = "SELECT * FROM moldingcategory WHERE name LIKE '%$search%'";
+            $request = $this->select_all($sql);
+            return $request;
+        }
+        public function sortca($sort){
+            $option="DESC";
+            if($sort == 2){
+                $option = " ASC"; 
+            }
+            $sql = "SELECT * FROM moldingcategory ORDER BY id $option ";
             $request = $this->select_all($sql);
             return $request;
         }

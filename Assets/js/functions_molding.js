@@ -47,7 +47,7 @@ element.addEventListener("click",function(e) {
     
 function addItem(){
     let getData = new FormData();
-    getData.append("idProduct","");
+    getData.append("idProduct",0);
     request(base_url+"/marqueteria/getProduct",getData,"post").then(function(objData){});
     
     let modalItem = document.querySelector("#modalItem");

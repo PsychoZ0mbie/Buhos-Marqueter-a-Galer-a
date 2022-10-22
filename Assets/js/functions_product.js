@@ -6,7 +6,7 @@ let sort = document.querySelector("#sortBy");
 let element = document.querySelector("#listItem");
 
 search.addEventListener('input',function() {
-    request(base_url+"/product/search/"+search.value,"","get").then(function(objData){
+    request(base_url+"/inventario/search/"+search.value,"","get").then(function(objData){
         if(objData.status){
             element.innerHTML = objData.data;
         }else{
@@ -16,7 +16,7 @@ search.addEventListener('input',function() {
 });
 
 sort.addEventListener("change",function(){
-    request(base_url+"/product/sort/"+sort.value,"","get").then(function(objData){
+    request(base_url+"/inventario/sort/"+sort.value,"","get").then(function(objData){
         if(objData.status){
             element.innerHTML = objData.data;
         }else{
@@ -46,7 +46,10 @@ element.addEventListener("click",function(e) {
 });
     
 function addItem(){
-    
+    let getData = new FormData();
+    getData.append("idProduct",0);
+    request(base_url+"/inventario/getProduct",getData,"post").then(function(objData){});
+
     let modalItem = document.querySelector("#modalItem");
     let modal = `
     <div class="modal fade" id="modalElement">
@@ -134,8 +137,8 @@ function addItem(){
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="txtShortDescription" class="form-label">Descripción corta <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="txtShortDescription" name="txtShortDescription" placeholder="Max 140 characters" required></input>
+                            <label for="txtShortDescription" class="form-label">Descripción corta</label>
+                            <input type="text" class="form-control" id="txtShortDescription" name="txtShortDescription" placeholder="Max 140 characters"></input>
                         </div>
                         <div class="mb-3">
                             <label for="txtDescription" class="form-label">Descripción </label>
@@ -176,7 +179,7 @@ function addItem(){
     setImage(img,parent,1);
     delImage(parent,1);
 
-    request(base_url+"/Product/getSelectCategories","","get").then(function(objData){
+    request(base_url+"/inventario/getSelectCategories","","get").then(function(objData){
         categoryList.innerHTML = objData.data;
     });
 
@@ -184,7 +187,7 @@ function addItem(){
         let formData = new FormData();
         formData.append("idCategory",categoryList.value);
 
-        request(base_url+"/Product/getSelectSubcategories",formData,"post").then(function(objData){
+        request(base_url+"/inventario/getSelectSubcategories",formData,"post").then(function(objData){
             document.querySelector("#subcategoryList").innerHTML = objData.data;
         });
     });
@@ -206,7 +209,7 @@ function addItem(){
         let intCategory = categoryList.value;
         let images = document.querySelectorAll(".upload-image");
 
-        if(strName == "" || intStatus == "" || intCategory == 0 || intSubCategory==0 || intPrice=="" || intStock=="" || strShortDescription==""){
+        if(strName == "" || intStatus == "" || intCategory == 0 || intSubCategory==0 || intPrice=="" || intStock==""){
             Swal.fire("Error","Todos los campos marcados con (*) son obligatorios","error");
             return false;
         }
@@ -246,7 +249,7 @@ function addItem(){
             btnAdd.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
             btnAdd.setAttribute("disabled","");
 
-            request(base_url+"/Product/setProduct",data,"post").then(function(objData){
+            request(base_url+"/inventario/setProduct",data,"post").then(function(objData){
                 modalView.hide();
                 form.reset();
                 formFile.reset();
@@ -270,7 +273,7 @@ function addItem(){
     },false);
 }
 function viewItem(id){
-    let url = base_url+"/Product/getProduct";
+    let url = base_url+"/inventario/getProduct";
     let formData = new FormData();
     formData.append("idProduct",id);
     request(url,formData,"post").then(function(objData){
@@ -459,8 +462,8 @@ function editItem(id){
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="txtShortDescription" class="form-label">Descripción corta <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="txtShortDescription" name="txtShortDescription" placeholder="Max 140 characters" required></input>
+                            <label for="txtShortDescription" class="form-label">Descripción corta</label>
+                            <input type="text" class="form-control" id="txtShortDescription" name="txtShortDescription" placeholder="Max 140 characters"></input>
                         </div>
                         <div class="mb-3">
                             <label for="txtDescription" class="form-label">Descripcion</label>
@@ -494,7 +497,7 @@ function editItem(id){
 
     setTinymce("#txtDescription");
 
-    request(base_url+"/Product/getProduct",formData,"post").then(function(objData){
+    request(base_url+"/inventario/getProduct",formData,"post").then(function(objData){
         let status = document.querySelectorAll("#statusList option");
         let images = objData.data.image;
         document.querySelector("#idProduct").value = objData.data.idproduct;
@@ -525,7 +528,7 @@ function editItem(id){
                 parent.appendChild(div);
             }
         }
-        request(base_url+"/Product/getSelectCategories","","get").then(function(html){
+        request(base_url+"/inventario/getSelectCategories","","get").then(function(html){
             document.querySelector("#categoryList").innerHTML = html.data;
             let categories = document.querySelectorAll("#categoryList option");
             for (let i = 0; i < categories.length; i++) {
@@ -534,7 +537,7 @@ function editItem(id){
                     let formData = new FormData();
 
                     formData.append("idCategory",objData.data.categoryid);
-                    request(base_url+"/Product/getSelectSubcategories",formData,"post").then(function(htmls){
+                    request(base_url+"/inventario/getSelectSubcategories",formData,"post").then(function(htmls){
                         document.querySelector("#subcategoryList").innerHTML = htmls.data;
                         let subcategories = document.querySelectorAll("#subcategoryList option");
                         for (let i = 0; i < subcategories.length; i++) {
@@ -558,7 +561,7 @@ function editItem(id){
         let formData = new FormData();
         formData.append("idCategory",categoryList.value);
 
-        request(base_url+"/Product/getSelectSubcategories",formData,"post").then(function(objData){
+        request(base_url+"/inventario/getSelectSubcategories",formData,"post").then(function(objData){
             document.querySelector("#subcategoryList").innerHTML = objData.data;
         });
     },false);
@@ -611,7 +614,7 @@ function editItem(id){
         btnAdd.setAttribute("disabled","");
 
         if(flag === true){
-            request(base_url+"/Product/setProduct",data,"post").then(function(objData){
+            request(base_url+"/inventario/setProduct",data,"post").then(function(objData){
                 form.reset();
                 formFile.reset();
                 if(objData.status){
@@ -650,7 +653,7 @@ function deleteItem(id){
         if(result.isConfirmed){
             let formData = new FormData();
             formData.append("idProduct",id);
-            request(base_url+"/Product/delProduct",formData,"post").then(function(objData){
+            request(base_url+"/inventario/delProduct",formData,"post").then(function(objData){
                 if(objData.status){
                     Swal.fire("Eliminado",objData.msg,"success");
                     element.innerHTML = objData.data;
@@ -675,7 +678,7 @@ function setImage(element,parent,option){
                 formImg.append("images",images);
                 formImg.append("id",document.querySelector("#idProduct").value);  
             }
-            request(base_url+"/Product/setImg",formImg,"post").then(function(objData){});
+            request(base_url+"/inventario/setImg",formImg,"post").then(function(objData){});
         }
     });
 }
@@ -692,7 +695,7 @@ function delImage(parent,option){
                     imgDel = document.querySelectorAll(".upload-image");
                 }
             }
-            let url = base_url+"/Product/delImg";
+            let url = base_url+"/inventario/delImg";
             let formDel = new FormData();
 
             formDel.append("id","");
