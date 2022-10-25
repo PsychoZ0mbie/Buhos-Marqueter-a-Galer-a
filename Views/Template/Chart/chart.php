@@ -1,24 +1,27 @@
 <?php
-    if($data['chart']=="salespermonth"){
-    $sales = $data['sales'];
+
+    if($data['chart']=="month"){
+    $ingresos = $data['dataingresos'];
+    $costos = $data['datacostos'];
+    $gastos = $data['datagastos'];
 ?>
 <script>
-    Highcharts.chart('salesMonth', {
+    Highcharts.chart('monthChart', {
         chart: {
             type: 'line'
         },
         title: {
-            text: 'Sales from <?=$data['month']." ".$data['year']?>'
+            text: 'Gráfico de <?=$ingresos['month']." ".$ingresos['year']?>'
         },
         subtitle: {
-            text: 'Total: <?=formatNum($data['total'])?>'
+            text: 'Total: <?=formatNum($ingresos['total'])?>'
         },
         xAxis: {
             categories: [
                 <?php
                     
-                    for ($i=0; $i < count($sales) ; $i++) { 
-                        echo $sales[$i]['day'].",";
+                    for ($i=0; $i < count($ingresos['sales']) ; $i++) { 
+                        echo $ingresos['sales'][$i]['day'].",";
                     }
                 ?>
             ]
@@ -37,12 +40,33 @@
             }
         },
         series: [{
-            name: '',
+            name: 'Ingresos',
             data: [
                 <?php
                     
-                    for ($i=0; $i < count($sales) ; $i++) { 
-                        echo $sales[$i]['total'].",";
+                    for ($i=0; $i < count($ingresos['sales']) ; $i++) { 
+                        echo $ingresos['sales'][$i]['total'].",";
+                    }
+                ?>
+            ]
+        },
+        {
+            name: 'Costos',
+            data: [
+                <?php
+                    
+                    for ($i=0; $i < count($costos['costos']) ; $i++) { 
+                        echo $costos['costos'][$i]['total'].",";
+                    }
+                ?>
+            ]
+        },{
+            name: 'Gastos',
+            data: [
+                <?php
+                    
+                    for ($i=0; $i < count($gastos['gastos']) ; $i++) { 
+                        echo $gastos['gastos'][$i]['total'].",";
                     }
                 ?>
             ]
@@ -50,62 +74,93 @@
     });
 </script>
 <?php }else{
-    $salesYear = $data['data'];
+    $dataAnual = $data['data'];
 ?>
 <script>
-    Highcharts.chart('salesYear', {
+    Highcharts.chart('yearChart', {
         chart: {
-            type: 'column'
+            type: 'bar'
         },
         title: {
-            text: 'Sales from <?=$salesYear[0]['year']?>'
+            text: 'Gráfico del año <?=$dataAnual[0]['year']?>'
         },
         subtitle: {
-            text: 'Total: <?=formatNum($data['total'])?>'
+            text: 'Ingresos netos: <?=formatNum($resultadoAnual)?>'
         },
         xAxis: {
-            type: 'category',
-            labels: {
-                rotation: -45,
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
+            categories: [
+                <?php
+                        for ($i=0; $i < count($dataAnual) ; $i++) { 
+                            echo '"'.$dataAnual[$i]['month'].'",';
+                        }    
+                ?>
+            ],
+            title: {
+            text: null
             }
         },
         yAxis: {
             min: 0,
             title: {
-                text: ''
+            text: 'Ingresos y egresos',
+            align: 'high'
+            },
+            labels: {
+            overflow: 'justify'
+            }
+        },
+        tooltip: {
+            valueSuffix: ` ${MD}`
+        },
+        plotOptions: {
+            bar: {
+            dataLabels: {
+                enabled: true
+            }
             }
         },
         legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+        credits: {
             enabled: false
         },
-        tooltip: {
-            pointFormat: 'Sales: <b>{point.y:.0f} '+MD+'</b>'
-        },
         series: [{
-            name: 'Population',
+            name: 'Ingresos',
             data: [
                 <?php
-                    for ($i=0; $i < count($salesYear) ; $i++) { 
-                        echo '["'.$salesYear[$i]['month'].'"'.",".''.$salesYear[$i]['sale'].'],';
+                    for ($i=0; $i < count($dataAnual) ; $i++) { 
+                        echo '["'.$dataAnual[$i]['month'].'"'.",".''.$dataAnual[$i]['sale'].'],';
                     }    
                 ?>
-                //['Shanghai', 24.2]
             ],
-            dataLabels: {
-                enabled: true,
-                rotation: 0,
-                color: '#FFFFFF',
-                align: 'center',
-                y: 0, // 10 pixels down from the top
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji'
-                }
-            }
+        }, {
+            name: 'Costos',
+            data: [
+                <?php
+                    for ($i=0; $i < count($dataAnual) ; $i++) { 
+                        echo '["'.$dataAnual[$i]['month'].'"'.",".''.$dataAnual[$i]['costos'].'],';
+                    }    
+                ?>
+            ],
+        }, {
+            name: 'Gastos',
+            data: [
+                <?php
+                    for ($i=0; $i < count($dataAnual) ; $i++) { 
+                        echo '["'.$dataAnual[$i]['month'].'"'.",".''.$dataAnual[$i]['gastos'].'],';
+                    }    
+                ?>
+            ],
         }]
     });
 </script>

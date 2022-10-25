@@ -67,6 +67,20 @@
                                 }
                             ?>
                             <?php 
+                                if($_SESSION['permit'][7]['r']){
+                            ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?=base_url()?>/contabilidad">
+                                    <svg class="nav-icon">
+                                        <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-dollar"></use>
+                                    </svg> 
+                                    Contabilidad<span class="badge badge-sm bg-info ms-auto"></span>
+                                </a>
+                            </li>
+                            <?php 
+                                }
+                            ?>
+                            <?php 
                                 if($_SESSION['permit'][4]['r']){
                             ?>
                             <li class="nav-group">

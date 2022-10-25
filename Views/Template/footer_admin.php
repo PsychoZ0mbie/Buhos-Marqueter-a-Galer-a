@@ -1,4 +1,4 @@
-<?php $companyData = getCompanyInfo();?>
+<?php $company = getCompanyInfo();?>
         
         <footer class="footer">
             <div>CoreUI Bootstrap Admin Template © 2021 creativeLabs.</div>
@@ -31,6 +31,8 @@
 
         <script>
           const base_url = "<?= base_url(); ?>";
+          const MS = "<?=$company['currency']['symbol'];?>";
+          const MD = "<?=$company['currency']['code']?>";
         </script>
         
         <script type="text/javascript" src="<?= media(); ?>/js/functions.js"></script>
