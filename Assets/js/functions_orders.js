@@ -35,7 +35,7 @@ if(document.querySelector("#quickSale")){
             formData.append("products",JSON.stringify(arrProducts));
             btnAddPos.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
             btnAddPos.setAttribute("disabled","");
-            request(base_url+"/orders/setOrder",formData,"post").then(function(objData){
+            request(base_url+"/pedidos/setOrder",formData,"post").then(function(objData){
                 btnAddPos.removeAttribute("disabled");
                 btnAddPos.innerHTML="Guardar";
                 if(objData.status){
@@ -47,7 +47,7 @@ if(document.querySelector("#quickSale")){
         }
     });
     searchProducts.addEventListener('input',function() {
-        request(base_url+"/orders/searchProducts/"+searchProducts.value,"","get").then(function(objData){
+        request(base_url+"/pedidos/searchProducts/"+searchProducts.value,"","get").then(function(objData){
             if(objData.status){
                 document.querySelector("#listProducts").innerHTML = objData.data;
             }else{
@@ -57,7 +57,7 @@ if(document.querySelector("#quickSale")){
     });
     searchCustomers.addEventListener('input',function() {
         if(searchCustomers.value !=""){
-            request(base_url+"/orders/searchCustomers/"+searchCustomers.value,"","get").then(function(objData){
+            request(base_url+"/pedidos/searchCustomers/"+searchCustomers.value,"","get").then(function(objData){
                 if(objData.status){
                     document.querySelector("#customers").innerHTML = objData.data;
                 }else{
@@ -77,7 +77,7 @@ if(document.querySelector("#orders")){
     
 
     search.addEventListener('input',function() {
-        request(base_url+"/orders/search/"+search.value,"","get").then(function(objData){
+        request(base_url+"/pedidos/search/"+search.value,"","get").then(function(objData){
             if(objData.status){
                 element.innerHTML = objData.data;
             }else{
@@ -88,7 +88,7 @@ if(document.querySelector("#orders")){
     
 
     sort.addEventListener("change",function(){
-        request(base_url+"/orders/sort/"+sort.value,"","get").then(function(objData){
+        request(base_url+"/pedidos/sort/"+sort.value,"","get").then(function(objData){
             if(objData.status){
                 element.innerHTML = objData.data;
             }else{
@@ -117,7 +117,7 @@ if(document.querySelector("#orders")){
             cancelButtonText:"No, cancelar"
         }).then(function(result){
             if(result.isConfirmed){
-                let url = base_url+"/Orders/delOrder"
+                let url = base_url+"/pedidos/delOrder"
                 let formData = new FormData();
                 formData.append("idOrder",id);
                 request(url,formData,"post").then(function(objData){
@@ -143,7 +143,7 @@ if(document.querySelector("#btnRefund")){
         btn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
         btn.setAttribute("disabled","");
     
-        request(base_url+"/Orders/getTransaction/"+id,"","get").then(function(objData){
+        request(base_url+"/pedidos/getTransaction/"+id,"","get").then(function(objData){
             btn.removeAttribute("disabled");
             btn.innerHTML=`<i class="fas fa-undo"></i> Reembolsar`;
     
@@ -236,7 +236,7 @@ if(document.querySelector("#btnRefund")){
                         
                         let formData = new FormData(form);
                         if(result.isConfirmed){
-                            request(base_url+"/Orders/setRefund",formData,"post").then(function(objData){
+                            request(base_url+"/pedidos/setRefund",formData,"post").then(function(objData){
                                 btnRefundConfirm.innerHTML=`<i class="fas fa-undo"></i> Reembolsar`;
                                 btnRefundConfirm.removeAttribute("disabled");
                                 if(objData.status){
@@ -268,7 +268,7 @@ function addProduct(id,btn){
     btn.setAttribute("disabled","disabled");
     let formData = new FormData();
     formData.append("idProduct",id);
-    request(base_url+"/orders/getProduct",formData,"post").then(function(objData){
+    request(base_url+"/pedidos/getProduct",formData,"post").then(function(objData){
         let data = objData.data;
         let div = document.createElement("div");
         let html =`

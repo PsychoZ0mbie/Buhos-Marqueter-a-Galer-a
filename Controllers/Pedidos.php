@@ -244,7 +244,7 @@
                         if($request[$i]['discount']>0){
                             $discount = '<span class="text-success">'.$request[$i]['discount'].'% OFF</span>';
                         }else{
-                            $discount = '<span class="text-danger">No discount</span>';
+                            $discount = '<span class="text-danger">0%</span>';
                         }
                         $html.='
                             <tr class="item">
@@ -254,7 +254,7 @@
                                 <td>'.$request[$i]['name'].'</td>
                                 <td>'.$price.'</td>
                                 <td>'.$discount.'</td>
-                                <td><button type="button" class="btn btn-primary" id="btn'.$request[$i]['idproduct'].'" onclick="addProduct('.$request[$i]['idproduct'].',this)">Add</button></td>
+                                <td><button type="button" class="btn btn-primary" id="btn'.$request[$i]['idproduct'].'" onclick="addProduct('.$request[$i]['idproduct'].',this)">Agregar</button></td>
                             </tr>
                         ';
                     }
