@@ -71,6 +71,10 @@
 
 </head>
 <body>
+    <div id="divLoading">
+        <div></div>
+        <span>Cargando...</span>
+    </div>
     <header>
         <div class="logo">
             <img src="<?=media()."/images/uploads/".$company['logo']?>" alt="<?=$company['name']?>">
@@ -188,13 +192,13 @@
         <div class="navmobile--elements">
             <div class="navmobile--header">
                 <div class="navmobile--title">
-                    <a href="#">Buho's <span>Marquetería</span> <span>&</span> <span>Galería</span></a>
+                    <a href="<?=base_url()?>">Buho's <span>Marquetería</span> <span>&</span> <span>Galería</span></a>
                 </div>
                 <span id="closeNav"><i class="fas fa-times"></i></span>
             </div>
             <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Enmarca aquí</a></li>
+                <li><a href="<?=base_url()?>">Inicio</a></li>
+                <li><a href="<?=base_url()?>/enmarcar">Enmarca aquí</a></li>
                 <li><a href="#">Tienda</a></li>
                 <li><a href="#">¿Quienes somos?</a></li>
                 <li><a href="#">Servicios</a></li>
@@ -208,10 +212,7 @@
             </ul>
         </div>
     </div>
-    <div id="divLoading">
-        <div></div>
-        <span>Cargando...</span>
-    </div>
+    
     <div id="modalLogin"></div>
     <a href="#" class="back--top d-none"><i class="fas fa-backward"></i></a>
     

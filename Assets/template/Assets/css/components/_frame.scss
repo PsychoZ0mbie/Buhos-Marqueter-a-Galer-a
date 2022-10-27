@@ -168,19 +168,6 @@
         width: 100%;
         border-radius: 10px;
     }
-    &:nth-of-type(1){
-        div{
-            background-color: $color1;
-        }
-    }&:nth-of-type(2){
-        div{
-            background-color: $color2;
-        }
-    }&:nth-of-type(3){
-        div{
-            background-color: $color3;
-        }
-    }
 }
 .element--hover{
     transition: all 0.3s ease;

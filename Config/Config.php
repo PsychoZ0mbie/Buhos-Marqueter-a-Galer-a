@@ -27,5 +27,8 @@
 	//Encriptado
 	const KEY = "ecommerce";
 	const METHOD = "AES-128-ECB";
+	
+	const COMISION = 1.04;
+	const TASA = 900;
 
 ?>

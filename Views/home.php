@@ -17,8 +17,8 @@
                 <div class="carousel-item active">
                     <div class="main--show">
                         <div class="show--text">
-                            <h2>Imprime y Enmarca tus fotos favoritas sin salir de casa</h2>
-                            <a href="#" class="btn btn-bg-1">Empieza ahora</a>
+                            <h2>Enmarca tus obras y fotos sin salir de casa</h2>
+                            <a href="<?=base_url()?>/enmarcar/tipo" class="btn btn-bg-1">Empieza ahora</a>
                         </div>
                         <div class="show--img">
                             <img src="assets/images/slide1.jpg" class="d-block w-100" alt="...">
@@ -28,8 +28,8 @@
                 <div class="carousel-item">
                     <div class="main--show">
                         <div class="show--text">
-                            <h2>Imprime y Enmarca tus fotos favoritas sin salir de casa</h2>
-                            <a href="#" class="btn btn-bg-1">Empieza ahora</a>
+                            <h2>Decora tus paredes con nuestros cuadros</h2>
+                            <a href="<?=base_url()?>/tienda" class="btn btn-bg-1">Empieza ahora</a>
                         </div>
                         <div class="show--img">
                             <img src="assets/images/slide1.jpg" class="d-block w-100" alt="...">
