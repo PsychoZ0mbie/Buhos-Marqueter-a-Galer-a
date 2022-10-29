@@ -10,8 +10,8 @@
 
         public function enmarcar(){
             $company = getCompanyInfo();
-            $data['page_tag'] = "Enmarcar |".$company['name'];
-            $data['page_title'] = "Enmarcar |".$company['name'];
+            $data['page_tag'] = "Enmarcar | ".$company['name'];
+            $data['page_title'] = "Enmarcar | ".$company['name'];
             $data['page_name'] = "enmarcar";
             $data['tipos'] = $this->selectTipos();
             $this->views->getView($this,"enmarcar",$data);
@@ -22,28 +22,38 @@
             $params = strClean($params);
             $request = $this->selectTipo($params);
             if(!empty($request)){
-                $data['page_tag'] = 'Enmarcar '.$request['name'].' |'.$company['name'];
-                $data['page_title'] = 'Enmarcar '.$request['name'].' |'.$company['name'];
+                $data['page_tag'] = 'Enmarcar '.$request['name'].' | '.$company['name'];
+                $data['page_title'] = 'Enmarcar '.$request['name'].' | '.$company['name'];
                 $data['page_name'] = "personalizar";
                 $data['tipo'] = $request;
                 $data['molduras'] = $this->getProducts();
-                $data['colores'] = $this->selectColors();
-                $data['app'] = "functions_personalizar.js";
+                if($request['id'] == 1){
+                    $data['colores'] = $this->selectColors();
+                    $data['app'] = "functions_personalizar.js";
+                    $data['option'] = getFile("Template/Enmarcar/general",$data);
+                }elseif($request['id'] == 3){
+                    $data['app'] = "functions_personalizar_espejo.js";
+                    $data['option'] = getFile("Template/Enmarcar/espejo",$data);
+                }elseif($request['id']==4){
+                    $data['colores'] = $this->selectColors();
+                    $data['app'] = "functions_personalizar.js";
+                    $data['option'] = getFile("Template/Enmarcar/lienzo",$data);
+                }
                 $this->views->getView($this,"personalizar",$data);
             }else{
                 header("location: ".base_url()."/enmarcar");
             }
             
         }
-        public function getProducts($option=null,$params=null){
+        public function getProducts($option=null,$params=null,$perimetro=""){
             $html="";
             $request="";
             if($option == 1){
-                $request = $this->searchT($params);
+                $request = $this->searchT($params,$perimetro);
             }else if($option == 2){
-                $request = $this->sortT($params);
+                $request = $this->sortT($params,$perimetro);
             }else{
-                $request = $this->selectProducts();
+                $request = $this->selectProducts($perimetro);
             }
             if(count($request)>0){
                 for ($i=0; $i < count($request); $i++) { 
@@ -94,20 +104,30 @@
             }
             die();
         }
-        public function search($params){
-            $search = strClean($params);
-            $arrResponse = $this->getProducts(1,$params);
-            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+        public function search(){
+            if($_POST){
+                $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
+                $arrResponse = $this->getProducts(1,strClean($_POST['search']),$perimetro);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
             die();
         }
-        public function sort($params){
-            $params = intval($params);
-            $arrResponse = $this->getProducts(2,$params);
-            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+        public function sort(){
+            if($_POST){
+                $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
+                $arrResponse = $this->getProducts(2,intval($_POST['sort']),$perimetro);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
             die();
         }
-        public function calcularMarco($altura,$ancho,$datos){
-            $perimetro = ($altura+$ancho)*2+$datos['waste'];
+        public function calcularMarcoInterno($estilo,$margin,$altura,$ancho,$datos){
+            if($estilo == 1){
+                $margin = 0;
+            }
+            $altura = $margin+$altura;
+            $ancho = $margin +$ancho;
+            $area = $altura * $ancho;
+            $perimetro = (2*($altura+$ancho))+$datos['waste'];
             $total =0;
             
             if($datos['discount']>0){
@@ -115,57 +135,177 @@
             }else{
                 $total = $datos['price']*$perimetro;
             }
-            return $total;
+            $arrDatos = array("perimetro"=>$perimetro,"area"=>$area,"total"=>$total);
+            return $arrDatos;
         }
-        public function calcularMarcoEstilos($estilo,$perimetro,$area){
+        public function calcularMarcoEstilos($estilo,$perimetro,$area,$tipo){
             $material = $this->selectMaterials();
             $paspartu = $material[0]['price'];
             $hijillo = $material[1]['price'];
             $bocel = $material[2]['price'];
+            $bastidor = $material[4]['price'];
             $triplex = $material[5]['price'];
             $vidrio = $material[3]['price'];
+            $espuma = $material[6]['price'];
+            $espejo =$material[7]['price'];
+
             $total = 0;
-            if($estilo == 1){
-                $total = $area * $vidrio;
-            }else if($estilo == 2){
-                $total = ($area * $paspartu)+($perimetro*$bocel)+($area*$vidrio);
-            }else if($estilo == 3){
-                $total = ($area * $paspartu)+($area*$vidrio);
-            }else if($estilo == 4){
-                $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio);
+            if($tipo==1){
+                if($estilo == 1){
+                    $total = $area * $vidrio;
+                }else if($estilo == 2){
+                    $total = ($area * $paspartu)+($perimetro*$bocel)+($area*$vidrio);
+                }else if($estilo == 3){
+                    $total = ($area * $paspartu)+($area*$vidrio);
+                }else if($estilo == 4){
+                    $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio);
+                }
+            }else if($tipo == 3){
+                $total = $area * $espejo;
+            }else if($tipo == 4){
+                if($estilo == 1){
+                    $total = $perimetro * $bastidor;
+                }else if($estilo == 4){
+                    $total = ($area * $triplex)+($perimetro*$hijillo)+($perimetro*$bastidor);
+                }else if($estilo == 5){
+                    $total = ($area * $triplex)+($perimetro*$bastidor);
+                }
             }
             return $total;
 
         }
-        public function calcularMarcoTotal(){
+        public function calcularMarcoTotal($datos=null){
+            if($datos==null){
+                if($_POST){
+                    $id = intval(openssl_decrypt($_POST['id'],METHOD,KEY));
+                    if(is_numeric($id)){
+                        $request = $this->selectProduct($id);
+                        $margin = intval($_POST['margin'])*2;
+                        $altura = floatval($_POST['height']);
+                        $ancho = floatval($_POST['width']);
+                        $estilo = intval($_POST['style']);
+                        $tipo = intval($_POST['type']);
+        
+        
+                        $marcoTotal = $this->calcularMarcoInterno($estilo,$margin,$altura,$ancho,$request);
+                        $marcoEstilos = $this->calcularMarcoEstilos($estilo,$marcoTotal['perimetro'],$marcoTotal['area'],$tipo);
+        
+                        $total = (($marcoEstilos+$marcoTotal['total'])*COMISION)+TASA;
+                        $request['total'] = array("total"=>$total,"format"=>formatNum($total));
+                        $arrResponse = array("status"=>true,"data"=>$request);
+                    }else{
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos"); 
+                    }
+                    //$request['total'] = $this->calcularMarco(floatval($_POST['height']),floatval($_POST['width']),$id);
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+                die();
+            }elseif($datos !=null){
+                $margin = $datos['margin']*2;
+                $altura = $datos['height'];
+                $ancho = $datos['width'];
+                $estilo = $datos['style'];
+                $tipo = $datos['type'];
+
+                $marcoTotal = $this->calcularMarcoInterno($estilo,$margin,$altura,$ancho,$datos['frame']);
+                $marcoEstilos = $this->calcularMarcoEstilos($estilo,$marcoTotal['perimetro'],$marcoTotal['area'],$tipo);
+
+                $total = intval((($marcoEstilos+$marcoTotal['total'])*COMISION)+TASA);
+                return $total;
+            }else{
+                die();
+            }
+            
+        }
+        public function addCart(){
+            //unset($_SESSION['arrCart']);exit;
             if($_POST){
                 $id = intval(openssl_decrypt($_POST['id'],METHOD,KEY));
-                $request = $this->selectProduct($id);
-                if(!empty($request)){
+                $arrCart = array();
+                $qty = intval($_POST['qty']);
+                
+                if(is_numeric($id)){
+                    $frame = $this->selectProduct($id);
+                    $colorMargin = $this->selectColor(intval($_POST['colorMargin']));
+                    $colorBorder = $this->selectColor(intval($_POST['colorBorder']));
+                    $colorMargin = !empty($colorMargin) ? $colorMargin['name'] : "No aplica";
+                    $colorBorder = !empty($colorBorder) ? $colorBorder['name'] : "No aplica";
+                    $height = floatval($_POST['height']);
+                    $width = floatval($_POST['width']);
+                    $margin = intval($_POST['margin']);
+                    $styleName = strClean($_POST['styleName']);
+                    $styleValue = intval($_POST['styleValue']);
+                    $route = $_POST['route'];
+                    $type = $_POST['type'];
+                    $idType = intval($_POST['idType']);
+                    $orientation = $_POST['orientation'];
 
-                    $margin = intval($_POST['margin'])*2;
-                    $altura = floatval($_POST['height']) + $margin;
-                    $ancho = floatval($_POST['width']) + $margin;
-                    $estilo = intval($_POST['style']);
-    
-                    
-                    $perimetro = ($altura+$ancho)*2;
-                    $area = $altura*$ancho;
-    
-                    $marcoTotal = $this->calcularMarco($altura,$ancho,$request);
-                    $marcoEstilos = $this->calcularMarcoEstilos($estilo,$perimetro,$area);
-    
-                    $total = (($marcoEstilos+$marcoTotal)*COMISION)+TASA;
-                    $request['total'] = array("total"=>$total,"format"=>formatNum($total));
-                    $arrResponse = array("status"=>true,"data"=>$request);
+                    $data = array("frame"=>$frame,"height"=>$height,"width"=>$width,"margin"=>$margin,"style"=>$styleValue,"type"=>$idType);
+                    $price = $this->calcularMarcoTotal($data);
+                    $pop = array("name"=>"Ref ".$frame['reference']." - ".$type,"image"=>$frame['image'][0],"route"=>base_url()."/enmarcar/personalizar/".$route);
+                    $arrProduct = array(
+                        "topic"=>1,
+                        "id"=>openssl_encrypt($id,METHOD,KEY),
+                        "name"=>$pop['name'],
+                        "type"=>$type,
+                        "idType"=>$idType,
+                        "orientation"=>$orientation,
+                        "style"=>$styleName,
+                        "reference"=>$frame['reference'],
+                        "height"=>$height,
+                        "width"=>$width,
+                        "margin"=>$styleValue == 1 ? 0:$margin,
+                        "colormargin"=>$colorMargin,
+                        "colorborder"=>$colorBorder,
+                        "price"=>$price,
+                        "qty"=>$qty,
+                        "url"=>$pop['route'],
+                        "img"=>$pop['image']
+                    );
+                    if(isset($_SESSION['arrCart'])){
+                        $arrCart = $_SESSION['arrCart'];
+                        $flag = true;
+                        for ($i=0; $i < count($arrCart) ; $i++) { 
+                            if($arrCart[$i]['topic'] == 1){
+                                if($arrCart[$i]['style'] == $arrProduct['style'] && $arrCart[$i]['height'] == $arrProduct['height'] &&
+                                $arrCart[$i]['width'] == $arrProduct['width'] && $arrCart[$i]['margin'] == $arrProduct['margin'] &&
+                                $arrCart[$i]['colormargin'] == $arrProduct['colormargin'] && $arrCart[$i]['colorborder'] == $arrProduct['colorborder'] && 
+                                $arrCart[$i]['id'] == $arrProduct['id'] && $arrCart[$i]['idType'] == $arrProduct['idType']){
+                                    $arrCart[$i]['qty'] +=$qty;
+                                    $flag = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if($flag){
+                            array_push($arrCart,$arrProduct);
+                        }
+                        $_SESSION['arrCart'] = $arrCart;
+
+                    }else{
+                        array_push($arrCart,$arrProduct);
+                        $_SESSION['arrCart'] = $arrCart;
+                    }
+                    $qtyCart = 0;
+                    foreach ($_SESSION['arrCart'] as $quantity) {
+                        $qtyCart += $quantity['qty'];
+                    }
+                    $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","qty"=>$qtyCart,"data"=>$pop);
                 }else{
-                    $arrResponse = array("status"=>false,"msg"=>"Datos no encontrados"); 
+                    $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                 }
-                //$request['total'] = $this->calcularMarco(floatval($_POST['height']),floatval($_POST['width']),$id);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            
+            die();
+        }
+        public function filterProducts(){
+            if($_POST){
+                $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
+                $arrResponse = $this->getProducts(null,null,$perimetro);
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
-            
         }
 
     }

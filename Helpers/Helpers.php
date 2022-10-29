@@ -83,9 +83,14 @@
         $format .= print_r('</pre>');
         return $format;
     }
-    function formatNum(int $num){
+    function formatNum(int $num,$divisa=true){
         $companyData = getCompanyInfo();
-        $num = $companyData['currency']['symbol'].number_format($num,0,DEC,MIL)." ".$companyData['currency']['code'];
+        if($divisa){
+            $code = $companyData['currency']['code'];
+        }else{
+            $code="";
+        }
+        $num = $companyData['currency']['symbol'].number_format($num,0,DEC,MIL)." ".$code;
         return $num;
     }
     function emailNotification(){

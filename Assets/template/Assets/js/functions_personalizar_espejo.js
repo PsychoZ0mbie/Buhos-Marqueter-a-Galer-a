@@ -9,10 +9,6 @@ const layoutMargin = document.querySelector(".layout--margin");
 const sliderLeft = document.querySelector(".slider--control-left");
 const sliderRight = document.querySelector(".slider--control-right");
 const sliderInner = document.querySelector(".slider--inner");
-const marginRange = document.querySelector("#marginRange");
-const colorMargin = document.querySelectorAll(".color--margin");
-const colorBorder = document.querySelectorAll(".color--border");
-const selectStyle = document.querySelector("#selectStyle");
 const optionsCustom = document.querySelectorAll(".option--custom");
 const btnBack = document.querySelector("#btnBack");
 const btnNext = document.querySelector("#btnNext");
@@ -148,7 +144,6 @@ searchFrame.addEventListener('input',function() {
         });
     }
 });
-
 sortFrame.addEventListener("change",function(){
     if(intWidth.value !="" && intHeight.value!=""){
         let formData = new FormData();
@@ -162,20 +157,10 @@ sortFrame.addEventListener("change",function(){
         });
     }
 });
-
 containerFrames.addEventListener("click",function(e){
     let id = e.target.parentElement.getAttribute("data-id");
     calcularMarco(id);
     
-});
-marginRange.addEventListener("input",function(){
-    customMargin(marginRange.value);
-    calcularMarco();
-});
-//[Select style]
-selectStyle.addEventListener("change",function(){
-    selectStyleFrame(selectStyle.value);
-    calcularMarco();
 });
 //----------------------------------------------
 //[Add frame]
@@ -189,32 +174,19 @@ addFrame.addEventListener("click",function(){
         Swal.fire("Error","Por favor, ingresa las medidas","error");
         return false;
     }
+
     if(!document.querySelector(".frame--item.element--active")){
         Swal.fire("Error","Por favor, seleccione la moldura","error");
         return false;
     }
-    if(selectStyle.value == 2 || selectStyle.value == 4){
-        if(!document.querySelector(".color--margin.element--active")){
-            Swal.fire("Error","Por favor, elige el color del margen","error");
-            return false;
-        }
-        if(!document.querySelector(".color--border.element--active")){
-            Swal.fire("Error","Por favor, elige el color del borde","error");
-            return false;
-        }
-    }else if(selectStyle.value == 3){
-        if(!document.querySelector(".color--margin.element--active")){
-            Swal.fire("Error","Por favor, elige el color del margen","error");
-            return false;
-        }
-    }
-    let margin = marginRange.value;
-    let styleFrame = selectStyle.value;
+
+    let margin = 0;
+    let styleFrame = 1;
     let height = intHeight.value;
     let width = intWidth.value;
     let id = document.querySelector(".frame--item.element--active").getAttribute("data-id");
-    let colorMargin = document.querySelector(".color--margin.element--active") ? document.querySelector(".color--margin.element--active").getAttribute("data-id") : 0;
-    let colorBorder = document.querySelector(".color--border.element--active") ? document.querySelector(".color--border.element--active").getAttribute("data-id") : 0;
+    let colorMargin = 0;
+    let colorBorder = 0;
     let route = document.querySelector("#enmarcarTipo").getAttribute("data-route");
     let type = document.querySelector("#enmarcarTipo").getAttribute("data-name");
     let orientation = document.querySelector(".orientation.element--active").getAttribute("data-name");
@@ -222,7 +194,7 @@ addFrame.addEventListener("click",function(){
     formData.append("height",height);
     formData.append("width",width);
     formData.append("styleValue",styleFrame);
-    formData.append("styleName",selectStyle.options[selectStyle.selectedIndex].text);
+    formData.append("styleName","Directo");
     formData.append("margin",margin);
     formData.append("qty",1);
     formData.append("id",id);
@@ -308,7 +280,7 @@ function resizeFrame(width,height){
 
     let heightM = height;
     let widthM = width;
-    let margin = parseInt(marginRange.value);
+    let margin = 0;
     let styleMargin = getComputedStyle(layoutMargin).height;
     let styleImg = getComputedStyle(layoutImg).height;
     styleMargin = parseInt(styleMargin.replace("px",""));
@@ -323,78 +295,6 @@ function resizeFrame(width,height){
     layoutMargin.style.height = `${heightM}px`;
     layoutMargin.style.width = `${widthM}px`;
 }
-function customMargin(margin){
-    marginRange.value = margin;
-    let marginHeight = (parseFloat(intHeight.value)+DIMENSIONDEFAULT) + (margin*10);
-    let marginWidth = (parseFloat(intWidth.value)+DIMENSIONDEFAULT) + (margin*10);
-    layoutMargin.style.height = `${marginHeight}px`;
-    layoutMargin.style.width = `${marginWidth}px`;
-    document.querySelector("#marginData").innerHTML= margin+" cm";
-}
-function selectStyleFrame(option){
-    document.querySelector(".borderColor").classList.remove("d-none");
-    if(option == 1){
-        optionsCustom[0].classList.add("d-none");
-        optionsCustom[1].classList.add("d-none");
-        customMargin(0);
-        selectColors();
-    }else if(option == 2 || option == 4){
-        optionsCustom[0].classList.remove("d-none");
-        optionsCustom[1].classList.add("d-none");
-        customMargin(1);
-        if(option==2){
-            selectColors(1);
-        }else{
-            selectColors(2);
-        }
-    }else if(option == 3 || option == 5){
-        optionsCustom[0].classList.remove("d-none");
-        optionsCustom[1].classList.add("d-none");
-        document.querySelector(".borderColor").classList.add("d-none");
-        customMargin(1);
-        selectColors(0);
-    }else{
-        customMargin(0);
-        selectColors();
-        optionsCustom[0].classList.add("d-none");
-        optionsCustom[1].classList.remove("d-none");
-    }
-}
-function selectColors(option = null){
-    if(option == 1){
-        layoutImg.style.border="5px solid #fff";
-        layoutMargin.style.backgroundColor="#000";
-    }else if(option == 2){
-        layoutImg.style.border="10px solid #fff";
-        layoutMargin.style.backgroundColor="#000";
-    }else{
-        layoutImg.style.border="none";
-        layoutMargin.style.backgroundColor="#000";
-    }
-
-    for (let i = 0; i < colorMargin.length; i++) {
-        let margin = colorMargin[i];
-        let border = colorBorder[i];
-
-        if(margin.className.includes("element--active")){
-            margin.classList.remove("element--active");
-        }
-        
-        if(border.className.includes("element--active")){
-            border.classList.remove("element--active");
-        }
-        margin.addEventListener("click",function(){
-            let bg = getComputedStyle(margin.children[0]).backgroundColor;
-            layoutMargin.style.backgroundColor=bg;
-            document.querySelector("#marginColor").innerHTML = document.querySelector(".color--margin.element--active").getAttribute("title");
-        });
-        border.addEventListener("click",function(){
-            let bc = getComputedStyle(border.children[0]).backgroundColor;
-            layoutImg.style.borderColor=bc;
-            document.querySelector("#borderColor").innerHTML = document.querySelector(".color--border.element--active").getAttribute("title");
-        });
-    }
-}
 function calcularMarco(id=null){
     if(!document.querySelector(".frame--item.element--active")){
         return false;
@@ -402,8 +302,8 @@ function calcularMarco(id=null){
     if(id == null){
         id = document.querySelector(".frame--item.element--active").getAttribute("data-id");
     }
-    let margin = marginRange.value;
-    let styleFrame = selectStyle.value;
+    let margin = 0;
+    let styleFrame = 1;
     let height = intHeight.value;
     let width = intWidth.value;
     let type = document.querySelector("#enmarcarTipo").getAttribute("data-id");
@@ -421,24 +321,10 @@ function calcularMarco(id=null){
             let data = objData.data;
             let borderImage = `url(${base_url}/assets/images/uploads/${data.frame}) 40% repeat`;
             document.querySelector("#reference").innerHTML = "Ref: "+data.reference;
-            document.querySelectorAll(".totalFrame")[0].innerHTML = data.total.format;
-            document.querySelectorAll(".totalFrame")[1].innerHTML = data.total.format;
+            document.querySelector(".totalFrame").innerHTML = data.total.format;
             layoutMargin.style.borderImage= borderImage;
             layoutMargin.style.borderWidth = (data.waste/1.5)+"px";
             layoutMargin.style.borderImageOutset = (data.waste/1.5)+"px";
         }
     });
-}
-function uploadImg(img,location){
-    let imgUpload = img.value;
-    let fileUpload = img.files;
-    let type = fileUpload[0].type;
-    if(type != "image/png" && type != "image/jpg" && type != "image/jpeg" && type != "image/gif"){
-        imgUpload ="";
-        Swal.fire("Error","Solo se permite imágenes.","error");
-    }else{
-        let objectUrl = window.URL || window.webkitURL;
-        let route = objectUrl.createObjectURL(fileUpload[0]);
-        document.querySelector(location).setAttribute("src",route);
-    }
 }

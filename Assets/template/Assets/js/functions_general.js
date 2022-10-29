@@ -105,48 +105,27 @@ document.addEventListener("readystatechange",function(){
     if(document.readyState =="complete")loading.classList.add("d-none");
 });
 
-
 btnCart.addEventListener("click",function(){
-    request(base_url+"/shop/currentCart","","get").then(function(objData){
-        if (objData.items!="") {
-            document.querySelector("#btnsCartPanel").classList.remove("d-none");
-            let btnCheckoutCart = document.querySelector("#btnCheckoutCart");
+    request(base_url+"/home/currentCart","","get").then(function(objData){
+        //document.querySelector("#qtyCart").innerHTML=objData.qty;
+        if(objData.items!=""){
+            document.querySelector("#btnsCartBar").classList.remove("d-none");
+            document.querySelector("#qtyCartbar").innerHTML=objData.qty;
+            document.querySelector(".cartlist--items").innerHTML = objData.items;
+            document.querySelector("#totalCart").innerHTML = objData.total;
+            delProduct(document.querySelectorAll(".delItem"));
+            let btnCheckoutCart = document.querySelectorAll(".btnCheckoutCart")[1];
             btnCheckoutCart.addEventListener("click",function(){
                 if(objData.status){
-                    window.location.href=base_url+"/shop/checkout";
+                    window.location.href=base_url+"/tienda/pago";
                 }else{
                     openLoginModal();
                 }
             });
         }else{
-            document.querySelector("#btnsCartPanel").classList.add("d-none");
+            document.querySelector("#btnsCartBar").classList.add("d-none");
         }
-        document.querySelector(".cartlist--items").innerHTML=objData.items;
-        document.querySelector("#total").innerHTML = `<strong>Total: ${objData.total}</strong>`;
-        if(document.querySelectorAll(".btn-del")){
-            let btns = document.querySelectorAll(".btn-del");
-            for (let i = 0; i < btns.length; i++) {
-                let btn = btns[i];
-                btn.addEventListener("click",function(){
-                    let idProduct = btn.parentElement.getAttribute("data-id");
-                    let formData = new FormData();
-                    formData.append("idProduct",idProduct);
-                    request(base_url+"/shop/delCart",formData,"post").then(function(objData){
-                        if(objData.status){
-                            btn.parentElement.remove();
-                            document.querySelector("#total").innerHTML = `<strong>Total: ${objData.total}</strong>`;
-                            document.querySelector("#qtyCart").innerHTML=objData.qty;
-                            if(document.querySelectorAll(".cart-panel-item").length>0){
-                                document.querySelector("#btnsCartPanel").classList.remove("d-none");
-                            }else{
-                                document.querySelector("#btnsCartPanel").classList.add("d-none");
-                            }
-                        }
-                    });
-                });
-            }
-        }
-    });
+    })
 });
 
 if(document.querySelector("#logout")){
@@ -1026,4 +1005,41 @@ function showMore(elements,max=null,handler){
 function checkPopup(){
     let status = localStorage.getItem(COMPANY+"popup");
     return status;
+}
+function delProduct(elements){
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        element.addEventListener("click",function(){
+            let formData = new FormData();
+            let topic = element.parentElement.getAttribute("data-topic");
+            let id = element.parentElement.getAttribute("data-id");
+            formData.append("topic",topic);
+            formData.append("id",id);
+            if(topic == 1){
+                let height = element.parentElement.getAttribute("data-h");
+                let width = element.parentElement.getAttribute("data-w");
+                let margin = element.parentElement.getAttribute("data-m");
+                let marginColor = element.parentElement.getAttribute("data-mc");
+                let borderColor = element.parentElement.getAttribute("data-bc");
+                let style = element.parentElement.getAttribute("data-s");
+                let type = element.parentElement.getAttribute("data-t");
+                formData.append("height",height);
+                formData.append("width",width);
+                formData.append("margin",margin);
+                formData.append("margincolor",marginColor);
+                formData.append("bordercolor",borderColor);
+                formData.append("style",style);
+                formData.append("type",type);
+            }
+            request(base_url+"/home/delCart",formData,"post").then(function(objData){
+                if(objData.status){
+                    document.querySelector("#qtyCart").innerHTML=objData.qty;
+                    document.querySelector("#totalCart").innerHTML = objData.subtotal;
+                    document.querySelector("#qtyCartbar").innerHTML=objData.qty;
+
+                    element.parentElement.remove();
+                }
+            });
+        });
+    }
 }

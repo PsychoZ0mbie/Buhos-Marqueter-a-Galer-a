@@ -267,9 +267,11 @@ nav{
     }
 }
 .item--info{
+    width: 200px;
     a{
+        text-align: start;
         height: 20px;
-        word-break: break-all;
+        word-wrap: break-word;
         font-weight: bold;
         line-height: 1.2;
         width: 100%;
@@ -281,6 +283,7 @@ nav{
     color:$color1;
 }
 .item--qty{
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
     gap: 30px;
@@ -317,7 +320,7 @@ nav{
 #closeNav{
     cursor: pointer;
 }
-#delItem{
+.delItem{
     cursor: pointer;
 }
 #btnNav{
@@ -362,5 +365,47 @@ nav{
     }to{
         z-index: 50;
     }
+}
+
+.popup{
+    width: 300px;
+    height: 125px;
+    position: fixed;
+    right: -100%;
+    bottom:10px;
+    background-color: #fff;
+    border: 1px solid $color2;
+    padding: 10px;
+    z-index: 100;
+    transition:0.3s;
+    .popup-close{
+        position: absolute;
+        top:2px;
+        right: 5px;
+        cursor: pointer;
+    }
+    .popup-info{
+        display: flex;
+        height: 50px;
+        font-size: 15px;
+        overflow: hidden;
+        a{
+            text-decoration: none;
+            color:#000;
+            font-weight: bold;
+        }
+        p{
+            margin: 0;
+        }
+        img{
+            margin-right: 10px;
+            width: 50px;
+            height: 100%;
+        }
+    }
+}
+.popup.active{
+    right:10px;
+    transition:0.3s;
 }
 

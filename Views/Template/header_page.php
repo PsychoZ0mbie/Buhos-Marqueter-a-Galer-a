@@ -25,13 +25,10 @@
         $arrProducts = $_SESSION['arrCart'];
         foreach ($arrProducts as $product) {
             $qtyCart += $product['qty'];
-            if($product['discount']>0){
-                $total += $product['qty']*($product['price']-($product['price']*($product['discount']*0.01)));
-            }else{
-                $total+=$product['qty']*$product['price'];
-            }
+            $total+=$product['price']*$product['qty']; 
         }
     }
+    //dep($arrProducts);exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,6 +68,20 @@
 
 </head>
 <body>
+    <div class="popup">
+        <div class="popup-close">X</div>
+        <div class="popup-info">
+            <img src="" alt="">
+            <div class="h-100">
+                <a href="product.html">Product 1</a>
+                <p>Ha sido agregado a tu carrito</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center text-center mt-3">
+            <a href="<?=base_url()?>/tienda/carrito" class="w-50 p-1 btn btn-bg-2 me-4">Mi carrito</a>
+            <div class="w-50 h-100 p-1 btn btn-bg-1 c-p btnCheckoutCart">Pagar</div>
+        </div>
+    </div>
     <div id="divLoading">
         <div></div>
         <span>Cargando...</span>
@@ -129,60 +140,21 @@
         <div class="cartbar--elements">
             <div class="cartbar--header">
                 <div class="cartbar--title">
-                    Mi carrito <span>0</span>
+                    Mi carrito <span id="qtyCartbar"><?=$qtyCart?></span>
                 </div>
                 <span id="closeCart"><i class="fas fa-times"></i></span>
             </div>
             <div class="cartbar--inner">
-                <ul class="cartlist--items">
-                    <?php 
-                    if(isset($_SESSION['arrCart']) && !empty($_SESSION['arrCart'])){
-                        for ($i=0; $i <count($arrProducts) ; $i++) { 
-                            $price="";
-                            if($arrProducts[$i]['discount']>0){
-                                $price = $arrProducts[$i]['price']-($arrProducts[$i]['price']*($arrProducts[$i]['discount']*0.01));
-                                $price = formatNum($price).' <span class="text-decoration-line-through">'.formatNum($arrProducts[$i]['price']).'</span>';
-                            }else{
-                                $price = formatNum($arrProducts[$i]['price']);
-                            }
-                    ?>
-                    <div class="cart-panel-item" data-id="<?=$arrProducts[$i]['idproduct']?>">
-                        <img src="<?=$arrProducts[$i]['image']?>" alt="<?=$arrProducts[$i]['name']?>">
-                        <div class="btn-del">X</div>
-                        <h3><a href="<?=$arrProducts[$i]['url']?>"><strong><?=$arrProducts[$i]['name']?></strong></a></h3>
-                        <p><?=$arrProducts[$i]['qty']?> x <?=$price?> </p>
-                    </div>
-                    <li class="cartlist--item" data-id="<?=$arrProducts[$i]['idproduct']?>">
-                        <a href="<?=$arrProducts[$i]['url']?>">
-                            <img src="<?=$arrProducts[$i]['image']?>" alt="<?=$arrProducts[$i]['name']?>">
-                        </a>
-                        <div class="item--info">
-                            <a href="<?=$arrProducts[$i]['url']?>"><?=$arrProducts[$i]['name']?></a>
-                            <div class="item--qty">
-                                <span>
-                                    <span class="fw-bold"><?=$arrProducts[$i]['qty']?></span>
-                                    <span class="item--price"><?=$price?></span>
-                                </span>
-                                <div class="qty--btns">
-                                    <button type="button" class="btn-minus" onclick=""><i class="fas fa-minus"></i></button>
-                                    <input type="number" name="" id="" class="btn-input" value="1" min="1" max="99">
-                                    <button type="button" class="btn-plus"><i class="fas fa-plus"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <span id="delItem"><i class="fas fa-times"></i></span>
-                    </li>
-                    <?php } }?>
-                </ul>
+                <ul class="cartlist--items"></ul>
             </div>
             <div class="cartbar--info">
                 <div class="info--total">
                     <span>Total</span>
-                    <span id="total"><?=formatNum($total)?></span>
+                    <span id="totalCart"><?=formatNum($total)?></span>
                 </div>
-                <div class="d-none" id="btnsCartPanel">
-                    <a href="<?=base_url()?>/tienda/carrito" class="btn d-block"> Ver carrito</a>
-                    <button type="button" class="btn d-block btn-bg-1" id="btnCheckoutCart"> Pagar</a>
+                <div id="btnsCartBar" class="d-none">
+                    <a href="<?=base_url()?>/tienda/carrito" class="btn btn-bg-2 d-block w-100 mb-3"> Ver carrito</a>
+                    <button type="button" class="btn d-block btn-bg-1 btnCheckoutCart w-100"> Pagar</a>
                 </div>
             </div>
         </div>
