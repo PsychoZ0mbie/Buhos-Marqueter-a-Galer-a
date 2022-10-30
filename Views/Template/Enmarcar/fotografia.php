@@ -1,5 +1,6 @@
 <?php 
     $colores = $data['colores'];
+    $company = getCompanyInfo();
 ?>
 <div id="modalPoup"></div>
 <main class="container mb-3">
@@ -8,10 +9,6 @@
         <div class="row">
             <div class="col-md-6 mb-4">
                 <div class="frame">
-                    <div class="up-image">
-                        <label for="txtPicture"><i class="fas fa-camera"></i></label>
-                        <input type="file" name="txtPicture" id="txtPicture" accept="image/*">
-                    </div>
                     <div class="zoom">
                         <i class="fas fa-search-minus" id="zoomMinus"></i>
                         <input type="range" class="form-range custom--range" min="10" max="200" value="100" step="10" id="zoomRange">
@@ -19,11 +16,12 @@
                     </div>
                     <div class="layout">
                         <div class="layout--img">
-                            <img src="<?=media()."/images/uploads/cuadro.png"?>" alt="Enmarcar <?=$data['tipo']['name']?>">
+                            <img src="<?=media()."/images/uploads/".$company['logo']?>" alt="Enmarcar <?=$data['tipo']['name']?>">
                         </div>
                         <div class="layout--margin"></div>
                     </div>
                 </div>
+                <p class="mt-3 text-center fw-bold fs-5" id="imgQuality"></p>
                 <!--
                 <div class="slider--content d-none">
                     <div class="slider--controls slider--control-left"><i class="fa-solid fa-angle-left"></i></div>
@@ -43,7 +41,17 @@
             </div>
             <div class="col-md-6 page mb-4">
                 <div class="mb-3">
-                    <span class="fw-bold">1. Elige la orientación</span>
+                    <span class="fw-bold">1. Sube una foto</span>
+                    <p class="t-color-3">La resolución debe ser de al menos 100ppi. Asegurate que abajo de tu imagen siempre diga: 
+                    <span class="fw-bold text-success">buena calidad</span></p>
+                    <div class="mt-3">
+                        <form id="formPicture">
+                            <input class="form-control" type="file" name="txtPicture" id="txtPicture" accept="image/*">
+                        </form>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span class="fw-bold">2. Elige la orientación</span>
                     <div class="d-flex flex-wrap justify-content-center align-items-center mt-3">
                         <div class="orientation element--hover" data-name="horizontal" onclick="selectOrientation(this)">
                             <span>Horizontal</span>
@@ -56,8 +64,8 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <span class="fw-bold ">2. Ingresa las dimensiones</span>
-                    <p class="t-color-3">Ingresa las medidas exactas de tu documento</p>
+                    <span class="fw-bold ">3. Dimensiones sugeridas para impresión</span>
+                    <p class="t-color-3">Puedes cambiar las dimensiones pero asegurate de mantener la calidad de tu imagen</p>
                     <div class="d-flex flex-wrap justify-content-center align-items-center">
                         <div class="measures--dimension">
                             <label for="">Ancho (cm)</label>
@@ -98,8 +106,9 @@
                         <span class="fw-bold">1. Elige el estilo</span>
                         <select class="form-select mt-3" aria-label="Default select example" id="selectStyle">
                             <option value="1">Directo</option>
+                            <option value="2">Passepartout con bocel</option>
+                            <option value="3">Passepartout sin bocel</option>
                             <option value="4">Caribe</option>
-                            <option value="5">Caribe sin borde</option>
                         </select>
                     </div>
                     <div class="option--custom d-none">

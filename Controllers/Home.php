@@ -33,7 +33,7 @@
                         $html.= '
                         <li class="cartlist--item" data-id="'.$arrProducts[$i]['id'].'" data-topic ="'.$arrProducts[$i]['topic'].'" data-h="'.$arrProducts[$i]['height'].'"
                         data-w="'.$arrProducts[$i]['width'].'" data-m="'.$arrProducts[$i]['margin'].'" data-s="'.$arrProducts[$i]['style'].'" 
-                        data-mc="'.$arrProducts[$i]['colormargin'].'" data-bc="'.$arrProducts[$i]['colorborder'].'" data-t="'.$arrProducts[$i]['idType'].'">
+                        data-mc="'.$arrProducts[$i]['colormargin'].'" data-bc="'.$arrProducts[$i]['colorborder'].'" data-t="'.$arrProducts[$i]['idType'].'" data-f="'.$arrProducts[$i]['photo'].'">
                             <a href="'.$arrProducts[$i]['url'].'">
                                 <img src="'.$arrProducts[$i]['img'].'" alt="'.$arrProducts[$i]['name'].'">
                             </a>
@@ -84,11 +84,16 @@
                     $type = intval($_POST['type']);
                     $borderColor = $_POST['bordercolor'];
                     $marginColor = $_POST['margincolor'];
+                    $photo = $_POST['photo'];
                     
                     for ($i=0; $i < count($arrCart) ; $i++) { 
                         if($topic == $arrCart[$i]['topic'] && $id == $arrCart[$i]['id'] && $height == $arrCart[$i]['height']
                         && $width == $arrCart[$i]['width'] && $margin == $arrCart[$i]['margin'] && $style == $arrCart[$i]['style']
-                        && $type == $arrCart[$i]['idType'] && $borderColor == $arrCart[$i]['colorborder'] && $marginColor == $arrCart[$i]['colormargin']){
+                        && $type == $arrCart[$i]['idType'] && $borderColor == $arrCart[$i]['colorborder'] && $marginColor == $arrCart[$i]['colormargin']
+                        && $photo == $arrCart[$i]['photo']){
+                            if($photo!=""){
+                                deleteFile($photo);
+                            }
                             unset($arrCart[$i]);
                             break;
                         }

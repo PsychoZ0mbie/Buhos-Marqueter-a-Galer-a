@@ -22,7 +22,7 @@ const searchFrame = document.querySelector("#searchFrame");
 const sortFrame = document.querySelector("#sortFrame");
 const addFrame = document.querySelector("#addFrame");
 const uploadPicture = document.querySelector("#txtPicture");
-
+const imgQuality = document.querySelector("#imgQuality");
 let page = 0;
 
 //----------------------------------------------
@@ -70,9 +70,10 @@ intHeight.addEventListener("change",function(){
     }else if(intHeight.value >= 500.0){
         intHeight.value = 500.0;
     }
+    calcPpi(intHeight.value,intWidth.value,document.querySelector(".layout--img img"));
     calcularMarco();
     resizeFrame(intWidth.value, intHeight.value);
-    if(intHeight.value !="" && intWidth.value!=""){
+    if(intHeight.value !="" && intWidth.value!="" && uploadPicture.value!=""){
         btnNext.classList.remove("d-none");
     }
     if(intWidth.value !="" && intHeight.value!=""){
@@ -92,9 +93,10 @@ intWidth.addEventListener("change",function(){
     }else if(intWidth.value >= 500.0){
         intWidth.value = 500.0;
     }
+    calcPpi(intHeight.value,intWidth.value,document.querySelector(".layout--img img"));
     calcularMarco();
     resizeFrame(intWidth.value, intHeight.value);
-    if(intHeight.value !="" && intWidth.value!=""){
+    if(intHeight.value !="" && intWidth.value!="" && uploadPicture.value!=""){
         btnNext.classList.remove("d-none");
     }
     if(intWidth.value !="" && intHeight.value!=""){
@@ -138,7 +140,20 @@ sliderRight.addEventListener("click",function(){
 //[upload image]
 
 uploadPicture.addEventListener("change",function(){
-    uploadImg(uploadPicture,".layout--img img");
+    if(uploadPicture.value !=""){
+        uploadImg(uploadPicture,".layout--img img");
+        if(intHeight.value !="" && intWidth.value!=""){
+            btnNext.classList.remove("d-none");
+        }
+    }else{
+        btnNext.classList.add("d-none");
+    }
+    setTimeout(function() {
+        calcDimension(document.querySelector(".layout--img img"));
+        calcularMarco();
+    }, 100);
+    
+    //console.log(resolution);
 });
 
 
@@ -193,7 +208,7 @@ addFrame.addEventListener("click",function(){
     let popup = document.querySelector(".popup");
     let popupClose = document.querySelector(".popup-close"); 
     let timer;
-    let formData = new FormData();
+    let formData = new FormData(document.querySelector("#formPicture"));
 
     if(intHeight.value =="" || intWidth.value==""){
         Swal.fire("Error","Por favor, ingresa las medidas","error");
@@ -229,6 +244,7 @@ addFrame.addEventListener("click",function(){
     let type = document.querySelector("#enmarcarTipo").getAttribute("data-name");
     let orientation = document.querySelector(".orientation.element--active").getAttribute("data-name");
     let idType = document.querySelector("#enmarcarTipo").getAttribute("data-id");
+    
     formData.append("height",height);
     formData.append("width",width);
     formData.append("styleValue",styleFrame);
@@ -301,6 +317,9 @@ function selectOrientation(element){
         items[i].classList.remove("element--active");
     }
     element.classList.add("element--active");
+    if(intHeight.value !="" && intWidth.value !=""){
+        btnNext.classList.remove("d-none");
+    }
     document.querySelectorAll(".measures--input")[0].removeAttribute("disabled");
     document.querySelectorAll(".measures--input")[1].removeAttribute("disabled");
 }
@@ -451,4 +470,35 @@ function uploadImg(img,location){
         let route = objectUrl.createObjectURL(fileUpload[0]);
         document.querySelector(location).setAttribute("src",route);
     }
+}
+function calcDimension(picture){
+    
+    let realHeight = picture.naturalHeight;
+    let realWidth = picture.naturalWidth;
+
+    let height = Math.round((realHeight*2.54)/100) < 10 ? 10 :  Math.round((realHeight*2.54)/100);
+    let width = Math.round((realWidth*2.54)/100) < 10 ? 10 :  Math.round((realWidth*2.54)/100);
+
+    intHeight.value = height;
+    intWidth.value = width;
+    btnNext.classList.remove("d-none");
+    resizeFrame(intWidth.value,intHeight.value);
+
+    imgQuality.innerHTML = `Resolución 100 ppi <span class="text-success">buena calidad</span>`
+}
+function calcPpi(height,width,picture){
+    
+    let realHeight = picture.naturalHeight;
+    let realWidth = picture.naturalWidth;
+
+    let h = Math.round((realHeight*2.54)/height);
+    let w = Math.round((realWidth*2.54)/width);
+    let ppi = Math.round((h+w))/2;
+
+    if(ppi<100){
+        imgQuality.innerHTML = `Resolución ${ppi} ppi <span class="text-danger">mala calidad</span>, puedes reducir las dimensiones o cambiar de imagen`;
+    }else{
+        imgQuality.innerHTML = `Resolución ${ppi} ppi <span class="text-success">buena calidad</span>`;
+    }
+
 }

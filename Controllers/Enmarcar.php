@@ -38,6 +38,10 @@
                     $data['colores'] = $this->selectColors();
                     $data['app'] = "functions_personalizar.js";
                     $data['option'] = getFile("Template/Enmarcar/lienzo",$data);
+                }elseif($request['id']==5){
+                    $data['colores'] = $this->selectColors();
+                    $data['app'] = "functions_personalizar_foto.js";
+                    $data['option'] = getFile("Template/Enmarcar/fotografia",$data);
                 }
                 $this->views->getView($this,"personalizar",$data);
             }else{
@@ -148,6 +152,7 @@
             $vidrio = $material[3]['price'];
             $espuma = $material[6]['price'];
             $espejo =$material[7]['price'];
+            $impresion =$material[8]['price'];
 
             $total = 0;
             if($tipo==1){
@@ -169,6 +174,16 @@
                     $total = ($area * $triplex)+($perimetro*$hijillo)+($perimetro*$bastidor);
                 }else if($estilo == 5){
                     $total = ($area * $triplex)+($perimetro*$bastidor);
+                }
+            }else if($tipo == 5){
+                if($estilo == 1){
+                    $total = ($area * $vidrio)+($area*$impresion);
+                }else if($estilo == 2){
+                    $total = ($area * $paspartu)+($perimetro*$bocel)+($area*$vidrio)+($area*$impresion);
+                }else if($estilo == 3){
+                    $total = ($area * $paspartu)+($area*$vidrio)+($area*$impresion);
+                }else if($estilo == 4){
+                    $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio)+($area*$impresion);
                 }
             }
             return $total;
@@ -239,6 +254,12 @@
                     $type = $_POST['type'];
                     $idType = intval($_POST['idType']);
                     $orientation = $_POST['orientation'];
+                    $photo="";
+
+                    if($_FILES['txtPicture']['name']!=""){
+                        $photo = 'impresion_'.bin2hex(random_bytes(6)).'.png';
+                        uploadImage($_FILES['txtPicture'],$photo);
+                    }
 
                     $data = array("frame"=>$frame,"height"=>$height,"width"=>$width,"margin"=>$margin,"style"=>$styleValue,"type"=>$idType);
                     $price = $this->calcularMarcoTotal($data);
@@ -260,7 +281,8 @@
                         "price"=>$price,
                         "qty"=>$qty,
                         "url"=>$pop['route'],
-                        "img"=>$pop['image']
+                        "img"=>$pop['image'],
+                        "photo"=>$photo
                     );
                     if(isset($_SESSION['arrCart'])){
                         $arrCart = $_SESSION['arrCart'];
@@ -270,7 +292,7 @@
                                 if($arrCart[$i]['style'] == $arrProduct['style'] && $arrCart[$i]['height'] == $arrProduct['height'] &&
                                 $arrCart[$i]['width'] == $arrProduct['width'] && $arrCart[$i]['margin'] == $arrProduct['margin'] &&
                                 $arrCart[$i]['colormargin'] == $arrProduct['colormargin'] && $arrCart[$i]['colorborder'] == $arrProduct['colorborder'] && 
-                                $arrCart[$i]['id'] == $arrProduct['id'] && $arrCart[$i]['idType'] == $arrProduct['idType']){
+                                $arrCart[$i]['id'] == $arrProduct['id'] && $arrCart[$i]['idType'] == $arrProduct['idType'] && $arrCart[$i]['photo'] == $arrProduct['photo']){
                                     $arrCart[$i]['qty'] +=$qty;
                                     $flag = false;
                                     break;

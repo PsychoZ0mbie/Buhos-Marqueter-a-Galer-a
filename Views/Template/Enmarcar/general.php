@@ -8,10 +8,10 @@
         <div class="row">
             <div class="col-md-6 mb-4">
                 <div class="frame">
-                    <!--<div class="up-image">
+                    <div class="up-image">
                         <label for="txtPicture"><i class="fas fa-camera"></i></label>
                         <input type="file" name="txtPicture" id="txtPicture" accept="image/*">
-                    </div>-->
+                    </div>
                     <div class="zoom">
                         <i class="fas fa-search-minus" id="zoomMinus"></i>
                         <input type="range" class="form-range custom--range" min="10" max="200" value="100" step="10" id="zoomRange">

@@ -1016,6 +1016,7 @@ function delProduct(elements){
             formData.append("topic",topic);
             formData.append("id",id);
             if(topic == 1){
+                let photo = element.parentElement.getAttribute("data-f");
                 let height = element.parentElement.getAttribute("data-h");
                 let width = element.parentElement.getAttribute("data-w");
                 let margin = element.parentElement.getAttribute("data-m");
@@ -1030,6 +1031,7 @@ function delProduct(elements){
                 formData.append("bordercolor",borderColor);
                 formData.append("style",style);
                 formData.append("type",type);
+                formData.append("photo",photo);
             }
             request(base_url+"/home/delCart",formData,"post").then(function(objData){
                 if(objData.status){
