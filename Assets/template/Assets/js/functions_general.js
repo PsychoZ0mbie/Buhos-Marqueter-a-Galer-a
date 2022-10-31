@@ -1033,7 +1033,11 @@ function delProduct(elements){
                 formData.append("type",type);
                 formData.append("photo",photo);
             }
+            element.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            element.setAttribute("disabled","");
             request(base_url+"/home/delCart",formData,"post").then(function(objData){
+                element.innerHTML=`<i class="fas fa-times"></i>`;
+                element.removeAttribute("disabled");
                 if(objData.status){
                     document.querySelector("#qtyCart").innerHTML=objData.qty;
                     document.querySelector("#totalCart").innerHTML = objData.subtotal;

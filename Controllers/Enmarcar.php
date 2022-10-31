@@ -85,9 +85,8 @@
                 }
                 $arrResponse = array("status"=>true,"data"=>$html);
             }else{
-                $arrResponse = array("status"=>false,"data"=>$html);
+                $arrResponse = array("status"=>false,"data"=>"No hay resultados");
             }
-            
             return $arrResponse;
         }
         public function getProduct(){
@@ -256,14 +255,14 @@
                     $orientation = $_POST['orientation'];
                     $photo="";
 
-                    if($_FILES['txtPicture']['name']!=""){
+                    if(!empty($_FILES['txtPicture'])){
                         $photo = 'impresion_'.bin2hex(random_bytes(6)).'.png';
                         uploadImage($_FILES['txtPicture'],$photo);
                     }
 
                     $data = array("frame"=>$frame,"height"=>$height,"width"=>$width,"margin"=>$margin,"style"=>$styleValue,"type"=>$idType);
                     $price = $this->calcularMarcoTotal($data);
-                    $pop = array("name"=>"Ref ".$frame['reference']." - ".$type,"image"=>$frame['image'][0],"route"=>base_url()."/enmarcar/personalizar/".$route);
+                    $pop = array("name"=>"Ref ".$frame['reference']." - ".$type,"image"=>$photo !="" ? media()."/images/uploads/".$photo : $frame['image'][0],"route"=>base_url()."/enmarcar/personalizar/".$route);
                     $arrProduct = array(
                         "topic"=>1,
                         "id"=>openssl_encrypt($id,METHOD,KEY),
@@ -318,7 +317,6 @@
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
-            
             die();
         }
         public function filterProducts(){

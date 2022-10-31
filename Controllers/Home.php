@@ -30,12 +30,13 @@
                 $html="";
                 for ($i=0; $i < count($arrProducts) ; $i++) { 
                     if($arrProducts[$i]['topic'] == 1){
+                        $photo = $arrProducts[$i]['photo'] != "" ? media()."/images/uploads/".$arrProducts[$i]['photo'] : $arrProducts[$i]['img'];
                         $html.= '
                         <li class="cartlist--item" data-id="'.$arrProducts[$i]['id'].'" data-topic ="'.$arrProducts[$i]['topic'].'" data-h="'.$arrProducts[$i]['height'].'"
                         data-w="'.$arrProducts[$i]['width'].'" data-m="'.$arrProducts[$i]['margin'].'" data-s="'.$arrProducts[$i]['style'].'" 
                         data-mc="'.$arrProducts[$i]['colormargin'].'" data-bc="'.$arrProducts[$i]['colorborder'].'" data-t="'.$arrProducts[$i]['idType'].'" data-f="'.$arrProducts[$i]['photo'].'">
                             <a href="'.$arrProducts[$i]['url'].'">
-                                <img src="'.$arrProducts[$i]['img'].'" alt="'.$arrProducts[$i]['name'].'">
+                                <img src="'.$photo.'" alt="'.$arrProducts[$i]['name'].'">
                             </a>
                             <div class="item--info">
                                 <a href="'.$arrProducts[$i]['url'].'">'.$arrProducts[$i]['name'].'</a>

@@ -68,20 +68,19 @@
 
 </head>
 <body>
-    <div class="popup">
-        <div class="popup-close">X</div>
-        <div class="popup-info">
-            <img src="" alt="">
-            <div class="h-100">
-                <a href="product.html">Product 1</a>
-                <p>Ha sido agregado a tu carrito</p>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center text-center mt-3">
-            <a href="<?=base_url()?>/tienda/carrito" class="w-50 p-1 btn btn-bg-2 me-4">Mi carrito</a>
-            <div class="w-50 h-100 p-1 btn btn-bg-1 c-p btnCheckoutCart">Pagar</div>
-        </div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="..." class="rounded me-2" alt="..." height="20" width="20">
+      <strong class="me-auto" id="toastProduct"></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+</div>
+</div>
     <div id="divLoading">
         <div></div>
         <span>Cargando...</span>

@@ -22,7 +22,7 @@ const searchFrame = document.querySelector("#searchFrame");
 const sortFrame = document.querySelector("#sortFrame");
 const addFrame = document.querySelector("#addFrame");
 const uploadPicture = document.querySelector("#txtPicture");
-
+const toastLiveExample = document.getElementById('liveToast');
 let page = 0;
 
 //----------------------------------------------
@@ -151,9 +151,18 @@ searchFrame.addEventListener('input',function() {
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
         formData.append("search",searchFrame.value);
+        containerFrames.innerHTML=`
+            <div class="text-center p-5">
+                <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `;
         request(base_url+"/enmarcar/search",formData,"post").then(function(objData){
             if(objData.status){
                 containerFrames.innerHTML = objData.data;
+            }else{
+                containerFrames.innerHTML = `<p class="fw-bold text-center">${objData.data}</p>`;
             }
         });
     }
@@ -165,9 +174,18 @@ sortFrame.addEventListener("change",function(){
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
         formData.append("sort",sortFrame.value);
+        containerFrames.innerHTML=`
+            <div class="text-center p-5">
+                <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `;
         request(base_url+"/enmarcar/sort",formData,"post").then(function(objData){
             if(objData.status){
                 containerFrames.innerHTML = objData.data;
+            }else{
+                containerFrames.innerHTML = `<p class="fw-bold text-center">${objData.data}</p>`;
             }
         });
     }
@@ -190,9 +208,6 @@ selectStyle.addEventListener("change",function(){
 //----------------------------------------------
 //[Add frame]
 addFrame.addEventListener("click",function(){
-    let popup = document.querySelector(".popup");
-    let popupClose = document.querySelector(".popup-close"); 
-    let timer;
     let formData = new FormData();
 
     if(intHeight.value =="" || intWidth.value==""){
@@ -243,54 +258,22 @@ addFrame.addEventListener("click",function(){
     formData.append("route",route);
     formData.append("orientation",orientation);
 
-    window.clearTimeout(timer);
-    if(popup.classList.length>1){
-        popup.classList.remove("active");
-        setTimeout(function(){
-            popup.classList.add("active");
-        },100);
-    }else{
-        popup.classList.add("active");
-    }
-    const runTime = function(){
-        timer = window.setTimeout(function(){
-            popup.classList.remove("active");
-        },6000);
-    };
-
-    runTime();
+    addFrame.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    addFrame.setAttribute("disabled","");
 
     request(base_url+"/enmarcar/addCart",formData,"post").then(function(objData){
+        addFrame.innerHTML=`Agregar`;
+        addFrame.removeAttribute("disabled");
         if(objData.status){
             document.querySelector("#qtyCart").innerHTML=objData.qty;
             document.querySelector("#qtyCartbar").innerHTML=objData.qty;
-
-            popup.children[1].children[0].src=objData.data.image;
-            popup.children[1].children[0].alt=objData.data.name;
-            popup.children[1].children[1].children[0].innerHTML=objData.data.name;
-            popup.children[1].children[1].children[0].setAttribute("href",objData.data.route);
-            popup.children[1].children[1].children[1].innerHTML=objData.msg;
-            popup.addEventListener("mouseover",function(){
-                window.clearTimeout(timer);
-                runTime();
-            })
-            popupClose.addEventListener("click",function(){
-                popup.classList.remove("active");
-            });
-        }else{
-
-            popup.children[1].children[0].src=objData.data.image;
-            popup.children[1].children[0].alt=objData.data.name;
-            popup.children[1].children[1].children[0].innerHTML=objData.data.name;
-            popup.children[1].children[1].children[0].setAttribute("href",objData.data.route);
-            popup.children[1].children[1].children[1].innerHTML=`<strong class="text-danger">${objData.msg}</strong>`;
-            popup.addEventListener("mouseover",function(){
-                window.clearTimeout(timer);
-                runTime();
-            });
-            popupClose.addEventListener("click",function(){
-                popup.classList.remove("active");
-            });
+            const toast = new bootstrap.Toast(toastLiveExample);
+            toast.show();
+            
+            document.querySelector(".toast-header img").src=objData.data.image;
+            document.querySelector(".toast-header img").alt=objData.data.name;
+            document.querySelector("#toastProduct").innerHTML=objData.data.name;
+            document.querySelector(".toast-body").innerHTML=objData.msg;
         }
     });
 }); 
@@ -426,6 +409,8 @@ function calcularMarco(id=null){
     formData.append("id",id);
     formData.append("type",type);
 
+    document.querySelectorAll(".totalFrame")[0].innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    document.querySelectorAll(".totalFrame")[1].innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
     request(base_url+"/enmarcar/calcularMarcoTotal",formData,"post").then(function(objData){
         if(objData.status){
             let data = objData.data;
