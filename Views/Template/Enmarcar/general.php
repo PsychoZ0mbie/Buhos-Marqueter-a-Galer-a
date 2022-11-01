@@ -1,5 +1,6 @@
 <?php 
     $colores = $data['colores'];
+    $company = getCompanyInfo();
 ?>
 <div id="modalPoup"></div>
 <main class="container mb-3">
@@ -188,6 +189,7 @@
                     <div class="text-center">
                         <div class="fw-bold fs-2 t-color-1 mt-3 totalFrame">$ 0.00</div>
                         <button type="button" class="btn btn-bg-1 mt-2" id="addFrame">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
+                        <p class="text-center t-color-3 mt-2">Recuerda enviar tu documento a nuestro domicilio <?=$company['addressfull']?></p>
                     </div>
                 </div>
             </div>

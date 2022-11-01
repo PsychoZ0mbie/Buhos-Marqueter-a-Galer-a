@@ -22,7 +22,7 @@ for ($i=0; $i < count($social) ; $i++) {
             <div class="logo">
                 <img src="<?=media()."/images/uploads/".$company['logo']?>" alt="<?=$company['name']?>">
             </div>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing elit, torquent vehicula molestie eros interdum ultrices inceptos cum, laoreet primis potenti sem donec integer.</p>
+            <p><?=$company['description']?></p>
             <p class="fw-bold fs-4">Síguenos</p>
             <ul class="social social--dark">
                 <?=$links?>

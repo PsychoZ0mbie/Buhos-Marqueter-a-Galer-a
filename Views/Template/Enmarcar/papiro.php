@@ -20,7 +20,7 @@
                     </div>
                     <div class="layout">
                         <div class="layout--img">
-                            <img src="<?=media()."/images/uploads/cuadro.png"?>" alt="Enmarcar <?=$data['tipo']['name']?>">
+                            <img src="<?=media()."/images/uploads/papiro.jpg"?>" alt="Enmarcar <?=$data['tipo']['name']?>">
                         </div>
                         <div class="layout--margin"></div>
                     </div>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="mb-3">
                     <span class="fw-bold ">2. Ingresa las dimensiones</span>
-                    <p class="t-color-3">Ingresa las medidas exactas de tu documento</p>
+                    <p class="t-color-3">Ingresa las medidas exactas del papiro</p>
                     <div class="d-flex flex-wrap justify-content-center align-items-center">
                         <div class="measures--dimension">
                             <label for="">Ancho (cm)</label>
@@ -95,23 +95,15 @@
             </div>
             <div class="col-md-6 page d-none">
                 <div class="mb-3">
-                    <div class="mt-5 mb-3">
-                        <span class="fw-bold">1. Elige el estilo</span>
-                        <select class="form-select mt-3" aria-label="Default select example" id="selectStyle">
-                            <option value="1">Directo</option>
-                            <option value="4">Caribe</option>
-                            <option value="5">Caribe sin borde</option>
-                        </select>
-                    </div>
                     <div class="option--custom d-none">
                         <div class="mb-3">
-                            <span class="fw-bold">2. Ajusta el margen</span>
-                            <input type="range" class="form-range custom--range pe-4 ps-4 mt-2" min="1" max="10" value="0" id="marginRange">
-                            <div class="fw-bold text-end pe-4 ps-4" id="marginData">1 cm</div>
+                            <span class="fw-bold">1. Ajusta el margen</span>
+                            <input type="range" class="form-range custom--range pe-4 ps-4 mt-2" min="3" max="10" value="0" id="marginRange">
+                            <div class="fw-bold text-end pe-4 ps-4" id="marginData">3 cm</div>
                         </div>
                         <div class="mb-3">
                             <div class="fw-bold d-flex justify-content-between">
-                                <span>3. Elige el color del margen</span>
+                                <span>2. Elige el color del margen</span>
                                 <span id="marginColor"></span>
                             </div>
                             <div class="colors mt-3">
@@ -188,7 +180,7 @@
                     <div class="text-center">
                         <div class="fw-bold fs-2 t-color-1 mt-3 totalFrame">$ 0.00</div>
                         <button type="button" class="btn btn-bg-1 mt-2" id="addFrame">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
-                        <p class="text-center t-color-3 mt-2">Recuerda enviar tu lienzo a nuestro domicilio <?=$company['addressfull']?></p>
+                        <p class="text-center t-color-3 mt-2">Recuerda enviar tu papiro a nuestro domicilio <?=$company['addressfull']?></p>
                     </div>
                 </div>
             </div>

@@ -92,7 +92,7 @@
                         && $width == $arrCart[$i]['width'] && $margin == $arrCart[$i]['margin'] && $style == $arrCart[$i]['style']
                         && $type == $arrCart[$i]['idType'] && $borderColor == $arrCart[$i]['colorborder'] && $marginColor == $arrCart[$i]['colormargin']
                         && $photo == $arrCart[$i]['photo']){
-                            if($photo!=""){
+                            if($photo!="" && $photo !="retablo.png"){
                                 deleteFile($photo);
                             }
                             unset($arrCart[$i]);

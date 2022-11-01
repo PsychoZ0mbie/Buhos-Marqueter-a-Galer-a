@@ -130,7 +130,12 @@ sliderRight.addEventListener("click",function(){
 
 //----------------------------------------------
 //[Frame custom]
-
+if(document.querySelector("#txtPicture")){
+    const uploadPicture = document.querySelector("#txtPicture");
+    uploadPicture.addEventListener("change",function(){
+        uploadImg(uploadPicture,".layout--img img");
+    });
+}
 searchFrame.addEventListener('input',function() {
     if(intWidth.value !="" && intHeight.value!=""){
         let formData = new FormData();
