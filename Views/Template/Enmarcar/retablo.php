@@ -78,7 +78,14 @@
                 </div>
                 <div class="text-center">
                     <div class="fw-bold fs-2 t-color-1 mt-3 totalFrame">$ 0.00</div>
-                    <button type="button" class="btn btn-bg-1 mt-2" id="addFrame">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
+                    <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
+                        <div class="btn-qty-1 me-3">
+                            <button class="btn" id="btnDecrement"><i class="fas fa-minus"></i></button>
+                            <input type="number" name="txtQty" id="txtQty" min="1" max ="99" value="1">
+                            <button class="btn" id="btnIncrement"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <button type="button" class="btn btn-bg-1" id="addFrame">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
+                    </div>
                 </div>
             </div>
         </div>

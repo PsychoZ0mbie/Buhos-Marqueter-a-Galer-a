@@ -54,6 +54,9 @@
                     $data['colores'] = $this->selectColors();
                     $data['app'] = "functions_personalizar_retablo.js";
                     $data['option'] = getFile("Template/Enmarcar/retablo",$data);
+                }elseif($request['id'] == 9){
+                    $data['app'] = "functions_personalizar_marco.js";
+                    $data['option'] = getFile("Template/Enmarcar/marco",$data);
                 }
                 $this->views->getView($this,"personalizar",$data);
             }else{
@@ -167,6 +170,7 @@
             $espejo =$material[7]['price'];
             $impresion =$material[8]['price'];
             $retablo =$material[9]['price'];
+            $carton = $material[10]['price'];
 
             $total = 0;
             if($tipo==1){
@@ -208,6 +212,12 @@
                     $total = ($area*$retablo)+($area*$impresion);
                 }else if($estilo == 2){
                     $total = ($area*$retablo);
+                }
+            }else if($tipo == 9){
+                if($estilo == 1){
+                    $total = 0;
+                }else if($estilo == 2){
+                    $total = ($area * $vidrio) + ($area * $carton);
                 }
             }
             return $total;
@@ -303,10 +313,9 @@
                     if(!empty($_FILES['txtPicture'])){
                         if($id!=0){
                             $photo = 'impresion_'.bin2hex(random_bytes(6)).'.png';
-                        }else if($styleValue == 1){
+                        }else if($id == 0 && $styleValue == 1){
                             $photo = 'retablo_'.bin2hex(random_bytes(6)).'.png';
                         }
-                        
                         uploadImage($_FILES['txtPicture'],$photo);
                     }
 
@@ -341,7 +350,7 @@
                                 if($arrCart[$i]['style'] == $arrProduct['style'] && $arrCart[$i]['height'] == $arrProduct['height'] &&
                                 $arrCart[$i]['width'] == $arrProduct['width'] && $arrCart[$i]['margin'] == $arrProduct['margin'] &&
                                 $arrCart[$i]['colormargin'] == $arrProduct['colormargin'] && $arrCart[$i]['colorborder'] == $arrProduct['colorborder'] && 
-                                $arrCart[$i]['id'] == $arrProduct['id'] && $arrCart[$i]['idType'] == $arrProduct['idType'] && $arrCart[$i]['photo'] == $arrProduct['photo']){
+                                $arrCart[$i]['id'] == $arrProduct['id'] && $arrCart[$i]['idType'] == $arrProduct['idType']){
                                     $arrCart[$i]['qty'] +=$qty;
                                     $flag = false;
                                     break;

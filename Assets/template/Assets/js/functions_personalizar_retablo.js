@@ -67,6 +67,35 @@ uploadPicture.addEventListener("change",function(){
 selectStyle.addEventListener("change",function(){
     calcularMarco();
 });
+//----------------------------------------------
+//[Quantity btns]
+
+const btnFPlus = document.querySelector("#btnIncrement");
+const btnFMinus = document.querySelector("#btnDecrement");
+const intFQty = document.querySelector("#txtQty");
+
+btnFPlus.addEventListener("click",function(){
+    if(intFQty.value >=99){
+        intFQty.value = 99;
+    }else{
+        ++intFQty.value; 
+    }
+});
+btnFMinus.addEventListener("click",function(){
+    if(intFQty.value <=1){
+        intFQty.value = 1;
+    }else{
+        --intFQty.value; 
+    }
+});
+
+intFQty.addEventListener("input",function(){
+    if(intFQty.value >= 99){
+        intFQty.value= 99;
+    }else if(intFQty.value <= 1){
+        intFQty.value= 1;
+    }
+});
 
 //----------------------------------------------
 //[Add frame]
@@ -102,7 +131,7 @@ addFrame.addEventListener("click",function(){
     formData.append("styleValue",styleFrame);
     formData.append("styleName",selectStyle.options[selectStyle.selectedIndex].text);
     formData.append("margin",margin);
-    formData.append("qty",1);
+    formData.append("qty",intFQty.value);
     formData.append("id",id);
     formData.append("colorMargin",0);
     formData.append("colorBorder",colorMargin);
