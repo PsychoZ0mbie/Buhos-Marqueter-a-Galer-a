@@ -1,11 +1,10 @@
 <?php
     
     require_once("Models/ProductTrait.php");
-    require_once("Models/CategoryTrait.php");
     require_once("Models/CustomerTrait.php");
-    require_once("Models/BlogTrait.php");
+    require_once("Models/EnmarcarTrait.php");
     class Home extends Controllers{
-        use ProductTrait, CategoryTrait, CustomerTrait,BlogTrait;
+        use CustomerTrait,EnmarcarTrait,ProductTrait;
         public function __construct(){
             session_start();
             parent::__construct();
@@ -15,13 +14,9 @@
             $company = getCompanyInfo();
             $data['page_tag'] = $company['name'];
             $data['page_title'] = $company['name'];
-            /*$data['slider'] = $this->getRecCategoriesT(6);
-            $data['category1'] = $this->getCategoriesShowT("4,5,6");
-            $data['category2'] = $this->getCategoriesShowT("7,8,9");
-            $data['products'] = $this->getProductsT(8);
-            $data['popProducts'] = $this->getPopularProductsT(4);
-            $data['recPosts'] = $this->getRecentPostsT(3);*/
+            $data['productos'] = $this->getProductsT(8);
             $data['page_name'] = "home";
+            $data['tipos'] = $this->selectTipos();
             $this->views->getView($this,"home",$data);
         }
         public function currentCart(){
@@ -37,6 +32,24 @@
                         data-mc="'.$arrProducts[$i]['colormargin'].'" data-bc="'.$arrProducts[$i]['colorborder'].'" data-t="'.$arrProducts[$i]['idType'].'" data-f="'.$arrProducts[$i]['photo'].'">
                             <a href="'.$arrProducts[$i]['url'].'">
                                 <img src="'.$photo.'" alt="'.$arrProducts[$i]['name'].'">
+                            </a>
+                            <div class="item--info">
+                                <a href="'.$arrProducts[$i]['url'].'">'.$arrProducts[$i]['name'].'</a>
+                                <div class="item--qty">
+                                    <span>
+                                        <span class="fw-bold">'.$arrProducts[$i]['qty'].' x</span>
+                                        <span class="item--price">'.formatNum($arrProducts[$i]['price'],false).'</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="delItem"><i class="fas fa-times"></i></span>
+                        </li>
+                        ';
+                    }else if($arrProducts[$i]['topic'] == 2){
+                        $html.= '
+                        <li class="cartlist--item" data-id="'.$arrProducts[$i]['id'].'" data-topic ="'.$arrProducts[$i]['topic'].'">
+                            <a href="'.$arrProducts[$i]['url'].'">
+                                <img src="'.$arrProducts[$i]['image'].'" alt="'.$arrProducts[$i]['name'].'">
                             </a>
                             <div class="item--info">
                                 <a href="'.$arrProducts[$i]['url'].'">'.$arrProducts[$i]['name'].'</a>
@@ -86,15 +99,21 @@
                     $borderColor = $_POST['bordercolor'];
                     $marginColor = $_POST['margincolor'];
                     $photo = $_POST['photo'];
-                    
-                    for ($i=0; $i < count($arrCart) ; $i++) { 
-                        if($topic == $arrCart[$i]['topic'] && $id == $arrCart[$i]['id'] && $height == $arrCart[$i]['height']
+                }
+                for ($i=0; $i < count($arrCart) ; $i++) { 
+                    if($topic == 1){
+                        if($id == $arrCart[$i]['id'] && $height == $arrCart[$i]['height']
                         && $width == $arrCart[$i]['width'] && $margin == $arrCart[$i]['margin'] && $style == $arrCart[$i]['style']
                         && $type == $arrCart[$i]['idType'] && $borderColor == $arrCart[$i]['colorborder'] && $marginColor == $arrCart[$i]['colormargin']
                         && $photo == $arrCart[$i]['photo']){
                             if($photo!="" && $photo !="retablo.png"){
                                 deleteFile($photo);
                             }
+                            unset($arrCart[$i]);
+                            break;
+                        }
+                    }else if($topic == 2){
+                        if($id == $arrCart[$i]['id']){
                             unset($arrCart[$i]);
                             break;
                         }

@@ -29,9 +29,8 @@ const navBar = document.querySelector(".navmobile");
 const navMask = document.querySelector(".navmobile--mask");
 const btnNav = document.querySelector("#btnNav");
 const closeNav = document.querySelector("#closeNav");
-const btnMinus = document.querySelectorAll(".btn-minus");
-const btnPlus = document.querySelectorAll(".btn-plus");
-const btnInput = document.querySelectorAll(".btn-input");
+const toastLive = document.getElementById('liveToast');
+
 /********************************Search******************************** */
 btnSearch.addEventListener("click",function(){
     search.classList.add("active");
@@ -70,37 +69,7 @@ navMask.addEventListener("click",function(){
     document.querySelector("body").style.overflow="auto";
 });
 
-/********************************Aside cart btns******************************** */
-for (let i = 0; i < btnMinus.length; i++) {
-    let btn = btnMinus[i];
-    btn.addEventListener("click",function(){
-        if(btnInput[i].value <= 1){
-            btnInput[i].value= 1;
-        }else{
-            --btnInput[i].value;
-        }
-    })
-}
-for (let i = 0; i < btnPlus.length; i++) {
-    let btn = btnPlus[i];
-    btn.addEventListener("click",function(){
-        if(btnInput[i].value >= 99){
-            btnInput[i].value= 99;
-        }else{
-            ++btnInput[i].value;
-        }
-    })
-}
-for (let i = 0; i < btnInput.length; i++) {
-    let btn = btnInput[i];
-    btn.addEventListener("input",function(){
-        if(btn.value >= 99){
-            btn.value= 99;
-        }else if(btn.value <= 1){
-            btn.value= 1;
-        }
-    })
-}
+
 document.addEventListener("readystatechange",function(){
     if(document.readyState =="complete")loading.classList.add("d-none");
 });
@@ -898,86 +867,33 @@ function quickModal(element){
         }
     });
 }
-function addProduct(element){
+function addCart(element){
 
-    let popup = document.querySelector(".popup");
-    let popupClose = document.querySelector(".popup-close"); 
-    let timer;
     let idProduct = element.getAttribute("data-id");
+    let topic = element.getAttribute("data-topic");
     let formData = new FormData();
 
     formData.append("idProduct",idProduct);
+    formData.append("topic",topic);
     formData.append("txtQty",1);
-    window.clearTimeout(timer);
-    if(popup.classList.length>1){
-        popup.classList.remove("active");
-        setTimeout(function(){
-            popup.classList.add("active");
-        },100);
-    }else{
-        popup.classList.add("active");
-    }
-    const runTime = function(){
-        timer = window.setTimeout(function(){
-            popup.classList.remove("active");
-        },6000);
-    };
 
-    runTime();
-    request(base_url+"/shop/addCart",formData,"post").then(function(objData){
+    element.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    element.setAttribute("disabled","");
+    request(base_url+"/tienda/addCart",formData,"post").then(function(objData){
+        element.innerHTML=`Agregar`;
+        element.removeAttribute("disabled");
+        document.querySelector(".toast-header img").src=objData.data.image;
+        document.querySelector(".toast-header img").alt=objData.data.name;
+        document.querySelector("#toastProduct").innerHTML=objData.data.name;
+        document.querySelector(".toast-body").innerHTML=objData.msg;
         if(objData.status){
             document.querySelector("#qtyCart").innerHTML=objData.qty;
-
-            popup.children[1].children[0].src=objData.data.image['url'];
-            popup.children[1].children[0].alt=objData.data.name;
-            popup.children[1].children[1].children[0].innerHTML=objData.data.name;
-            popup.children[1].children[1].children[0].setAttribute("href",objData.data.route);
-            popup.children[1].children[1].children[1].innerHTML=objData.msg;
-            popup.addEventListener("mouseover",function(){
-                window.clearTimeout(timer);
-                runTime();
-            })
-            popupClose.addEventListener("click",function(){
-                popup.classList.remove("active");
-            });
-        }else{
-
-            popup.children[1].children[0].src=objData.data.image['url'];
-            popup.children[1].children[0].alt=objData.data.name;
-            popup.children[1].children[1].children[0].innerHTML=objData.data.name;
-            popup.children[1].children[1].children[0].setAttribute("href",objData.data.route);
-            popup.children[1].children[1].children[1].innerHTML=`<strong class="text-danger">${objData.msg}</strong>`;
-            popup.addEventListener("mouseover",function(){
-                window.clearTimeout(timer);
-                runTime();
-            });
-            popupClose.addEventListener("click",function(){
-                popup.classList.remove("active");
-            });
+            document.querySelector("#qtyCartbar").innerHTML=objData.qty;
         }
+
+        const toast = new bootstrap.Toast(toastLive);
+        toast.show();
     });
-    if(document.querySelector("#btnCheckOutPopup")){
-        let btnCheckoutPop = document.querySelector("#btnCheckOutPopup");
-        let flag = true;
-        if(flag === true){
-            btnCheckoutPop.addEventListener("click",function(){
-                btnCheckoutPop.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-                btnCheckoutPop.setAttribute("disabled","");
-                request(base_url+"/shop/currentCart","","get").then(function(objData){
-                    
-                    btnCheckoutPop.innerHTML=`Pagar`;
-                    btnCheckoutPop.removeAttribute("disabled","");
-                    if(objData.status){
-                        window.location.href=base_url+"/shop/checkout";
-                    }else{
-                        openLoginModal();
-                    }
-                });
-                flag = false;
-            });
-        }
-        
-    }
 }
 function showMore(elements,max=null,handler){
     let currentElement = 0;
@@ -1042,8 +958,10 @@ function delProduct(elements){
                     document.querySelector("#qtyCart").innerHTML=objData.qty;
                     document.querySelector("#totalCart").innerHTML = objData.subtotal;
                     document.querySelector("#qtyCartbar").innerHTML=objData.qty;
-
                     element.parentElement.remove();
+                    if(objData.qty == 0){
+                        document.querySelector("#btnsCartBar").classList.add("d-none");
+                    }
                 }
             });
         });

@@ -1,13 +1,20 @@
 <?php
     headerPage($data);
-    
-    $slider = $data['slider'];
-    $categories1 = $data['category1'];
-    $categories2 = $data['category2'];
-    $products = $data['products'];
-    $popProducts = $data['popProducts'];
-    $recPosts = $data['recPosts'];
-    //dep($slider);exit;
+    $social = getSocialMedia();
+    $company = getCompanyInfo();
+    $links ="";
+    for ($i=0; $i < count($social) ; $i++) { 
+        if($social[$i]['link']!=""){
+            if($social[$i]['name']=="whatsapp"){
+                $links.='<li><a href="https://wa.me/'.$social[$i]['link'].'" target="_blank"><i class="fab fa-'.$social[$i]['name'].'"></i></a></li>';
+            }else{
+                $links.='<li><a href="'.$social[$i]['link'].'" target="_blank"><i class="fab fa-'.$social[$i]['name'].'"></i></a></li>';
+            }
+        }
+    }
+
+    $tipos = $data['tipos'];
+    $productos = $data['productos'];
 ?>
     <div id="modalItem"></div>
     <div id="modalPoup"></div>
@@ -18,10 +25,10 @@
                     <div class="main--show">
                         <div class="show--text">
                             <h2>Enmarca tus obras y fotos sin salir de casa</h2>
-                            <a href="<?=base_url()?>/enmarcar/tipo" class="btn btn-bg-1">Empieza ahora</a>
+                            <a href="<?=base_url()?>/enmarcar" class="btn btn-bg-1">Empieza ahora</a>
                         </div>
                         <div class="show--img">
-                            <img src="assets/images/slide1.jpg" class="d-block w-100" alt="...">
+                            <img src="<?=media()?>/images/uploads/slider1.jpg" class="d-block w-100" alt="Enmarcar obras y fotos en línea">
                         </div>
                     </div>
                 </div>
@@ -29,10 +36,10 @@
                     <div class="main--show">
                         <div class="show--text">
                             <h2>Decora tus paredes con nuestros cuadros</h2>
-                            <a href="<?=base_url()?>/tienda" class="btn btn-bg-1">Empieza ahora</a>
+                            <a href="<?=base_url()?>/tienda" class="btn btn-bg-1">Ver tienda</a>
                         </div>
                         <div class="show--img">
-                            <img src="assets/images/slide1.jpg" class="d-block w-100" alt="...">
+                            <img src="<?=media()?>/images/uploads/slider2.jpg" class="d-block w-100" alt="Cuadros decorativos para mi hogar">
                         </div>
                     </div>
                 </div>
@@ -52,102 +59,39 @@
             <h2 class="section--title">Enmarca lo que quieras</h2>
             <div id="carouselEnmarcar" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
+                    <?php
+                        for ($i=0; $i < 2 ; $i++) { 
+                            $active="";
+                            if($i == 0)$active="active";
+                        
+                    ?>
+                    <div class="carousel-item <?=$active?>">
                         <div class="enmarcaciones">
+                            <?php
+                                for ($j=0; $j < count($tipos) ; $j++) { 
+                                    $url = base_url()."/enmarcar/personalizar/".$tipos[$j]['route'];
+                                    $img = media()."/images/uploads/".$tipos[$j]['image'];
+                                    if($i == 0 && $j == 4){
+                                        break;
+                                    }else if($i == 1 && $j < 4){
+                                        continue;
+                                    } 
+                            ?>
                             <div class="card--enmarcar shadow">
                                 <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
+                                    <a href="<?=$url?>"><img src="<?=$img?>" alt="Enmarcar <?=$tipos[$j]['name']?>"></a>
                                 </div>
                                 <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                                    <a href="<?=$url?>">
+                                        <h3 class="enmarcar--title"><?=$tipos[$j]['name']?></h3>
+                                        <p><?=$tipos[$j]['description']?></p>
                                     </a>
                                 </div>
                             </div>
-                            <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
-                                </div>
-                                <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
-                                </div>
-                                <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
-                                </div>
-                                <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                    </a>
-                                </div>
-                            </div>
+                            <?php }?>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="enmarcaciones">
-                            <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
-                                </div>
-                                <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
-                                </div>
-                                <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
-                                </div>
-                                <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
-                                    <a href="#"><img src="assets/images/producto.gif" alt=""></a>
-                                </div>
-                                <div class="card--enmarcar-info">
-                                    <a href="#">
-                                        <h3 class="enmarcar--title">Diplomas y títulos</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php }?>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselEnmarcar" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -159,7 +103,7 @@
                 </button>
             </div>
             <div class="text-center">
-                <a href="#" class="btn btn-bg-2">Ver todo</a>
+                <a href="<?=base_url()?>/enmarcar" class="btn btn-bg-2">Ver todo</a>
             </div>
             <div class="section--cta">
                 <div class="row">
@@ -167,12 +111,12 @@
                         <div class="cta-info">
                             <h4>Dale vida a tus obras</h4>
                             <p>Enmarca tus pinturas, dale estilo y personalidad con nuestros mejores marcos</p>
-                            <a href="#" class="btn btn-bg-1 mt-3">Enmarcar ahora</a>
+                            <a href="<?=base_url()."/enmarcar/personalizar/".$tipos[2]['route']?>" class="btn btn-bg-1 mt-3">Enmarcar ahora</a>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="cta-img">
-                            <img src="assets/images/slide1.jpg" alt="">
+                            <img src="<?=media()?>/images/uploads/cta1.jpg" class="d-block w-100" alt="Cuadros decorativos para mi hogar">
                         </div>
                     </div>
                 </div>
@@ -182,7 +126,7 @@
             <h2 class="section--title">¿Cómo funciona?</h2>
             <div class="row">
                 <div class="col-md-6 how-img mb-3 d-flex align-items-center">
-                    <img src="assets/images/slide1.jpg" alt="">
+                    <img src="<?=media()?>/images/uploads/cta2.jpg" class="d-block w-100" alt="Enmarcaciones en linea">
                 </div>
                 <div class="col-md-6 how-list mb-3 d-flex align-items-start flex-column">
                     <ol>
@@ -192,14 +136,14 @@
                         </li>
                         <li>
                             <p>Personaliza tu marco</p>
-                            <p>Elige el material, colores, bordes y más mientras se visualiza como queda tu marco</p>
+                            <p>Elige las molduras, colores y estilos de enmarcado</p>
                         </li>
                         <li>
                             <p>Recibelo en tu puerta</p>
-                            <p>Enviamos la enmarcación a tu domicilio o puedes recogerlo en nuestro local</p>
+                            <p>Enviamos el pedido a tu domicilio o puedes recogerlo en nuestro local</p>
                         </li>
                     </ol>
-                    <a href="#" class="btn btn-bg-1 mt-3">Empieza a enmarcar ahora</a>
+                    <a href="<?=base_url()?>/enmarcar" class="btn btn-bg-1 mt-3">Empieza a enmarcar ahora</a>
                 </div>
             </div>
             <div class="row mt-4">
@@ -221,7 +165,7 @@
                     <div class="card--plus shadow">
                         <i class="fas fa-dollar-sign"></i>
                         <h3>Precios claros</h3>
-                        <p>El precio se basa en el material y tamaño del marco.</p>
+                        <p>El precio se basa en el tipo de enmarcación, tamaño, moldura y estilos.</p>
                     </div>
                 </div>
             </div>
@@ -231,12 +175,12 @@
                         <div class="cta-info">
                             <h4>Decora tu alrededor</h4>
                             <p>Decora tu sala, oficina o habitación con nuestros cuadros abstractos, paisajes y más</p>
-                            <a href="#" class="btn btn-bg-1 mt-3">Ver tienda</a>
+                            <a href="<?=base_url()?>/tienda" class="btn btn-bg-1 mt-3">Ver tienda</a>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="cta-img">
-                            <img src="assets/images/slide1.jpg" alt="">
+                            <img src="<?=media()?>/images/uploads/cta3.jpg" class="d-block w-100" alt="Enmarcaciones en linea">
                         </div>
                     </div>
                 </div>
@@ -245,89 +189,40 @@
         <section class="mt-5">
             <h2 class="section--title">Algunos de nuestros productos</h2>
             <div class="row">
+                <?php
+                    for ($i=0; $i < count($productos) ; $i++) { 
+                        $id = openssl_encrypt($productos[$i]['idproduct'],METHOD,KEY);
+                        $discount = "";
+                        $price ='</span><span class="current">'.formatNum($productos[$i]['price']).'</span>';
+                        if($productos[$i]['discount'] > 0){
+                            $discount = '<span class="discount">-'.$productos[$i]['discount'].'%</span>';
+                            $price ='<span class="current sale me-2">'.formatNum($productos[$i]['priceDiscount']).'</span><span class="compare">'.formatNum($productos[$i]['price']).'</span>';
+                        }
+                ?>
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card--product">
                         <div class="card--product-img">
-                            <a href="#">
-                                <img src="assets/images/slide1.jpg" alt="">
+                            <a href="<?=base_url()."/tienda/producto/".$productos[$i]['route']?>">
+                                <?=$discount?>
+                                <img src="<?=$productos[$i]['url']?>" alt="Cuadros decorativos <?=$productos[$i]['subcategory']?>">
                             </a>
                         </div>
                         <div class="card--product-info">
-                            <h4><a href="#">Cuadro xd</a></h4>
+                            <h4><a href="<?=base_url()."/tienda/producto/".$productos[$i]['route']?>"><?=$productos[$i]['name']?></a></h4>
                             <div class="card--price">
-                                <span class="current">$20.000</span>
+                                <?=$price?>
                             </div>
                         </div>
                         <div class="card--product-btns">
-                            <button type="button" class="btn btn-bg-1">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
-                            <button type="button" class="btn btn-bg-4">Vista rápida</button>
+                            <button type="button" class="btn btn-bg-1" data-id="<?=$id?>" data-topic="2" onclick="addCart(this)">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
+                            <button type="button" class="btn btn-bg-4" data-id="<?=$id?>">Vista rápida</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card--product">
-                        <div class="card--product-img">
-                            <a href="#">
-                                <span class="discount">-30%</span>
-                                <img src="assets/images/slide1.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="card--product-info">
-                            <h4><a href="#">Cuadro xdaaaaaaaaaaaaaaaa</a></h4>
-                            <div class="card--price">
-                                <span class="current sale">$20.000</span>
-                                <span class="compare">$20.000</span>
-                            </div>
-                        </div>
-                        <div class="card--product-btns">
-                            <button type="button" class="btn btn-bg-1">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
-                            <button type="button" class="btn btn-bg-4">Vista rápida</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card--product">
-                        <div class="card--product-img">
-                            <a href="#">
-                                <img src="assets/images/slide1.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="card--product-info">
-                            <h4><a href="#">Cuadro xd</a></h4>
-                            <div class="card--price">
-                                <span class="current">$20.000</span>
-                            </div>
-                        </div>
-                        <div class="card--product-btns">
-                            <button type="button" class="btn btn-bg-1">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
-                            <button type="button" class="btn btn-bg-4">Vista rápida</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card--product">
-                        <div class="card--product-img">
-                            <a href="#">
-                                <span class="discount">-30%</span>
-                                <img src="assets/images/slide1.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="card--product-info">
-                            <h4><a href="#">Cuadro xdaaaaaaaaaaaaaaaa</a></h4>
-                            <div class="card--price">
-                                <span class="current sale">$20.000</span>
-                                <span class="compare">$20.000</span>
-                            </div>
-                        </div>
-                        <div class="card--product-btns">
-                            <button type="button" class="btn btn-bg-1">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
-                            <button type="button" class="btn btn-bg-4">Vista rápida</button>
-                        </div>
-                    </div>
-                </div>
+                <?php } ?>
             </div>
             <div class="text-center mt-3">
-                <a href="#" class="btn btn-bg-2">Ver todo</a>
+                <a href="<?=base_url()?>/tienda" class="btn btn-bg-2">Ver todo</a>
             </div>
         </section>
         <section class="mt-5">
@@ -336,7 +231,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <form class="form--contact">
-                            <p>Nos encontramos en la ciudad de Villavicencio/Meta/Colombia en la Cra 36 #15a-03 Barrio Nuevo Ricaurte</p> 
+                            <p>Nos encontramos en <?=$company['addressfull']?></p> 
                             <div class="form--contact-data">
                                 <label>¿Cuál es tu nombre?</label>
                                 <input type="text" placeholder="Nombre">
@@ -360,9 +255,7 @@
                             <div class="mt-3 d-flex justify-content-between align-items-center flex-wrap">
                                 <button type="submit" class="btn btn-bg-1 mb-3">Enviar mensaje</button>
                                 <ul class="social mb-3">
-                                    <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-                                    <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                                    <li><a href="#"><i class="fa-brands fa-whatsapp"></i></a></li>
+                                    <?=$links?>
                                 </ul>
                             </div>
                         </form>

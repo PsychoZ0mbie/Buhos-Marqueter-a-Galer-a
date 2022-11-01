@@ -83,23 +83,10 @@
 
                     $request[$i]['priceDiscount'] =  $request[$i]['price']-($request[$i]['price']*($request[$i]['discount']*0.01));
                     $request[$i]['price'] = $request[$i]['price'];
-                    $request[$i]['favorite'] = 0;
 
                     $idProduct = $request[$i]['idproduct'];
-
-                    if(isset($_SESSION['login'])){
-                        $idUser = $_SESSION['idUser'];
-                        $sqlFavorite = "SELECT * FROM wishlist WHERE productid = $idProduct AND personid = $idUser";
-                        $requestFavorite = $this->con->select($sqlFavorite);
-                        if(!empty($requestFavorite)){
-                            $request[$i]['favorite'] = $requestFavorite['status'];
-                        }
-                    }
-                    $sqlRate = "SELECT AVG(rate) as rate FROM productrate WHERE productid = $idProduct";
                     $sqlImg = "SELECT * FROM productimage WHERE productid = $idProduct";
                     $requestImg =  $this->con->select_all($sqlImg);
-                    $requestRate =  $this->con->select($sqlRate);
-                    $request[$i]['rate'] = $requestRate['rate'];
 
                     if(count($requestImg)>0){
                         $request[$i]['url'] = media()."/images/uploads/".$requestImg[0]['name'];
@@ -358,21 +345,6 @@
             AND p.idproduct = $this->intIdProduct";
 
             $request = $this->con->select($sql);
-            $request['favorite'] = 0;
-
-            if(isset($_SESSION['login'])){
-                $idUser = $_SESSION['idUser'];
-                $sqlFavorite = "SELECT * FROM wishlist WHERE productid = $this->intIdProduct AND personid = $idUser";
-                $requestFavorite = $this->con->select($sqlFavorite);
-                if(!empty($requestFavorite)){
-                    $request['favorite'] = $requestFavorite['status'];
-                }
-            }
-
-            $sqlRate = "SELECT AVG(rate) as rate, COUNT(rate) as total FROM productrate WHERE productid = $idProduct HAVING rate IS NOT NULL";
-            $requestRate =  $this->con->select_all($sqlRate);
-            $request['rate'] = $requestRate;
-
             $sqlImg = "SELECT * FROM productimage WHERE productid = $this->intIdProduct";
             $requestImg = $this->con->select_all($sqlImg);
 

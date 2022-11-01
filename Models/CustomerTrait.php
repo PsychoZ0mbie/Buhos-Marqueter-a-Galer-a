@@ -262,13 +262,13 @@
             $request = $this->con->select($sql);
             return $request;
         }
-        public function selectProduct($id){
+        /*public function selectProduct($id){
             $this->con = new Mysql();
             $this->intIdProduct = $id;
             $sql = "SELECT * FROM product WHERE idproduct =$this->intIdProduct";
             $request = $this->con->select($sql);
             return $request;
-        }
+        }*/
         public function updateStock($id,$stock){
             $this->con = new Mysql();
             $this->intIdProduct = $id;

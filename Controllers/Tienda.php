@@ -5,7 +5,7 @@
     require_once("Models/CustomerTrait.php");
     require_once("Models/LoginModel.php");
     require_once("Models/ReviewTrait.php");
-    class Shop extends Controllers{
+    class Tienda extends Controllers{
         use ProductTrait, CategoryTrait, CustomerTrait, ReviewTrait;
         private $login;
         public function __construct(){
@@ -15,7 +15,7 @@
         }
 
         /******************************Views************************************/
-        public function shop(){
+        public function tienda(){
             $company=getCompanyInfo();
             $data['page_tag'] = $company['name'];
             $data['page_title'] = "Tienda | ".$company['name'];
@@ -26,7 +26,7 @@
             $data['app'] = "shop.js";
             $this->views->getView($this,"shop",$data);
         }
-        public function category($params){
+        public function categoria($params){
             $arrParams = explode(",",$params);
             $category="";
             $subcategory="";
@@ -50,7 +50,7 @@
             $data['app'] = "shop.js";
             $this->views->getView($this,"category",$data);
         }
-        public function product($params){
+        public function producto($params){
             if($params!= ""){
                 $params = strClean($params);
                 $data['product'] = $this->getProductPageT($params);
@@ -147,25 +147,31 @@
         }
         /******************************Cart methods************************************/
         public function addCart(){
+            //unset($_SESSION['arrCart']);exit;
             if($_POST){ 
                 $id = intval(openssl_decrypt($_POST['idProduct'],METHOD,KEY));
                 $qty = intval($_POST['txtQty']);
+                $topic = intval($_POST['topic']);
                 $qtyCart = 0;
                 $arrCart = array();
                 $valiQty =true;
                 if(is_numeric($id)){
                     $request = $this->getProductT($id);
-                    $data = array("name"=>$request['name'],"image"=>$request['image'][0],"route"=>base_url()."/shop/product/".$request['route']);
+                    $price = $request['price'];
+                    if($request['discount']>0){
+                        $price = $request['price'] - ($request['price']*($request['discount']/100));
+                    }
+                    $data = array("name"=>$request['name'],"image"=>$request['image'][0]['url'],"route"=>base_url()."/tienda/producto/".$request['route']);
 
                     if(!empty($request)){
                         $arrProduct = array(
-                            "idproduct"=>$_POST['idProduct'],
+                            "topic"=>2,
+                            "id"=>openssl_encrypt($id,METHOD,KEY),
                             "name" => $request['name'],
                             "qty"=>$qty,
                             "image"=>$request['image'][0]['url'],
-                            "url"=>base_url()."/shop/product/".$request['route'],
-                            "price" =>$request['price'],
-                            "discount" => $request['discount'],
+                            "url"=>base_url()."/tienda/producto/".$request['route'],
+                            "price" =>$price,
                             "stock"=>$request['stock']
                         );
                         if(isset($_SESSION['arrCart'])){
@@ -173,23 +179,25 @@
                             $currentQty = 0;
                             $flag = true;
                             for ($i=0; $i < count($arrCart) ; $i++) { 
-                                if($arrCart[$i]['idproduct'] == $arrProduct['idproduct']){
-                                    $currentQty = $arrCart[$i]['qty'];
-                                    $arrCart[$i]['qty']+= $qty;
-                                    if($arrCart[$i]['qty'] > $request['stock']){
-                                        $arrCart[$i]['qty'] = $currentQty;
-                                        $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
-                                        $flag = false;
-                                        break;
-                                    }else{
-                                        $_SESSION['arrCart'] = $arrCart;
-                                        foreach ($_SESSION['arrCart'] as $quantity) {
-                                            $qtyCart += $quantity['qty'];
+                                if($arrCart[$i]['topic'] == 2){
+                                    if($arrCart[$i]['id'] == $arrProduct['id']){
+                                        $currentQty = $arrCart[$i]['qty'];
+                                        $arrCart[$i]['qty']+= $qty;
+                                        if($arrCart[$i]['qty'] > $request['stock']){
+                                            $arrCart[$i]['qty'] = $currentQty;
+                                            $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
+                                            $flag = false;
+                                            break;
+                                        }else{
+                                            $_SESSION['arrCart'] = $arrCart;
+                                            foreach ($_SESSION['arrCart'] as $quantity) {
+                                                $qtyCart += $quantity['qty'];
+                                            }
+                                            $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","qty"=>$qtyCart,"data"=>$data);
                                         }
-                                        $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","qty"=>$qtyCart,"data"=>$data);
+                                        $flag =false;
+                                        break;
                                     }
-                                    $flag =false;
-                                    break;
                                 }
                             }
                             if($flag){
@@ -223,42 +231,6 @@
                     
                 }else{
                     $arrResponse = array("status"=>false,"msg"=>"Error de datos");
-                }
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            }
-            die();
-        }
-        public function delCart(){
-            if($_POST){
-                $id = $_POST['idProduct'];
-                $total=0;
-                $qtyCart=0;
-                $arrCart = $_SESSION['arrCart'];
-                for ($i=0; $i < count($arrCart) ; $i++) { 
-                    if($arrCart[$i]['idproduct'] == $id){
-                        unset($arrCart[$i]);
-                        break;
-                    } 
-                }
-                sort($arrCart);
-                $_SESSION['arrCart'] = $arrCart;
-                foreach ($_SESSION['arrCart'] as $quantity) {
-                    $qtyCart += $quantity['qty'];
-                }
-                if(!empty($_SESSION['arrShipping']['city'])){
-                    $arrTotal = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping'],$_SESSION['arrShipping']['city']['id']);
-                }else if(!empty($_SESSION['arrShipping'])){
-                    $arrTotal = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping']);
-                }else{
-                    $arrTotal = $this->calculateTotal($_SESSION['arrCart']);
-                }
-                
-                $subtotal = $arrTotal['subtotal'];
-                $total = $arrTotal['total'];
-                if($arrTotal['subtotalCoupon']> 0){
-                    $arrResponse = array("status"=>true,"total" =>formatNum($total),"subtotal"=>formatNum($subtotal),"subtotalCoupon"=>formatNum($arrTotal['subtotalCoupon']),"qty"=>$qtyCart);
-                }else{
-                    $arrResponse = array("status"=>true,"total" =>formatNum($total),"subtotal"=>formatNum($subtotal),"qty"=>$qtyCart);
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
@@ -389,47 +361,6 @@
         public function delCouponCode(){
             unset($_SESSION['couponInfo']);
         }
-        /******************************wishlist methods************************************/
-        public function addWishList(){
-            if($_POST){
-                if(isset($_SESSION['login'])){
-                    $idProduct = openssl_decrypt($_POST['idProduct'],METHOD,KEY);
-                    if(is_numeric($idProduct)){
-                        $request = $this->addWishListT($idProduct,$_SESSION['idUser']);
-                        if($request>0){
-                            $arrResponse = array("status"=>true);
-                        }else if("exists"){
-                            $arrResponse = array("status"=>true);
-                        }else{
-                            $arrResponse = array("status"=>false);
-                        }
-                    }
-                }else{
-                    $arrResponse = array("status"=>false);
-                }
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            }
-            die();
-        }
-        public function delWishList(){
-            if($_POST){
-                if(isset($_SESSION['login'])){
-                    $idProduct = openssl_decrypt($_POST['idProduct'],METHOD,KEY);
-                    if(is_numeric($idProduct)){
-                        $request = $this->delWishListT($idProduct,$_SESSION['idUser']);
-                        if($request>0){
-                            $arrResponse = array("status"=>true);
-                        }else{
-                            $arrResponse = array("status"=>false);
-                        }
-                    }
-                }else{
-                    $arrResponse = array("status"=>false);
-                }
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            }
-            die();
-        }
         /******************************Customer methods************************************/
         public function validCustomer(){
             if($_POST){
@@ -536,162 +467,6 @@
             }
             echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             die();
-        }
-        /******************************Reviews methods************************************/
-        public function getReviews($idProduct,$sort=null,$search=null){
-            if(is_numeric($idProduct)){
-                $idProduct = intval($idProduct);
-            }else{
-                $idProduct= intval(openssl_decrypt($idProduct,METHOD,KEY));
-            }
-            $reviews="";
-            if($sort != null){
-                $reviews = $this->getReviewsT($idProduct,$sort);
-                //dep($reviews);exit;
-            }else if($search!=null){
-                $reviews = $this->getSearchReviewsT($idProduct,$search);
-            }else{
-                $reviews = $this->getReviewsT($idProduct);
-            }
-            
-            $rate = $this->getRate($idProduct);
-            $html="";
-            for ($i=0; $i < count($reviews); $i++) { 
-                $image = media()."/images/uploads/".$reviews[$i]['image'];
-                $name = $reviews[$i]['firstname']." ".$reviews[$i]['lastname'];
-                $rateComment ="";
-                $options="";
-                if(isset($_SESSION['login'])){
-                    if($_SESSION['idUser'] == $reviews[$i]['personid']){
-                        $options.='<a href="#formReview" class="p-0 me-2 t-p btn editComment" data-id="'.$reviews[$i]['id'].'" onclick="editReview('.$reviews[$i]['id'].')" title="edit" >Edit</a>';
-                    }
-                    if($_SESSION['idUser'] == $reviews[$i]['personid'] || $_SESSION['userData']['roleid']==1){
-                        $options.='<button type="button" class="btn t-p p-0" onclick="deleteReview('.$reviews[$i]['id'].')" title="delete">Delete</button>';
-                    }
-                }
-                for ($j = 0; $j < 5; $j++) {
-                    if($j >= intval($reviews[$i]['rate'])){
-                        $rateComment.='<i class="far fa-star"></i>';
-                    }else{
-                        $rateComment.='<i class="fas fa-star"></i>';
-                    }
-                }
-
-                $html.='
-                <li class="comment-block">
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <div class="comment-info d-flex justify-content-between">
-                                <div class="d-flex justify-content-start">
-                                    <div class="comment-img me-1">
-                                        <img src="'.$image.'" alt="'.$name.'">
-                                    </div>
-                                    <div>
-                                        <p class="m-0">'.$name.'</p>
-                                        <p class="m-0 text-secondary">'.$reviews[$i]['date'].'</p>
-                                    </div>
-                                </div>
-                                <div class="product-rate text-end m-0">
-                                    '.$rateComment.'
-                                    <p class="m-0 text-secondary">'.$reviews[$i]['dateupdated'].'</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mt-1">
-                            <p class="m-0">'.$reviews[$i]['description'].'</p>
-                            <div class="t-p text-end">'.$options.'</div>
-                        </div>
-                        
-                    </div>
-                </li>
-                ';
-            }
-            $arrResponse = array("html"=>$html,"rate"=>$rate);
-            return $arrResponse;
-        }
-        public function setReview(){
-            //dep($_POST);exit;
-            if($_POST){
-                if(isset($_SESSION['login'])){
-                    if(empty($_POST['intRate']) || empty($_POST['txtReview']) || empty($_POST['idProduct'])){
-                        $arrResponse = array("status"=>false,"msg"=>"Por favor, califíque y escriba su reseña.");
-                        echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-                    }else{
-                        $idUser = $_SESSION['idUser'];
-                        $idReview = intval($_POST['idReview']);
-                        $idProduct = intval(openssl_decrypt($_POST['idProduct'],METHOD,KEY));
-                        $intRate = intval($_POST['intRate']);
-                        $strReview = strClean($_POST['txtReview']);
-                        $option=0;
-                        $request="";
-                        
-
-                        if($idReview==0){
-                            $option = 1;
-                            $request = $this->setReviewT($idProduct,$idUser,$strReview,$intRate);
-                            
-                        }else{
-                            $option = 2;
-                            $request = $this->updateReviewT($idReview,$idProduct,$idUser,$strReview,$intRate);
-                        }
-                        $reviews = $this->getReviews($idProduct);
-                        if($option ==1){
-                            if(!is_array($request) && $request>0){
-                                $arrResponse = array("status"=>true,"msg"=>"Su reseña ha sido compartida.","html"=>$reviews['html'],"rate"=>$reviews['rate']);
-                            }else if(is_array($request)){
-                                $arrResponse = array("status"=>false,"msg"=>"Ya has compartido tu reseña antes. Edítala si quieres.","id"=>$request['id']);
-                            }else{
-                                $arrResponse = array("status"=>false,"msg"=>"Error, intenta de nuevo.");
-                            }
-                        }else{
-                            $arrResponse = array("status"=>true,"msg"=>"Su reseña se ha actualizado.","html"=>$reviews['html'],"rate"=>$reviews['rate']);
-                        }
-                    }
-                }else{
-                    $arrResponse = array("login"=>false,"msg"=>"Inicie sesión para compartir su reseña.");
-                }
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            }
-            die();
-        }
-        public function delReview(){
-            if($_POST){
-                $id = intval($_POST['idReview']);
-                $idProduct = intval(openssl_decrypt($_POST['idProduct'],METHOD,KEY));
-                $request = $this->deleteReviewT($id); 
-                $reviews = $this->getReviews($idProduct);
-                $arrResponse = array("status"=>true,"msg"=>"La reseña ha sido eliminada.","html"=>$reviews['html'],"rate"=>$reviews['rate']);
-            }
-            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            die();
-        }
-        public function getReview(){
-            if($_POST){
-                $idReview = intval($_POST['idReview']);
-                $request = $this->getReviewT($idReview);
-                echo json_encode($request,JSON_UNESCAPED_UNICODE);
-            }
-            die();
-        }
-        public function sortReviews(){
-            if($_POST){
-                $idProduct = intval(openssl_decrypt($_POST['idProduct'],METHOD,KEY));
-                $option = intval($_POST['intSort']);
-                $reviews = $this->getReviews($idProduct,$option);
-                $arrResponse = array("status"=>true,"html"=>$reviews['html'],"rate"=>$reviews['rate']);
-            }
-            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            die();  
-        }
-        public function searchReviews(){
-            if($_POST){
-                $idProduct = intval(openssl_decrypt($_POST['idProduct'],METHOD,KEY));
-                $search = strClean($_POST['strSearch']);
-                $reviews = $this->getReviews($idProduct,null,$search);
-                $arrResponse = array("status"=>true,"html"=>$reviews['html'],"rate"=>$reviews['rate']);
-            }
-            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            die();  
         }
         /******************************Checkout methods************************************/
         public function checkData(){
