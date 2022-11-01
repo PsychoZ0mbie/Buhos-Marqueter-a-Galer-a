@@ -125,7 +125,7 @@ window.addEventListener("scroll",function(){
 
 window.addEventListener("load",function(){
     if(document.querySelector("#modalPoup")){
-        request(base_url+"/shop/statusCouponSuscriber","","get").then(function(data){
+        request(base_url+"/tienda/statusCouponSuscriber","","get").then(function(data){
             let discount = data.discount;
             if(data.status && !checkPopup()){
                 setTimeout(function(){
@@ -134,7 +134,7 @@ window.addEventListener("load",function(){
                     let timer;
                     modal= `
                             <div class="modal fade" id="modalSuscribe">
-                                <div class="modal-dialog modal-lg modal-dialog-centered ">
+                                <div class="modal-dialog modal-dialog-centered ">
                                     <div class="modal-content">
                                         <div class="d-flex justify-content-end">
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -142,13 +142,13 @@ window.addEventListener("load",function(){
                                         <div class="container mb-3 p-4 pe-5 ps-5">
                                             <form id="formModalSuscribe" class="mb-3">
                                                 <h2 class="t-p">${COMPANY}</h2>
-                                                <h2 class="fs-5">Suscríbase a nuestro boletín y reciba un cupón de descuento de ${discount}%</h2>
+                                                <h2 class="fs-5">Suscríbete a nuestro boletín y recibe un cupón de descuento de ${discount}%</h2>
                                                 <p>Reciba información actualizada sobre novedades, ofertas especiales y nuestras promociones</p>
                                                 <div class="mb-3">
                                                     <input type="email" class="form-control" id="txtEmailModalSuscribe" name="txtEmailSuscribe" placeholder="Tu correo" required>
                                                 </div>
                                                 <div class="alert alert-danger d-none" id="alertModalSuscribe" role="alert"></div>
-                                                <button type="submit" class="btn btnc-primary" id="btnModalSuscribe">Suscribirse</button>
+                                                <button type="submit" class="btn btn-bg-1" id="btnModalSuscribe">Suscribirse</button>
                                             </form>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="" id="delPopup">
@@ -202,7 +202,7 @@ window.addEventListener("load",function(){
                         btn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;    
                         btn.setAttribute("disabled","");
                         
-                        request(base_url+"/shop/setSuscriber",formData,"post").then(function(objData){
+                        request(base_url+"/tienda/setSuscriber",formData,"post").then(function(objData){
                             btn.innerHTML="Suscribirse";    
                             btn.removeAttribute("disabled");
                             if(objData.status){
