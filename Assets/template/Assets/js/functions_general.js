@@ -114,7 +114,7 @@ btnCart.addEventListener("click",function(){
             document.querySelector(".cartlist--items").innerHTML = objData.items;
             document.querySelector("#totalCart").innerHTML = objData.total;
             delProduct(document.querySelectorAll(".delItem"));
-            let btnCheckoutCart = document.querySelectorAll(".btnCheckoutCart")[1];
+            let btnCheckoutCart = document.querySelector(".btnCheckoutCart");
             btnCheckoutCart.addEventListener("click",function(){
                 if(objData.status){
                     window.location.href=base_url+"/tienda/pago";

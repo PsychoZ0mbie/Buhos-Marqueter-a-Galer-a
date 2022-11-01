@@ -18,7 +18,7 @@
                     </div>
                     <div class="card--enmarcar-info">
                         <a href="<?=$url?>">
-                            <h3 class="enmarcar--title"><?=$tipos[$i]['name']?></h3>
+                            <h2 class="enmarcar--title"><?=$tipos[$i]['name']?></h2>
                             <p><?=$tipos[$i]['description']?></p>
                         </a>
                     </div>
