@@ -1,21 +1,4 @@
-@import "variable";
-.card-post{
-    img{
-        max-width: 100%;
-        height: 200px;
-    }
-    .card-body{
-        height: 180px;
-        a{
-            h2{
-                height: 50px;
-            }
-        }
-        div{
-            height: 50px;
-        }
-    }
-}
+@import "mixin";
 .product-cant{
     display: flex;
     justify-content: center;
@@ -74,30 +57,6 @@
                 color:$third-color;
             }
         }
-    }
-}
-.comment-list{
-    list-style: none;
-    padding: 0;
-    padding-top: 10px;
-    .comment-info{
-        height: 50px;
-        img{
-            border-radius: 50%;
-            height: 100%;
-        }
-    }
-}
-.review-rate{
-    button{
-        background-color: unset;
-        border: none;
-        color: $first-color;
-    }
-}
-.review-stars{
-    i{
-        font-size: 0.75rem;
     }
 }
 .btn-del{

@@ -197,6 +197,8 @@
                         if($productos[$i]['discount'] > 0){
                             $discount = '<span class="discount">-'.$productos[$i]['discount'].'%</span>';
                             $price ='<span class="current sale me-2">'.formatNum($productos[$i]['priceDiscount']).'</span><span class="compare">'.formatNum($productos[$i]['price']).'</span>';
+                        }else if($productos[$i]['stock'] == 0){
+                            $price = '<span class="current sale me-2">Agotado</span>';
                         }
                 ?>
                 <div class="col-6 col-lg-3 col-md-6">
@@ -214,8 +216,10 @@
                             </div>
                         </div>
                         <div class="card--product-btns">
+                            <?php if($productos[$i]['stock'] > 0){?>
                             <button type="button" class="btn btn-bg-1" data-id="<?=$id?>" data-topic="2" onclick="addCart(this)">Agregar <i class="fa-solid fa-cart-shopping"></i></button>
-                            <button type="button" class="btn btn-bg-4" data-id="<?=$id?>">Vista rápida</button>
+                            <?php }?>
+                            <button type="button" class="btn btn-bg-4" data-id="<?=$id?>" onclick="quickModal(this)">Vista rápida</button>
                         </div>
                     </div>
                 </div>
@@ -271,40 +275,40 @@
             <div class="row">
                 <div class="col-6 col-lg-3 col-md-6 mb-3">
                     <div class="instagram">
-                        <a href="#">
+                        <a href="<?=$social[3]['link']?>" target="_blank">
                             <div class="instagram-img">
-                                <img src="assets/images/producto.gif" alt="">
-                                <div><i class="fa-brands fa-instagram"></i></div>
+                                <img src="<?=media()?>/images/uploads/instagram1.png" alt="Cuadros y enmarcaciones en linea">
+                                <div><i class="fab fa-instagram"></i></div>
                             </div>
                         </a>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3 col-md-6 mb-3">
                     <div class="instagram">
-                        <a href="#">
+                        <a href="<?=$social[3]['link']?>" target="_blank">
                             <div class="instagram-img">
-                                <img src="assets/images/producto.gif" alt="">
-                                <div><i class="fa-brands fa-instagram"></i></div>
+                                <img src="<?=media()?>/images/uploads/instagram2.png" alt="Cuadros y enmarcaciones en linea">
+                                <div><i class="fab fa-instagram"></i></div>
                             </div>
                         </a>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3 col-md-6 mb-3">
                     <div class="instagram">
-                        <a href="#">
+                        <a href="<?=$social[3]['link']?>" target="_blank">
                             <div class="instagram-img">
-                                <img src="assets/images/producto.gif" alt="">
-                                <div><i class="fa-brands fa-instagram"></i></div>
+                                <img src="<?=media()?>/images/uploads/instagram3.png" alt="Cuadros y enmarcaciones en linea">
+                                <div><i class="fab fa-instagram"></i></div>
                             </div>
                         </a>
                     </div>
                 </div>
                 <div class="col-6 col-lg-3 col-md-6 mb-3">
                     <div class="instagram">
-                        <a href="#">
+                        <a href="<?=$social[3]['link']?>" target="_blank">
                             <div class="instagram-img">
-                                <img src="assets/images/producto.gif" alt="">
-                                <div><i class="fa-brands fa-instagram"></i></div>
+                                <img src="<?=media()?>/images/uploads/instagram4.png" alt="Cuadros y enmarcaciones en linea">
+                                <div><i class="fab fa-instagram"></i></div>
                             </div>
                         </a>
                     </div>

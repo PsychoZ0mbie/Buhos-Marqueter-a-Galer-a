@@ -16,15 +16,16 @@
 
         /******************************Views************************************/
         public function tienda(){
+            $pageNow = isset($_GET['p']) ? strClean($_GET['p']) : 1;
+            $sort = isset($_GET['s']) ? strClean($_GET['s']) : 1;
             $company=getCompanyInfo();
             $data['page_tag'] = $company['name'];
             $data['page_title'] = "Tienda | ".$company['name'];
-            $data['page_name'] = "shop";
+            $data['page_name'] = "tienda";
             $data['categories'] = $this->getCategoriesT();
-            $data['products'] = $this->getProductsT("");
-            $data['popProducts'] = $this->getPopularProductsT(9);
-            $data['app'] = "shop.js";
-            $this->views->getView($this,"shop",$data);
+            $data['products'] = $this->getProductsPage($pageNow,$sort);
+            $data['app'] = "functions_shop.js";
+            $this->views->getView($this,"tienda",$data);
         }
         public function categoria($params){
             $arrParams = explode(",",$params);
@@ -148,6 +149,7 @@
         /******************************Cart methods************************************/
         public function addCart(){
             //unset($_SESSION['arrCart']);exit;
+            //dep($_POST);exit;
             if($_POST){ 
                 $id = intval(openssl_decrypt($_POST['idProduct'],METHOD,KEY));
                 $qty = intval($_POST['txtQty']);
@@ -157,6 +159,7 @@
                 $valiQty =true;
                 if(is_numeric($id)){
                     $request = $this->getProductT($id);
+                    
                     $price = $request['price'];
                     if($request['discount']>0){
                         $price = $request['price'] - ($request['price']*($request['discount']/100));
@@ -685,9 +688,17 @@
                 if(is_numeric($idProduct)){
                     $request = $this->getProductT($idProduct);
                     $request['idproduct'] = $_POST['idProduct']; 
-                    $request['priceDiscount']=formatNum($request['price']-($request['price']*($request['discount']*0.01)));
-                    $request['price'] = formatNum($request['price']);
-                    $arrResponse= array("status"=>true,"data"=>$request);
+                    $request['priceDiscount']=$request['price']-($request['price']*($request['discount']*0.01));
+                    $request['price'] = $request['price'];
+                    
+                    $script = getFile("Template/Modal/modalQuickView",$request);
+                    $data = array(
+                        "name"=>$request['name'],
+                        "url"=>base_url()."/tienda/producto/".$request['route'],
+                        "img"=>$request['image'][0]['url'],
+                        "stock"=>$request['stock']
+                    );
+                    $arrResponse= array("status"=>true,"script"=>$script,"data"=>$data);
                 }else{
                     $arrResponse= array("status"=>false);
                 }

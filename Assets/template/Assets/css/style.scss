@@ -12,6 +12,7 @@
 @import "components/frame";
 @import "components/about";
 @import "components/service";
+@import "components/shop";
 @import "components/footer";
 @import "components/mediaqueries";
 
@@ -42,4 +43,47 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none; 
+}
+.accordion-item {
+    background-color: #fff;
+    border: none;
+}
+.accordion-button{
+    padding: 10px;
+}
+.accordion-body{
+    padding: 5px 0 5px 5px;
+    a, a:hover, a:focus, a:active {
+        text-decoration: none;
+        color: #000;
+      }
+}
+.accordion-button:not(.collapsed) {
+    color: #000;
+    background-color: #FFF;
+    box-shadow: none;
+}
+.accordion-button:focus {
+    border: none;
+    box-shadow: none;
+    color:$color1;
+}
+.list-group-item {
+    border: none;
+}
+.accordion-header{
+    position: relative;
+    a{
+        font-size: 16px;
+        padding: 10px;
+        position: absolute;
+        top:50%;
+        left:0;
+        transform: translateY(-50%);
+        z-index: 3;
+    }
+}
+.btn-check:focus+.btn, .btn:focus {
+    outline: 0;
+    box-shadow: none;
 }

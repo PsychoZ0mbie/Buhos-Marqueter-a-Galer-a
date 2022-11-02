@@ -30,5 +30,7 @@
 	
 	const COMISION = 1.04;
 	const TASA = 900;
+	const PERPAGE = 12;
+	const BUTTONS = 3;
 
 ?>

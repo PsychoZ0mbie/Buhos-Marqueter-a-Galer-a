@@ -197,6 +197,111 @@
     height: 100%;
     width: 100%;
 }
+
+.product-image{
+    width: 100%;
+    height: 400px;
+    padding: 10px;
+    position: relative;
+    img{
+        padding: 20px;
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+}
+.product-image-slider{
+    width: 100%;
+    height: 100px;
+    position: relative;
+}
+.slider-btn-left{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 25px;
+    top:0;
+    left:0;
+    background-color: #f5f7fa50;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 2;
+    cursor: pointer;
+    i{
+        color:$color4;
+        background-color: $color2;
+        padding: 3px 6px;
+        border-radius: 50%;
+    }
+}
+.slider-btn-right{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 25px;
+    top:0;
+    right:0;
+    background-color: #f5f7fa50;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 2;
+    cursor: pointer;
+    i{
+        color:$color4;
+        background-color: $color2;
+        padding: 3px 6px;
+        border-radius: 50%;
+    }
+}
+.product-image-inner{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    position: absolute;
+    scroll-behavior: smooth;
+    overflow-x: scroll;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+}
+.product-image-item{
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    img{
+        width: 70px;
+        height: 100%;
+        position: relative;
+        object-fit: contain;
+        z-index: -1;
+    }
+
+}.product-image-item.active{
+    border: 3px solid $color1;
+}
+.product-data{
+    #description{
+        height: 100px;
+        overflow: hidden;
+    }
+    a{
+        text-decoration: none;
+        color:#000;
+    }
+    h1{
+        margin: 0;
+        font-size: 28px;
+    }
+}
 @keyframes scrollSlider {
     0%{
         transform: translateX(0);
