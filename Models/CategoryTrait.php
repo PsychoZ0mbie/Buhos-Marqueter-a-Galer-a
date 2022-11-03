@@ -23,22 +23,6 @@
             }
             return $request;
         }
-        public function getCategoriesShowT(string $categories){
-            $this->con=new Mysql();
-            $sql = "SELECT * FROM category WHERE idcategory IN ($categories)";       
-            $request = $this->con->select_all($sql);
-            return $request;
-        }
-        public function getRecCategoriesT(int $qty=null){
-            $q="";
-            if($qty!=null){
-                $q=" LIMIT $qty";
-            }
-            $this->con=new Mysql();
-            $sql = "SELECT * FROM category WHERE idcategory ORDER BY idcategory DESC LIMIT $qty";       
-            $request = $this->con->select_all($sql);
-            return $request;
-        }
     }
     
 ?>

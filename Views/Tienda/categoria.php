@@ -4,6 +4,13 @@
     $productos = $data['products']['productos'];
     $paginas = $data['products']['paginas'];
 
+    $category = $data['routec'];
+    $subcategory = $data['routes'];
+
+    $breadcrumb ="";
+    $categoryName= $productos[0]['category'];
+    $subcategoryName = $productos[0]['subcategory'];
+
     $nextPage = 2;
     $prevPage = 1;
     $current = isset($_GET['p']) ? intval(strClean($_GET['p'])) : 1 ;
@@ -17,6 +24,15 @@
     if($prevPage <= 0){
         $prevPage = 1;
     }
+    $urlCategory = $subcategory !="" ? "/".$category."/".$subcategory : "/".$category;
+
+    if($subcategory!=""){
+        $categoryCrumb = base_url()."/tienda/categoria/".$category;
+        $breadcrumb = '
+        <li class="breadcrumb-item"><a class="text-decoration-none" href="'.$categoryCrumb.'">'.$categoryName.'</a></li>'.'<li class="breadcrumb-item active" aria-current="page">'.$subcategoryName.'</li>';
+    }else{
+        $breadcrumb = '<li class="breadcrumb-item active" aria-current="page">'.$categoryName.'</li>';
+    }
 ?>
     <div id="modalItem"></div>
     <div id="modalPoup"></div>
@@ -25,7 +41,8 @@
             <nav class="mt-2 mb-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a class="text-decoration-none" href="<?=base_url()?>">Inicio</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Tienda</li>
+                  <li class="breadcrumb-item"><a class="text-decoration-none" href="<?=base_url()?>/tienda">Tienda</a></li>
+                  <?=$breadcrumb?>
                 </ol>
             </nav>
             <div class="row">
@@ -58,12 +75,12 @@
                                                         for ($j=0; $j < count($categories[$i]['subcategories']) ; $j++) { 
                                                             $subcategories = $categories[$i]['subcategories'][$j];
                                                             if($subcategories['total'] >0){
-                                                            $routeS = base_url()."/tienda/categoria/".$categories[$i]['route']."/".$subcategories['route'];
-                                                    ?>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        <a href="<?=$routeS?>"><?=$subcategories['name']?></a>
-                                                        <span class="badge bg-color-2 rounded-pill"><?=$subcategories['total']?></span>
-                                                    </li>
+                                                                $routeS = base_url()."/tienda/categoria/".$categories[$i]['route']."/".$subcategories['route'];
+                                                        ?>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <a href="<?=$routeS?>"><?=$subcategories['name']?></a>
+                                                                    <span class="badge bg-color-2 rounded-pill"><?=$subcategories['total']?></span>
+                                                                </li>
                                                     <?php } }?>
                                                 </ul>
                                             </div>
@@ -84,9 +101,9 @@
                         <div class="d-flex align-items-center justify-content-center">
                             <label for="selectSort" class="form-label m-0 me-4 text-end">Ordenar por:</label>
                             <select class="form-select w-50" aria-label="Default select example" id="selectSort">
-                                <option value="1" data-url = "<?=base_url()."/tienda?p=".$current?>">Todo</option>
-                                <option value="2" data-url = "<?=base_url()."/tienda?p=".$current?>">Mayor a menor precio</option>
-                                <option value="3" data-url = "<?=base_url()."/tienda?p=".$current?>">Menor a mayor precio</option>
+                                <option value="1" data-url = "<?=base_url()."/tienda/categoria".$urlCategory."?p=".$current?>">Todo</option>
+                                <option value="2" data-url = "<?=base_url()."/tienda/categoria".$urlCategory."?p=".$current?>">Mayor a menor precio</option>
+                                <option value="3" data-url = "<?=base_url()."/tienda/categoria".$urlCategory."?p=".$current?>">Menor a mayor precio</option>
                             </select>
                         </div>
                     </div>
@@ -128,33 +145,32 @@
                         <?php } ?>
                     </div>
                     <div class="pagination">
-                        <a href="<?=base_url()."/tienda?p=1".$urlSort?>" class="pagination-btn pagination-start"><i class="fas fa-angle-double-left" aria-hidden="true"></i></a>
-                        <a href="<?=base_url()."/tienda?p=".$prevPage.$urlSort?>" class="pagination-btn pagination-prev"><i class="fas fa-angle-left" aria-hidden="true"></i></a>
+                        <a href="<?=base_url()."/tienda/categoria".$urlCategory."?p=1".$urlSort?>" class="pagination-btn pagination-start"><i class="fas fa-angle-double-left" aria-hidden="true"></i></a>
+                        <a href="<?=base_url()."/tienda/categoria".$urlCategory."?p=".$prevPage.$urlSort?>" class="pagination-btn pagination-prev"><i class="fas fa-angle-left" aria-hidden="true"></i></a>
                         <div class="pagination-pag">
                             <ul>
                             <?php
                                 $button = $current;
                                 $qtyBtns = BUTTONS;
+                            
                                 if($qtyBtns > $paginas){
                                     $qtyBtns = $paginas;
                                 }
                                 if($button>=$paginas-$qtyBtns){
-                                    $button = ($paginas-$qtyBtns)+1;
+                                    $button = abs(($paginas-$qtyBtns))+1;
                                 }
-                                
-
                                 for ($i=1; $i <= $qtyBtns ; $i++) {
                                     $activeBtn = "";
                                     if($button == $current){
                                         $activeBtn="active";
                                     }
                             ?>
-                             <a href="<?=base_url()."/tienda?p=".$button.$urlSort?>" class="page <?=$activeBtn?>"><?=$button?></a>
+                             <a href="<?=base_url()."/tienda/categoria".$urlCategory."?p=".$button.$urlSort?>" class="page <?=$activeBtn?>"><?=$button?></a>
                             <?php $button++;}?>
                             </ul>
                         </div>
-                        <a href="<?=base_url()."/tienda?p=".$nextPage.$urlSort?>" class="pagination-btn pagination-next"><i class="fas fa-angle-right" aria-hidden="true"></i></a>
-                        <a href="<?=base_url()."/tienda?p=".$paginas.$urlSort?>" class="pagination-btn pagination-end"><i class="fas fa-angle-double-right" aria-hidden="true"></i></a>
+                        <a href="<?=base_url()."/tienda/categoria".$urlCategory."?p=".$nextPage.$urlSort?>" class="pagination-btn pagination-next"><i class="fas fa-angle-right" aria-hidden="true"></i></a>
+                        <a href="<?=base_url()."/tienda/categoria".$urlCategory."?p=".$paginas.$urlSort?>" class="pagination-btn pagination-end"><i class="fas fa-angle-double-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>

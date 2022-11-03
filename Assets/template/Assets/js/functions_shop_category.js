@@ -5,16 +5,13 @@ window.addEventListener("load",function(){
     let filterOverlay = document.querySelector(".filter-options-overlay");
     let urlSearch = window.location.search;
     let params = new URLSearchParams(urlSearch);
-    let currentPage = 1;
+
     if(params.get("s")){
         let sortValue = parseInt(params.get("s"));
         if(sortValue - 1 > selectSort.options.length)sortValue=1;
         selectSort.options[sortValue-1].setAttribute("selected","selected");
     }
-    if(params.get("p")){
-        currentPage = parseInt(params.get("p"));
-    }
-
+    
     filterOverlay.addEventListener("click",function(){
         filterOverlay.style.display="none";
         filterOptions.classList.remove("active");

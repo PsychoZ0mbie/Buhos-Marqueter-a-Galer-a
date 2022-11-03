@@ -16,21 +16,29 @@
 
         /******************************Views************************************/
         public function tienda(){
-            $pageNow = isset($_GET['p']) ? strClean($_GET['p']) : 1;
-            $sort = isset($_GET['s']) ? strClean($_GET['s']) : 1;
+            $pageNow = isset($_GET['p']) ? intval(strClean($_GET['p'])) : 1;
+            $sort = isset($_GET['s']) ? intval(strClean($_GET['s'])) : 1;
             $company=getCompanyInfo();
             $data['page_tag'] = $company['name'];
             $data['page_title'] = "Tienda | ".$company['name'];
             $data['page_name'] = "tienda";
             $data['categories'] = $this->getCategoriesT();
-            $data['products'] = $this->getProductsPage($pageNow,$sort);
-            $data['app'] = "functions_shop.js";
-            $this->views->getView($this,"tienda",$data);
+            $productsPage =  $this->getProductsPageT($pageNow,$sort);
+            if($pageNow <= $productsPage['paginas']){
+                $data['products'] = $productsPage;
+                $data['app'] = "functions_shop.js";
+                $this->views->getView($this,"tienda",$data);
+            }else{
+                header("location: ".base_url()."/error");
+                die();
+            }
         }
         public function categoria($params){
             $arrParams = explode(",",$params);
             $category="";
             $subcategory="";
+            $pageNow = isset($_GET['p']) ? intval(strClean($_GET['p'])) : 1;
+            $sort = isset($_GET['s']) ? intval(strClean($_GET['s'])) : 1;
 
             if(count($arrParams)>1){
                 $category = strClean($arrParams[0]);
@@ -40,16 +48,25 @@
             }
             $company=getCompanyInfo();
             $data['page_tag'] = $company['name'];
-            $data['page_title'] = "Tienda | ".$company['name'];
-            $data['page_name'] = "category";
+            $data['page_name'] = "categoria";
             $data['categories'] = $this->getCategoriesT();
             $data['routec'] = $category;
             $data['routes'] = $subcategory;
-            $data['total'] = $this->getTotalProductsT($category,$subcategory);
-            $data['products'] = $this->getProductsCategoryT($category,$subcategory,1);
-            $data['popProducts'] = $this->getPopularProductsT(9);
-            $data['app'] = "shop.js";
-            $this->views->getView($this,"category",$data);
+            $productsPage =  $this->getProductsCategoryT($category,$subcategory,$pageNow,$sort);
+            
+            if($pageNow <= $productsPage['paginas']){
+                $data['products'] = $productsPage;
+                $titleC = $data['products']['productos'][0]['category'];
+                $titleS = $data['products']['productos'][0]['subcategory'];
+                $title = $subcategory !="" ? $titleC." - ".$titleS : $titleC;
+                $data['page_title'] = $title." | ".$company['name'];
+                $data['app'] = "functions_shop_category.js";
+                $this->views->getView($this,"categoria",$data);
+            }else{
+                header("location: ".base_url()."/error");
+                die();
+            }
+
         }
         public function producto($params){
             if($params!= ""){
