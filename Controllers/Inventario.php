@@ -166,10 +166,10 @@
                         $intStatus = intval($_POST['statusList']);
                         $strDescription = strClean($_POST['txtDescription']);
                         
-                        $route = str_replace(" ","-",$strName);
-                        $route = str_replace("?","",$route);
+                        $route = clear_cadena($strName);
                         $route = strtolower(str_replace("¿","",$route));
-                        $route = clear_cadena($route);
+                        $route = str_replace(" ","-",$route);
+                        $route = str_replace("?","",$route);
 
                         $photos = $this->model->selectTmpImages();
                         //dep($photos);
@@ -376,10 +376,10 @@
                         $idCategory = intval($_POST['idCategory']);
                         $strName = ucwords(strClean($_POST['txtName']));
                         $strDescription = strClean($_POST['txtDescription']);
-                        $route = str_replace(" ","-",$strName);
-                        $route = str_replace("?","",$route);
+                        $route = clear_cadena($strName);
                         $route = strtolower(str_replace("¿","",$route));
-                        $route = clear_cadena($route);
+                        $route = str_replace(" ","-",$route);
+                        $route = str_replace("?","",$route);
                         $photo = "";
                         $photoCategory="";
 
@@ -571,10 +571,10 @@
                         $idSubCategory = intval($_POST['idSubCategory']);
                         $strName = ucwords(strClean($_POST['txtName']));
                         $idCategory = intval(strClean($_POST['categoryList']));
-                        $route = str_replace(" ","-",$strName);
-                        $route = str_replace("?","",$route);
+                        $route = clear_cadena($strName);
                         $route = strtolower(str_replace("¿","",$route));
-                        $route = clear_cadena($route);
+                        $route = str_replace(" ","-",$route);
+                        $route = str_replace("?","",$route);
 
                         if($idSubCategory == 0){
                             if($_SESSION['permitsModule']['w']){
