@@ -68,6 +68,25 @@
             }
 
         }
+        public function buscar(){
+            $pageNow = isset($_GET['p']) ? intval(strClean($_GET['p'])) : 1;
+            $sort = isset($_GET['s']) ? intval(strClean($_GET['s'])) : 1;
+            $search = isset($_GET['b']) ? strClean($_GET['b']) : "";
+            $company=getCompanyInfo();
+            $data['page_tag'] = $company['name'];
+            $data['page_title'] = "Tienda | ".$company['name'];
+            $data['page_name'] = "tienda";
+            $data['categories'] = $this->getCategoriesT();
+            $productsPage =  $this->getProductsSearchT($pageNow,$sort,$search);
+            if($pageNow <= $productsPage['paginas']){
+                $data['products'] = $productsPage;
+                $data['app'] = "functions_shop_search.js";
+                $this->views->getView($this,"buscar",$data);
+            }else{
+                header("location: ".base_url()."/error");
+                die();
+            }
+        }
         public function producto($params){
             if($params!= ""){
                 $params = strClean($params);
