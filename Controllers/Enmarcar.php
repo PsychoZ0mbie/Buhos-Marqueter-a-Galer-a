@@ -175,13 +175,13 @@
             $total = 0;
             if($tipo==1){
                 if($estilo == 1){
-                    $total = $area * $vidrio;
+                    $total = ($area * $vidrio)+($area*$carton);
                 }else if($estilo == 2){
-                    $total = ($area * $paspartu)+($perimetro*$bocel)+($area*$vidrio);
+                    $total = ($area * $paspartu)+($perimetro*$bocel)+($area*$vidrio)+($area*$carton);
                 }else if($estilo == 3){
-                    $total = ($area * $paspartu)+($area*$vidrio);
+                    $total = ($area * $paspartu)+($area*$vidrio)+($area*$carton);
                 }else if($estilo == 4){
-                    $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio);
+                    $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio)+($area*$carton);
                 }
             }else if($tipo == 3){
                 $total = $area * $espejo;
@@ -195,13 +195,13 @@
                 }
             }else if($tipo == 5){
                 if($estilo == 1){
-                    $total = ($area * $vidrio)+($area*$impresion);
+                    $total = ($area * $vidrio)+($area*$impresion)+($area*$carton);
                 }else if($estilo == 2){
-                    $total = ($area * $paspartu)+($perimetro*$bocel)+($area*$vidrio)+($area*$impresion);
+                    $total = ($area * $paspartu)+($perimetro*$bocel)+($area*$vidrio)+($area*$impresion)+($area*$carton);
                 }else if($estilo == 3){
-                    $total = ($area * $paspartu)+($area*$vidrio)+($area*$impresion);
+                    $total = ($area * $paspartu)+($area*$vidrio)+($area*$impresion)+($area*$carton);
                 }else if($estilo == 4){
-                    $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio)+($area*$impresion);
+                    $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio)+($area*$impresion)+($area*$carton);
                 }
             }else if($tipo == 6){
                 $total = ($area * $vidrio) + ($area*$triplex);
@@ -245,7 +245,7 @@
                         $marcoTotal = $this->calcularMarcoInterno($estilo,$margin,$altura,$ancho,$request,$option);
                         $marcoEstilos = $this->calcularMarcoEstilos($estilo,$marcoTotal['perimetro'],$marcoTotal['area'],$tipo);
         
-                        $total = (($marcoEstilos+$marcoTotal['total'])*COMISION)+TASA;
+                        $total = UTILIDAD*((($marcoEstilos+$marcoTotal['total'])*COMISION)+TASA);
                         $request['total'] = array("total"=>$total,"format"=>formatNum($total));
                         $arrResponse = array("status"=>true,"data"=>$request);
                     }else{

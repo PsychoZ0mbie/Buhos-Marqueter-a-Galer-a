@@ -32,5 +32,6 @@
 	const TASA = 900;
 	const PERPAGE = 12;
 	const BUTTONS = 3;
+	const UTILIDAD = 1.7;
 
 ?>
