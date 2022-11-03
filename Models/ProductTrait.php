@@ -8,7 +8,6 @@
             if($cant !=""){
                 $cant = " LIMIT $cant";
             }
-            $cant = " LIMIT 12";
             $this->con=new Mysql();
             $sql = "SELECT 
                 p.idproduct,
@@ -31,7 +30,7 @@
                 s.name as subcategory
             FROM product p
             INNER JOIN category c, subcategory s
-            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1
+            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1 AND p.stock > 0
             ORDER BY p.idproduct DESC $cant
             ";
             $request = $this->con->select_all($sql);
