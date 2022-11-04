@@ -58,10 +58,8 @@
                         </div>
                     </div>
                     <?php }?>
-                    <div class="alert alert-warning d-none" id="alert" role="alert">
-                        ¡Ups! No hay suficiente stock, inténtalo con menos o comprueba en tu cesta si has añadido todas nuestras unidades antes.
-                    </div>
-                    <div class="d-flex align-items-center mt-4">
+                    <p class="mt-4">Compartir en:</p>
+                    <div class="d-flex align-items-center">
                         <ul class="social social--dark mb-3">
                             <li title="Compartir en facebook"><a href="#" onclick="window.open('http://www.facebook.com/sharer.php?u=<?=base_url()."/tienda/producto/".$data['route']?>&amp;t=<?=$data['name']?>','share','toolbar=0,status=0,width=650,height=450')"><i class="fab fa-facebook-f" aria-hidden="true"></i></a></li>
                             <li title="Compartir en twitter"><a href="#" onclick="window.open('https://twitter.com/intent/tweet?text=<?=$data['name']?>&amp;url=<?=base_url()."/tienda/producto/".$data['route']?>&amp;hashtags=mediastore','share','toolbar=0,status=0,width=650,height=450')"><i class="fab fa-twitter" aria-hidden="true"></i></a></li>

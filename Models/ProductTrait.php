@@ -87,7 +87,8 @@
                 c.route as routec,
                 s.idsubcategory,
                 s.categoryid,
-                s.name as subcategory
+                s.name as subcategory,
+                s.route as routes
             FROM product p
             INNER JOIN category c, subcategory s
             WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1
@@ -190,11 +191,11 @@
             return $array;
 
         }
-        public function getProductsRandT($cant){
+        public function getProductsRelT($id,$cant){
+            $this->con=new Mysql();
             if($cant !=""){
                 $cant = " LIMIT $cant";
             }
-            $this->con=new Mysql();
             $sql = "SELECT 
                 p.idproduct,
                 p.categoryid,
@@ -213,10 +214,13 @@
                 c.route as routec,
                 s.idsubcategory,
                 s.categoryid,
-                s.name as subcategory
+                s.name as subcategory,
+                s.route as routes
             FROM product p
             INNER JOIN category c, subcategory s
-            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1
+            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid 
+            AND p.subcategoryid = s.idsubcategory 
+            AND p.status = 1 AND p.categoryid = $id
             ORDER BY RAND() $cant
             ";
             $request = $this->con->select_all($sql);
@@ -225,23 +229,10 @@
 
                     $request[$i]['priceDiscount'] =  $request[$i]['price']-($request[$i]['price']*($request[$i]['discount']*0.01));
                     $request[$i]['price'] = $request[$i]['price'];
-                    $request[$i]['favorite'] = 0;
 
                     $idProduct = $request[$i]['idproduct'];
-
-                    if(isset($_SESSION['login'])){
-                        $idUser = $_SESSION['idUser'];
-                        $sqlFavorite = "SELECT * FROM wishlist WHERE productid = $idProduct AND personid = $idUser";
-                        $requestFavorite = $this->con->select($sqlFavorite);
-                        if(!empty($requestFavorite)){
-                            $request[$i]['favorite'] = $requestFavorite['status'];
-                        }
-                    }
-                    $sqlRate = "SELECT AVG(rate) as rate FROM productrate WHERE productid = $idProduct";
                     $sqlImg = "SELECT * FROM productimage WHERE productid = $idProduct";
                     $requestImg =  $this->con->select_all($sqlImg);
-                    $requestRate =  $this->con->select($sqlRate);
-                    $request[$i]['rate'] = $requestRate['rate'];
 
                     if(count($requestImg)>0){
                         $request[$i]['url'] = media()."/images/uploads/".$requestImg[0]['name'];
@@ -396,7 +387,8 @@
                 c.route as routec,
                 s.idsubcategory,
                 s.categoryid,
-                s.name as subcategory
+                s.name as subcategory,
+                s.route as routes
             FROM product p
             INNER JOIN category c, subcategory s
             WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1
@@ -406,29 +398,7 @@
             if(!empty($request)){
                 $request['priceDiscount'] =  $request['price']-($request['price']*($request['discount']*0.01));
                 $request['price'] = $request['price'];
-                $request['favorite'] = 0;
                 $idProduct =$request['idproduct'];
-    
-                if(isset($_SESSION['login'])){
-                    $idUser = $_SESSION['idUser'];
-                    $sqlFavorite = "SELECT * FROM wishlist WHERE productid = $idProduct AND personid = $idUser";
-                    $requestFavorite = $this->con->select($sqlFavorite);
-                    if(!empty($requestFavorite)){
-                        $request['favorite'] = $requestFavorite['status'];
-                    }
-                }
-    
-                $sqlRate = "SELECT AVG(rate) as rate, COUNT(rate) as total FROM productrate WHERE productid = $idProduct HAVING rate IS NOT NULL";
-                $requestRate =  $this->con->select($sqlRate);
-                //dep($requestRate);exit;
-                if(!empty($requestRate)){
-                    $request['rate'] = number_format($requestRate['rate'],1);
-                    $request['reviews'] = $requestRate['total'];
-                }else{
-                    $request['rate'] = number_format(0,1);
-                    $request['reviews'] = 0;
-                }
-                
                 $sqlImg = "SELECT * FROM productimage WHERE productid = $idProduct";
                 $requestImg = $this->con->select_all($sqlImg);
     

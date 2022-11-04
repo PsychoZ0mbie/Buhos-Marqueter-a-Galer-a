@@ -82,12 +82,10 @@
                     $company=getCompanyInfo();
                     $data['page_tag'] = $company['name'];
                     $data['page_name'] = "product";
-                    $data['review'] = $this->getRate($data['product']['idproduct']);
-                    $data['reviews'] = $this->getReviews($data['product']['idproduct']);
-                    $data['products'] = $this->getProductsRandT(4);
+                    $data['products'] = $this->getProductsRelT($data['product']['categoryid'],4);
                     $data['page_title'] =$data['product']['name']." | ".$company['name'];
-                    $data['app'] = "product.js";
-                    $this->views->getView($this,"product",$data); 
+                    $data['app'] = "functions_product.js";
+                    $this->views->getView($this,"producto",$data); 
                 }else{
                     header("location: ".base_url()."/error");
                     die();
