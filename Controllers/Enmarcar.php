@@ -271,7 +271,7 @@
                 $marcoTotal = $this->calcularMarcoInterno($estilo,$margin,$altura,$ancho,$frame,$datos['option']);
                 $marcoEstilos = $this->calcularMarcoEstilos($estilo,$marcoTotal['perimetro'],$marcoTotal['area'],$tipo);
 
-                $total = intval((($marcoEstilos+$marcoTotal['total'])*COMISION)+TASA);
+                $total = UTILIDAD*(intval((($marcoEstilos+$marcoTotal['total'])*COMISION)+TASA));
                 return $total;
             }else{
                 die();
