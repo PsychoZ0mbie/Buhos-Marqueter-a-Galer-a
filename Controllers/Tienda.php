@@ -34,31 +34,18 @@
             }
         }
         public function categoria($params){
-            $arrParams = explode(",",$params);
-            $category="";
-            $subcategory="";
             $pageNow = isset($_GET['p']) ? intval(strClean($_GET['p'])) : 1;
             $sort = isset($_GET['s']) ? intval(strClean($_GET['s'])) : 1;
-
-            if(count($arrParams)>1){
-                $category = strClean($arrParams[0]);
-                $subcategory = strClean($arrParams[1]);
-            }else{
-                $category = strClean($arrParams[0]);
-            }
+            $params = strClean($params);
+            $title = ucwords(str_replace("-"," ",$params));
             $company=getCompanyInfo();
             $data['page_tag'] = $company['name'];
             $data['page_name'] = "categoria";
             $data['categories'] = $this->getCategoriesT();
-            $data['routec'] = $category;
-            $data['routes'] = $subcategory;
-            $productsPage =  $this->getProductsCategoryT($category,$subcategory,$pageNow,$sort);
-            
+            $data['ruta'] = $params;
+            $productsPage =  $this->getProductsCategoryT($params,$pageNow,$sort);
             if($pageNow <= $productsPage['paginas']){
                 $data['products'] = $productsPage;
-                $titleC = $data['products']['productos'][0]['category'];
-                $titleS = $data['products']['productos'][0]['subcategory'];
-                $title = $subcategory !="" ? $titleC." - ".$titleS : $titleC;
                 $data['page_title'] = $title." | ".$company['name'];
                 $data['app'] = "functions_shop_category.js";
                 $this->views->getView($this,"categoria",$data);

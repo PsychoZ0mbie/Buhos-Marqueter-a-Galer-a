@@ -254,14 +254,9 @@
             //dep($request);exit;
             return $request;
         }
-        public function getProductsCategoryT(string $category,string $subcategory,int $pageNow,int $sort){
+        public function getProductsCategoryT(string $category,int $pageNow,int $sort){
             $this->con=new Mysql();
-            $route="";
-            if($subcategory!=""){
-                $route=" AND c.route = '$category' AND s.route = '$subcategory'";
-            }else{
-                $route=" AND c.route = '$category'";
-            }
+
             $perPage = PERPAGE;
             $option ="ORDER BY p.idproduct DESC";
             if($sort == 2){
@@ -272,7 +267,8 @@
             $sqlTotal = "SELECT COUNT(p.idproduct) AS total 
             FROM product p 
             INNER JOIN category c, subcategory s
-            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1 $route";
+            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory 
+            AND p.status = 1 AND (c.route = '$category' || s.route = '$category')";
              
             $totalProducts =$this->con->select($sqlTotal)['total'];
 
@@ -302,7 +298,8 @@
                 s.route as routes
             FROM product p
             INNER JOIN category c, subcategory s
-            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1 $route $option 
+            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory AND p.status = 1 
+            AND (c.route = '$category' || s.route = '$category') $option 
             LIMIT $start,$perPage";
             $request = $this->con->select_all($sql);
             if(count($request)> 0){

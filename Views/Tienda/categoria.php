@@ -4,12 +4,7 @@
     $productos = $data['products']['productos'];
     $paginas = $data['products']['paginas'];
 
-    $category = $data['routec'];
-    $subcategory = $data['routes'];
-
-    $breadcrumb ="";
-    $categoryName= $productos[0]['category'];
-    $subcategoryName = $productos[0]['subcategory'];
+    $urlCategory = "/".$data['ruta'];
 
     $nextPage = 2;
     $prevPage = 1;
@@ -17,21 +12,12 @@
     $urlSort =isset($_GET['s']) ?  "&s=".intval(strClean($_GET['s'])) : "";
     $nextPage = $current+1;
     $prevPage = $current-1;
-
+    
     if($current >= $paginas){
         $nextPage = $paginas;
     }
     if($prevPage <= 0){
         $prevPage = 1;
-    }
-    $urlCategory = $subcategory !="" ? "/".$category."/".$subcategory : "/".$category;
-
-    if($subcategory!=""){
-        $categoryCrumb = base_url()."/tienda/categoria/".$category;
-        $breadcrumb = '
-        <li class="breadcrumb-item"><a class="text-decoration-none" href="'.$categoryCrumb.'">'.$categoryName.'</a></li>'.'<li class="breadcrumb-item active" aria-current="page">'.$subcategoryName.'</li>';
-    }else{
-        $breadcrumb = '<li class="breadcrumb-item active" aria-current="page">'.$categoryName.'</li>';
     }
 ?>
     <div id="modalItem"></div>
@@ -42,7 +28,14 @@
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a class="text-decoration-none" href="<?=base_url()?>">Inicio</a></li>
                   <li class="breadcrumb-item"><a class="text-decoration-none" href="<?=base_url()?>/tienda">Tienda</a></li>
-                  <?=$breadcrumb?>
+                  <?php
+                    if($productos[0]['routec']!=$data['ruta']){
+                  ?>
+                  <li class="breadcrumb-item"><a class="text-decoration-none" href="<?=base_url()."/tienda/categoria/".$productos[0]['routec']?>"><?=$productos[0]['category']?></a></li>
+                  <li class="breadcrumb-item active" aria-current="page"><?=$productos[0]['subcategory']?></li>
+                  <?php }else{?>
+                    <li class="breadcrumb-item active" aria-current="page"><?=$productos[0]['category']?></li>
+                  <?php }?>
                 </ol>
             </nav>
             <div class="row">
@@ -75,7 +68,7 @@
                                                         for ($j=0; $j < count($categories[$i]['subcategories']) ; $j++) { 
                                                             $subcategories = $categories[$i]['subcategories'][$j];
                                                             if($subcategories['total'] >0){
-                                                                $routeS = base_url()."/tienda/categoria/".$categories[$i]['route']."/".$subcategories['route'];
+                                                                $routeS = base_url()."/tienda/categoria/".$subcategories['route'];
                                                         ?>
                                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                                                     <a href="<?=$routeS?>"><?=$subcategories['name']?></a>
