@@ -82,6 +82,24 @@
 
 }
 @media screen and (max-width: 576px){ 
+    .table-cart{
+        thead{
+            display: none;
+        }
+        tbody{
+            tr{
+                td{
+                    a{
+                     text-align: center;   
+                    }
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+                }
+            }
+        }
+    }
     .filter-options{
         left:-100%;
         width: 80%;

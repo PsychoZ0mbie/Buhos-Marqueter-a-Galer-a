@@ -298,8 +298,8 @@
 
                     $colorMargin = $this->selectColor(intval($_POST['colorMargin']));
                     $colorBorder = $this->selectColor(intval($_POST['colorBorder']));
-                    $colorMargin = !empty($colorMargin) ? $colorMargin['name'] : "No aplica";
-                    $colorBorder = !empty($colorBorder) ? $colorBorder['name'] : "No aplica";
+                    $colorMargin = !empty($colorMargin) ? $colorMargin['name'] : "";
+                    $colorBorder = !empty($colorBorder) ? $colorBorder['name'] : "";
                     $height = floatval($_POST['height']);
                     $width = floatval($_POST['width']);
                     $margin = intval($_POST['margin']);
