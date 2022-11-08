@@ -5,6 +5,10 @@
     $total = 0;
     $subtotal = 0;
     $arrShipping = $data['shipping'];
+    $urlCupon="";
+    if(isset($_GET['cupon'])){
+        $urlCupon = "?cupon=".$_GET['cupon'];
+    }
 
 
 ?>
@@ -29,7 +33,7 @@
                     }else{
                         $total = $subtotal;
                     }
-                    if(!$arrShipping['id'] == 3){
+                    if($arrShipping['id'] != 3){
                         $total+=$arrShipping['value'];
                     }
             ?>
@@ -195,10 +199,10 @@
                         <input type="text" class="form-control" placeholder="Coupon code" aria-label="Coupon code" aria-describedby="button-addon2">
                         <button class="btn btnc-primary" type="button" id="button-addon2">+</button>
                     </div>-->
-                    <?php if(isset($_SESSION['login']) && isset($_SESSION['arrCart']) && !empty($_SESSION['arrCart'])){ 
+                    <?php if(isset($_SESSION['login'])){ 
                         if($arrShipping['id']!=3){
                     ?>
-                    <a href="<?=base_url()?>/pago" class="mb-3 w-100 btn btn-bg-1">Pagar</a>
+                    <a href="<?=base_url()."/pago".$urlCupon?>" class="mb-3 w-100 btn btn-bg-1">Pagar</a>
                     <?php }else{ ?>
                         <div class="alert alert-danger d-none" id="alertCity"></div>
                         <button type="button" id="checkCity" class="mb-3 w-100 btn btn-bg-1">Pagar</button>

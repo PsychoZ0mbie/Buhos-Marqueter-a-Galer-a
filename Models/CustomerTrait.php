@@ -55,8 +55,8 @@
         }
         public function selectCountries(){
             $this->con = new Mysql();
-            $sql = "SELECT * FROM countries";
-            $request = $this->con->select_all($sql);
+            $sql = "SELECT * FROM countries WHERE id = 47";
+            $request = $this->con->select($sql);
             return $request;
         }
         public function selectStates($country){
@@ -84,9 +84,9 @@
             $sql = "SELECT * FROM usedcoupon WHERE personid = $this->intIdUser AND couponid = $idCoupon";
             $request = $this->con->select($sql);
             if(!empty($request)){
-                $request = false;
-            }else{
                 $request = true;
+            }else{
+                $request = false;
             }
             return $request;
         }

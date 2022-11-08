@@ -1,27 +1,26 @@
-btnSearch.classList.add("d-none");
-document.querySelector(".nav-icons-qty").classList.add("d-none");
+document.querySelector("#btnCart").classList.add("d-none");
 let intCountry = document.querySelector("#listCountry");
 let intState = document.querySelector("#listState");
 let intCity = document.querySelector("#listCity");
 let formOrder = document.querySelector("#formOrder");
 let checkData = document.querySelector("#checkData");
 
-request(base_url+"/shop/getCountries","","get").then(function(objData){
+request(base_url+"/pago/getCountries","","get").then(function(objData){
     intCountry.innerHTML = objData;
 });
 
 intCountry.addEventListener("change",function(){
-    request(base_url+"/shop/getSelectCountry/"+intCountry.value,"","get").then(function(objData){
+    request(base_url+"/pago/getSelectCountry/"+intCountry.value,"","get").then(function(objData){
         intState.innerHTML = objData;
     });
     intCity.innerHTML = "";
 });
 intState.addEventListener("change",function(){
-    request(base_url+"/shop/getSelectState/"+intState.value,"","get").then(function(objData){
+    request(base_url+"/pago/getSelectState/"+intState.value,"","get").then(function(objData){
         intCity.innerHTML = objData;
     });
 });
-
+/*
 checkData.addEventListener("click",function(){
     let strName = document.querySelector("#txtNameOrder").value;
     let strLastName = document.querySelector("#txtLastNameOrder").value;
@@ -83,4 +82,70 @@ checkData.addEventListener("click",function(){
             alertOrder.innerHTML = objData.msg;
         }
     });
+});*/
+btnOrder.addEventListener("click",function(e){
+    e.preventDefault();
+    let strNombre = document.querySelector("#txtNameOrder").value;
+    let strApellido = document.querySelector("#txtLastNameOrder").value;
+    let strEmail = document.querySelector("#txtEmailOrder").value;
+    let intTelefono = document.querySelector("#txtPhoneOrder").value;
+    let intPais = document.querySelector("#listCountry").value;
+    let intDepartamento = document.querySelector("#listState").value;
+    let intCiudad = document.querySelector("#listCity").value;
+    let strDireccion = document.querySelector("#txtAddressOrder").value;
+
+    if(intPais =="" || strNombre =="" || strApellido =="" || strEmail =="" || intTelefono=="" || intDepartamento ==""
+    || intCiudad =="" || strDireccion==""){
+        Swal.fire("Error","todos los campos con (*) son obligatorios","error");
+        return false;
+    }
+    if(intTelefono.length < 10){
+        Swal.fire("Error","El número de teléfono debe tener 10 dígitos","error");
+        return false;
+    }
+    if(!fntEmailValidate(strEmail)){
+        Swal.fire("Error","El correo ingresado es inválido","error");
+        return false;
+    }
+    checkout.open();
+    //btnOrder.setAttribute("onclick","checkout.open()");
+    /*let formData = new FormData(formOrden);
+    let url=base_url+"/tienda/setPedido";
+    btnOrder.setAttribute("disabled","");
+    loading.style.display = "flex";
+    request(url,formData,"post").then(function(objData){
+        loading.style.display = "none";
+        btnOrder.removeAttribute("disabled");
+        if(objData.status){
+            checkout.open();
+        }else{
+            Swal.fire("Error",objData.msg,"error");
+        }
+    });*/
 });
+if(document.querySelector("#btnCoupon")){
+    let btnCoupon = document.querySelector("#btnCoupon");
+    btnCoupon.addEventListener("click",function(){
+        let formCoupon = document.querySelector("#formCoupon");
+        let strCoupon = document.querySelector("#txtCoupon").value;
+        if(strCoupon ==""){
+            alertCoupon.innerHTML="Por favor, ingresa el cupón.";
+            alertCoupon.classList.remove("d-none");
+            return false;
+        }
+        btnCoupon.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+        btnCoupon.setAttribute("disabled","");
+
+        let formData = new FormData(formCoupon);
+        request(base_url+"/carrito/setCouponCode",formData,"post").then(function(objData){
+            btnCoupon.innerHTML=`+`;
+            btnCoupon.removeAttribute("disabled");
+            if(objData.status){
+                window.location.href = base_url+"/pago?cupon="+objData.data.code;
+            }else{
+                alertCoupon.innerHTML=objData.msg;
+                alertCoupon.classList.remove("d-none");
+            }
+        });
+    })
+}

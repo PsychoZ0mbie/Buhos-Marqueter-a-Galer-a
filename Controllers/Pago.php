@@ -21,30 +21,19 @@
                 $data['page_name'] = "pago";
                 $data['credentials'] = getCredentials();
                 $data['company'] = getCompanyInfo();
+                $data['shipping'] = $this->selectShippingMode();
                 $data['app'] = "functions_checkout.js";
-                if(isset($_SESSION['arrShipping']) && $_SESSION['arrShipping']['id'] == 3 && empty($_SESSION['arrShipping']['city'])){
-                    header("location: ".base_url()."/shop/cart");
-                    die(); 
-                }else if(!isset($_SESSION['arrShipping'])){
-                    $_SESSION['arrShipping'] = $this->selectShippingMode();
-                    if($_SESSION['arrShipping']['id'] == 3 && empty($_SESSION['arrShipping']['city'])){
-                        header("location: ".base_url()."/shop/cart");
-                        die(); 
+                if(isset($_GET['cupon'])){
+                    $cupon = strtoupper(strClean($_GET['cupon']));
+                    $cuponData = $this->selectCouponCode($cupon);
+                    if(!empty($cuponData)){
+                        $data['cupon'] = $cuponData;
+                        $data['cupon']['check'] = $this->checkCoupon($_SESSION['idUser'],$data['cupon']['id']);
+                    }else{
+                        header("location: ".base_url()."/pago");
                     }
                 }
-                if(isset($_SESSION['couponInfo'])){
-                    if(!$this->checkCoupon($_SESSION['idUser'],$_SESSION['couponInfo']['id'])){
-                        $_SESSION['couponInfo']['status'] = false;
-                    }
-                }
-                $data['arrShipping'] = $_SESSION['arrShipping'];
-
-                if(!empty($_SESSION['arrShipping']['city'])){
-                    $data['total'] = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping'],$_SESSION['arrShipping']['city']['id']);
-                }else{
-                    $data['total'] = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping']);
-                }
-                $this->views->getView($this,"checkout",$data); 
+                $this->views->getView($this,"pago",$data); 
             }else{
                 header("location: ".base_url());
                 die();
@@ -232,17 +221,16 @@
         }
         public function getCountries(){
             $request = $this->selectCountries();
-            $html='<option value="0" selected>Select</option>';
-            for ($i=0; $i < count($request) ; $i++) { 
-                $html.='<option value="'.$request[$i]['id'].'">'.$request[$i]['name'].'</option>';
-            }
-
+            $html='
+            <option value="0" selected>Seleccione</option>
+            <option value="'.$request['id'].'">'.$request['name'].'</option>
+            ';
             echo json_encode($html,JSON_UNESCAPED_UNICODE);
             die();
         }
         public function getSelectCountry($id){
             $request = $this->selectStates($id);
-            $html='<option value="0" selected>Select</option>';
+            $html='<option value="0" selected>Seleccione</option>';
             for ($i=0; $i < count($request) ; $i++) { 
                 $html.='<option value="'.$request[$i]['id'].'">'.$request[$i]['name'].'</option>';
             }
@@ -251,7 +239,7 @@
         }
         public function getSelectState($id){
             $request = $this->selectCities($id);
-            $html='<option value="0" selected>Select</option>';
+            $html='<option value="0" selected>Seleccione</option>';
             for ($i=0; $i < count($request) ; $i++) { 
                 $html.='<option value="'.$request[$i]['id'].'">'.$request[$i]['name'].'</option>';
             }
