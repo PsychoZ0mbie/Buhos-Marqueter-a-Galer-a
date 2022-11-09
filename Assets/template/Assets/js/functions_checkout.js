@@ -84,18 +84,28 @@ checkData.addEventListener("click",function(){
     });
 });*/
 btnOrder.addEventListener("click",function(e){
+    let urlSearch = window.location.search;
+    let params = new URLSearchParams(urlSearch);
+    let cupon = "";
+    if(params.get("cupon")){
+        cupon = params.get("cupon");
+    }
+
     e.preventDefault();
     let strNombre = document.querySelector("#txtNameOrder").value;
     let strApellido = document.querySelector("#txtLastNameOrder").value;
     let strEmail = document.querySelector("#txtEmailOrder").value;
     let intTelefono = document.querySelector("#txtPhoneOrder").value;
-    let intPais = document.querySelector("#listCountry").value;
-    let intDepartamento = document.querySelector("#listState").value;
-    let intCiudad = document.querySelector("#listCity").value;
+    let intPais = document.querySelector("#listCountry");
+    let intDepartamento = document.querySelector("#listState");
+    let intCiudad = document.querySelector("#listCity");
     let strDireccion = document.querySelector("#txtAddressOrder").value;
 
-    if(intPais =="" || strNombre =="" || strApellido =="" || strEmail =="" || intTelefono=="" || intDepartamento ==""
-    || intCiudad =="" || strDireccion==""){
+    
+
+    if(intPais =="" || strNombre =="" || strApellido =="" || strEmail =="" || intTelefono==""
+    || intPais.value =="" || intDepartamento.value ==""
+    || intCiudad.value =="" || strDireccion==""){
         Swal.fire("Error","todos los campos con (*) son obligatorios","error");
         return false;
     }
@@ -107,21 +117,25 @@ btnOrder.addEventListener("click",function(e){
         Swal.fire("Error","El correo ingresado es inválido","error");
         return false;
     }
-    checkout.open();
-    //btnOrder.setAttribute("onclick","checkout.open()");
-    /*let formData = new FormData(formOrden);
-    let url=base_url+"/tienda/setPedido";
+    let strCountry = intPais.options[intPais.selectedIndex].text;
+    let strState = intDepartamento.options[intDepartamento.selectedIndex].text;
+    let strCity = intCiudad.options[intCiudad.selectedIndex].text;
+
+    let formOrden = document.querySelector("#formOrder");
+    let formData = new FormData(formOrden);
+    formData.append("cupon",cupon);
+    formData.append("country",strCountry);
+    formData.append("state",strState);
+    formData.append("city",strCity);
     btnOrder.setAttribute("disabled","");
-    loading.style.display = "flex";
-    request(url,formData,"post").then(function(objData){
-        loading.style.display = "none";
-        btnOrder.removeAttribute("disabled");
+    btnOrder.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    request(base_url+"/pago/checkInfo",formData,"post").then(function(objData){
         if(objData.status){
-            checkout.open();
+            window.location.href=btnOrder.getAttribute("red");
         }else{
             Swal.fire("Error",objData.msg,"error");
         }
-    });*/
+    });
 });
 if(document.querySelector("#btnCoupon")){
     let btnCoupon = document.querySelector("#btnCoupon");

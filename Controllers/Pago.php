@@ -39,19 +39,31 @@
                 die();
             }
         }
-        public function confirm(){
-            if(isset($_SESSION['orderData'])){
+        public function confirmar(){
+            if(isset($_SESSION['orderDataInfo'])){
                 $company=getCompanyInfo();
                 $data['page_tag'] = $company['name'];
                 $data['page_title'] ="Confirmar pedido | ".$company['name'];
-                $data['page_name'] = "confirm";
-                $data['orderData'] = $_SESSION['orderData'];
-                unset($_SESSION['orderData']);
-                $this->views->getView($this,"confirm",$data); 
+                $data['page_name'] = "confirmar";
+                $arrData = $_SESSION['orderDataInfo'];
+                $arrData['transaction'] = strClean($_GET['payment_id']);
+                $arrData['status'] = strClean($_GET['status']);
+                $arrData['type'] = strClean($_GET['payment_type']);
+                $orderData = $this->setOrder($arrData);
+                $data['orderData'] = $orderData;
+                unset($_SESSION['orderDataInfo']);
+                $this->views->getView($this,"confirmar",$data); 
             }else{
                 header("location: ".base_url());
                 die();
             }
+        }
+        public function error(){
+            $company=getCompanyInfo();
+            $data['page_tag'] = $company['name'];
+            $data['page_title'] ="Error | ".$company['name'];
+            $data['page_name'] = "Error";
+            $this->views->getView($this,"error",$data); 
         }
         public function calcTotalCart($arrProducts,$code=null,$city=null){
             $arrShipping = $this->selectShippingMode();
@@ -59,6 +71,8 @@
             $subtotal=0;
             $shipping =0;
             $cupon = 0;
+            $status = true;
+            $arrCupon = array();
             for ($i=0; $i < count($arrProducts) ; $i++) { 
                 $subtotal += $arrProducts[$i]['price']*$arrProducts[$i]['qty']; 
             }
@@ -71,10 +85,16 @@
             $total = $subtotal + $shipping;
             if($code != ""){
                 $arrCupon = $this->selectCouponCode($code);
-                $cupon = $subtotal-($subtotal*($arrCupon['discount']/100));
-                $total =$cupon + $shipping;
+                $status = $this->checkCoupon($_SESSION['idUser'],$arrCupon['id']);
+                if(!$status){
+                    $cupon = $subtotal-($subtotal*($arrCupon['discount']/100));
+                    $total =$cupon + $shipping;
+                    $this->setCoupon($arrCupon['id'],$_SESSION['idUser'],$code);
+                }else{
+                    $arrCupon = array();
+                }
             }
-            $arrData = array("subtotal"=>$subtotal,"total"=>$total,"cupon"=>$cupon);
+            $arrData = array("total"=>$total,"cupon"=>$cupon,"arrcupon"=>$arrCupon,"subtotal"=>$subtotal,"status"=>$status);
             return $arrData;
         }
         public function calculateShippingCity(){
@@ -102,122 +122,88 @@
             die();
         }
         /******************************Checkout methods************************************/
-        public function checkData(){
+        
+        public function checkInfo(){
             if($_POST){
-                if(empty($_POST['txtNameOrder']) || empty($_POST['txtLastNameOrder']) || empty($_POST['txtEmailOrder']) || 
-                empty($_POST['txtPhoneOrder']) || empty($_POST['txtAddressOrder']) || empty($_POST['country'])
-                || empty($_POST['state']) || empty($_POST['city'])){
+                if(empty($_POST['txtNameOrder']) || empty($_POST['txtLastNameOrder']) || empty($_POST['txtEmailOrder'])
+                || empty($_POST['txtPhoneOrder']) || empty($_POST['txtAddressOrder']) || empty($_POST['listCountry']) ||
+                empty($_POST['listState']) || empty($_POST['listCity'])){
                     $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                 }else{
-                    $arrData = array(
-                        "firstname"=>strClean(ucwords($_POST['txtNameOrder'])),
-                        "lastname"=>strClean(ucwords($_POST['txtLastNameOrder'])),
-                        "email"=>strClean(strtolower($_POST['txtEmailOrder'])),
-                        "phone"=>strClean($_POST['txtPhoneOrder']),
-                        "address"=>strClean($_POST['txtAddressOrder']),
-                        "country"=>strClean($_POST['country']),
-                        "state"=>strClean($_POST['state']),
-                        "city"=>strClean($_POST['city']),
-                        "postalcode" =>strClean($_POST['txtPostCodeOrder']),
-                        "note"=>strClean($_POST['txtNote'])
+                    $strName = strClean(ucwords($_POST['txtNameOrder']));
+                    $strLastName = strClean(ucwords($_POST['txtLastNameOrder']));
+                    $strEmail = strClean(strtolower($_POST['txtEmailOrder']));
+                    $strPhone = strClean($_POST['txtPhoneOrder']);
+                    $strAddress = strClean($_POST['txtAddressOrder']);
+                    $strCountry = strClean($_POST['country']);
+                    $strState = strClean($_POST['state']);
+                    $strCity = strClean($_POST['city']);
+                    $cupon = strtoupper(strClean($_POST['cupon']));
+                    $strPostal = strClean($_POST['txtPostCodeOrder']);
+                    $strNote = strClean($_POST['txtNote']);
+                    $strAddress = $strAddress.", ".$strCity."/".$strState."/".$strCountry." ".$strPostal;
+                    $strName = $strName." ".$strLastName;
+
+                    $_SESSION['orderDataInfo'] = array(
+                        "name"=>$strName,
+                        "email"=>$strEmail,
+                        "phone"=>$strPhone,
+                        "address"=>$strAddress,
+                        "note"=>$strNote,
+                        "cupon"=>$cupon
                     );
-                    $_SESSION['checkData'] = $arrData;
-                    $arrResponse = array("status"=>true,"msg"=>"Datos correctos");
+                    $arrResponse = array("status"=>true,"msg"=>"Datos guardados");
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }
-        public function setOrder(){
-            if($_POST){
-                if(empty($_POST['data']) || empty($_SESSION['checkData'])){
-                    $arrResponse = array("status"=>false,"msg"=>"Data error");
-                }else{
-                    $total = 0;
-                    $arrTotal = array();
-                    $idUser = $_SESSION['idUser'];
-                    $objPaypal = json_decode($_POST['data']);
-                    $arrInfo = $_SESSION['checkData'];
-                    $amountData=array();
-                    unset($_SESSION['checkData']);
+        public function setOrder($arrData){
+            $total = 0;
+            $arrTotal = array();
+            $idUser = $_SESSION['idUser'];
+            $strName = $arrData['name'];
+            $strEmail = $arrData['email'];
+            $strPhone = $arrData['phone'];
+            $strAddress = $arrData['address'];
+            $cupon = $arrData['cupon'];
+            $strNote = $arrData['note'];
+            $status = $arrData['status'];
+            $idTransaction =$arrData['transaction'];
+            $type =$arrData['type'];
 
-                    if(!empty($_SESSION['arrCart'])){
-                        if(!empty($_SESSION['arrShipping']['city'])){
-                            $arrTotal = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping'],$_SESSION['arrShipping']['city']['id']);
-                        }else{
-                            $arrTotal = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping']);
-                        }
-
-                        
-                        if(is_object($objPaypal)){
-                            
-                            $dataPaypal = $_POST['data'];
-                            $idTransaction = $objPaypal->purchase_units[0]->payments->captures[0]->id;
-                            $status = $objPaypal->purchase_units[0]->payments->captures[0]->status;
-                            $firstname = $arrInfo['firstname'];
-                            $lastname = $arrInfo['lastname'];
-                            $email = $arrInfo['email'];
-                            $phone = $arrInfo['phone'];
-                            $postalCode = $arrInfo['postalcode'];  
-                            $country = $arrInfo['country'];
-                            $state = $arrInfo['state'];
-                            $city = $arrInfo['city'];
-                            $address = $arrInfo['address'];
-                            $note = $arrInfo['note'];
-                            $total = $arrTotal['total'];
-
-                            if(isset($_SESSION['couponInfo'])){
-                                $amountData['couponInfo'] = $_SESSION['couponInfo'];
-                                if($amountData['couponInfo']['status'] == true){
-                                    $this->setCoupon($amountData['couponInfo']['id'],$idUser,$amountData['couponInfo']['code']);
-                                }
-                                unset($_SESSION['couponInfo']);
-                            }
-                            $amountData['totalInfo'] = array("total"=>$arrTotal,"shipping"=>$_SESSION['arrShipping']);
-                            $objAmount = json_encode($amountData,true);
-
-                            unset($_SESSION['arrShipping']);
-
-                            $requestOrder = $this->insertOrder($idUser,$idTransaction,$dataPaypal,$objAmount,$firstname,$lastname,$email,$phone,$country,$state,$city,$address,
-                            $postalCode,$note,$total,$status);
-
-                            if($requestOrder>0){
-
-                                $arrOrder = array("idorder"=>$requestOrder,"iduser"=>$_SESSION['idUser'],"products"=>$_SESSION['arrCart']);
-                                $request = $this->insertOrderDetail($arrOrder);
-                                $orderInfo = $this->getOrder($requestOrder);
-                                $orderInfo['amountData'] = $amountData;
-                                $company = getCompanyInfo();
-                                $dataEmailOrden = array(
-                                    'asunto' => "Se ha generado un pedido",
-                                    'email_usuario' => $_SESSION['userData']['email'], 
-                                    'email_remitente'=>$company['email'],
-                                    'company'=>$company,
-                                    'email_copia' => $company['secondary_email'],
-                                    'order' => $orderInfo );
-
-								sendEmail($dataEmailOrden,"email_order");
-                                $idOrder = openssl_encrypt($requestOrder,METHOD,KEY);
-                                $idTransaction = openssl_encrypt($orderInfo['order']['idtransaction'],METHOD,KEY);
-                                $arrResponse = array("status"=>true,"order"=>$idOrder,"transaction"=>$idTransaction,"msg"=>"Pedido realizado");
-                                $_SESSION['orderData'] = $arrResponse;
-
-                                unset($_SESSION['arrCart']);
-                                
-                                
-                            }else{
-                                $arrResponse = array("status"=>false,"msg"=>"No se ha podido realizar el pedido.");
-                            }
-                        }else{
-                            $arrResponse = array("status"=>false,"msg"=>"Se ha producido un error en la transacción.");
-                        }
-                    }else{
-                        $arrResponse = array("status"=>false,"msg"=>"Se ha producido un error en la transacción.");
-                    }
-                }
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            $arrProducts = $_SESSION['arrCart'];
+            $arrTotal = $this->calcTotalCart($arrProducts,$cupon);
+            if($arrTotal['status']){
+                $cupon ="";
             }
-            die();
+
+            $arrShipping = $this->selectShippingMode();
+            if($arrShipping['id']!=3){
+                $envio = $arrShipping['value'];
+            }
+            $request = $this->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$arrTotal['total'],$status,$type);          
+            if($request>0){
+                $arrOrder = array("idorder"=>$request,"iduser"=>$_SESSION['idUser'],"products"=>$_SESSION['arrCart']);
+                $requestDetail = $this->insertOrderDetail($arrOrder);
+                $orderInfo = $this->getOrder($request);
+                $orderInfo['totaldetail'] = $arrTotal;
+                $company = getCompanyInfo();
+                $dataEmailOrden = array(
+                    'asunto' => "Se ha generado un pedido",
+                    'email_usuario' => $_SESSION['userData']['email'], 
+                    'email_remitente'=>$company['email'],
+                    'company'=>$company,
+                    'email_copia' => $company['secondary_email'],
+                    'order' => $orderInfo);
+
+                sendEmail($dataEmailOrden,"email_order");
+                $idOrder = openssl_encrypt($request,METHOD,KEY);
+                $idTransaction = openssl_encrypt($orderInfo['order']['idtransaction'],METHOD,KEY);
+                $orderData = array("order"=>$idOrder,"transaction"=>$idTransaction);
+                unset($_SESSION['arrCart']);
+            }
+            return $orderData;
         }
         public function getCountries(){
             $request = $this->selectCountries();

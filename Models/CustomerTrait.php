@@ -98,41 +98,31 @@
             $request = $this->con->insert($sql,$arrData);
             return;
         }
-        public function insertOrder($idUser,$idTransaction,$dataPaypal,$amountData,$firstname,$lastname,$email,$phone,$country,$state,$city,$address,
-        $postalCode,$note,$total,$status){
+        public function insertOrder(int $idUser, string $idTransaction, string $strName,string $strEmail,string $strPhone,string $strAddress,
+        string $strNote,string $cupon,int $envio,int $total,string $status, string $type){
 
             $this->con = new Mysql();
             $this->strIdTransaction = $idTransaction;
             $this->intIdUser = $idUser;
-            $this->strFirstName = $firstname;
-            $this->strLastName = $lastname;
-            $this->strEmail = $email;
-            $this->strPhone = $phone;
-            $this->strCountry = $country;
-            $this->strState = $state;
-            $this->strCity = $city;
-            $this->strPostalCode = $postalCode;
-            $this->strAddress=$address;
-
-            $sql ="INSERT INTO orderdata(personid,idtransaction,paypaldata,amountdata,firstname,lastname,email,phone,address,country,state,city,postalcode,note,amount,type,status) VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $this->strName = $strName;
+            $this->strEmail = $strEmail;
+            $this->strPhone = $strPhone;
+            $this->strAddress = $strAddress;
+            
+            $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
             $arrData = array(
                 $this->intIdUser, 
                 $this->strIdTransaction,
-                $dataPaypal,
-                $amountData,
-                $this->strFirstName,
-                $this->strLastName,
+                $this->strName,
                 $this->strEmail,
                 $this->strPhone,
                 $this->strAddress,
-                $this->strCountry,
-                $this->strState,
-                $this->strCity,
-                $this->strPostalCode,
-                $note,
+                $strNote,
                 $total,
-                "paypal",
-                $status);
+                $status,
+                $cupon,
+                $envio,
+                $type);
             $request = $this->con->insert($sql,$arrData);
             return $request;
         }
@@ -141,28 +131,41 @@
             $this->intIdUser = $arrOrder['iduser'];
             $this->intIdOrder = $arrOrder['idorder'];
             $products = $arrOrder['products'];
-
             foreach ($products as $pro) {
-                $price=0;
-                $this->intIdProduct = openssl_decrypt($pro['idproduct'],METHOD,KEY);
-                if($pro['discount']>0){
-                    $price = $pro['price']-($pro['price']*($pro['discount']*0.01));
+                $this->intIdProduct = openssl_decrypt($pro['id'],METHOD,KEY);
+                if($pro['topic'] == 1){
+                    $description = json_encode(array(
+                        "name"=>$pro['name'],
+                        "type"=>$pro['type'],
+                        "idType"=>$pro['idType'],
+                        "orientation"=>$pro['orientation'],
+                        "style"=>$pro['style'],
+                        "reference"=>$pro['reference'],
+                        "height"=>$pro['height'],
+                        "width"=>$pro['width'],
+                        "margin"=>$pro['margin'],
+                        "colormargin"=>$pro['colormargin'],
+                        "colorborder"=>$pro['colorborder'],
+                        "img"=>$pro['img'],
+                        "photo"=>$pro['photo']
+                    ));
                 }else{
-                    $price = $pro['price'];
+                    $description = $pro['name'];
+                    $selectProduct = $this->selectProductC($this->intIdProduct);
+                    if($selectProduct['stock']>0){
+                        $stock = $selectProduct['stock']-$pro['qty'];
+                        $this->updateStock($this->intIdProduct,$stock);
+                    }
                 }
-                $query = "INSERT INTO orderdetail(orderid,personid,productid,name,quantity,price)
-                        VALUE(?,?,?,?,?,?)";
+                $query = "INSERT INTO orderdetail(orderid,personid,productid,topic,description,quantity,price)
+                        VALUE(?,?,?,?,?,?,?)";
                 $arrData=array($this->intIdOrder,
                                 $this->intIdUser,
                                 $this->intIdProduct,
-                                $pro['name'],
+                                $pro['topic'],
+                                $description,
                                 $pro['qty'],
-                                $price);
-                $selectProduct = $this->selectProduct($this->intIdProduct);
-                if($selectProduct['stock']>0){
-                    $stock = $selectProduct['stock']-$pro['qty'];
-                    $this->updateStock($this->intIdProduct,$stock);
-                }
+                                $pro['price']);
                 $request = $this->con->insert($query,$arrData);
             }
             return $request;
@@ -170,22 +173,7 @@
         public function getOrder($idOrder){
             $this->con = new Mysql();
             $this->intIdOrder =$idOrder;
-            $sql = "SELECT idorder,
-                    idtransaction,
-                    firstname,
-                    lastname,
-                    email,
-                    phone,
-                    address,
-                    country,
-                    state,
-                    city,
-                    postalcode,
-                    note,
-                    amount,
-                    DATE_FORMAT(date, '%d/%m/%Y') as date,
-                    status
-                    FROM orderdata WHERE idorder = $this->intIdOrder";
+            $sql = "SELECT *, DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata WHERE idorder = $this->intIdOrder";
             $order = $this->con->select($sql);
             if(!empty($order)){
                 $sql = "SELECT * FROM orderdetail WHERE orderid = $this->intIdOrder";
@@ -262,13 +250,13 @@
             $request = $this->con->select($sql);
             return $request;
         }
-        /*public function selectProduct($id){
+        public function selectProductC($id){
             $this->con = new Mysql();
             $this->intIdProduct = $id;
             $sql = "SELECT * FROM product WHERE idproduct =$this->intIdProduct";
             $request = $this->con->select($sql);
             return $request;
-        }*/
+        }
         public function updateStock($id,$stock){
             $this->con = new Mysql();
             $this->intIdProduct = $id;

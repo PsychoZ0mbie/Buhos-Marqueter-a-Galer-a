@@ -30,12 +30,12 @@
 
     $item->title = "productos";
     $item->quantity = 1;
-    $item->unit_price = round($total);
+    $item->unit_price = floor($total);
     $item->currency_id=$data['company']['currency']['code'];
     $preference->items = array($item);
     $preference->back_urls = array(
-        "success" => base_url()."/pago/confirmarPedido",
-        "failure" => base_url()."/pago/falloPedido"
+        "success" => base_url()."/pago/confirmar",
+        "failure" => base_url()."/pago/error"
     );
     $preference->auto_return = "approved";
     $preference->binary_mode = true;
@@ -153,7 +153,7 @@
                     <form id="formCoupon" class="mb-3">
                         <div class="input-group">
                             <input type="text" id="txtCoupon" name="cupon" class="form-control" placeholder="Código de descuento" aria-label="Coupon code" aria-describedby="button-addon2">
-                            <button type="submit" class="btn btn-bg-1" type="button" id="btnCoupon">+</button>
+                            <button type="button" class="btn btn-bg-1" type="button" id="btnCoupon">+</button>
                         </div>
                         <div class="alert alert-danger mt-3 d-none" id="alertCoupon" role="alert"></div>
                     </form>
@@ -164,7 +164,7 @@
                     <form id="formCoupon" class="mb-3">
                         <div class="input-group">
                             <input type="text" id="txtCoupon" name="cupon" class="form-control" placeholder="Código de descuento" aria-label="Coupon code" aria-describedby="button-addon2">
-                            <button type="submit" class="btn btn-bg-1" type="button" id="btnCoupon">+</button>
+                            <button type="button" class="btn btn-bg-1" type="button" id="btnCoupon">+</button>
                         </div>
                         <div class="alert alert-danger mt-3 d-none" id="alertCoupon" role="alert"></div>
                     </form>
@@ -177,7 +177,7 @@
                         <p class="m-0 fw-bold fs-5">Total</p>
                         <p class="m-0 fw-bold fs-5" id="totalResume"><?=formatNum($total)?></p>
                     </div>
-                    <button type="button" class="mb-3 w-100 btn btn-bg-1" id="btnOrder">Pagar</button>
+                    <button type="button" class="mb-3 w-100 btn btn-bg-1" id="btnOrder" red="<?=$preference->init_point; ?>">Pagar</button>
                 </div>
             </div>
         </div>

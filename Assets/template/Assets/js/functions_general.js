@@ -86,7 +86,7 @@ btnCart.addEventListener("click",function(){
             let btnCheckoutCart = document.querySelector(".btnCheckoutCart");
             btnCheckoutCart.addEventListener("click",function(){
                 if(objData.status){
-                    window.location.href=base_url+"/tienda/pago";
+                    window.location.href=base_url+"/pago";
                 }else{
                     openLoginModal();
                 }
@@ -121,7 +121,7 @@ window.addEventListener("scroll",function(){
     }else{
         document.querySelector(".back--top").classList.add("d-none");
     }
-})
+});
 
 window.addEventListener("load",function(){
     if(document.querySelector("#modalPoup")){
