@@ -8,13 +8,13 @@
             <div class="card-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="free-tab" data-bs-toggle="tab" data-bs-target="#free" type="button" role="tab" aria-controls="free" aria-selected="true">Free shipping</button>
+                        <button class="nav-link active" id="free-tab" data-bs-toggle="tab" data-bs-target="#free" type="button" role="tab" aria-controls="free" aria-selected="true">Envio gratis</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="flat-tab" data-bs-toggle="tab" data-bs-target="#flat" type="button" role="tab" aria-controls="flat" aria-selected="true">Flat rate</button>
+                        <button class="nav-link" id="flat-tab" data-bs-toggle="tab" data-bs-target="#flat" type="button" role="tab" aria-controls="flat" aria-selected="true">Tarifa plana</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="city-tab" data-bs-toggle="tab" data-bs-target="#city" type="button" role="tab" aria-controls="city" aria-selected="false">Per city</button>
+                        <button class="nav-link" id="city-tab" data-bs-toggle="tab" data-bs-target="#city" type="button" role="tab" aria-controls="city" aria-selected="false">Por ciudad</button>
                     </li>
                 </ul>
                 

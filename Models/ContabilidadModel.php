@@ -95,7 +95,7 @@
                     DAY(date) AS day, 
                     COUNT(idorder) AS quantity, 
                     SUM(amount) AS total FROM orderdata 
-                    WHERE DATE(date) = '$date_format' AND status = 'COMPLETED'";
+                    WHERE DATE(date) = '$date_format' AND status = 'approved'";
                 $request = $this->select($sql);
                 $request['day'] = $day;
                 $request['total'] = $request['total'] =="" ? 0 : $request['total'];
@@ -151,7 +151,7 @@
                         $i as month, 
                         sum(amount) as sale 
                         FROM orderdata
-                        WHERE MONTH(date) = $i AND YEAR(date) = $year AND status = 'COMPLETED' 
+                        WHERE MONTH(date) = $i AND YEAR(date) = $year AND status = 'approved' 
                         GROUP BY MONTH(date)";
                 $request = $this->select($sql);
                 //Costos

@@ -417,7 +417,7 @@ function openLoginModal(){
             Swal.fire("Error","La contraseña debe tener al menos 8 carácteres","error");
             return false;
         }
-        let url = base_url+'/Shop/validCustomer'; 
+        let url = base_url+'/tienda/validCustomer'; 
         let formData = new FormData(formSign);
         signBtn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
         signBtn.setAttribute("disabled","");
@@ -445,7 +445,7 @@ function openLoginModal(){
             return false;
         }else{
 
-            let url = base_url+'/Shop/setCustomer'; 
+            let url = base_url+'/tienda/setCustomer'; 
             let formData = new FormData(formConfirmSign);
             formData.append("txtSignName",strName);
             formData.append("txtSignEmail",strEmail);

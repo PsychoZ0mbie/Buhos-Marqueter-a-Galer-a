@@ -40,8 +40,9 @@
             $request = $this->select_all($sql);
             return $request;
         }
-        public function selectCoupon($id){
-            $sql = "SELECT * FROM coupon WHERE id = $id";
+        public function selectCouponCode($strCoupon){
+            $this->strCoupon = $strCoupon;
+            $sql = "SELECT * FROM coupon WHERE code = '$this->strCoupon' AND status = 1";
             $request = $this->select($sql);
             return $request;
         }

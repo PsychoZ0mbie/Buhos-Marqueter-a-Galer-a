@@ -133,10 +133,10 @@ $detail = $data['order']['detail'];
 				?>
 				<?php if($arrProducts['idType'] == 1 || $arrProducts['idType'] == 4 || $arrProducts['idType'] == 5){?>
 				<ul>
-					<li><span class="fw-bold t-color-3">Referencia:</span> <?=$arrProducts['reference']?></li>
-					<li><span class="fw-bold t-color-3">Orientación:</span> <?=$arrProducts['orientation']?></li>
-					<li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts['style']?></li>
-					<li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
+					<li><span class="fw-bold text-secondary">Referencia:</span> <?=$arrProducts['reference']?></li>
+					<li><span class="fw-bold text-secondary">Orientación:</span> <?=$arrProducts['orientation']?></li>
+					<li><span class="fw-bold text-secondary">Estilo:</span> <?=$arrProducts['style']?></li>
+					<li><span class="fw-bold text-secondary">Medidas:</span> <?=$medidas?></li>
 					<?=$margen?>
 					<li><span class="fw-bold t-color-3">Medidas del marco:</span> <?=$medidasMarco?></li>
 					<?=$colorMargen?>
@@ -203,7 +203,7 @@ $detail = $data['order']['detail'];
 		  			<td class="text-right"><?= formatNum($order['shipping'],false)?></td>
 		  		</tr>
 				<tr>
-		  			<th colspan="3" class="text-right">Envio:</th>
+		  			<th colspan="3" class="text-right">Total:</th>
 		  			<td class="text-right"><?= formatNum($order['amount'],false)?></td>
 		  		</tr>
 		  </tfoot>

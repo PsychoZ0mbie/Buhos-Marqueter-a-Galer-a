@@ -37,10 +37,15 @@
                     }
                     $data['orderdata'] = $this->model->selectOrder($idOrder,$idPerson);
                     $data['orderdetail'] = $this->model->selectOrderDetail($idOrder);
+                    if($data['orderdata']['coupon']!=""){
+                        $data['cupon'] = $this->model->selectCouponCode($data['orderdata']['coupon']);
+                    }
                     $data['page_tag'] = "Pedido";
                     $data['page_title'] = "Pedido";
                     $data['page_name'] = "pedido";
                     $data['company'] = getCompanyInfo();
+
+                    
                     $this->views->getView($this,"pedido",$data);
                 }else{
                     header("location: ".base_url()."/pedidos");

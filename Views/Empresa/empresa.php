@@ -188,19 +188,19 @@
                     </div>
                     <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
                         <div class="d-flex justify-content-between align-items-center flex-wrap mt-3">
-                            <img src="<?=media()?>/images/uploads/paypal.png" style="width=100px;height:100px;" alt="">
+                            <img src="<?=media()?>/images/uploads/mercadopago.jpg" style="width=100px;height:100px;" alt="">
                         </div>
                         <form id="formPayment">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="txtName" class="form-label">CLIENT ID <span class="text-danger">*</span></label>
+                                        <label for="txtName" class="form-label">PUBLIC KEY <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="txtClient" name="txtClient" value="<?=$data['paypal']['client']?>" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="txtName" class="form-label">SECRET <span class="text-danger">*</span></label>
+                                        <label for="txtName" class="form-label">TOKEN <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="txtSecret" name="txtSecret" value="<?=$data['paypal']['secret']?>" required>
                                     </div>
                                 </div>
