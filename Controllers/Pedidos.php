@@ -20,7 +20,7 @@
                 $data['page_name'] = "pedidos";
                 $data['orders'] = $this->getOrders();
                 $data['products'] = $this->getProducts();
-                
+                $data['tipos'] = $this->model->selectCategories();
                 $data['app'] = "functions_orders.js";
                 $this->views->getView($this,"pedidos",$data);
             }else{
@@ -245,7 +245,7 @@
                 }
                 if(count($request)>0){
                     for ($i=0; $i < count($request); $i++) { 
-                        $price = formatNum($request[$i]['price']);
+                        $price = formatNum($request[$i]['price'],false);
                         if($request[$i]['discount']>0){
                             $discount = '<span class="text-success">'.$request[$i]['discount'].'% OFF</span>';
                         }else{
@@ -259,7 +259,7 @@
                                 <td>'.$request[$i]['name'].'</td>
                                 <td>'.$price.'</td>
                                 <td>'.$discount.'</td>
-                                <td><button type="button" class="btn btn-primary" id="btn'.$request[$i]['idproduct'].'" onclick="addProduct('.$request[$i]['idproduct'].',this)">Agregar</button></td>
+                                <td><button type="button" class="btn btn-primary" onclick="addProduct('.$request[$i]['idproduct'].',this)">Agregar</button></td>
                             </tr>
                         ';
                     }
@@ -349,6 +349,330 @@
             }
             die();
         }
-        
+
+        /*************************POS methods*******************************/
+        public function addCart(){
+            if($_POST){ 
+                $id = intval($_POST['idProduct']);
+                $qty = intval($_POST['txtQty']);
+                $topic = intval($_POST['topic']);
+                $qtyCart = 0;
+                $arrCart = array();
+                $valiQty =true;
+                $data = array();
+                $request = array();
+                if($id != 0){
+                    $request = $this->model->selectProduct($id);
+                    $price = $request['price'];
+    
+                    if($request['discount']>0){
+                        $price = $request['price'] - ($request['price']*($request['discount']/100));
+                    }
+                    $data = array("name"=>$request['name'],"image"=>$request['image'],"route"=>base_url()."/tienda/producto/".$request['route']);
+                }else{
+                    $service = ucwords(strClean($_POST['txtService']));
+                    $servicePrice = intval($_POST['intPrice']);
+                    $data = array("name"=>$service,"image"=>media()."/images/uploads/category.jpg");
+                }
+
+                if(!empty($request) || $id == 0){
+                    if($topic== 3){
+                        $arrProduct = array(
+                            "topic"=>3,
+                            "id"=>0,
+                            "name" => $service,
+                            "qty"=>$qty,
+                            "image"=>media()."/images/uploads/category.jpg",
+                            "price" =>$servicePrice
+                        );
+                    }else{
+                        $arrProduct = array(
+                            "topic"=>2,
+                            "id"=>$id,
+                            "name" => $request['name'],
+                            "qty"=>$qty,
+                            "image"=>$request['image'],
+                            "price" =>$price,
+                            "stock"=>$request['stock']
+                        );
+                    }
+                    if(isset($_SESSION['arrPOS'])){
+                        $arrCart = $_SESSION['arrPOS'];
+                        $currentQty = 0;
+                        $flag = true;
+                        $total = 0;
+                        for ($i=0; $i < count($arrCart) ; $i++) { 
+                            if($topic == 2){
+                                if($arrCart[$i]['id'] == $arrProduct['id']){
+                                    $currentQty = $arrCart[$i]['qty'];
+                                    $arrCart[$i]['qty']+= $qty;
+                                    if($arrCart[$i]['qty'] > $request['stock']){
+                                        $arrCart[$i]['qty'] = $currentQty;
+                                        $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
+                                        $flag = false;
+                                        break;
+                                    }else{
+                                        $_SESSION['arrPOS'] = $arrCart;
+                                        foreach ($_SESSION['arrPOS'] as $quantity) {
+                                            $total += $quantity['qty']*$quantity['price'];
+                                        }
+                                        $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
+                                    }
+                                    $flag =false;
+                                    break;
+                                }
+                            }else if($topic == 3){
+                                if($service == $arrCart[$i]['name']){
+                                    $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
+                                    break;
+                                }
+                            }
+                        }
+                        if($flag){
+                            if(!empty($request) && $qty > $request['stock']){
+                                $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
+                                $_SESSION['arrPOS'] = $arrCart;
+                            }else{
+                                array_push($arrCart,$arrProduct);
+                                $_SESSION['arrPOS'] = $arrCart;
+                                foreach ($_SESSION['arrPOS'] as $quantity) {
+                                    $total += $quantity['qty']*$quantity['price'];
+                                }
+                                $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
+                            }
+                        }
+                        
+                    }else{
+                        if(!empty($request) && $qty > $request['stock']){
+                            $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
+                        }else{
+                            array_push($arrCart,$arrProduct);
+                            $_SESSION['arrPOS'] = $arrCart;
+                            foreach ($_SESSION['arrPOS'] as $quantity) {
+                                $total += $quantity['qty']*$quantity['price'];
+                            }
+                            $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
+                        } 
+                    }
+                    $arrResponse['html'] = $this->currentCart();
+                }else{
+                    $arrResponse = array("status"=>false,"msg"=>"El producto no existe");
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        public function updateCart(){
+            //dep($_SESSION['arrPOS']);exit;
+            if($_SESSION['permitsModule']['w']){
+                if($_POST){
+                    $id = intval($_POST['id']);
+                    $topic = intval($_POST['topic']);
+                    if($topic == 1){
+                        $height = floatval($_POST['height']);
+                        $width = floatval($_POST['width']);
+                        $margin = intval($_POST['margin']);
+                        $style = strClean($_POST['style']);
+                        $colorMargin = strClean($_POST['colormargin']);
+                        $colorBorder = strClean($_POST['colorborder']);
+                        $idType = intval($_POST['idType']);
+                        $reference = strClean($_POST['reference']);
+                    }
+                    $total =0;
+                    $totalPrice = 0;
+                    $qty = intval($_POST['qty']);
+                    if($qty > 0){
+                        
+                        $arrProducts = $_SESSION['arrPOS'];
+                        for ($i=0; $i < count($arrProducts) ; $i++) { 
+                            if($topic == 1){
+                                if($arrProducts[$i]['style'] == $style && $arrProducts[$i]['height'] == $height &&
+                                $arrProducts[$i]['width'] == $width && $arrProducts[$i]['margin'] == $margin &&
+                                $arrProducts[$i]['colormargin'] == $colorMargin && $arrProducts[$i]['colorborder'] == $colorBorder && 
+                                $arrProducts[$i]['idType'] == $idType && $arrProducts[$i]['reference'] == $reference){
+                                    $arrProducts[$i]['qty'] = $qty;
+                                    $totalPrice =$arrProducts[$i]['qty']*$arrProducts[$i]['price'];
+                                    break;
+                                }
+                            }else if($topic == 2){
+                                if($arrProducts[$i]['id'] == $id){
+                                    $stock = $this->model->selectProduct($id)['stock'];
+                                    if($qty >= $stock ){
+                                        $qty = $stock;
+                                    }
+                                    $arrProducts[$i]['qty'] = $qty;
+                                    $totalPrice =$arrProducts[$i]['qty']*$arrProducts[$i]['price'];
+                                    break;
+                                }
+                            }
+                        }
+                        $_SESSION['arrPOS'] = $arrProducts;
+                        foreach ($_SESSION['arrPOS'] as $pro) {
+                            $total+=$pro['qty']*$pro['price'];
+                        }
+                        $arrResponse = array("status"=>true,"total" =>formatNum($total),"totalprice"=>formatNum($totalPrice,false),"qty"=>$qty);
+                    }else{
+                        $arrResponse = array("status"=>false,"msg" =>"Error de datos.");
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }
+            die();
+        }
+        public function delCart(){
+            if($_SESSION['permitsModule']['w']){
+                if($_POST){
+                    $id = $_POST['id'];
+                    $topic = intval($_POST['topic']);
+                    $arrCart = $_SESSION['arrPOS'];
+
+                    if($topic == 1){
+                        $height = floatval($_POST['height']);
+                        $width = floatval($_POST['width']);
+                        $margin = intval($_POST['margin']);
+                        $style = $_POST['style'];
+                        $type = intval($_POST['type']);
+                        $borderColor = $_POST['bordercolor'];
+                        $marginColor = $_POST['margincolor'];
+                        $reference = $_POST['reference'];
+                        $photo = $_POST['photo'];
+                    }else if($topic == 3){
+                        $service = ucwords(strClean($_POST['txtService']));
+                    }
+                    for ($i=0; $i < count($arrCart) ; $i++) { 
+                        if($topic == 1){
+                            if($id == $arrCart[$i]['id'] && $height == $arrCart[$i]['height']
+                            && $width == $arrCart[$i]['width'] && $margin == $arrCart[$i]['margin'] && $style == $arrCart[$i]['style']
+                            && $type == $arrCart[$i]['idType'] && $borderColor == $arrCart[$i]['colorborder'] && $marginColor == $arrCart[$i]['colormargin']
+                            && $photo == $arrCart[$i]['photo'] && $reference == $arrCart[$i]['reference']){
+                                if($photo!="" && $photo !="retablo.png"){
+                                    deleteFile($photo);
+                                }
+                                unset($arrCart[$i]);
+                                break;
+                            }
+                        }else if($topic == 2){
+                            if($id == $arrCart[$i]['id']){
+                                unset($arrCart[$i]);
+                                break;
+                            }
+                        }else if($topic == 3){
+                            if($id == $arrCart[$i]['id'] && $service == $arrCart[$i]['name']){
+                                unset($arrCart[$i]);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    sort($arrCart);
+                    $_SESSION['arrPOS'] = $arrCart;
+                    $total = 0;
+                    foreach ($_SESSION['arrPOS'] as $pro) {
+                        $total += $pro['qty']*$pro['price'];
+                    }
+                    $html = $this->currentCart();
+                    $arrResponse = array("status"=>true,"total" =>formatNum($total),"html"=>$html);
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        public function currentCart(){
+            if($_SESSION['permitsModule']['w']){
+                $html="";
+                if(isset($_SESSION['arrPOS']) && !empty($_SESSION['arrPOS'])){
+                    $arrProducts = $_SESSION['arrPOS'];
+                    $html="";
+                    for ($i=0; $i < count($arrProducts) ; $i++) { 
+                        if($arrProducts[$i]['topic'] == 1){
+                            $photo = $arrProducts[$i]['photo'] != "" ? media()."/images/uploads/".$arrProducts[$i]['photo'] : $arrProducts[$i]['img'];
+                            $html.= '
+                            <div class="position-relative" data-id="'.$arrProducts[$i]['id'].'" data-topic ="'.$arrProducts[$i]['topic'].'" data-h="'.$arrProducts[$i]['height'].'"
+                                data-w="'.$arrProducts[$i]['width'].'" data-m="'.$arrProducts[$i]['margin'].'" data-s="'.$arrProducts[$i]['style'].'" 
+                                data-mc="'.$arrProducts[$i]['colormargin'].'" data-bc="'.$arrProducts[$i]['colorborder'].'" data-t="'.$arrProducts[$i]['idType'].'" data-f="'.$arrProducts[$i]['photo'].'"
+                                data-r="'.$arrProducts[$i]['reference'].'">
+                                <button class="btn text-danger p-0 rounded-circle position-absolute top-0 end-0 fs-5" onclick="delProduct(this)"><i class="fas fa-times-circle"></i></button>
+                                <div class="p-1">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex">
+                                            <img src="'.$photo.'" alt="" class="me-1" height="60px" width="60px" >
+                                            <div class="text-start">
+                                                <div style="height:25px" class="overflow-hidden"><p class="m-0" >'.$arrProducts[$i]['name'].'</p></div>
+                                                <p class="m-0 productData">
+                                                    <span class="qtyProduct">'.$arrProducts[$i]['qty'].'</span> x '.formatNum($arrProducts[$i]['price'],false).'
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <div>
+                                            <button type="button" class="btn btn-sm btn-secondary p-1 text-white productDec"><i class="fas fa-minus"></i></button>
+                                            <button type="button" class="btn btn-sm btn-success p-1 text-white productInc"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                        <p class="m-0 mt-1 fw-bold text-end productTotal">'.formatNum($arrProducts[$i]['price']*$arrProducts[$i]['qty'],false).'</p>
+                                    </div>
+                                </div>
+                            </div>
+                            ';
+                        }else if($arrProducts[$i]['topic'] == 2){
+                            $html.= '
+                            <div class="position-relative" data-id="'.$arrProducts[$i]['id'].'" data-topic ="'.$arrProducts[$i]['topic'].'">
+                                <button class="btn text-danger p-0 rounded-circle position-absolute top-0 end-0 fs-5" onclick="delProduct(this)"><i class="fas fa-times-circle"></i></button>
+                                <div class="p-1">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex">
+                                            <img src="'.$arrProducts[$i]['image'].'" alt="" class="me-1" height="60px" width="60px" >
+                                            <div class="text-start">
+                                                <div style="height:25px" class="overflow-hidden"><p class="m-0" >'.$arrProducts[$i]['name'].'</p></div>
+                                                <p class="m-0 productData">
+                                                    <span class="qtyProduct">'.$arrProducts[$i]['qty'].'</span> x '.formatNum($arrProducts[$i]['price'],false).'
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <div>
+                                            <button type="button" class="btn btn-sm btn-secondary p-1 text-white productDec"><i class="fas fa-minus"></i></button>
+                                            <button type="button" class="btn btn-sm btn-success p-1 text-white productInc"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                        <p class="m-0 mt-1 fw-bold text-end productTotal" >'.formatNum($arrProducts[$i]['price']*$arrProducts[$i]['qty'],false).'</p>
+                                    </div>
+                                </div>
+                            </div>';
+                        }else if($arrProducts[$i]['topic'] == 3){
+                            $html.='
+                            <div class="position-relative" data-id="'.$arrProducts[$i]['id'].'" data-name="'.$arrProducts[$i]['name'].'" data-topic ="'.$arrProducts[$i]['topic'].'">
+                                <button class="btn text-danger p-0 rounded-circle position-absolute top-0 end-0 fs-5" onclick="delProduct(this)"><i class="fas fa-times-circle"></i></button>
+                                <div class="p-1">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex">
+                                            <img src="'.media().'/images/uploads/category.jpg" alt="" class="me-1" height="60px" width="60px" >
+                                            <div class="text-start">
+                                                <div style="height:25px" class="overflow-hidden"><p class="m-0" >'.$arrProducts[$i]['name'].'</p></div>
+                                                <p class="m-0 productData">
+                                                    <span class="qtyProduct">'.$arrProducts[$i]['qty'].'</span> x '.formatNum($arrProducts[$i]['price'],false).'
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end mt-1">
+                                        <p class="m-0 mt-1 fw-bold text-end productTotal" >'.formatNum($arrProducts[$i]['price']*$arrProducts[$i]['qty'],false).'</p>
+                                    </div>
+                                </div>
+                            </div>
+                            ';
+                        }
+                    }
+                    $total =0;
+                    $qty = 0;
+                    foreach ($arrProducts as $product) {
+                        $total+=$product['qty']*$product['price'];
+                        $qty+=$product['qty'];
+                    }
+                    
+                }
+                return $html;
+            }
+        }
     }
 ?>

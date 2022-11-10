@@ -1,6 +1,9 @@
 'use strict';
 
 if(document.querySelector("#quickSale")){
+    window.addEventListener("load",function(){
+        updateCart();
+    })
     const moneyReceived = document.querySelector("#moneyReceived");
     const btnAddPos = document.querySelector("#btnAddPos");
     let searchProducts = document.querySelector("#searchProducts");
@@ -69,13 +72,11 @@ if(document.querySelector("#quickSale")){
         }
     });
 }
-if(document.querySelector("#orders")){
+if(document.querySelector("#pedidos")){
     let search = document.querySelector("#search");
-    
     let sort = document.querySelector("#sortBy");
     let element = document.querySelector("#listItem");
     
-
     search.addEventListener('input',function() {
         request(base_url+"/pedidos/search/"+search.value,"","get").then(function(objData){
             if(objData.status){
@@ -86,7 +87,6 @@ if(document.querySelector("#orders")){
         });
     });
     
-
     sort.addEventListener("change",function(){
         request(base_url+"/pedidos/sort/"+sort.value,"","get").then(function(objData){
             if(objData.status){
@@ -96,7 +96,6 @@ if(document.querySelector("#orders")){
             }
         });
     });
-
     element.addEventListener("click",function(e) {
         let element = e.target;
         let id = element.getAttribute("data-id");
@@ -104,7 +103,6 @@ if(document.querySelector("#orders")){
             deleteItem(id);
         }
     });
-
     function deleteItem(id){
         Swal.fire({
             title:"¿Estás seguro de eliminarlo?",
@@ -264,76 +262,176 @@ if(document.querySelector("#btnPrint")){
         printDiv(document.querySelector("#orderInfo"));
     });
 }
-function addProduct(id,btn){
-    btn.setAttribute("disabled","disabled");
+function addProduct(id=null, element){
     let formData = new FormData();
-    formData.append("idProduct",id);
-    request(base_url+"/pedidos/getProduct",formData,"post").then(function(objData){
-        let data = objData.data;
-        let div = document.createElement("div");
-        let html =`
-            <button class="btn text-danger p-0 rounded-circle position-absolute top-0 end-0 fs-5" data-id="${data.idproduct}" onclick="delProduct(this)"><i class="fas fa-times-circle"></i></button>
-            <div class="p-1">
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                        <img src="${data.image}" alt="" class="me-1" height="60px" width="60px">
-                        <div class="text-start">
-                            <div style="height:25px" class="overflow-hidden"><p class="m-0" >${data.name}</p></div>
-                            <p class="m-0 productData" data-value ="1" data-price="${data.price}" id="qty${data.idproduct}"><span id="valQty${data.idproduct}">1</span> x ${data.priceFormat}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <button type="button" class="btn btn-sm btn-secondary p-1 text-white" onclick="decQty(${data.idproduct})"><i class="fas fa-minus"></i></button>
-                        <button type="button" class="btn btn-sm btn-success p-1 text-white" onclick="incQty(${data.idproduct},${data.stock})"><i class="fas fa-plus"></i></button>
-                    </div>
-                    <p class="m-0 mt-1 fw-bold text-end" >$<span id="total${data.idproduct}">${data.price}</span></p>
-                </div>
-            </div>
-        `;
-        div.classList.add("w-100" ,"border" ,"border-primary" ,"position-relative" ,"mb-3","product");
-        div.setAttribute("style","height:100px");
-        div.innerHTML = html;
-        document.querySelector("#posProducts").appendChild(div);
-        calcTotal();
+    const toastLiveExample = document.getElementById('liveToast');
+    let topic = 0;
+    if(id!=null){
+        topic = 2;
+    }else{
+        id = 0;
+        topic = 3;
+        let strService = document.querySelector("#txtService").value;
+        let intPrice = document.querySelector("#intPrice").value;
+        formData.append("txtService",strService);
+        formData.append("intPrice",intPrice);
+    }
+    let idProduct = id;
+    let intQty = 1;
+
+    formData.append("idProduct",idProduct);
+    formData.append("topic",topic);
+    formData.append("txtQty",intQty);
+
+    element.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    element.setAttribute("disabled","");
+    request(base_url+"/pedidos/addCart",formData,"post").then(function(objData){
+        element.innerHTML=`Agregar`;
+        element.removeAttribute("disabled");
+        document.querySelector(".toast-header img").src=objData.data.image;
+        document.querySelector(".toast-header img").alt=objData.data.name;
+        document.querySelector("#toastProduct").innerHTML=objData.data.name;
+        document.querySelector(".toast-body").innerHTML=objData.msg;
+        if(objData.status){
+            document.querySelector("#total").innerHTML = objData.total;
+            document.querySelector("#posProducts").innerHTML = objData.html;
+            updateCart();
+        }
+
+        const toast = new bootstrap.Toast(toastLiveExample);
+        toast.show();
     });
 }
 function delProduct(element){
-    let id = element.getAttribute("data-id");
-    document.querySelector("#btn"+id).removeAttribute("disabled");
-    element.parentElement.remove();
-    calcTotal();
-}
-function decQty(id){
-    let element = document.querySelector("#qty"+id);
-    let qty = element.getAttribute("data-value");
-    let price = element.getAttribute("data-price");
-    if(qty <= 1){
-        qty = 1;
-    }else{
-        qty--;
+    let formData = new FormData();
+    let topic = element.parentElement.getAttribute("data-topic");
+    let id = element.parentElement.getAttribute("data-id");
+    formData.append("topic",topic);
+    formData.append("id",id);
+    if(topic == 1){
+        let photo = element.parentElement.getAttribute("data-f");
+        let height = element.parentElement.getAttribute("data-h");
+        let width = element.parentElement.getAttribute("data-w");
+        let margin = element.parentElement.getAttribute("data-m");
+        let marginColor = element.parentElement.getAttribute("data-mc");
+        let borderColor = element.parentElement.getAttribute("data-bc");
+        let style = element.parentElement.getAttribute("data-s");
+        let type = element.parentElement.getAttribute("data-t");
+        let reference = element.parentElement.getAttribute("data-r");
+        formData.append("height",height);
+        formData.append("width",width);
+        formData.append("margin",margin);
+        formData.append("margincolor",marginColor);
+        formData.append("bordercolor",borderColor);
+        formData.append("style",style);
+        formData.append("type",type);
+        formData.append("photo",photo);
+        formData.append("reference",reference);
+    }else if(topic==3){
+        let strService = element.parentElement.getAttribute("data-name");
+        let intPrice = element.parentElement.getAttribute("data-price");
+        formData.append("txtService",strService);
+        formData.append("intPrice",intPrice);
     }
-
-    element.setAttribute("data-value",qty);
-    document.querySelector("#valQty"+id).innerHTML = qty;
-    document.querySelector("#total"+id).innerHTML = `${price*qty}`;
-    calcTotal();
+    element.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    element.setAttribute("disabled","");
+    request(base_url+"/pedidos/delCart",formData,"post").then(function(objData){
+        element.innerHTML=`<i class="fas fa-times"></i>`;
+        element.removeAttribute("disabled");
+        if(objData.status){
+            document.querySelector("#total").innerHTML = objData.total;
+            document.querySelector("#posProducts").innerHTML = objData.html;
+            element.parentElement.remove();
+            updateCart();
+        }
+    });
 }
-function incQty(id,stock){
-    let element = document.querySelector("#qty"+id);
-    let qty = element.getAttribute("data-value");
-    let price = element.getAttribute("data-price");
-    if(qty >= stock){
-        qty = stock;
-    }else{
-        qty++;
-    }
+function updateCart(){
+    let decrement = document.querySelectorAll(".productDec");
+    let increment = document.querySelectorAll(".productInc");
+    for (let i = 0; i < increment.length; i++) {
+        let minus = decrement[i];
+        let plus = increment[i];
+        let id = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-id");
+        let topic = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-topic");
 
-    element.setAttribute("data-value",qty);
-    document.querySelector("#valQty"+id).innerHTML = qty;
-    document.querySelector("#total"+id).innerHTML = `${price*qty}`;
-    calcTotal();
+        minus.addEventListener("click",function(){
+            let qty=parseInt(document.querySelectorAll(".qtyProduct")[i].innerHTML);
+            if(qty <=1){
+                qty = 1;
+            }else{
+                qty--;
+            }
+            let formData = new FormData();
+            formData.append("id",id);
+            formData.append("topic",topic);
+            formData.append("qty",qty);
+            
+            if(topic == 1){
+                let height = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-h");
+                let width = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-w");
+                let margin = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-m");
+                let style = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-s");
+                let colorMargin = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-mc");
+                let colorBorder = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-bc");
+                let idType = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-t");
+                let reference = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-r");
+                formData.append("height",height);
+                formData.append("width",width);
+                formData.append("margin",margin);
+                formData.append("style",style);
+                formData.append("colormargin",colorMargin);
+                formData.append("colorborder",colorBorder);
+                formData.append("idType",idType);
+                formData.append("reference",reference);
+            }
+            document.querySelector("#total").innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            document.querySelectorAll(".productTotal")[i].innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            request(base_url+"/pedidos/updateCart",formData,"post").then(function(objData){
+                if(objData.status){
+                    document.querySelectorAll(".qtyProduct")[i].innerHTML = objData.qty;
+                    document.querySelectorAll(".productTotal")[i].innerHTML = objData.totalprice;
+                    document.querySelector("#total").innerHTML = objData.total;
+                }
+            });
+        });
+        plus.addEventListener("click",function(){
+            let qty=parseInt(document.querySelectorAll(".qtyProduct")[i].innerHTML);
+            let formData = new FormData();
+            formData.append("id",id);
+            formData.append("topic",topic);
+            formData.append("qty",++qty);
+            
+            if(topic == 1){
+                let height = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-h");
+                let width = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-w");
+                let margin = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-m");
+                let style = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-s");
+                let colorMargin = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-mc");
+                let colorBorder = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-bc");
+                let idType = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-t");
+                let reference = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-r");
+
+                formData.append("height",height);
+                formData.append("width",width);
+                formData.append("margin",margin);
+                formData.append("style",style);
+                formData.append("colormargin",colorMargin);
+                formData.append("colorborder",colorBorder);
+                formData.append("idType",idType);
+                formData.append("reference",reference);
+            }
+            document.querySelector("#total").innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            document.querySelectorAll(".productTotal")[i].innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            request(base_url+"/pedidos/updateCart",formData,"post").then(function(objData){
+                if(objData.status){
+                    document.querySelectorAll(".qtyProduct")[i].innerHTML = objData.qty;
+                    document.querySelectorAll(".productTotal")[i].innerHTML = objData.totalprice;
+                    document.querySelector("#total").innerHTML = objData.total;
+                }
+            });
+        })
+    }
 }
 function calcTotal(){
     let data = document.querySelectorAll(".productData");

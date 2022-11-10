@@ -25,6 +25,7 @@
         <link href="<?= media();?>/plugins/datepicker/jquery-ui.min.css" rel="stylesheet">
         <!------------------------------My styles--------------------------------->
         <link rel="stylesheet" href="<?=media()?>/css/style.css">
+        <link rel="stylesheet" href="<?=media()?>/css/marco.css">
     </head>
     <body>
         <?php require_once("nav_admin.php");?>

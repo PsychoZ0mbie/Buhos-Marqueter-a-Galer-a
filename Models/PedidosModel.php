@@ -166,29 +166,7 @@
         }
         public function selectProduct($id){
             $this->intIdProduct = $id;
-            $sql = "SELECT 
-                p.idproduct,
-                p.categoryid,
-                p.subcategoryid,
-                p.reference,
-                p.name,
-                p.shortdescription,
-                p.description,
-                p.price,
-                p.discount,
-                p.stock,
-                p.status,
-                p.route,
-                c.idcategory,
-                c.name as category,
-                s.idsubcategory,
-                s.categoryid,
-                s.name as subcategory,
-                DATE_FORMAT(p.date, '%d/%m/%Y') as date
-            FROM product p
-            INNER JOIN category c, subcategory s
-            WHERE c.idcategory = p.categoryid AND c.idcategory = s.categoryid AND p.subcategoryid = s.idsubcategory 
-            AND p.idproduct = $this->intIdProduct";
+            $sql = "SELECT * FROM product WHERE idproduct = $this->intIdProduct";
             $request = $this->select($sql);
             $sqlImg = "SELECT * FROM productimage WHERE productid = $this->intIdProduct";
             $requestImg = $this->select_all($sqlImg);
@@ -353,6 +331,13 @@
             $sql = "UPDATE product SET stock=? WHERE idproduct = $this->intIdProduct";
             $arrData = array($stock);
             $request = $this->update($sql,$arrData);
+            return $request;
+        }
+
+        /*************************Category methods*******************************/
+        public function selectCategories(){
+            $sql = "SELECT * FROM moldingcategory ORDER BY id ASC";       
+            $request = $this->select_all($sql);
             return $request;
         }
     }
