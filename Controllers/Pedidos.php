@@ -44,8 +44,7 @@
                     $data['page_title'] = "Pedido";
                     $data['page_name'] = "pedido";
                     $data['company'] = getCompanyInfo();
-
-                    
+                    $data['app'] = "functions_orders.js";
                     $this->views->getView($this,"pedido",$data);
                 }else{
                     header("location: ".base_url()."/pedidos");
@@ -55,6 +54,48 @@
                 header("location: ".base_url());
                 die();
             }
+        }
+        public function getOrder(){
+            if($_SESSION['permitsModule']['r']){
+                if($_POST){
+                    $idOrder = intval($_POST['id']);
+                    $data = $this->model->selectOrder($idOrder,"");
+                    $data['amount'] = formatNum($data['amount']);
+                    $options ="";
+                    if($data['status'] == "pendent"){
+                        $options='
+                        <option value="1">approved</option>
+                        <option value="2" selected>pendent</option>
+                        ';
+                    }else{
+                        $options='
+                        <option value="1" selected>approved</option>
+                        <option value="2">pendent</option>
+                        ';
+                    }
+                    $data['options'] = $options;
+                    $arrResponse = array("status"=>true,"data"=>$data);
+                }
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
+        }
+        public function updateOrder(){
+            if($_SESSION['permitsModule']['u']){
+                //dep($_POST);exit;
+                if($_POST){
+                    $idOrder = intval($_POST['idOrder']);
+                    $status = strtolower(strClean($_POST['status']));
+                    $request = $this->model->updateOrder($idOrder,$status);
+                    if($request>0){
+                        $arrResponse = array("status"=>true,"msg"=>"Pedido actualizado","data"=>$this->getOrders()['data']);
+                    }else{
+                        $arrResponse = array("status"=>false,"msg"=>"No se ha podido actualizar el pedido");
+                    }
+                }
+                echo json_encode ($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+            die();
         }
         public function transaccion($idTransaction){
             if($_SESSION['permitsModule']['r']){
@@ -91,15 +132,19 @@
                         $btnView='<a href="'.base_url().'/pedidos/pedido/'.$request[$i]['idorder'].'" class="btn btn-info text-white m-1" type="button" title="View order" name="btnView"><i class="fas fa-eye"></i></a>';
                         $btnPaypal='';
                         $btnDelete ="";
+                        $btnEdit ="";
 
                         if($request[$i]['type'] == "paypal"){
-                            $btnPaypal = '<a href="'.base_url().'/pedidos/transaccion/'.$request[$i]['idtransaction'].'" class="btn btn-info m-1 text-white " type="button" title="View Transaction" name="btnPaypal"><i class="fab fa-paypal"></i></a>';
+                            $btnPaypal = '<a href="'.base_url().'/pedidos/transaccion/'.$request[$i]['idorder'].'" class="btn btn-info m-1 text-white " type="button" title="View Transaction" name="btnPaypal"><i class="fab fa-paypal"></i></a>';
                         }
 
                         if($_SESSION['permitsModule']['d'] && $_SESSION['userData']['roleid'] == 1){
                             $btnDelete = '<button class="btn btn-danger text-white m-1" type="button" title="Delete" data-id="'.$request[$i]['idorder'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
                         }
-                        if($_SESSION['userData']['roleid'] == 1){
+                        if($_SESSION['permitsModule']['u'] && $request[$i]['type'] == "pos"){
+                            $btnEdit = '<button class="btn btn-success text-white m-1" type="button" title="Edit" data-id="'.$request[$i]['idorder'].'" name="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
+                        }
+                        if($_SESSION['userData']['roleid'] == 1 || $_SESSION['userData']['roleid'] == 3){
 
                             $html.='
                                 <tr class="item">
@@ -109,9 +154,10 @@
                                     <td>'.formatNum($request[$i]['amount']).'</td>
                                     <td>'.$request[$i]['type'].'</td>
                                     <td>'.$request[$i]['status'].'</td>
-                                    <td class="item-btn">'.$btnView.$btnPaypal.$btnDelete.'</td>
+                                    <td class="item-btn">'.$btnView.$btnPaypal.$btnEdit.$btnDelete.'</td>
                                 </tr>
                             ';
+
                         }elseif($_SESSION['idUser'] == $request[$i]['personid']){
                             $html.='
                             <tr class="item">
@@ -234,6 +280,10 @@
             }
             die();
         }
+
+        
+
+        /*************************POS methods*******************************/
         public function getProducts($option=null,$params=null){
             if($_SESSION['permitsModule']['r']){
                 $html="";
@@ -293,8 +343,8 @@
                         $html .='
                         <button class="p-2 btn w-100 text-start" data-id="'.$request[$i]['idperson'].'" onclick="addCustom(this)">
                             <p class="m-0 fw-bold">'.$request[$i]['firstname'].' '.$request[$i]['lastname'].'</p>
-                            <p class="m-0">Email: <span>'.$request[$i]['email'].'</span></p>
-                            <p class="m-0">Phone: <span>'.$request[$i]['phone'].'</span></p>
+                            <p class="m-0">Correo: <span>'.$request[$i]['email'].'</span></p>
+                            <p class="m-0">Teléfono: <span>'.$request[$i]['phone'].'</span></p>
                         </button>
                         ';
                     }
@@ -306,163 +356,122 @@
             }
             die();
         }
-        public function setOrder(){
-            //dep($_POST);exit;
-            if($_SESSION['permitsModule']['w']){
-                if($_POST){
-                    if(empty($_POST['id']) || empty($_POST['products'])){
-                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
-                    }else{
-                        $arrProducts = json_decode($_POST['products'],true);
-                        $orderDetail = [];
-                        $total = 0;
-                        for ($i=0; $i < count($arrProducts) ; $i++) { 
-                            $request = $this->model->selectProduct($arrProducts[$i]['id']);
-                            $request['qty'] = $arrProducts[$i]['qty'];
-                            array_push($orderDetail,$request);
-                        }
-
-                        foreach ($orderDetail as $product) {
-                            if($product['discount']>0){
-                                $total += $product['qty'] * ($product['price'] - ($product['price']*($product['discount']/100)));
-                            }else{
-                                $total += $product['qty'] * $product['price'];
-                            }
-                        }
-                        
-                        $idCustomer = intval($_POST['id']);
-                        $customInfo = $this->model->selectCustomer($idCustomer);
-
-                        $requestOrder = $this->model->insertOrder($idCustomer,$customInfo['firstname'],$customInfo['lastname'],$customInfo['email'],
-                        $customInfo['phone'],$customInfo['country'],$customInfo['state'],$customInfo['city'],$customInfo['address'],$total);
-
-                        if($requestOrder > 0){
-                            $arrData = array("iduser"=>$idCustomer,"idorder"=>$requestOrder,"products"=>$orderDetail);
-                            $requestOrderDetail = $this->model->insertOrderDetail($arrData);
-                            $arrResponse = array("status"=>true,"msg"=>"Datos guardados");
-                        }else{
-                            $arrResponse = array("status"=>false,"msg"=>"Error, intenta de nuevo");
-                        }
-                    }
-                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-                }
-            }
-            die();
-        }
-
-        /*************************POS methods*******************************/
         public function addCart(){
-            if($_POST){ 
-                $id = intval($_POST['idProduct']);
-                $qty = intval($_POST['txtQty']);
-                $topic = intval($_POST['topic']);
-                $qtyCart = 0;
-                $arrCart = array();
-                $valiQty =true;
-                $data = array();
-                $request = array();
-                if($id != 0){
-                    $request = $this->model->selectProduct($id);
-                    $price = $request['price'];
-    
-                    if($request['discount']>0){
-                        $price = $request['price'] - ($request['price']*($request['discount']/100));
-                    }
-                    $data = array("name"=>$request['name'],"image"=>$request['image'],"route"=>base_url()."/tienda/producto/".$request['route']);
-                }else{
-                    $service = ucwords(strClean($_POST['txtService']));
-                    $servicePrice = intval($_POST['intPrice']);
-                    $data = array("name"=>$service,"image"=>media()."/images/uploads/category.jpg");
-                }
-
-                if(!empty($request) || $id == 0){
-                    if($topic== 3){
-                        $arrProduct = array(
-                            "topic"=>3,
-                            "id"=>0,
-                            "name" => $service,
-                            "qty"=>$qty,
-                            "image"=>media()."/images/uploads/category.jpg",
-                            "price" =>$servicePrice
-                        );
+            if($_SESSION['permitsModule']['w']){
+                if($_POST){ 
+                    $id = intval($_POST['idProduct']);
+                    $qty = intval($_POST['txtQty']);
+                    $topic = intval($_POST['topic']);
+                    $qtyCart = 0;
+                    $arrCart = array();
+                    $valiQty =true;
+                    $data = array();
+                    $request = array();
+                    $total = 0;
+                    if($id != 0){
+                        $request = $this->model->selectProduct($id);
+                        $price = $request['price'];
+        
+                        if($request['discount']>0){
+                            $price = $request['price'] - ($request['price']*($request['discount']/100));
+                        }
+                        $data = array("name"=>$request['name'],"image"=>$request['image'],"route"=>base_url()."/tienda/producto/".$request['route']);
                     }else{
-                        $arrProduct = array(
-                            "topic"=>2,
-                            "id"=>$id,
-                            "name" => $request['name'],
-                            "qty"=>$qty,
-                            "image"=>$request['image'],
-                            "price" =>$price,
-                            "stock"=>$request['stock']
-                        );
+                        $service = ucwords(strClean($_POST['txtService']));
+                        $servicePrice = intval($_POST['intPrice']);
+                        $data = array("name"=>$service,"image"=>media()."/images/uploads/category.jpg");
                     }
-                    if(isset($_SESSION['arrPOS'])){
-                        $arrCart = $_SESSION['arrPOS'];
-                        $currentQty = 0;
-                        $flag = true;
-                        $total = 0;
-                        for ($i=0; $i < count($arrCart) ; $i++) { 
-                            if($topic == 2){
-                                if($arrCart[$i]['id'] == $arrProduct['id']){
-                                    $currentQty = $arrCart[$i]['qty'];
-                                    $arrCart[$i]['qty']+= $qty;
-                                    if($arrCart[$i]['qty'] > $request['stock']){
-                                        $arrCart[$i]['qty'] = $currentQty;
-                                        $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
-                                        $flag = false;
-                                        break;
-                                    }else{
-                                        $_SESSION['arrPOS'] = $arrCart;
-                                        foreach ($_SESSION['arrPOS'] as $quantity) {
-                                            $total += $quantity['qty']*$quantity['price'];
+
+                    if(!empty($request) || $id == 0){
+                        if($topic== 3){
+                            $arrProduct = array(
+                                "topic"=>3,
+                                "id"=>0,
+                                "name" => $service,
+                                "qty"=>$qty,
+                                "image"=>media()."/images/uploads/category.jpg",
+                                "price" =>$servicePrice
+                            );
+                        }else{
+                            $arrProduct = array(
+                                "topic"=>2,
+                                "id"=>$id,
+                                "name" => $request['name'],
+                                "qty"=>$qty,
+                                "image"=>$request['image'],
+                                "price" =>$price,
+                                "stock"=>$request['stock']
+                            );
+                        }
+                        if(isset($_SESSION['arrPOS'])){
+                            $arrCart = $_SESSION['arrPOS'];
+                            $currentQty = 0;
+                            $flag = true;
+                            
+                            for ($i=0; $i < count($arrCart) ; $i++) { 
+                                if($topic == 2){
+                                    if($arrCart[$i]['id'] == $arrProduct['id']){
+                                        $currentQty = $arrCart[$i]['qty'];
+                                        $arrCart[$i]['qty']+= $qty;
+                                        if($arrCart[$i]['qty'] > $request['stock']){
+                                            $arrCart[$i]['qty'] = $currentQty;
+                                            $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
+                                            $flag = false;
+                                            break;
+                                        }else{
+                                            $_SESSION['arrPOS'] = $arrCart;
+                                            foreach ($_SESSION['arrPOS'] as $quantity) {
+                                                $total += $quantity['qty']*$quantity['price'];
+                                            }
+                                            $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
                                         }
-                                        $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
+                                        $flag =false;
+                                        break;
                                     }
-                                    $flag =false;
-                                    break;
-                                }
-                            }else if($topic == 3){
-                                if($service == $arrCart[$i]['name']){
-                                    $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
-                                    break;
+                                }else if($topic == 3){
+                                    if($service == $arrCart[$i]['name']){
+                                        $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        if($flag){
+                            if($flag){
+                                if(!empty($request) && $qty > $request['stock']){
+                                    $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
+                                    $_SESSION['arrPOS'] = $arrCart;
+                                }else{
+                                    array_push($arrCart,$arrProduct);
+                                    $_SESSION['arrPOS'] = $arrCart;
+                                    foreach ($_SESSION['arrPOS'] as $quantity) {
+                                        $total += $quantity['qty']*$quantity['price'];
+                                    }
+                                    $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
+                                }
+                            }
+                            
+                        }else{
                             if(!empty($request) && $qty > $request['stock']){
                                 $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
-                                $_SESSION['arrPOS'] = $arrCart;
                             }else{
                                 array_push($arrCart,$arrProduct);
                                 $_SESSION['arrPOS'] = $arrCart;
                                 foreach ($_SESSION['arrPOS'] as $quantity) {
                                     $total += $quantity['qty']*$quantity['price'];
                                 }
-                                $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
-                            }
+                                $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
+                            } 
                         }
-                        
+                        $arrResponse['html'] = $this->currentCart();
                     }else{
-                        if(!empty($request) && $qty > $request['stock']){
-                            $arrResponse = array("status"=>false,"msg"=>"No hay suficientes unidades","data"=>$data);
-                        }else{
-                            array_push($arrCart,$arrProduct);
-                            $_SESSION['arrPOS'] = $arrCart;
-                            foreach ($_SESSION['arrPOS'] as $quantity) {
-                                $total += $quantity['qty']*$quantity['price'];
-                            }
-                            $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"data"=>$data);
-                        } 
+                        $arrResponse = array("status"=>false,"msg"=>"El producto no existe");
                     }
-                    $arrResponse['html'] = $this->currentCart();
-                }else{
-                    $arrResponse = array("status"=>false,"msg"=>"El producto no existe");
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 }
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }
         public function updateCart(){
+            //dep($_POST);exit;
             //dep($_SESSION['arrPOS']);exit;
             if($_SESSION['permitsModule']['w']){
                 if($_POST){
@@ -485,7 +494,7 @@
                         
                         $arrProducts = $_SESSION['arrPOS'];
                         for ($i=0; $i < count($arrProducts) ; $i++) { 
-                            if($topic == 1){
+                            if($arrProducts[$i]['topic'] == 1 && $topic == 1){
                                 if($arrProducts[$i]['style'] == $style && $arrProducts[$i]['height'] == $height &&
                                 $arrProducts[$i]['width'] == $width && $arrProducts[$i]['margin'] == $margin &&
                                 $arrProducts[$i]['colormargin'] == $colorMargin && $arrProducts[$i]['colorborder'] == $colorBorder && 
@@ -494,7 +503,7 @@
                                     $totalPrice =$arrProducts[$i]['qty']*$arrProducts[$i]['price'];
                                     break;
                                 }
-                            }else if($topic == 2){
+                            }else if($arrProducts[$i]['topic'] == 2 && $topic == 2){
                                 if($arrProducts[$i]['id'] == $id){
                                     $stock = $this->model->selectProduct($id)['stock'];
                                     if($qty >= $stock ){
@@ -510,7 +519,7 @@
                         foreach ($_SESSION['arrPOS'] as $pro) {
                             $total+=$pro['qty']*$pro['price'];
                         }
-                        $arrResponse = array("status"=>true,"total" =>formatNum($total),"totalprice"=>formatNum($totalPrice,false),"qty"=>$qty);
+                        $arrResponse = array("status"=>true,"total" =>formatNum($total),"value"=>$total,"totalprice"=>formatNum($totalPrice,false),"qty"=>$qty);
                     }else{
                         $arrResponse = array("status"=>false,"msg" =>"Error de datos.");
                     }
@@ -571,7 +580,7 @@
                         $total += $pro['qty']*$pro['price'];
                     }
                     $html = $this->currentCart();
-                    $arrResponse = array("status"=>true,"total" =>formatNum($total),"html"=>$html);
+                    $arrResponse = array("status"=>true,"total" =>formatNum($total),"value"=>$total,"html"=>$html);
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
@@ -673,6 +682,50 @@
                 }
                 return $html;
             }
+        }
+        public function setOrder(){
+            if($_SESSION['permitsModule']['w']){
+                if($_POST){
+                    if(empty($_POST['id'])){
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
+                    }else{
+                        $total = 0;
+                        foreach ($_SESSION['arrPOS'] as $pro) {
+                            $total +=$pro['qty']*$pro['price'];
+                        }
+                        
+                        $idUser = intval($_POST['id']);
+                        $customInfo = $this->model->selectCustomer($idUser);
+                        $status = "approved";
+                        $received = intval($_POST['received']);
+                        $strNote = "";
+                        $strName = $customInfo['firstname']." ".$customInfo['lastname'];
+                        $strEmail = $customInfo['email'];
+                        $strPhone = $customInfo['phone'];
+                        $strAddress = $customInfo['address'].", ".$customInfo['city']."/".$customInfo['state']."/".$customInfo['country'];
+                        $cupon = "";
+                        $idTransaction ="POS";
+                        $type ="pos";
+                        $envio = 0;
+
+                        if($received < $total){
+                            $status = "pendent";
+                            $strNote = "Abona ".formatNum($received,false).", debe ".formatNum($total-$received,false);
+                        }
+                        $request = $this->model->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$total,$status,$type);          
+                        if($request>0){
+                            $arrOrder = array("idorder"=>$request,"iduser"=>$idUser,"products"=>$_SESSION['arrPOS']);
+                            $requestDetail = $this->model->insertOrderDetail($arrOrder);
+                            unset($_SESSION['arrPOS']);
+                            $arrResponse = array("status"=>true,"msg"=>"Pedido realizado");
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"Error, no se ha podido realizar el pedido, inténtelo de nuevo.");
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }
+            die();
         }
     }
 ?>

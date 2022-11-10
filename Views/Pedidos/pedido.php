@@ -60,16 +60,21 @@ $subtotal = 0;
                         ?>
                         <tr>
                             <?php
-                                if($product['topic'] == 2){
+                                if($product['topic'] == 2 || $product['topic'] == 3){
                             ?>
-                        <td>
+                        <td class="text-start">
                             <?=$product['description']?><br>
                         </td>
                             <?php 
                                 }else{ 
                                     $arrProducts = json_decode($product['description'],true);
+                                    $photo = "";
+                                    if($arrProducts['photo']!=""){
+                                        $photo = '<img src="'.media()."/images/uploads/".$arrProducts['photo'].'" width="70" height="70"><br>';
+                                    }
                             ?>
                             <td class="text-start">
+                                <?=$photo?>
                                 <?=$arrProducts['name']?>
                             <?php
                                 $margen = $arrProducts['margin'] > 0 ? '<li><span class="fw-bold t-color-3">Margen:</span> '.$arrProducts['margin'].'cm</li>' : "";

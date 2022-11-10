@@ -36,14 +36,7 @@
         </script>
         
         <script type="text/javascript" src="<?= media(); ?>/js/functions.js"></script>
-        <?php
-          if($data['page_name'] =="personalizar"){
-
-        ?>
-        <script src="<?=media();?>/template/Assets/js/<?=$data['app']?>"></script>
-        <?php }else{?>
-          <script src="<?= media(); ?>/js/<?=$data['app']?>"></script>
-        <?php }?>
+        <script src="<?= media(); ?>/js/<?=$data['app']?>"></script>
         
     </body>
 </html>

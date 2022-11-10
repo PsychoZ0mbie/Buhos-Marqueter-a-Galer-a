@@ -2,9 +2,11 @@
     headerAdmin($data);
     $tipos = $data['tipos'];
     $total = 0;
+    $active="d-none";
     //unset($_SESSION['arrPOS']);
     //dep($_SESSION['arrPOS']);exit;
 ?>
+<div id="modalItem"></div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
@@ -30,7 +32,7 @@
                     <input type="hidden" name="" id="idCustomer" value ="0">
                     <div>
                         <label for="" class="form-label">Cliente</label>
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchCustomers" name="searchCustomers">
+                        <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" id="searchCustomers" name="searchCustomers">
                     </div>
                     <div class="position-relative" id="selectCustomers">
                         <div id="customers" class="bg-white position-absolute w-100" style="overflow-y:scroll; max-height:30vh;"></div>
@@ -183,6 +185,7 @@
                                 <div class="scroll-y container mb-3 mt-3" id="posProducts">
                                     <?php 
                                         if(isset($_SESSION['arrPOS']) && !empty($_SESSION['arrPOS'])){
+                                            $active ="";
                                             $arrProducts = $_SESSION['arrPOS'];
                                             for ($i=0; $i < count($arrProducts) ; $i++) { 
                                                 $total += $arrProducts[$i]['qty'] * $arrProducts[$i]['price'];
@@ -265,8 +268,8 @@
                                         <?php }?>
                                     <?php } }?>
                                 </div>
-                                <p class="fw-bold text-center fs-5">Total: <span id="total"><?=formatNum($total)?></span></p>
-                                <button type="button" class="btn btn-primary d-none" id="btnPos" disabled onclick="openModalOrder()">Continuar</button>
+                                <p class="fw-bold text-center fs-5">Total: <span id="total" data-value="<?=floor($total)?>"><?=formatNum($total)?></span></p>
+                                <button type="button" class="btn btn-primary <?=$active?>" id="btnPos" onclick="openModalOrder()">Continuar</button>
                             </div>
                         </div> 
                     </div>

@@ -259,35 +259,30 @@
             $request = $this->select($sql);
             return $request;
         }
-        public function insertOrder(int $idUser,string $firstName,string $lastName,string $email, string $phone, string $country,
-        string $state,string $city,string $address,int $total){
+        public function insertOrder(int $idUser, string $idTransaction, string $strName,string $strEmail,string $strPhone,string $strAddress,
+        string $strNote,string $cupon,int $envio,int $total,string $status, string $type){
 
+            $this->strIdTransaction = $idTransaction;
             $this->intIdUser = $idUser;
-            $this->strFirstName = $firstName;
-            $this->strLastName = $lastName;
-            $this->strEmail = $email;
-            $this->strPhone = $phone;
-            $this->strCountry = $country;
-            $this->strState = $state;
-            $this->strCity = $city;
-            $this->strAddress = $address;
-            $this->intTotal = $total;
-
-            $sql = "INSERT INTO orderdata(personid,firstname,lastname,email,phone,address,country,state,city,amount,type,status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+            $this->strName = $strName;
+            $this->strEmail = $strEmail;
+            $this->strPhone = $strPhone;
+            $this->strAddress = $strAddress;
+            
+            $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
             $arrData = array(
-                $this->intIdUser,
-                $this->strFirstName,
-                $this->strLastName,
+                $this->intIdUser, 
+                $this->strIdTransaction,
+                $this->strName,
                 $this->strEmail,
                 $this->strPhone,
-                $this->strCountry,
-                $this->strState,
-                $this->strCity,
                 $this->strAddress,
-                $this->intTotal,
-                "POS",
-                "COMPLETED"
-            );
+                $strNote,
+                $total,
+                $status,
+                $cupon,
+                $envio,
+                $type);
             $request = $this->insert($sql,$arrData);
             if($request > 0){
                 $sqlUpdate = "UPDATE orderdata SET idtransaction=? WHERE idorder = $request";
@@ -300,28 +295,43 @@
             $this->intIdUser = $arrOrder['iduser'];
             $this->intIdOrder = $arrOrder['idorder'];
             $products = $arrOrder['products'];
-
             foreach ($products as $pro) {
-                $price=0;
-                $this->intIdProduct = $pro['idproduct'];
-                if($pro['discount']>0){
-                    $price = $pro['price']-($pro['price']*($pro['discount']*0.01));
+                $this->intIdProduct = $pro['id'];
+                if($pro['topic'] == 1){
+                    $description = json_encode(array(
+                        "name"=>$pro['name'],
+                        "type"=>$pro['type'],
+                        "idType"=>$pro['idType'],
+                        "orientation"=>$pro['orientation'],
+                        "style"=>$pro['style'],
+                        "reference"=>$pro['reference'],
+                        "height"=>$pro['height'],
+                        "width"=>$pro['width'],
+                        "margin"=>$pro['margin'],
+                        "colormargin"=>$pro['colormargin'],
+                        "colorborder"=>$pro['colorborder'],
+                        "img"=>$pro['img'],
+                        "photo"=>$pro['photo']
+                    ));
+                }else if($pro['topic'] == 2){
+                    $description = $pro['name'];
+                    $selectProduct = $this->selectProduct($this->intIdProduct);
+                    if($selectProduct['stock']>0){
+                        $stock = $selectProduct['stock']-$pro['qty'];
+                        $this->updateStock($this->intIdProduct,$stock);
+                    }
                 }else{
-                    $price = $pro['price'];
+                    $description = $pro['name'];
                 }
-                $query = "INSERT INTO orderdetail(orderid,personid,productid,name,quantity,price)
-                        VALUE(?,?,?,?,?,?)";
+                $query = "INSERT INTO orderdetail(orderid,personid,productid,topic,description,quantity,price)
+                        VALUE(?,?,?,?,?,?,?)";
                 $arrData=array($this->intIdOrder,
                                 $this->intIdUser,
                                 $this->intIdProduct,
-                                $pro['name'],
+                                $pro['topic'],
+                                $description,
                                 $pro['qty'],
-                                $price);
-                $selectProduct = $this->selectProduct($this->intIdProduct);
-                if($selectProduct['stock']>0){
-                    $stock = $selectProduct['stock']-$pro['qty'];
-                    $this->updateStock($this->intIdProduct,$stock);
-                }
+                                $pro['price']);
                 $request = $this->insert($query,$arrData);
             }
             return $request;
@@ -333,7 +343,19 @@
             $request = $this->update($sql,$arrData);
             return $request;
         }
-
+        public function updateOrder($idOrder,$status){
+            $this->intIdOrder = $idOrder;
+            if($status == "approved"){
+                $sql = "UPDATE orderdata SET status=? WHERE idorder = $this->intIdOrder";
+                $arrData = array($status);
+                $request = $this->update($sql,$arrData);
+            }else{
+                $sql = "UPDATE orderdata SET status=?, note=? WHERE idorder = $this->intIdOrder";
+                $arrData = array($status,"");
+                $request = $this->update($sql,$arrData);
+            }
+            return $request;
+        }
         /*************************Category methods*******************************/
         public function selectCategories(){
             $sql = "SELECT * FROM moldingcategory ORDER BY id ASC";       

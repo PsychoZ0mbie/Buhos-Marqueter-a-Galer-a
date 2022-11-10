@@ -1,8 +1,5 @@
 <?php
-    
-    require_once("Models/EnmarcarTrait.php");
     class Marcos extends Controllers{
-        use EnmarcarTrait;
         public function __construct(){
             session_start();
             if(empty($_SESSION['login'])){
@@ -15,7 +12,7 @@
         public function personalizar($params){
             if($_SESSION['permitsModule']['w']){
                 $params = strClean($params);
-                $request = $this->selectTipo($params);
+                $request = $this->model->selectTipo($params);
                 if(!empty($request)){
                     $data['page_tag'] = 'Enmarcar '.$request['name'].' | Panel';
                     $data['page_title'] = 'Enmarcar '.$request['name'].' | Panel';
@@ -23,30 +20,30 @@
                     $data['tipo'] = $request;
                     $data['molduras'] = $this->getProducts();
                     if($request['id'] == 1){
-                        $data['colores'] = $this->selectColors();
+                        $data['colores'] = $this->model->selectColors();
                         $data['app'] = "functions_personalizar.js";
                         $data['option'] = getFile("Template/Enmarcar/general",$data);
                     }elseif($request['id'] == 3){
                         $data['app'] = "functions_personalizar_directo.js";
                         $data['option'] = getFile("Template/Enmarcar/espejo",$data);
                     }elseif($request['id']==4){
-                        $data['colores'] = $this->selectColors();
+                        $data['colores'] = $this->model->selectColors();
                         $data['app'] = "functions_personalizar.js";
                         $data['option'] = getFile("Template/Enmarcar/lienzo",$data);
                     }elseif($request['id']==5){
-                        $data['colores'] = $this->selectColors();
+                        $data['colores'] = $this->model->selectColors();
                         $data['app'] = "functions_personalizar_foto.js";
                         $data['option'] = getFile("Template/Enmarcar/fotografia",$data);
                     }elseif($request['id'] == 6){
-                        $data['colores'] = $this->selectColors();
+                        $data['colores'] = $this->model->selectColors();
                         $data['app'] = "functions_personalizar_papiro.js";
                         $data['option'] = getFile("Template/Enmarcar/papiro",$data);
                     }elseif($request['id'] == 7){
-                        $data['colores'] = $this->selectColors();
+                        $data['colores'] = $this->model->selectColors();
                         $data['app'] = "functions_personalizar_directo.js";
                         $data['option'] = getFile("Template/Enmarcar/gobelino",$data);
                     }elseif($request['id'] == 8){
-                        $data['colores'] = $this->selectColors();
+                        $data['colores'] = $this->model->selectColors();
                         $data['app'] = "functions_personalizar_retablo.js";
                         $data['option'] = getFile("Template/Enmarcar/retablo",$data);
                     }elseif($request['id'] == 9){
@@ -66,11 +63,11 @@
                 $html="";
                 $request="";
                 if($option == 1){
-                    $request = $this->searchT($params,$perimetro);
+                    $request = $this->model->searchT($params,$perimetro);
                 }else if($option == 2){
-                    $request = $this->sortT($params,$perimetro);
+                    $request = $this->model->sortT($params,$perimetro);
                 }else{
-                    $request = $this->selectProducts($perimetro);
+                    $request = $this->model->selectProducts($perimetro);
                 }
                 if(count($request)>0){
                     for ($i=0; $i < count($request); $i++) { 
@@ -104,13 +101,14 @@
             return $arrResponse;
         }
         public function getProduct(){
+            
             if($_SESSION['permitsModule']['w']){
                 if($_POST){
                     if(empty($_POST)){
                         $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }else{
                         $id = intval($_POST['id']);
-                        $request = $this->selectProduct($id);
+                        $request = $this->model->selectProduct($id);
                         if(!empty($request)){
                             $request['total'] = $this->calcularMarcoTotal();
                             $arrResponse = array("status"=>true,"data"=>$request);
@@ -164,7 +162,7 @@
             return $arrDatos;
         }
         public function calcularMarcoEstilos($estilo,$perimetro,$area,$tipo){
-            $material = $this->selectMaterials();
+            $material = $this->model->selectMaterials();
             $paspartu = $material[0]['price'];
             $hijillo = $material[1]['price'];
             $bocel = $material[2]['price'];
@@ -236,7 +234,7 @@
                         $request=array();
                         $option = false;
                         if($id != 0){
-                            $request = $this->selectProduct($id);
+                            $request = $this->model->selectProduct($id);
                             $option = true;
                         }
                         
@@ -286,7 +284,7 @@
         public function addCart(){
             //dep($_POST);exit;
             if($_POST){
-                $id = intval(openssl_decrypt($_POST['id'],METHOD,KEY));
+                $id = intval($_POST['id']);
                 $arrCart = array();
                 $qty = intval($_POST['qty']);
                 
@@ -294,15 +292,15 @@
                     $option=true;
                     $photo="";
                     if($id != 0){
-                        $frame = $this->selectProduct($id);
+                        $frame = $this->model->selectProduct($id);
                     }else{
                         $photo = "retablo.png";
                         $frame = array();
                         $option = false;
                     }
 
-                    $colorMargin = $this->selectColor(intval($_POST['colorMargin']));
-                    $colorBorder = $this->selectColor(intval($_POST['colorBorder']));
+                    $colorMargin = $this->model->selectColor(intval($_POST['colorMargin']));
+                    $colorBorder = $this->model->selectColor(intval($_POST['colorBorder']));
                     $colorMargin = !empty($colorMargin) ? $colorMargin['name'] : "";
                     $colorBorder = !empty($colorBorder) ? $colorBorder['name'] : "";
                     $height = floatval($_POST['height']);
@@ -314,7 +312,6 @@
                     $type = $_POST['type'];
                     $idType = intval($_POST['idType']);
                     $orientation = $_POST['orientation'];
-
                     if(!empty($_FILES['txtPicture'])){
                         if($id!=0){
                             $photo = 'impresion_'.bin2hex(random_bytes(6)).'.png';

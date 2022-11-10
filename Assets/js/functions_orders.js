@@ -9,45 +9,40 @@ if(document.querySelector("#quickSale")){
     let searchProducts = document.querySelector("#searchProducts");
     let searchCustomers = document.querySelector("#searchCustomers");
     moneyReceived.addEventListener("input",function(){
-        let total = document.querySelector("#total").getAttribute("data-total");
+        let total = document.querySelector("#total").getAttribute("data-value");
         let result = 0;
         result = moneyReceived.value - total ;
         if(result < 0){
             result = 0;
         }
-    
-        document.querySelector("#moneyBack").innerHTML = "Money back: "+MS+formatNum(result,".")+" "+MD;
+        document.querySelector("#moneyBack").innerHTML = "Dinero a devolver: "+MS+result;
     });
     btnAddPos.addEventListener("click",function(){
         let id = document.querySelector("#idCustomer").value;
+        let received = moneyReceived.value;
         if(id <= 0){
             Swal.fire("Error","Por favor, añada un cliente para establecer el pedido","error");
             return false;
-        }else{
-            let products = document.querySelectorAll(".product");
-            let arrProducts = [];
-            for (let i = 0; i < products.length; i++) {
-                let product = {
-                    "id":products[i].children[0].getAttribute("data-id"),
-                    "qty":products[i].children[1].children[0].children[0].children[1].children[1].getAttribute("data-value")
-                };
-                arrProducts.push(product);
-            }
-            let formData = new FormData();
-            formData.append("id",id);
-            formData.append("products",JSON.stringify(arrProducts));
-            btnAddPos.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-            btnAddPos.setAttribute("disabled","");
-            request(base_url+"/pedidos/setOrder",formData,"post").then(function(objData){
-                btnAddPos.removeAttribute("disabled");
-                btnAddPos.innerHTML="Guardar";
-                if(objData.status){
-                    location.reload();
-                }else{
-                    Swal.fire("Error",objData.msg,"error");
-                }
-            });
         }
+        if(received ==""){
+            Swal.fire("Error","Por favor, ingresa el dinero recibido","error");
+            return false;
+        }
+        let formData = new FormData();
+        formData.append("id",id);
+        formData.append("received",received);
+        btnAddPos.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+        btnAddPos.setAttribute("disabled","");
+        request(base_url+"/pedidos/setOrder",formData,"post").then(function(objData){
+            btnAddPos.removeAttribute("disabled");
+            btnAddPos.innerHTML="Guardar";
+            if(objData.status){
+                location.reload();
+            }else{
+                Swal.fire("Error",objData.msg,"error");
+            }
+        });
+
     });
     searchProducts.addEventListener('input',function() {
         request(base_url+"/pedidos/searchProducts/"+searchProducts.value,"","get").then(function(objData){
@@ -101,6 +96,8 @@ if(document.querySelector("#pedidos")){
         let id = element.getAttribute("data-id");
         if(element.name == "btnDelete"){
             deleteItem(id);
+        }else if(element.name=="btnEdit"){
+            editItem(id);
         }
     });
     function deleteItem(id){
@@ -129,7 +126,99 @@ if(document.querySelector("#pedidos")){
             }
         });
     }
+    function editItem(id){
+        let formData = new FormData();
+        formData.append("id",id);
+        request(base_url+"/pedidos/getOrder",formData,"post").then(function(objData){
+            let modalItem = document.querySelector("#modalItem");
+            let modal= `
+            <div class="modal fade" id="modalElement">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Actualizar pedido</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table align-middle text-break">
+                                <tbody id="listItem">
+                                    <tr>
+                                        <td><strong>Orden: </strong></td>
+                                        <td>${objData.data.idorder}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Transacción: </strong></td>
+                                        <td>${objData.data.idtransaction}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cliente: </strong></td>
+                                        <td>${objData.data.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Telefono: </strong></td>
+                                        <td>${objData.data.phone}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Estado: </strong></td>
+                                        <td>${objData.data.status}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Notas: </strong></td>
+                                        <td>${objData.data.note}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total: </strong></td>
+                                        <td>${objData.data.amount}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <form id="formOrder">
+                                <input type="hidden" id="idOrder" name="idOrder" value="${objData.data.idorder}">
+                                <div class="mb-3">
+                                    <label for="typeList" class="form-label">Estado <span class="text-danger">*</span></label>
+                                    <select class="form-control" aria-label="Default select example" id="statusList" name="statusList" required>
+                                        ${objData.data.options}
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" id="btnAdd">Actualizar</button>
+                                    <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
     
+            modalItem.innerHTML = modal;
+            let modalView = new bootstrap.Modal(document.querySelector("#modalElement"));
+            modalView.show();
+            let formOrder = document.querySelector("#formOrder");
+            formOrder.addEventListener("submit",function(e){
+                e.preventDefault();
+                let formData = new FormData(formOrder);
+                let select = document.querySelector("#statusList");
+                let status = select.options[select.selectedIndex].text;
+                formData.append("status",status);
+                let btnAdd = document.querySelector("#btnAdd");
+    
+                btnAdd.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+                btnAdd.setAttribute("disabled","");
+                request(base_url+"/pedidos/updateOrder",formData,"post").then(function(objData){
+                    btnAdd.removeAttribute("disabled");
+                    btnAdd.innerHTML = "Actualizar"
+                    if(objData.status){
+                        Swal.fire("Actualizado",objData.msg,"success");
+                        modalView.hide();
+                        element.innerHTML = objData.data;
+                    }else{
+                        Swal.fire("Error",objData.msg,"error");
+                    }
+                });
+            })
+        });
+    }
 }
 if(document.querySelector("#btnRefund")){
     let btn = document.querySelector("#btnRefund");
@@ -258,10 +347,11 @@ if(document.querySelector("#btnRefund")){
 if(document.querySelector("#btnPrint")){
     let btn = document.querySelector("#btnPrint");
     btn.addEventListener("click",function(){
-        if(document.querySelector("#btnRefund"))document.querySelector("#btnRefund").classList.add("d-none");
+        console.log("hola");
         printDiv(document.querySelector("#orderInfo"));
     });
 }
+
 function addProduct(id=null, element){
     let formData = new FormData();
     const toastLiveExample = document.getElementById('liveToast');
@@ -295,6 +385,8 @@ function addProduct(id=null, element){
         if(objData.status){
             document.querySelector("#total").innerHTML = objData.total;
             document.querySelector("#posProducts").innerHTML = objData.html;
+            document.querySelector("#total").setAttribute("data-value",objData.value);
+            statusPOS();
             updateCart();
         }
 
@@ -340,8 +432,10 @@ function delProduct(element){
         element.removeAttribute("disabled");
         if(objData.status){
             document.querySelector("#total").innerHTML = objData.total;
+            document.querySelector("#total").setAttribute("data-value",objData.value);
             document.querySelector("#posProducts").innerHTML = objData.html;
             element.parentElement.remove();
+            statusPOS();
             updateCart();
         }
     });
@@ -392,6 +486,7 @@ function updateCart(){
                     document.querySelectorAll(".qtyProduct")[i].innerHTML = objData.qty;
                     document.querySelectorAll(".productTotal")[i].innerHTML = objData.totalprice;
                     document.querySelector("#total").innerHTML = objData.total;
+                    document.querySelector("#total").setAttribute("data-value",objData.value);
                 }
             });
         });
@@ -428,34 +523,18 @@ function updateCart(){
                     document.querySelectorAll(".qtyProduct")[i].innerHTML = objData.qty;
                     document.querySelectorAll(".productTotal")[i].innerHTML = objData.totalprice;
                     document.querySelector("#total").innerHTML = objData.total;
+                    document.querySelector("#total").setAttribute("data-value",objData.value);
                 }
             });
         })
     }
 }
-function calcTotal(){
-    let data = document.querySelectorAll(".productData");
-    let total = 0;
-    
-    for (let i = 0; i < data.length; i++) {
-        total+= data[i].getAttribute("data-value")*data[i].getAttribute("data-price");
-    }
-    if(total > 0){
-        document.querySelector("#btnPos").classList.remove("d-none");
-        document.querySelector("#btnPos").removeAttribute("disabled");
-    }else{
-        document.querySelector("#btnPos").classList.add("d-none");
-        document.querySelector("#btnPos").setAttribute("disabled","disabled");
-    }
-    document.querySelector("#total").innerHTML = MS+total+" "+MD;
-    document.querySelector("#total").setAttribute("data-total",total);
-}
 function openModalOrder(){
     let modal = new bootstrap.Modal(document.querySelector("#modalPos"));
-    moneyReceived.value = document.querySelector("#total").getAttribute("data-total");
-    let total = document.querySelector("#total").getAttribute("data-total");
-    document.querySelector("#saleValue").innerHTML = "Valor de venta: "+MS+formatNum(total,".")+" "+MD;
-    document.querySelector("#moneyBack").innerHTML = "Dinero a devolver: "+MS+0+" "+MD;
+    moneyReceived.value = document.querySelector("#total").getAttribute("data-value");
+    let total = moneyReceived.value;
+    document.querySelector("#saleValue").innerHTML = "Valor de venta: "+MS+total;
+    document.querySelector("#moneyBack").innerHTML = "Dinero a devolver: "+MS+0;
     modal.show();
 }
 function addCustom(element){
@@ -470,4 +549,11 @@ function delCustom(element){
     searchCustomers.parentElement.classList.remove("d-none");
     document.querySelector("#idCustomer").value = 0;
     element.remove();
+}
+function statusPOS(){
+    if(document.querySelector("#posProducts").children.length > 0){
+        document.querySelector("#btnPos").classList.remove("d-none");
+    }else{
+        document.querySelector("#btnPos").classList.add("d-none");
+    }
 }
