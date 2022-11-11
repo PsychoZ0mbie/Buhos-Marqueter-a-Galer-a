@@ -4,9 +4,8 @@
     require_once("Models/CategoryTrait.php");
     require_once("Models/CustomerTrait.php");
     require_once("Models/LoginModel.php");
-    require_once("Models/ReviewTrait.php");
     class Tienda extends Controllers{
-        use ProductTrait, CategoryTrait, CustomerTrait, ReviewTrait;
+        use ProductTrait, CategoryTrait, CustomerTrait;
         private $login;
         public function __construct(){
             session_start();
