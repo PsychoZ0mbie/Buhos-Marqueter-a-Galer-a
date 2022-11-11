@@ -147,8 +147,7 @@
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/correo"><span class="nav-icon"></span> Correo <?=$emails?></a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/suscriptores"><span class="nav-icon"></span> Suscriptores</a></li>
                                     <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/envios"><span class="nav-icon"></span> Envio</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/about"><span class="nav-icon"></span> Nosotros</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/administracion/policies"><span class="nav-icon"></span> Politicas</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/paginas"><span class="nav-icon"></span> Páginas</a></li>
                                 </ul>
                             </li>
                             <?php 
