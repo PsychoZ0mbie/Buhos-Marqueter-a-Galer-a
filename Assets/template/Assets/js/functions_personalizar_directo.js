@@ -1,4 +1,4 @@
-const DIMENSIONDEFAULT = 200;
+const DIMENSIONDEFAULT = 4;
 const rangeZoom = document.querySelector("#zoomRange");
 const minusZoom = document.querySelector("#zoomMinus");
 const plusZoom = document.querySelector("#zoomPlus");
@@ -264,8 +264,8 @@ function selectActive(element =null,elements=null){
 }
 function resizeFrame(width,height){
 
-    height = parseFloat(height) +DIMENSIONDEFAULT;
-    width = parseFloat(width) + DIMENSIONDEFAULT;
+    height = parseFloat(height) *DIMENSIONDEFAULT;
+    width = parseFloat(width) *DIMENSIONDEFAULT;
 
     let heightM = height;
     let widthM = width;

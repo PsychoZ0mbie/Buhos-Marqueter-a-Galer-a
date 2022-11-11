@@ -1,4 +1,4 @@
-const DIMENSIONDEFAULT = 200;
+const DIMENSIONDEFAULT = 4;
 const rangeZoom = document.querySelector("#zoomRange");
 const minusZoom = document.querySelector("#zoomMinus");
 const plusZoom = document.querySelector("#zoomPlus");
@@ -168,8 +168,8 @@ function selectActive(element =null,elements=null){
     element.classList.add("element--active");
 }
 function resizeFrame(width,height){
-    height = parseFloat(height) +DIMENSIONDEFAULT;
-    width = parseFloat(width) + DIMENSIONDEFAULT;
+    height = parseFloat(height) *DIMENSIONDEFAULT;
+    width = parseFloat(width) *DIMENSIONDEFAULT;
     cube.style.height = `${height}px`;
     cube.style.width = `${width}px`;
     document.querySelector(".face-right").style.transform=`rotateY(90deg) translateZ(${width-10}px)`;

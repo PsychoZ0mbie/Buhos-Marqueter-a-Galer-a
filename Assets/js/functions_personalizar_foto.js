@@ -1,4 +1,4 @@
-const DIMENSIONDEFAULT = 200;
+const DIMENSIONDEFAULT = 4;
 const rangeZoom = document.querySelector("#zoomRange");
 const minusZoom = document.querySelector("#zoomMinus");
 const plusZoom = document.querySelector("#zoomPlus");
@@ -318,8 +318,8 @@ function selectActive(element =null,elements=null){
 }
 function resizeFrame(width,height){
 
-    height = parseFloat(height) +DIMENSIONDEFAULT;
-    width = parseFloat(width) + DIMENSIONDEFAULT;
+    height = parseFloat(height) *DIMENSIONDEFAULT;
+    width = parseFloat(width) *DIMENSIONDEFAULT;
 
     let heightM = height;
     let widthM = width;
@@ -340,8 +340,8 @@ function resizeFrame(width,height){
 }
 function customMargin(margin){
     marginRange.value = margin;
-    let marginHeight = (parseFloat(intHeight.value)+DIMENSIONDEFAULT) + (margin*10);
-    let marginWidth = (parseFloat(intWidth.value)+DIMENSIONDEFAULT) + (margin*10);
+    let marginHeight = (parseFloat(intHeight.value)*DIMENSIONDEFAULT) + (margin*10);
+    let marginWidth = (parseFloat(intWidth.value)*DIMENSIONDEFAULT) + (margin*10);
     layoutMargin.style.height = `${marginHeight}px`;
     layoutMargin.style.width = `${marginWidth}px`;
     document.querySelector("#marginData").innerHTML= margin+" cm";
