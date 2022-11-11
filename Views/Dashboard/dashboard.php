@@ -44,7 +44,7 @@
                             <div class="text-uppercase text-medium-emphasis small">Usuarios</div>
                         </div>
                     </div>
-                    <a href="<?=base_url();?>/user" class="position-absolute w-100 h-100"></a>
+                    <a href="<?=base_url();?>/usuarios/usuarios" class="position-absolute w-100 h-100"></a>
                 </div>
             </div>
             <div class="col-md-3">
@@ -61,7 +61,7 @@
                             <div class="text-uppercase text-medium-emphasis small">Clientes</div>
                         </div>
                     </div>
-                    <a href="<?=base_url();?>/customer" class="position-absolute w-100 h-100"></a>
+                    <a href="<?=base_url();?>/clientes" class="position-absolute w-100 h-100"></a>
                 </div>
             </div>
             <div class="col-md-3">
@@ -75,9 +75,10 @@
                     <div class="card-body row text-center">
                         <div class="col">
                             <div class="fs-5 fw-semibold"><?=$data['totalSales']?></div>
-                            <div class="text-uppercase text-medium-emphasis small">Ventas</div>
+                            <div class="text-uppercase text-medium-emphasis small">Ventas brutas</div>
                         </div>
                     </div>
+                    <a href="<?=base_url();?>/contabilidad" class="position-absolute w-100 h-100"></a>
                 </div>
             </div>
             <?php }?>
@@ -95,7 +96,7 @@
                             <div class="text-uppercase text-medium-emphasis small">Pedidos</div>
                         </div>
                     </div>
-                    <a href="<?=base_url();?>/orders" class="position-absolute w-100 h-100"></a>
+                    <a href="<?=base_url();?>/pedidos" class="position-absolute w-100 h-100"></a>
                 </div>
             </div>
         </div>
