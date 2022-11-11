@@ -167,7 +167,7 @@ $subtotal = 0;
                         <a href="<?=base_url()?>/pedidos" class="btn btn-secondary text-white"><i class="fas fa-arrow-circle-left"></i> Regresar</a>
                     </div>
                     <div class="col-6 text-end">
-                        <button type="button" id="btnPrint" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
+                        <button type="button" onclick="printJS({ printable: 'orderInfo', type: 'html', targetStyles: ['*'],documentTitle: '<?=$order['idtransaction']?>'})" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
                     </div>
                 </div>
             </div>

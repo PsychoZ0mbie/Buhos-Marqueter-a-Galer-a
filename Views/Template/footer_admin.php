@@ -27,6 +27,7 @@
 
         <script src="<?= media();?>/plugins/datepicker/jquery-ui.min.js"></script>
         <script src="<?= media();?>/plugins/sheetjs/sheetjs.js"></script>
+        <script src="<?= media();?>/plugins/print/print.min.js"></script>
         <!------------------------------My functions--------------------------------->
 
         <script>

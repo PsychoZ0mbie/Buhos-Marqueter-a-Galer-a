@@ -344,13 +344,13 @@ if(document.querySelector("#btnRefund")){
         });
     }
 }
+/*
 if(document.querySelector("#btnPrint")){
     let btn = document.querySelector("#btnPrint");
     btn.addEventListener("click",function(){
-        console.log("hola");
         printDiv(document.querySelector("#orderInfo"));
     });
-}
+}*/
 
 function addProduct(id=null, element){
     let formData = new FormData();
