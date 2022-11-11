@@ -17,7 +17,7 @@ for ($i=0; $i < count($social) ; $i++) {
 ?>
 
 <footer>
-    <div class="row m-0">
+    <div class="row m-0 mt-3">
         <div class="col-lg-4 p-5">
             <div class="logo">
                 <img src="<?=media()."/images/uploads/".$company['logo']?>" alt="<?=$company['name']?>">
@@ -96,7 +96,7 @@ for ($i=0; $i < count($social) ; $i++) {
                                     </span>
                                 </h3>
                             </div>
-                            <p>Suscríbase a nuestro boletín y reciba un cupón de descuento de <?=$discount['discount']?>% <br><br>Reciba información actualizada sobre novedades, ofertas especiales y nuestras promociones</p>
+                            <p>Suscríbete a nuestro boletín y recibe un cupón de descuento de <?=$discount['discount']?>% <br><br>Reciba información actualizada sobre novedades, ofertas especiales y nuestras promociones</p>
                             <div class="alert alert-danger d-none" id="alertSuscribe" role="alert"></div>
                             <form action="" class="footer--subscribe" id="formSuscriber">
                                 <input type="email" id="txtEmailSuscribe" name="txtEmailSuscribe" placeholder="Tu correo">
@@ -115,8 +115,8 @@ for ($i=0; $i < count($social) ; $i++) {
                 <p>Copyright © 2022 <?=$company['name']?></p>
                 <ul>
                     <li><a href="<?=base_url()?>">Inicio</a></li>
-                    <li><a href="<?=base_url()?>/politicas">Términos y condiciones</a></li>
-                    <li><a href="<?=base_url()?>/politicas">Políticas de privacidad</a></li>
+                    <li><a href="<?=base_url()?>/politicas/terminos">Términos y condiciones</a></li>
+                    <li><a href="<?=base_url()?>/politicas/privacidad">Políticas de privacidad</a></li>
                     <li><a href="<?=base_url()?>/contacto">Contacto</a></li>
                 </ul>
             </div>

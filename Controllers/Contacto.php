@@ -1,19 +1,19 @@
 <?php
     require_once("Models/CustomerTrait.php");
-    class Contact extends Controllers{
+    class Contacto extends Controllers{
         use CustomerTrait;
         public function __construct(){
             parent::__construct();
             session_start();
         }
 
-        public function contact(){
+        public function contacto(){
             $company=getCompanyInfo();
-            $data['page_tag'] = "Contact | ".$company['name'];
+            $data['page_tag'] = "Contacto | ".$company['name'];
 			$data['page_title'] = "Contacto | ".$company['name'];
-			$data['page_name'] = "contact";
-            $data['app'] = "contact.js";
-            $this->views->getView($this,"contact",$data);
+			$data['page_name'] = "contacto";
+            $data['app'] = "functions_contact.js";
+            $this->views->getView($this,"contacto",$data);
         }
         public function setContact(){
             if($_POST){

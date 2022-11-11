@@ -101,6 +101,7 @@
                 <li class="nav-link"><a href="<?=base_url()?>/tienda">Tienda</a></li>
                 <li class="nav-link"><a href="<?=base_url()?>/nosotros">¿Quienes somos?</a></li>
                 <li class="nav-link"><a href="<?=base_url()?>/servicios">Servicios</a></li>
+                <li class="nav-link"><a href="<?=base_url()?>/contacto">Contacto</a></li>
             </ul>
             <ul class="nav--links">
                 <li class="nav--icon" id="btnSearch"><i class="fas fa-search"></i></li>
@@ -170,9 +171,10 @@
             <ul>
                 <li><a href="<?=base_url()?>">Inicio</a></li>
                 <li><a href="<?=base_url()?>/enmarcar">Enmarca aquí</a></li>
-                <li><a href="#">Tienda</a></li>
-                <li><a href="#">¿Quienes somos?</a></li>
-                <li><a href="#">Servicios</a></li>
+                <li><a href="<?=base_url()?>/tienda">Tienda</a></li>
+                <li><a href="<?=base_url()?>/nosotros">¿Quienes somos?</a></li>
+                <li><a href="<?=base_url()?>/servicios">Servicios</a></li>
+                <li><a href="<?=base_url()?>/contacto">Contacto</a></li>
                 <?php
                     if(isset($_SESSION['login'])){
                 ?>

@@ -234,7 +234,7 @@
                 <h2 class="section--title">¿No encuentras lo que buscas? <br> Contáctanos</h2>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <form class="form--contact">
+                        <form class="form--contact" id="formContact">
                             <p>Nos encontramos en <?=$company['addressfull']?></p> 
                             <div class="form--contact-data">
                                 <label>¿Cuál es tu nombre?</label>
@@ -270,6 +270,9 @@
                 </div>
             </div>
         </section>
+        <?php
+            if($social[3]['link']!=""){
+        ?>
         <section class="mt-5">
             <h2 class="section--title">Nuestro instagram</h2>
             <div class="row">
@@ -315,6 +318,7 @@
                 </div>
             </div>
         </section>
+        <?php }?>
     </div>
 <?php
     footerPage($data);
