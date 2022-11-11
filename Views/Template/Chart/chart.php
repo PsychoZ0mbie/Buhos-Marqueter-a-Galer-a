@@ -4,6 +4,8 @@
     $ingresos = $data['dataingresos'];
     $costos = $data['datacostos'];
     $gastos = $data['datagastos'];
+
+    $resultadoMensual = $ingresos['total'] -($costos['total']+$gastos['total']);
 ?>
 <script>
     Highcharts.chart('monthChart', {
@@ -14,7 +16,7 @@
             text: 'Gráfico de <?=$ingresos['month']." ".$ingresos['year']?>'
         },
         subtitle: {
-            text: 'Total: <?=formatNum($ingresos['total'])?>'
+            text: 'Total: <?=formatNum($resultadoMensual)?>'
         },
         xAxis: {
             categories: [
@@ -75,6 +77,10 @@
 </script>
 <?php }else{
     $dataAnual = $data['data'];
+    $ingresosAnual = $data['total'];
+    $costosAnual = $data['costos'];
+    $gastosAnual = $data['gastos'];
+    $resultadoAnual = $ingresosAnual-($costosAnual+$gastosAnual);
 ?>
 <script>
     Highcharts.chart('yearChart', {

@@ -17,25 +17,29 @@ $('.date-picker').datepicker( {
     }
 });
 
-let btnSalesMonth = document.querySelector("#btnSalesMonth");
-let btnSalesYear = document.querySelector("#btnSalesYear");
-btnSalesMonth.addEventListener("click",function(){
-    let salesMonth = document.querySelector(".salesMonth").value;
-    if(salesMonth==""){
+let search = document.querySelector("#search");
+let sort = document.querySelector("#sortBy");
+let element = document.querySelector("#listItem");
+
+let btnContabilidadMes = document.querySelector("#btnContabilidadMes");
+let btnContabilidadAnio = document.querySelector("#btnContabilidadAnio");
+btnContabilidadMes.addEventListener("click",function(){
+    let contabilidadMes = document.querySelector(".contabilidadMes").value;
+    if(contabilidadMes==""){
         Swal.fire("Error", "Elija una fecha", "error");
         return false;
     }
-    btnSalesMonth.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-    btnSalesMonth.setAttribute("disabled","");
+    btnContabilidadMes.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    btnContabilidadMes.setAttribute("disabled","");
     let formData = new FormData();
-    formData.append("date",salesMonth);
-    request(base_url+"/dashboard/getSalesMonth",formData,"post").then(function(objData){
-        btnSalesMonth.innerHTML=`<i class="fas fa-search"></i>`;
-        btnSalesMonth.removeAttribute("disabled");
-        $("#salesMonth").html(objData);
+    formData.append("date",contabilidadMes);
+    request(base_url+"/dashboard/getContabilidadMes",formData,"post").then(function(objData){
+        btnContabilidadMes.innerHTML=`<i class="fas fa-search"></i>`;
+        btnContabilidadMes.removeAttribute("disabled");
+        $("#monthChart").html(objData.script);
     });
 });
-btnSalesYear.addEventListener("click",function(){
+btnContabilidadAnio.addEventListener("click",function(){
     
     let salesYear = document.querySelector("#sYear").value;
     let strYear = salesYear.toString();
@@ -46,21 +50,21 @@ btnSalesYear.addEventListener("click",function(){
         return false;
     }
     if(strYear.length>4){
-        Swal.fire("Error", "La fecha es incorrecta.", "error");
+        Swal.fire("Error", "El año es incorrecto.", "error");
         document.querySelector("#sYear").value ="";
         return false;
     }
-    btnSalesYear.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-    btnSalesYear.setAttribute("disabled","");
+    btnContabilidadAnio.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+    btnContabilidadAnio.setAttribute("disabled","");
 
     let formData = new FormData();
     formData.append("date",salesYear);
-    request(base_url+"/dashboard/getSalesYear",formData,"post").then(function(objData){
-        btnSalesYear.innerHTML=`<i class="fas fa-search"></i>`;
-        btnSalesYear.removeAttribute("disabled");
-        console.log(objData);
+    request(base_url+"/dashboard/getContabilidadAnio",formData,"post").then(function(objData){
+        btnContabilidadAnio.innerHTML=`<i class="fas fa-search"></i>`;
+        btnContabilidadAnio.removeAttribute("disabled");
+
         if(objData.status){
-            $("#salesYear").html(objData.script);
+            $("#yearChart").html(objData.script);
         }else{
             Swal.fire("Error", objData.msg, "error");
             document.querySelector("#sYear").value ="";
