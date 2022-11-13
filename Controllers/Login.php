@@ -109,13 +109,13 @@
 				}else{
 					$company = getCompanyInfo();
 					$data['page_tag'] = "Recovery";
-					$data['page_title'] = $company['name']."| Actualizar contraseña" ;
+					$data['page_title'] = "Actualizar contraseña | ".$company['name'] ;
 					$data['email'] = $strEmail;
 					$data['token'] = $strToken;
 					$data['company'] = $company;
 					$data['page_name'] = "recovery";
 					$data['idperson'] = $arrResponse['idperson'];
-					$data['app'] = "login.js";
+					$data['app'] = "functions_login.js";
 					$this->views->getView($this,"recovery",$data);
 				}
 			}

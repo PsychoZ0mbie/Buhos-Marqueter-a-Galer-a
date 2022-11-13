@@ -17,8 +17,7 @@ if(document.querySelector("#formRecovery")){
         formData.append("txtEmail",strEmail);
         formData.append("idUsuario",idUser);
 
-        btn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;    
-        btn.setAttribute("disabled","");
+        
         if(strPassword == "" || strPasswordConfirm==""){
             Swal.fire("Error", "Por favor, pon tu nueva contraseña.", "error");
             return false;
@@ -30,7 +29,8 @@ if(document.querySelector("#formRecovery")){
                 Swal.fire("Error","Las contraseñas no coinciden","error");
             return false;
             }
-
+            btn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;    
+            btn.setAttribute("disabled","");
             request(url,formData,"post").then(function(objData){
                 btn.innerHTML="Actualizar contraseña";    
                 btn.removeAttribute("disabled");
