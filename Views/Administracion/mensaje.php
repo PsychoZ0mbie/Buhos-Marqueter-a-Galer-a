@@ -8,7 +8,7 @@
             <div class="card-body"> 
                 <h2 class="fs-5"><?=$data['message']['subject']?></h2>
                 <div class="d-flex justify-content-between flex-wrap">
-                    <p class="m-0"><?=$data['message']['name']." (".$data['message']['email'].")"?></p>
+                    <p class="m-0"><?=$data['message']['name']." (".$data['message']['email'].", ".$data['message']['phone'].")"?></p>
                     <p class="m-0"><?=$data['message']['date']?></p>
                 </div>
                 <hr>
@@ -27,7 +27,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-6 text-start">
-                        <a href="<?=base_url()?>/store/mailbox" class="btn btn-secondary text-white mb-4"><i class="fas fa-arrow-circle-left"></i> Regresar</a>   
+                        <a href="<?=base_url()?>/administracion/correo" class="btn btn-secondary text-white mb-4"><i class="fas fa-arrow-circle-left"></i> Regresar</a>   
                     </div>
                 </div>
                 <?php }else{?>
@@ -36,11 +36,11 @@
                     <input type="hidden" id="txtEmail" name="txtEmail" value="<?=$data['message']['email']?>">
                     <input type="hidden" id="txtName" name="txtName" value="<?=$data['message']['name']?>">
                     <div class="mb-3">
-                        <textarea class="form-control" id="txtMessage" name="txtMessage" rows="5" placeholder="Click here to reply"></textarea>
+                        <textarea class="form-control" id="txtMessage" name="txtMessage" rows="5" placeholder="Escribe tu respuesta"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-6 text-start">
-                            <a href="<?=base_url()?>/store/mailbox" class="btn btn-secondary text-white mb-4"><i class="fas fa-arrow-circle-left"></i> Regresar</a>   
+                            <a href="<?=base_url()?>/administracion/correo" class="btn btn-secondary text-white mb-4"><i class="fas fa-arrow-circle-left"></i> Regresar</a>   
                         </div>
                         <?php if($_SESSION['permitsModule']['w']){?>
                         <div class="col-6 text-end">

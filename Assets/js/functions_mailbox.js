@@ -1,6 +1,6 @@
 'use strict';
 
-if(document.querySelector("#mailbox")){
+if(document.querySelector("#correo")){
     setTinymce("#txtMessage");
     
     let formEmail = document.querySelector("#formEmail");
@@ -29,7 +29,7 @@ if(document.querySelector("#mailbox")){
     });
 }
 
-if(document.querySelector("#message") && document.querySelector("#formReply")){
+if(document.querySelector("#mensaje") && document.querySelector("#formReply")){
     setTinymce("#txtMessage");
     let formReply = document.querySelector("#formReply");
     formReply.addEventListener("submit",function(e){

@@ -56,7 +56,7 @@
                 die();
             }
         }
-        public function enviados($params){
+        public function enviado($params){
             if($_SESSION['permitsModule']['r']){
                 if(is_numeric($params)){
                     $id = intval($params);
@@ -64,7 +64,7 @@
                     $data['page_tag'] = "Enviados";
                     $data['page_title'] = "Enviados";
                     $data['page_name'] = "enviados";
-                    $this->views->getView($this,"enviados",$data);
+                    $this->views->getView($this,"enviado",$data);
                 }else{
                     header("location: ".base_url()."/administracion/mailbox");
                     die();
@@ -96,32 +96,6 @@
                 $data['flat'] = $this->model->selectFlatRate();
                 $data['app'] = "functions_shipping.js";
                 $this->views->getView($this,"envios",$data);
-            }else{
-                header("location: ".base_url());
-                die();
-            }
-        }
-        public function about(){
-            if($_SESSION['permitsModule']['r']){
-                $data['page_tag'] = "Nosotros";
-                $data['page_title'] = "Nosotros";
-                $data['page_name'] = "page";
-                $data['page'] = $this->model->selectPage(1);
-                $data['app'] = "pages.js";
-                $this->views->getView($this,"about",$data);
-            }else{
-                header("location: ".base_url());
-                die();
-            }
-        }
-        public function policies(){
-            if($_SESSION['permitsModule']['r']){
-                $data['page_tag'] = "Politicas";
-                $data['page_title'] = "Politicas";
-                $data['page_name'] = "page";
-                $data['page'] = $this->model->selectPage(2);
-                $data['app'] = "pages.js";
-                $this->views->getView($this,"policies",$data);
             }else{
                 header("location: ".base_url());
                 die();
@@ -271,7 +245,7 @@
                 if(count($request)>0){
                     for ($i=0; $i < count($request); $i++) { 
                         $status ="";
-                        $url = base_url()."/administracion/message/".$request[$i]['id'];
+                        $url = base_url()."/administracion/mensaje/".$request[$i]['id'];
                         if($request[$i]['status'] == 1){
                             $status="text-black-50";
                         }else{
@@ -371,7 +345,7 @@
                         $status ="";
                         $total = 0;
                         $email = explode("@",$request[$i]['email']);
-                        $url = base_url()."/administracion/sent/".$request[$i]['id'];
+                        $url = base_url()."/administracion/enviado/".$request[$i]['id'];
                         $html.='
                         <div class="mail-item text-black-50">
                             <div class="row position-relative">
