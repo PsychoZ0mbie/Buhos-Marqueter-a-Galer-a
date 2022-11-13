@@ -78,10 +78,8 @@
     top: 50%;
     transform: translate(-50%,-50%);
     border-image: url("/assets/images/moldura.gif") 40% repeat;
-    border-width: 32px;
     border-color: #000;
     border-style: solid;
-    border-image-outset: 32px;
     transition: all 0.3s ease-out;
 }
 .cube-container{
