@@ -7,9 +7,9 @@
     for ($i=0; $i < count($social) ; $i++) { 
         if($social[$i]['link']!=""){
             if($social[$i]['name']=="whatsapp"){
-                $links.='<a href="https://wa.me/'.$social[$i]['link'].'" target="_blank" class="me-3 ms-3 text-dark fs-5"><i class="fab fa-'.$social[$i]['name'].'"></i></a>';
+                $links.='<li><a href="https://wa.me/'.$social[$i]['link'].'" target="_blank"><i class="fab fa-'.$social[$i]['name'].'"></i></a></li>';
             }else{
-                $links.='<a href="'.$social[$i]['link'].'" target="_blank" class="me-3 ms-3 text-dark fs-5"><i class="fab fa-'.$social[$i]['name'].'"></i></a>';
+                $links.='<li><a href="'.$social[$i]['link'].'" target="_blank"><i class="fab fa-'.$social[$i]['name'].'"></i></a></li>';
             }
         }
     }
@@ -31,29 +31,31 @@
                 <div class="col-md-6 mt-4">
                     <form class="form--contact p-4" id="formContact">
                         <h2 class="t-color-4">Mándanos un email</h2>
-                        <p class="t-color-3">Nos encontramos en la ciudad de Villavicencio/Meta/Colombia en la Cra 36 #15a-03 Barrio Nuevo Ricaurte</p> 
+                        <p class="t-color-3">Nos encontramos en <?=$company['addressfull']?></p> 
                         <div class="form--contact-data">
                             <label>¿Cuál es tu nombre?</label>
-                            <input type="text" placeholder="Nombre">
+                            <input type="text" id="txtContactName" name="txtContactName" placeholder="Nombre">
                             <span class="form-focus-effect"></span>
                         </div>
                         <div class="form--contact-data">
                             <label>¿Cuál es tu teléfono?</label>
-                            <input type="text" placeholder="310 123 1234">
+                            <input type="text" id="txtContactPhone" name="txtContactPhone" placeholder="310 123 1234">
                             <span class="form-focus-effect"></span>
                         </div>
                         <div class="form--contact-data">
                             <label>¿Cuál es tu correo?</label>
-                            <input type="text" placeholder="micorreo@ejemplo.com">
+                            <input type="text" id="txtContactEmail" name="txtContactEmail" placeholder="micorreo@ejemplo.com">
                             <span class="form-focus-effect"></span>
                         </div>
                         <div class="form--contact-data">
                             <label>Tu mensaje</label>
-                            <textarea name="" id="" rows="3" placeholder="Escribe tu mensaje"></textarea>
+                            <textarea name="txtContactMessage" id="txtContactMessage" rows="3" placeholder="Escribe tu mensaje"></textarea>
                             <span class="form-focus-effect"></span>
                         </div>
+                        <div class="alert alert-danger mt-3 d-none" id="alertContact" role="alert"></div>
                         <div class="mt-3 d-flex justify-content-between align-items-center flex-wrap">
-                            <button type="submit" class="btn btn-bg-1 mb-3">Enviar mensaje</button>
+                            <button type="submit" class="btn btn-bg-1 mb-3" id="btnMessage">Enviar mensaje</button>
+                            
                             <ul class="social mb-3">
                                 <?=$links?>
                             </ul>

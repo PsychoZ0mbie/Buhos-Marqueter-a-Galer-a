@@ -93,6 +93,7 @@
 					<p class="mb-4">Datos de contacto.</p>
 					<p>Nombre: <strong><?= $data['name'];?></strong></p>
 					<p>Email: <strong><?= $data['email_usuario']; ?></strong></p>
+					<p>Teléfono: <strong><?= $data['phone']; ?></strong></p>
 					<p>Mensaje:</p>
 					<p><?= $data['message']; ?></p>
 					<p class="x_title_gray"><a href="<?= BASE_URL; ?>" target="_blanck"><?= BASE_URL; ?></a></p>

@@ -238,26 +238,28 @@
                             <p>Nos encontramos en <?=$company['addressfull']?></p> 
                             <div class="form--contact-data">
                                 <label>¿Cuál es tu nombre?</label>
-                                <input type="text" placeholder="Nombre">
+                                <input type="text" id="txtContactName" name="txtContactName" placeholder="Nombre">
                                 <span class="form-focus-effect"></span>
                             </div>
                             <div class="form--contact-data">
                                 <label>¿Cuál es tu teléfono?</label>
-                                <input type="text" placeholder="310 123 1234">
+                                <input type="text" id="txtContactPhone" name="txtContactPhone" placeholder="310 123 1234">
                                 <span class="form-focus-effect"></span>
                             </div>
                             <div class="form--contact-data">
                                 <label>¿Cuál es tu correo?</label>
-                                <input type="text" placeholder="micorreo@ejemplo.com">
+                                <input type="text" id="txtContactEmail" name="txtContactEmail" placeholder="micorreo@ejemplo.com">
                                 <span class="form-focus-effect"></span>
                             </div>
                             <div class="form--contact-data">
                                 <label>Tu mensaje</label>
-                                <textarea name="" id="" rows="3" placeholder="Escribe tu mensaje"></textarea>
+                                <textarea name="txtContactMessage" id="txtContactMessage" rows="3" placeholder="Escribe tu mensaje"></textarea>
                                 <span class="form-focus-effect"></span>
                             </div>
+                            <div class="alert alert-danger mt-3 d-none" id="alertContact" role="alert"></div>
                             <div class="mt-3 d-flex justify-content-between align-items-center flex-wrap">
-                                <button type="submit" class="btn btn-bg-1 mb-3">Enviar mensaje</button>
+                                <button type="submit" class="btn btn-bg-1 mb-3" id="btnMessage">Enviar mensaje</button>
+                                
                                 <ul class="social mb-3">
                                     <?=$links?>
                                 </ul>

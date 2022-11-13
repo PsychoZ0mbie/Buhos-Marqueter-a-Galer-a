@@ -16,6 +16,7 @@
             $data['page_title'] = $company['name'];
             $data['productos'] = $this->getProductsT(8);
             $data['page_name'] = "home";
+            $data['app'] = "functions_contact.js";
             $data['tipos'] = $this->selectTipos();
             $this->views->getView($this,"home",$data);
         }

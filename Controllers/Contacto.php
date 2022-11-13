@@ -17,15 +17,16 @@
         }
         public function setContact(){
             if($_POST){
-                if(empty($_POST['txtContactName']) || empty($_POST['txtContactEmail']) || empty($_POST['txtContactMessage'])){
+                if(empty($_POST['txtContactName']) || empty($_POST['txtContactEmail']) || empty($_POST['txtContactMessage']) || empty($_POST['txtContactPhone'])){
                     $arrResponse = array("status"=>true,"msg"=>"Data error");
                 }else{
                     $strName = ucwords(strClean($_POST['txtContactName']));
                     $strEmail = strtolower(strClean($_POST['txtContactEmail']));
+                    $strPhone = strClean($_POST['txtContactPhone']);
                     $strMessage = strClean($_POST['txtContactMessage']);
-                    $strSubject = $_POST['txtSubject'] !="" ? strClean(($_POST['txtSubject'])) : "Se ha enviado un nuevo mensaje";
+                    $strSubject = "Nuevo mensaje";
                     $company = getCompanyInfo();
-                    $request = $this->setMessage($strName,$strEmail,$strSubject,$strMessage);
+                    $request = $this->setMessage($strName,$strPhone,$strEmail,$strSubject,$strMessage);
                     if($request > 0){
                         $dataEmail = array('email_remitente' => $company['email'], 
                                                 'email_usuario'=>$strEmail, 
@@ -33,6 +34,7 @@
                                                 'asunto' =>$strSubject,
                                                 "message"=>$strMessage,
                                                 "company"=>$company,
+                                                "phone"=>$strPhone,
                                                 'name'=>$strName);
                         sendEmail($dataEmail,'email_contact');
                         $arrResponse = array("status"=>true,"msg"=>"Recibimos tu mensaje, pronto nos comunicaremos contigo.");
