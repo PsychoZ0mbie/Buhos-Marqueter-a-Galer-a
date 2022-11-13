@@ -244,8 +244,8 @@ if(document.querySelector("#formSuscriber")){
     btn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;    
     btn.setAttribute("disabled","");
     
-    request(base_url+"/shop/setSuscriber",formData,"post").then(function(objData){
-        btn.innerHTML="Suscribirse";    
+    request(base_url+"/tienda/setSuscriber",formData,"post").then(function(objData){
+        btn.innerHTML=`<i class="fas fa-paper-plane"></i>`;    
         btn.removeAttribute("disabled");
         if(objData.status){
             alert.classList.add("d-none");
