@@ -305,7 +305,8 @@ function openLoginModal(){
                                         <div class="d-flex justify-content-center align-items p-3 bg-color-2 text-white"><i class="fas fa-lock"></i></div>
                                         <input type="password" class="form-control" id="txtSignPassword" name="txtSignPassword" placeholder="Contraseña" required></textarea>
                                     </div>
-                                    <p>Al registrarse en nuestro sitio web, aceptas <a href="${base_url}/policies" target="_blank">nuestras políticas de uso y de privacidad</a>.</p>
+                                    <p>Al registrarse en nuestro sitio web, aceptas <a href="${base_url}/politicas/terminos" target="_blank">nuestras políticas de uso</a> y 
+                                    <a href="${base_url}/politicas/privacidad" target="_blank">de privacidad</a>.</p>
                                     <div class="d-flex justify-content-end mb-3 t-p" >
                                         <div class="c-p loginBtn">¿Ya tienes una cuenta? inicia sesión</div>
                                     </div>
