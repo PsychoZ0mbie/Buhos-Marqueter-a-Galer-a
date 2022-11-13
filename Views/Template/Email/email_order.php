@@ -1,9 +1,8 @@
 <?php 
 
 $order = $data['order']['order'];
-$totalDetail = $data['order']['totaldetail'];
 $detail = $data['order']['detail'];
-
+$subtotal = 0;
  ?>
 
 <!DOCTYPE html>
@@ -107,24 +106,40 @@ $detail = $data['order']['detail'];
 		    </tr>
 		  </thead>
 		  <tbody id="detalleOrden">
-		  	<?php 
-		  		if(count($detail) > 0){
-		  			foreach ($detail as $product) {
-		  	 ?>
-		    <tr>
+		  	<thead class="text-center">
+				<tr>
+					<th>Descripcion</th>
+					<th>Precio</th>
+					<th>Cantidad</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php 
+				if(count($detail) > 0){
+					
+					foreach ($detail as $product) {
+						$subtotal+= $product['quantity']*$product['price'];
+			?>
+			<tr>
 				<?php
-					if($product['topic'] == 2){
+					if($product['topic'] == 2 || $product['topic'] == 3){
 				?>
-		      <td>
+			<td class="text-start">
 				<?=$product['description']?><br>
-			  </td>
+			</td>
 				<?php 
 					}else{ 
 						$arrProducts = json_decode($product['description'],true);
+						$photo = "";
+						if($arrProducts['photo']!=""){
+							$photo = '<img src="'.media()."/images/uploads/".$arrProducts['photo'].'" width="70" height="70"><br>';
+						}
 				?>
-				<td>
+				<td class="text-start">
+					<?=$photo?>
 					<?=$arrProducts['name']?>
-			  <?php
+				<?php
 					$margen = $arrProducts['margin'] > 0 ? '<li><span class="fw-bold t-color-3">Margen:</span> '.$arrProducts['margin'].'cm</li>' : "";
 					$colorMargen = $arrProducts['colormargin'] != "" ? '<li><span class="fw-bold t-color-3">Color margen:</span> '.$arrProducts['colormargin'].'</li>' : "";
 					$colorBorder = $arrProducts['colorborder'] != "" ? '<li><span class="fw-bold t-color-3">Color Borde:</span> '.$arrProducts['colorborder'].'</li>' : "";
@@ -133,10 +148,10 @@ $detail = $data['order']['detail'];
 				?>
 				<?php if($arrProducts['idType'] == 1 || $arrProducts['idType'] == 4 || $arrProducts['idType'] == 5){?>
 				<ul>
-					<li><span class="fw-bold text-secondary">Referencia:</span> <?=$arrProducts['reference']?></li>
-					<li><span class="fw-bold text-secondary">Orientación:</span> <?=$arrProducts['orientation']?></li>
-					<li><span class="fw-bold text-secondary">Estilo:</span> <?=$arrProducts['style']?></li>
-					<li><span class="fw-bold text-secondary">Medidas:</span> <?=$medidas?></li>
+					<li><span class="fw-bold text-start">Referencia:</span> <?=$arrProducts['reference']?></li>
+					<li><span class="fw-bold t-color-3">Orientación:</span> <?=$arrProducts['orientation']?></li>
+					<li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts['style']?></li>
+					<li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
 					<?=$margen?>
 					<li><span class="fw-bold t-color-3">Medidas del marco:</span> <?=$medidasMarco?></li>
 					<?=$colorMargen?>
@@ -170,10 +185,10 @@ $detail = $data['order']['detail'];
 				</ul>
 				<?php }?>
 				</td>
-			  <?php }?>
-		      <td class="text-right"><?=formatNum($product['price'],false)?></td>
-		      <td class="text-center"><?= $product['quantity'] ?></td>
-		      <td class="text-right"><?= formatNum($product['price']*$product['quantity'],false)?></td>
+			<?php }?>
+			<td class="text-right"><?=formatNum($product['price'],false)?></td>
+			<td class="text-center"><?= $product['quantity'] ?></td>
+			<td class="text-right"><?= formatNum($product['price']*$product['quantity'],false)?></td>
 			</tr>
 			<?php 		
 				}
@@ -181,32 +196,33 @@ $detail = $data['order']['detail'];
 			?>
 		  </tbody>
 		  <tfoot>
-		  		<tr>
-		  			<th colspan="3" class="text-right">Subtotal:</th>
-		  			<td class="text-right"><?= formatNum($totalDetail['subtotal'],false)?></td>
-		  		</tr>
+				<tr>
+					<th colspan="3" class="text-end">Subtotal:</th>
+					<td class="text-right"><?= formatNum($subtotal,false)?></td>
+				</tr>
 				<?php
-					if(!empty($totalDetail['arrcupon'])){
-						$cupon = $totalDetail['arrcupon'];
+					if(isset($order['cupon'])){
+						$cupon = $order['cupon'];
+						$subtotal = $subtotal - ($subtotal*($cupon['discount']/100));
 				?>
 				<tr>
-		  			<th colspan="3" class="text-right">Cupon:</th>
-		  			<td class="text-right"><?= $cupon['code']." - ".$cupon['discount']?>%</td>
-		  		</tr>
+					<th colspan="3" class="text-end">Cupon:</th>
+					<td class="text-right"><?= $cupon['code']." - ".$cupon['discount']?>%</td>
+				</tr>
 				<tr>
-		  			<th colspan="3" class="text-right">Subtotal:</th>
-		  			<td class="text-right"><?= formatNum($cupon['cupon'],false)?></td>
-		  		</tr>
+					<th colspan="3" class="text-end">Subtotal:</th>
+					<td class="text-right"><?= formatNum($subtotal,false)?></td>
+				</tr>
 				<?php }?>
 				<tr>
-		  			<th colspan="3" class="text-right">Envio:</th>
-		  			<td class="text-right"><?= formatNum($order['shipping'],false)?></td>
-		  		</tr>
+					<th colspan="3" class="text-end">Envio:</th>
+					<td class="text-right"><?= formatNum($order['shipping'],false)?></td>
+				</tr>
 				<tr>
-		  			<th colspan="3" class="text-right">Total:</th>
-		  			<td class="text-right"><?= formatNum($order['amount'],false)?></td>
-		  		</tr>
-		  </tfoot>
+					<th colspan="3" class="text-end">Total:</th>
+					<td class="text-right"><?= formatNum($order['amount'],false)?></td>
+				</tr>
+		</tfoot>
 		</table>
 		<div class="text-center">
 			<h4>Gracias por tu compra!</h4>			

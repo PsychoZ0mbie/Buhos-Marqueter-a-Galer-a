@@ -75,24 +75,6 @@ if(document.querySelector("#btnCoupon")){
         });
     })
 }
-if(document.querySelector("#checkCity")){
-    let btn = document.querySelector("#checkCity");
-    btn.addEventListener("click",function(){
-        let id = document.querySelector("#selectCity").value;
-        btn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-        btn.setAttribute("disabled","");
-        request(base_url+"/carrito/checkShippingCity/"+id,"","get").then(function(objData){
-            btn.innerHTML=`Checkout`;
-            btn.removeAttribute("disabled");
-            if(objData.status){
-                window.location.href = base_url+"/carrito/checkout";
-            }else{
-                document.querySelector("#alertCity").classList.remove("d-none");
-                document.querySelector("#alertCity").innerHTML = objData.msg;
-            }
-        });
-    });
-}
 function updateCart(){
     let decrement = document.querySelectorAll(".cartDecrement");
     let increment = document.querySelectorAll(".cartIncrement");

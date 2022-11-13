@@ -196,7 +196,7 @@
                     $arrProducts = $_SESSION['arrCart'];
                     //dep($arrProducts);exit;
                     for ($i=0; $i < count($arrProducts) ; $i++) { 
-                        if($topic == 1){
+                        if($arrProducts[$i]['topic'] == 1 && $topic == 1){
                             if($arrProducts[$i]['style'] == $style && $arrProducts[$i]['height'] == $height &&
                             $arrProducts[$i]['width'] == $width && $arrProducts[$i]['margin'] == $margin &&
                             $arrProducts[$i]['colormargin'] == $colorMargin && $arrProducts[$i]['colorborder'] == $colorBorder && 
@@ -205,7 +205,7 @@
                                 $totalPrice =$arrProducts[$i]['qty']*$arrProducts[$i]['price'];
                                 break;
                             }
-                        }else if($topic == 2){
+                        }else if($arrProducts[$i]['topic'] == 1 && $topic == 2){
                             if($arrProducts[$i]['id'] == $id){
                                 $idProduct = intval(openssl_decrypt($id,METHOD,KEY));
                                 $stock = $this->getProductT($idProduct)['stock'];
@@ -369,6 +369,7 @@
             }else if($city > 0){
                 $cityVal = $this->selectShippingCity($city)['value'];
                 $shipping = $cityVal;
+                $_SESSION['shippingcity'] = $shipping;
             }
             $total = $subtotal + $shipping;
             if($code != ""){

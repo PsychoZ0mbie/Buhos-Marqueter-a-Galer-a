@@ -23,6 +23,9 @@
                 $data['company'] = getCompanyInfo();
                 $data['shipping'] = $this->selectShippingMode();
                 $data['app'] = "functions_checkout.js";
+                if($data['shipping']['id'] == 3 && !isset($_SESSION['shippingcity'])){
+                    header("location: ".base_url()."/carrito");
+                }
                 if(isset($_GET['cupon'])){
                     $cupon = strtoupper(strClean($_GET['cupon']));
                     $cuponData = $this->selectCouponCode($cupon);
@@ -78,9 +81,6 @@
             }
             if($arrShipping['id'] != 3){
                 $shipping = $arrShipping['value'];
-            }else if($city > 0){
-                $cityVal = $this->selectShippingCity($city)['value'];
-                $shipping = $cityVal;
             }
             $total = $subtotal + $shipping;
             if($code != ""){
@@ -108,17 +108,6 @@
                 $arrData['cupon'] = formatNum($arrData['cupon']); 
                 echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
             }
-            die();
-        }
-        public function checkShippingCity($id){
-            $id = intval($id);
-            $request = $this->selectShippingCity($id);
-            if(!empty($request)){
-                $arrResponse = array("status"=>true);
-            }else{
-                $arrResponse = array("status"=>false,"msg"=>"Por favor, seleccione una ciudad.");
-            }
-            echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             die();
         }
         /******************************Checkout methods************************************/
@@ -171,9 +160,11 @@
             $status = $arrData['status'];
             $idTransaction =$arrData['transaction'];
             $type =$arrData['type'];
-
+            $envio = 0;
+            
             $arrProducts = $_SESSION['arrCart'];
             $arrTotal = $this->calcTotalCart($arrProducts,$cupon);
+            $total = $arrTotal['total'];
             if($arrTotal['status']){
                 $cupon ="";
             }
@@ -181,13 +172,19 @@
             $arrShipping = $this->selectShippingMode();
             if($arrShipping['id']!=3){
                 $envio = $arrShipping['value'];
+            }else{
+                $envio = $_SESSION['shippingcity'];
+                $total +=$envio;
             }
-            $request = $this->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$arrTotal['total'],$status,$type);          
+            $request = $this->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$total,$status,$type);          
             if($request>0){
                 $arrOrder = array("idorder"=>$request,"iduser"=>$_SESSION['idUser'],"products"=>$_SESSION['arrCart']);
                 $requestDetail = $this->insertOrderDetail($arrOrder);
                 $orderInfo = $this->getOrder($request);
-                $orderInfo['totaldetail'] = $arrTotal;
+                if($orderInfo['order']['coupon']!=""){
+                    $orderInfo['order']['cupon'] = $this->selectCouponCode($orderInfo['order']['coupon']);
+                }
+                //$orderInfo['totaldetail'] = $arrTotal;
                 $company = getCompanyInfo();
                 $dataEmailOrden = array(
                     'asunto' => "Se ha generado un pedido",
@@ -202,6 +199,7 @@
                 $idTransaction = openssl_encrypt($orderInfo['order']['idtransaction'],METHOD,KEY);
                 $orderData = array("order"=>$idOrder,"transaction"=>$idTransaction);
                 unset($_SESSION['arrCart']);
+                unset($_SESSION['shippingcity']);
             }
             return $orderData;
         }

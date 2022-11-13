@@ -26,6 +26,9 @@
     if($arrShipping['id'] != 3){
         $envio = $arrShipping['value'];
         $total+=$envio;
+    }else if($arrShipping['id'] && isset($_SESSION['shippingcity'])){
+        $envio = $_SESSION['shippingcity'];
+        $total+= $envio;
     }
 
     $item->title = "productos";

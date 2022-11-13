@@ -9,8 +9,6 @@
     if(isset($_GET['cupon'])){
         $urlCupon = "?cupon=".$_GET['cupon'];
     }
-
-
 ?>
     <main id="cart">
         <div class="container">
@@ -200,13 +198,8 @@
                         <button class="btn btnc-primary" type="button" id="button-addon2">+</button>
                     </div>-->
                     <?php if(isset($_SESSION['login'])){ 
-                        if($arrShipping['id']!=3){
                     ?>
                     <a href="<?=base_url()."/pago".$urlCupon?>" class="mb-3 w-100 btn btn-bg-1">Pagar</a>
-                    <?php }else{ ?>
-                        <div class="alert alert-danger d-none" id="alertCity"></div>
-                        <button type="button" id="checkCity" class="mb-3 w-100 btn btn-bg-1">Pagar</button>
-                    <?php }?>
                     <?php }else{ ?>
                     <button type="button" onclick="openLoginModal();" class="mb-3 w-100 btn btn-bg-1">Pagar</button>
                     <?php }?>
