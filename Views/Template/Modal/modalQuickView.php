@@ -1,7 +1,7 @@
 <?php
     $price ='</span><span class="current">'.formatNum($data['price']).'</span>';
     $discount ="";
-    if($data['discount'] > 0){
+    if($data['discount'] > 0 && $data['stock'] > 0){
         $discount = '<span class="discount">-'.$data['discount'].'%</span>';
         $price ='<span class="current sale me-2">'.formatNum($data['priceDiscount']).'</span><span class="compare">'.formatNum($data['price']).'</span>';
     }else if($data['stock'] == 0){

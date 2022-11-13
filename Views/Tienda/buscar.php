@@ -101,7 +101,7 @@
                                 $id = openssl_encrypt($productos[$i]['idproduct'],METHOD,KEY);
                                 $discount = "";
                                 $price ='</span><span class="current">'.formatNum($productos[$i]['price']).'</span>';
-                                if($productos[$i]['discount'] > 0){
+                                if($productos[$i]['discount'] > 0 && $productos[$i]['stock'] > 0){
                                     $discount = '<span class="discount">-'.$productos[$i]['discount'].'%</span>';
                                     $price ='<span class="current sale me-2">'.formatNum($productos[$i]['priceDiscount']).'</span><span class="compare">'.formatNum($productos[$i]['price']).'</span>';
                                 }else if($productos[$i]['stock'] == 0){
