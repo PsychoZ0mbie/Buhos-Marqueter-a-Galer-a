@@ -46,8 +46,8 @@ formProfile.addEventListener("submit",function(e){
     let strConfirmPassword = document.querySelector("#txtConfirmPassword").value;
     let idusuarios = document.querySelector("#idUser").value;
 
-    if(strFirstName == "" || strLastName == "" || strEmail == "" || strPhone == "" || intCountry == "" || intState == ""
-    || intCity == "" || strAddress ==""){
+    if(strFirstName == "" || strLastName == "" || strEmail == "" || strPhone == "" || intCountry == 0 || intState == 0
+    || intCity == 0 || strAddress ==""){
         Swal.fire("Error","Todos los campos marcados con (*) son obligatorios","error");
         return false;
     }

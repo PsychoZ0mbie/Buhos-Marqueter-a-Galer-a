@@ -383,18 +383,14 @@
             $countries = $this->model->selectCountries();
             $states = $this->model->selectStates($idCountry);
             $cities = $this->model->selectCities($idState);
-
-            $countrieshtml="";
-            $stateshtml="";
-            $citieshtml="";
-
-            for ($i=0; $i < count($countries) ; $i++) { 
-                if($idCountry == $countries[$i]['id']){
-                    $countrieshtml.='<option value="'.$countries[$i]['id'].'" selected>'.$countries[$i]['name'].'</option>';
-                    
-                }else{
-                    $countrieshtml.='<option value="'.$countries[$i]['id'].'">'.$countries[$i]['name'].'</option>';
-                }
+            //dep($countries);exit;
+            $countrieshtml='';
+            $stateshtml='';
+            $citieshtml='';
+            if($idCountry == $countries['id']){
+                $countrieshtml.='<option value="0">Seleccione</option><option value="'.$countries['id'].'" selected>'.$countries['name'].'</option>';
+            }else{
+                $countrieshtml.='<option value="0" selected>Seleccione</option><option value="'.$countries['id'].'">'.$countries['name'].'</option>';
             }
             for ($i=0; $i < count($states) ; $i++) { 
                 if($idState == $states[$i]['id']){

@@ -205,7 +205,8 @@
             return $request;
         }
         public function selectCountries(){
-            $request = $this->select_all("SELECT * FROM countries");
+            $sql = "SELECT * FROM countries WHERE id = 47";
+            $request = $this->select($sql);
             return $request;
         }
         public function selectStates($country){

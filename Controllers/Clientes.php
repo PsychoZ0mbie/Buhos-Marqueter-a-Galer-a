@@ -94,18 +94,16 @@
                             $states = $this->model->selectStates($request['countryid']);
                             $cities = $this->model->selectCities($request['stateid']);
 
-                            $countrieshtml="";
+                            $countrieshtml='';
+                            if($request['countryid'] == $countries['id']){
+                                $countrieshtml.='<option value="0">Seleccione</option><option value="'.$countries['id'].'" selected>'.$countries['name'].'</option>';
+                            }else{
+                                $countrieshtml.='<option value="0" selected>Seleccione</option><option value="'.$countries['id'].'">'.$countries['name'].'</option>';
+                            }
+
                             $stateshtml="";
                             $citieshtml="";
 
-                            for ($i=0; $i < count($countries) ; $i++) { 
-                                if($request['countryid'] == $countries[$i]['id']){
-                                    $countrieshtml.='<option value="'.$countries[$i]['id'].'" selected>'.$countries[$i]['name'].'</option>';
-                                    
-                                }else{
-                                    $countrieshtml.='<option value="'.$countries[$i]['id'].'">'.$countries[$i]['name'].'</option>';
-                                }
-                            }
                             for ($i=0; $i < count($states) ; $i++) { 
                                 if($request['stateid'] == $states[$i]['id']){
                                     $stateshtml.='<option value="'.$states[$i]['id'].'" selected>'.$states[$i]['name'].'</option>';
@@ -323,11 +321,10 @@
         }
         public function getCountries(){
             $request = $this->model->selectCountries();
-            $html='<option value="0" selected>Seleccione</option>';
-            for ($i=0; $i < count($request) ; $i++) { 
-                $html.='<option value="'.$request[$i]['id'].'">'.$request[$i]['name'].'</option>';
-            }
-
+            $html='
+            <option value="0" selected>Seleccione</option>
+            <option value="'.$request['id'].'">'.$request['name'].'</option>
+            ';
             echo json_encode($html,JSON_UNESCAPED_UNICODE);
             die();
         }
