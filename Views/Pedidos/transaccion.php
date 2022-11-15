@@ -1,29 +1,28 @@
 <?php 
 headerAdmin($data);
-$transaction = $data['transaction'];
-$idTransaction = $transaction->purchase_units[0]->payments->captures[0]->id;
-$date = $transaction->purchase_units[0]->payments->captures[0]->create_time;
-$status = $transaction->purchase_units[0]->payments->captures[0]->status;
-$amount = $transaction->purchase_units[0]->payments->captures[0]->amount->value;
-$currency = $transaction->purchase_units[0]->payments->captures[0]->amount->currency_code;
-$name = $transaction->purchase_units[0]->shipping->name->full_name;
-$address=$transaction->purchase_units[0]->shipping->address->address_line_1;
-$address.=", ".$transaction->purchase_units[0]->shipping->address->admin_area_2;
-$address.=" ".$transaction->purchase_units[0]->shipping->address->postal_code;
-$address.=", ".$transaction->purchase_units[0]->shipping->address->country_code;
-$email = $transaction->payer->email_address;
-$payee = $transaction->purchase_units[0]->payee->email_address;
-$grossAmount = $transaction->purchase_units[0]->payments->captures[0]->seller_receivable_breakdown->gross_amount->value;
-$feeAmount = $transaction->purchase_units[0]->payments->captures[0]->seller_receivable_breakdown->paypal_fee->value;
-$netAmount = $transaction->purchase_units[0]->payments->captures[0]->seller_receivable_breakdown->net_amount->value;
 
+$transaction = $data['transaction'];
+$details = $transaction->transaction_details;
+$refunds = $transaction->refunds;
+//dep($transaction);exit;
+//dep($refunds);exit;
+$idTransaction = $transaction->id;
+$status = $transaction->status;
+$date = $transaction->date_created;
+$payment_type = $transaction->payment_type_id;
+$amount = $transaction->transaction_amount;
+$comision = $transaction->fee_details[0]->amount;
+$net = $amount-$comision;
+
+//Payer
+$payer = $transaction->payer;
+$name = $payer->first_name." ".$payer->last_name;
+$email = $payer->email;
+$identification = $payer->identification->type." ".$payer->identification->number;
+$phone = $payer->phone->number;
 $refund = false;
-if(isset($transaction->purchase_units[0]->payments->refunds)){
-    $refund = true;
-    $grossAmount = $transaction->purchase_units[0]->payments->refunds[0]->seller_payable_breakdown->gross_amount->value;
-    $feeAmount = $transaction->purchase_units[0]->payments->refunds[0]->seller_payable_breakdown->paypal_fee->value;
-    $netAmount = $transaction->purchase_units[0]->payments->refunds[0]->seller_payable_breakdown->net_amount->value;
-    $dateUpdate = $transaction->purchase_units[0]->payments->captures[0]->update_time;
+if(!empty($refunds)){
+
 }
 ?>
 <div id="modalItem"></div>
@@ -34,82 +33,42 @@ if(isset($transaction->purchase_units[0]->payments->refunds)){
             <div class="card-body">
                 <div id="orderInfo">
                     <div class="d-flex justify-content-between align-items-center flex-wrap">
-                        <img src="<?=media()?>/images/uploads/paypal.png" style="width=100px;height:100px;" alt="">
-                        <?php if(!$refund){ 
-                            if($_SESSION['permitsModule']['r'] && $_SESSION['userData']['roleid'] != 2){
-                        ?>
-                            <button type="button" class="btn btn-success text-white" id="btnRefund" data-id="<?=$idTransaction?>"><i class="fas fa-undo"></i> Refund</a>
-                        <?php } }?>
+                        <img src="<?=media()?>/images/uploads/mercadopago.jpg" style="width=100px;height:100px;" alt="">
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 mb-3">
                             <p class="m-0 mb-2"><span class="fw-bold">Transacción:</span> <?=$idTransaction?></p>
                             <p class="m-0"><span class="fw-bold">Fecha:</span> <?=$date?></p>
                             <p class="m-0"><span class="fw-bold">Estado:</span> <?=$status?></p>
-                            <p class="m-0"><span class="fw-bold">Monto:</span> <?=$amount?></p>
-                            <p class="m-0"><span class="fw-bold">Divisa:</span> <?=$currency?></p>
+                            <p class="m-0"><span class="fw-bold">Monto:</span> <?=formatNum($amount)?></p>
                         </div>
                         <div class="col-md-4 mb-3">
                             <p class="m-0 mb-2 fw-bold">Pagador</p>
                             <p class="m-0"><span class="fw-bold">Nombre:</span> <?=$name?></p>
                             <p class="m-0"><span class="fw-bold">Email:</span> <?=$email?></p>
-                            <p class="m-0"><span class="fw-bold">Dirección:</span> <?=$address?></p>
+                            <p class="m-0"><span class="fw-bold">Teléfono:</span> <?=$phone?></p>
+                            <p class="m-0"><span class="fw-bold">Identificación:</span> <?=$identification?></p>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <p class="m-0 mb-2 fw-bold">Beneficiario</p>
-                            <p class="m-0"><span class="fw-bold">Email:</span> <?=$payee?></p>
+                            <p class="m-0 fw-bold">Beneficiario</p>
+                            <p class="m-0"><span class="fw-bold">Descripción:</span> <?=$transaction->statement_descriptor?></p>
                         </div>
                     </div>
-                    <?php if($refund){?>
-                    <table class="table items align-middle">
-                        <thead class="text-center">
-                            <tr>
-                                <th>Movimiento</th>
-                                <th>Monto bruto</th>
-                                <th>Comisión de paypal</th>
-                                <th>Monto total</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center">
-                            <?php if($_SESSION['userData']['roleid'] == 2){?>
-                            <tr>
-                                <td><?=$dateUpdate.' Refund for '.$name?></td>
-                                <td class="text-right"> <?=formatNum($grossAmount)?></td>
-                                <td class="text-right"><?=formatNum(0)?></td>
-                                <td class="text-right"> <?=formatNum($grossAmount)?></td>
-                            </tr>
-                            <?php }else{?>
-                            <tr>
-                                <td><?=$dateUpdate.' Refund for '.$name?></td>
-                                <td class="text-right">- <?=formatNum($grossAmount)?></td>
-                                <td class="text-right">- <?=formatNum($feeAmount)?></td>
-                                <td class="text-right">- <?=formatNum($netAmount)?></td>
-                            </tr>
-                            <tr>
-                                <td><?=$dateUpdate.' Paypal fee canceled for '.$name?></td>
-                                <td class="text-right"> <?=formatNum($feeAmount)?></td>
-                                <td class="text-right"><?=formatNum(0)?></td>
-                                <td class="text-right"> <?=formatNum($feeAmount)?></td>
-                            </tr>
-                            <?php }?>
-                        </tbody>
-                    </table>
-                    <?php }?>
                     <?php if($_SESSION['permitsModule']['r'] && $_SESSION['userData']['roleid'] != 2){?>
-                    <div class="row text-start mb-3">
+                    <div class="row text-start mt-3 mb-3">
                         <p class="m-0 mb-2 fw-bold">Detalles de pago</p>
-                        <p class="m-0"><span class="fw-bold">Monto bruto:</span> <?=formatNum($grossAmount)?></p>
-                        <p class="m-0"><span class="fw-bold">Comisión de paypal:</span> -<?=formatNum($feeAmount)?></p>
-                        <p class="m-0"><span class="fw-bold">Monto total:</span> <?=formatNum($netAmount)?></p>
+                        <p class="m-0"><span class="fw-bold">Monto bruto:</span> <?=formatNum($amount)?></p>
+                        <p class="m-0"><span class="fw-bold">Comisión de mercadopago:</span> -<?=formatNum($comision)?></p>
+                        <p class="m-0"><span class="fw-bold">Monto neto:</span> <?=formatNum($net)?></p>
                     </div>
                     <?php }?>
                 </div>
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-6 text-start">
                         <a href="<?=base_url()?>/pedidos" class="btn btn-secondary text-white"><i class="fas fa-arrow-circle-left"></i> Regresar</a>
                     </div>
                     <div class="col-6 text-end">
-                        <button type="button" id="btnPrint" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
+                    <button type="button" onclick="printJS({ printable: 'orderInfo', type: 'html', targetStyles: ['*']})" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
                     </div>
                 </div>
             </div>

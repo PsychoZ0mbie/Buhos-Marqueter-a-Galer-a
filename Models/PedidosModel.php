@@ -59,49 +59,12 @@
             $sql = "SELECT * FROM orderdata WHERE idtransaction = '$this->intIdTransaction' $option";
             $request = $this->select($sql);
             if(!empty($request)){
-                $objData = json_decode($request['paypaldata']);
+
                 //dep($objData);exit;
-                //$urlTransaction ="https://api.sandbox.paypal.com/v2/payments/captures/".$this->intIdTransaction;
-                $urlOrder =$objData->links[0]->href;
-                $objTransaction = curlConnectionGet($urlOrder,"application/json",getTokenPaypal());
-                //dep($objTransaction);exit;
+                $urlTransaction ="https://api.mercadopago.com/v1/payments/".$this->intIdTransaction;
+                $objTransaction = curlConnectionGet($urlTransaction,"application/json");
             }
             return $objTransaction;
-        }
-        public function insertRefund($idTransaction,$strDescription){
-            $response = false;
-            $this->intIdTransaction = $idTransaction;
-            //href: "https://api.sandbox.paypal.com/v2/payments/captures/9PA67488FV4531342/refund"
-            $sql = "SELECT idorder,paypaldata FROM orderdata WHERE idtransaction = '$this->intIdTransaction'";
-            $request = $this->select($sql);
-            if(!empty($request)){
-                //$objData = $request['paypaldata'];
-                $urlRefund = URLPAYPAL."/v2/payments/captures/".$this->intIdTransaction."/refund";
-                $objData = curlConnectionPost($urlRefund,"application/json",getTokenPaypal());
-                if(isset($objData->status) && $objData->status =="COMPLETED"){
-                    $idorder = $request['idorder'];
-                    $idTransaction = $objData->id;
-                    $dataRefund = json_encode($objData);
-                    $status = $objData->status;
-                    $sqlRefund = "INSERT INTO refund(orderid,idtransaction,datarefund,description,status) VALUES(?,?,?,?,?)";
-                    $arrData = array(
-                        $idorder,
-                        $idTransaction,
-                        $dataRefund,
-                        $strDescription,
-                        $status
-                    );
-                    $requestRefund = $this->insert($sqlRefund,$arrData);
-                    if($requestRefund >0){
-                        $sql = "UPDATE orderdata SET status=? WHERE idorder = $idorder";
-                        $arrData = array("REFUNDED");
-                        $request = $this->update($sql,$arrData);
-                        $response = true;
-                    }
-                }
-            }
-            return $response;
-
         }
         public function deleteOrder($id){
             $this->intIdOrder = $id;

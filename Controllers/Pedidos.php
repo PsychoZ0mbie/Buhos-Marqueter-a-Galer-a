@@ -129,13 +129,13 @@
                 if(count($request)>0){
                     for ($i=0; $i < count($request); $i++) { 
 
-                        $btnView='<a href="'.base_url().'/pedidos/pedido/'.$request[$i]['idorder'].'" class="btn btn-info text-white m-1" type="button" title="View order" name="btnView"><i class="fas fa-eye"></i></a>';
+                        $btnView='<a href="'.base_url().'/pedidos/pedido/'.$request[$i]['idorder'].'" class="btn btn-info text-white m-1" type="button" title="Ver orden" name="btnView"><i class="fas fa-eye"></i></a>';
                         $btnPaypal='';
                         $btnDelete ="";
                         $btnEdit ="";
 
-                        if($request[$i]['type'] == "paypal"){
-                            $btnPaypal = '<a href="'.base_url().'/pedidos/transaccion/'.$request[$i]['idorder'].'" class="btn btn-info m-1 text-white " type="button" title="View Transaction" name="btnPaypal"><i class="fab fa-paypal"></i></a>';
+                        if($request[$i]['type'] != "pos"){
+                            $btnPaypal = '<a href="'.base_url().'/pedidos/transaccion/'.$request[$i]['idtransaction'].'" class="btn btn-info m-1 text-white " type="button" title="Ver transacción" name="btnPaypal"><i class="fas fa-receipt"></i></a>';
                         }
 
                         if($_SESSION['permitsModule']['d'] && $_SESSION['userData']['roleid'] == 1){
