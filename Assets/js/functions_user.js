@@ -451,7 +451,7 @@ function deleteItem(id){
             formData.append("idUser",id);
             request(url,formData,"post").then(function(objData){
                 if(objData.status){
-                    Swal.fire("Deleted",objData.msg,"success");
+                    Swal.fire("Eliminado",objData.msg,"success");
                     element.innerHTML = objData.data;
                 }else{
                     Swal.fire("Error",objData.msg,"error");

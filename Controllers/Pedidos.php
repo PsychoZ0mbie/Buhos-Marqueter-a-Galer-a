@@ -423,14 +423,14 @@
                                             foreach ($_SESSION['arrPOS'] as $quantity) {
                                                 $total += $quantity['qty']*$quantity['price'];
                                             }
-                                            $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
+                                            $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>floor($total),"data"=>$data);
                                         }
                                         $flag =false;
                                         break;
                                     }
                                 }else if($topic == 3){
                                     if($service == $arrCart[$i]['name']){
-                                        $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
+                                        $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>floor($total),"data"=>$data);
                                         break;
                                     }
                                 }
@@ -445,7 +445,7 @@
                                     foreach ($_SESSION['arrPOS'] as $quantity) {
                                         $total += $quantity['qty']*$quantity['price'];
                                     }
-                                    $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
+                                    $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>floor($total),"data"=>$data);
                                 }
                             }
                             
@@ -458,7 +458,7 @@
                                 foreach ($_SESSION['arrPOS'] as $quantity) {
                                     $total += $quantity['qty']*$quantity['price'];
                                 }
-                                $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>$total,"data"=>$data);
+                                $arrResponse = array("status"=>true,"msg"=>"Ha sido agregado a tu carrito.","total"=>formatNum($total),"value"=>floor($total),"data"=>$data);
                             } 
                         }
                         $arrResponse['html'] = $this->currentCart();
@@ -519,7 +519,7 @@
                         foreach ($_SESSION['arrPOS'] as $pro) {
                             $total+=$pro['qty']*$pro['price'];
                         }
-                        $arrResponse = array("status"=>true,"total" =>formatNum($total),"value"=>$total,"totalprice"=>formatNum($totalPrice,false),"qty"=>$qty);
+                        $arrResponse = array("status"=>true,"total" =>formatNum($total),"value"=>floor($total),"totalprice"=>formatNum($totalPrice,false),"qty"=>$qty);
                     }else{
                         $arrResponse = array("status"=>false,"msg" =>"Error de datos.");
                     }
@@ -580,7 +580,7 @@
                         $total += $pro['qty']*$pro['price'];
                     }
                     $html = $this->currentCart();
-                    $arrResponse = array("status"=>true,"total" =>formatNum($total),"value"=>$total,"html"=>$html);
+                    $arrResponse = array("status"=>true,"total" =>formatNum($total),"value"=>floor($total),"html"=>$html);
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
@@ -707,10 +707,10 @@
                         $idTransaction ="POS";
                         $type ="pos";
                         $envio = 0;
-
+                        //dep(array("recibido"=>$received,"total"=>$total));exit;
                         if($received < $total){
                             $status = "pendent";
-                            $strNote = "Abona ".formatNum($received,false).", debe ".formatNum($total-$received,false);
+                            $strNote .= " Abona ".formatNum($received,false).", debe ".formatNum($total-$received,false);
                         }
                         $request = $this->model->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$total,$status,$type);          
                         if($request>0){

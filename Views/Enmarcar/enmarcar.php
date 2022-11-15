@@ -13,7 +13,7 @@
             ?>
             <div class="col-6 col-lg-3 col-md-6 mb-3">
                 <div class="card--enmarcar w-100 hover">
-                    <div class="card--enmarcar-img">
+                    <div class="card--enmarcar-img img--contain">
                         <a href="<?=$url?>"><img src="<?=$img?>" alt="Enmarcar <?=$tipos[$i]['name']?>"></a>
                     </div>
                     <div class="card--enmarcar-info">

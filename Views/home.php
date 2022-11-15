@@ -78,7 +78,7 @@
                                     } 
                             ?>
                             <div class="card--enmarcar shadow">
-                                <div class="card--enmarcar-img">
+                                <div class="card--enmarcar-img img--contain">
                                     <a href="<?=$url?>"><img src="<?=$img?>" alt="Enmarcar <?=$tipos[$j]['name']?>"></a>
                                 </div>
                                 <div class="card--enmarcar-info">

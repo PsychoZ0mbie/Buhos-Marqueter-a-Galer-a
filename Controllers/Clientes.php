@@ -289,7 +289,7 @@
 
                         $request = $this->model->deleteCustomer($id);
                         if($request=="ok"){
-                            $arrResponse = $this->getCustomers();
+                            $arrResponse = array("status"=>true,"msg"=>"Se ha eliminado.","data"=>$this->getCustomers()['data']);
                             $arrResponse['msg'] = "Se ha eliminado";
                         }else{
                             $arrResponse = array("status"=>false,"msg"=>"No es posible eliminar, intenta de nuevo.");
