@@ -32,7 +32,7 @@
                     $data['app'] = "functions_personalizar.js";
                     $data['option'] = getFile("Template/Enmarcar/general",$data);
                 }elseif($request['id'] == 3){
-                    $data['app'] = "functions_personalizar_directo.js";
+                    $data['app'] = "functions_personalizar_espejo.js";
                     $data['option'] = getFile("Template/Enmarcar/espejo",$data);
                 }elseif($request['id']==4){
                     $data['colores'] = $this->selectColors();
@@ -167,10 +167,12 @@
             $triplex = $material[5]['price'];
             $vidrio = $material[3]['price'];
             $espuma = $material[6]['price'];
-            $espejo =$material[7]['price'];
+            $espejo3mm =$material[7]['price'];
             $impresion =$material[8]['price'];
             $retablo =$material[9]['price'];
             $carton = $material[10]['price'];
+            $espejo4mm =$material[11]['price'];
+            //$espejoBicelado =$material[12]['price'];
 
             $total = 0;
             if($tipo==1){
@@ -184,7 +186,14 @@
                     $total = ($area * $triplex)+($perimetro*$hijillo)+($area*$vidrio)+($area*$carton);
                 }
             }else if($tipo == 3){
-                $total = $area * $espejo;
+                if($estilo == 1){
+                    $total = ($area * $triplex) +($area * $espejo3mm);
+                }else if($estilo == 2){
+                    $total = ($area * $triplex) + ($area * $espejo4mm);
+                }/*else if($estilo == 3){
+                    $total = ($area * $triplex) + ($area * $espejoBicelado);
+                }*/
+                
             }else if($tipo == 4){
                 if($estilo == 1){
                     $total = $perimetro * $bastidor;
