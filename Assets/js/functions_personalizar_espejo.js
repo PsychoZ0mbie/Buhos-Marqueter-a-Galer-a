@@ -235,7 +235,7 @@ addFrame.addEventListener("click",function(){
     }
 
     let margin = 0;
-    let styleFrame = 1;
+    let styleFrame = selectStyle.value;
     let height = intHeight.value;
     let width = intWidth.value;
     let id = document.querySelector(".frame--item.element--active").getAttribute("data-id");
