@@ -39,7 +39,15 @@
                     </div>
                     <div id="selectedCustomer"></div>
                     <div class="mt-3 mb-3">
-                        <label for="" class="form-label">Dinero recibido:</label>
+                        <label for="" class="form-label">Fecha</label>
+                        <input type="date" name="" id="txtDate" class="form-control">
+                    </div>
+                    <div class="mt-3 mb-3">
+                        <label for="" class="form-label">Notas <span class="text-danger">*</span></label>
+                        <textarea rows="5" name="" id="txtNotePos" class="form-control"></textarea>
+                    </div>
+                    <div class="mt-3 mb-3">
+                        <label for="" class="form-label">Dinero recibido <span class="text-danger">*</span></label>
                         <input type="number" name="" id="moneyReceived" class="form-control">
                     </div>
                     <p id="saleValue"></p>

@@ -55,6 +55,24 @@
                 die();
             }
         }
+        public function transaccion($idTransaction){
+            if($_SESSION['permitsModule']['r']){
+                $idPerson ="";
+                if($_SESSION['userData']['roleid'] == 2 ){
+                    $idPerson= $_SESSION['idUser'];
+                }
+                $data['transaction'] = $this->model->selectTransaction($idTransaction,$idPerson);
+                $data['page_tag'] = "Transacción";
+                $data['page_title'] = "Transacción";
+                $data['page_name'] = "transaccion";
+                $data['app'] = "functions_orders.js";
+                $this->views->getView($this,"transaccion",$data);
+                
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+        }
         public function getOrder(){
             if($_SESSION['permitsModule']['r']){
                 if($_POST){
@@ -84,9 +102,13 @@
             if($_SESSION['permitsModule']['u']){
                 //dep($_POST);exit;
                 if($_POST){
+                    if(empty($_POST['strNote']) || empty($_POST['status'])){
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
+                    }
                     $idOrder = intval($_POST['idOrder']);
                     $status = strtolower(strClean($_POST['status']));
-                    $request = $this->model->updateOrder($idOrder,$status);
+                    $strNote = strClean($_POST['strNote']);
+                    $request = $this->model->updateOrder($idOrder,$strNote,$status);
                     if($request>0){
                         $arrResponse = array("status"=>true,"msg"=>"Pedido actualizado","data"=>$this->getOrders()['data']);
                     }else{
@@ -96,24 +118,6 @@
                 echo json_encode ($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
-        }
-        public function transaccion($idTransaction){
-            if($_SESSION['permitsModule']['r']){
-                $idPerson ="";
-                if($_SESSION['userData']['roleid'] == 2 ){
-                    $idPerson= $_SESSION['idUser'];
-                }
-                $data['transaction'] = $this->model->selectTransaction($idTransaction,$idPerson);
-                $data['page_tag'] = "Transacción";
-                $data['page_title'] = "Transacción";
-                $data['page_name'] = "transaccion";
-                $data['app'] = "functions_orders.js";
-                $this->views->getView($this,"transaccion",$data);
-                
-            }else{
-                header("location: ".base_url());
-                die();
-            }
         }
         public function getOrders($option=null,$params=null){
             if($_SESSION['permitsModule']['r']){
@@ -686,7 +690,7 @@
         public function setOrder(){
             if($_SESSION['permitsModule']['w']){
                 if($_POST){
-                    if(empty($_POST['id'])){
+                    if(empty($_POST['id']) || empty($_POST['received']) || empty($_POST['strNote'])){
                         $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }else{
                         $total = 0;
@@ -698,7 +702,8 @@
                         $customInfo = $this->model->selectCustomer($idUser);
                         $status = "approved";
                         $received = intval($_POST['received']);
-                        $strNote = "";
+                        $strNote = strClean($_POST['strNote']);
+                        $strDate = $_POST['strDate'];
                         $strName = $customInfo['firstname']." ".$customInfo['lastname'];
                         $strEmail = $customInfo['email'];
                         $strPhone = $customInfo['phone'];
@@ -707,12 +712,11 @@
                         $idTransaction ="POS";
                         $type ="pos";
                         $envio = 0;
-                        //dep(array("recibido"=>$received,"total"=>$total));exit;
                         if($received < $total){
                             $status = "pendent";
-                            $strNote .= " Abona ".formatNum($received,false).", debe ".formatNum($total-$received,false);
+                            $strNote .= " - abona ".formatNum($received,false).", debe ".formatNum($total-$received,false);
                         }
-                        $request = $this->model->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$total,$status,$type);          
+                        $request = $this->model->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$strDate,$cupon,$envio,$total,$status,$type);          
                         if($request>0){
                             $arrOrder = array("idorder"=>$request,"iduser"=>$idUser,"products"=>$_SESSION['arrPOS']);
                             $requestDetail = $this->model->insertOrderDetail($arrOrder);

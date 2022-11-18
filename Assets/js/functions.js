@@ -41,8 +41,8 @@ function setTinymce(selectorId,height=null){
     }
 
     tinymce.init({
-        relative_urls: 0,
-        remove_script_host: 0,
+        relative_urls: false,
+        remove_script_host: false,
         selector: selectorId,
         height: height,
         plugins: [

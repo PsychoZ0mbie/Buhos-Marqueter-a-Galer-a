@@ -71,9 +71,9 @@
         $view_footer="Views/Template/footer_admin.php";
         require_once ($view_footer);
     }
-    function getModal(string $nameModal, $data){
+    function getModal(string $nameModal, $data=null){
     
-        $view_modal = "Views/Template/Modals/{$nameModal}.php";
+        $view_modal = "Views/Template/Modal/{$nameModal}.php";
         require_once $view_modal;        
     }
     function dep($data){

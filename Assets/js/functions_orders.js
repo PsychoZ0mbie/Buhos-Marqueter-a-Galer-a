@@ -20,17 +20,21 @@ if(document.querySelector("#quickSale")){
     btnAddPos.addEventListener("click",function(){
         let id = document.querySelector("#idCustomer").value;
         let received = moneyReceived.value;
+        let strDate = document.querySelector("#txtDate").value;
+        let strNote = document.querySelector("#txtNotePos").value;
         if(id <= 0){
             Swal.fire("Error","Por favor, añada un cliente para establecer el pedido","error");
             return false;
         }
-        if(received ==""){
-            Swal.fire("Error","Por favor, ingresa el dinero recibido","error");
+        if(received =="" || strNote ==""){
+            Swal.fire("Error","Los campos con (*) son obligatorios","error");
             return false;
         }
         let formData = new FormData();
         formData.append("id",id);
         formData.append("received",received);
+        formData.append("strDate",strDate);
+        formData.append("strNote",strNote);
         btnAddPos.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
         btnAddPos.setAttribute("disabled","");
         request(base_url+"/pedidos/setOrder",formData,"post").then(function(objData){
@@ -163,10 +167,6 @@ if(document.querySelector("#pedidos")){
                                         <td>${objData.data.status}</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Notas: </strong></td>
-                                        <td>${objData.data.note}</td>
-                                    </tr>
-                                    <tr>
                                         <td><strong>Total: </strong></td>
                                         <td>${objData.data.amount}</td>
                                     </tr>
@@ -174,6 +174,10 @@ if(document.querySelector("#pedidos")){
                             </table>
                             <form id="formOrder">
                                 <input type="hidden" id="idOrder" name="idOrder" value="${objData.data.idorder}">
+                                <div class="mt-3 mb-3">
+                                    <label for="" class="form-label">Notas <span class="text-danger">*</span></label>
+                                    <textarea rows="5" name="strNote" id="txtNotePos" class="form-control">${objData.data.note}</textarea>
+                                </div>
                                 <div class="mb-3">
                                     <label for="typeList" class="form-label">Estado <span class="text-danger">*</span></label>
                                     <select class="form-control" aria-label="Default select example" id="statusList" name="statusList" required>
@@ -199,7 +203,12 @@ if(document.querySelector("#pedidos")){
                 e.preventDefault();
                 let formData = new FormData(formOrder);
                 let select = document.querySelector("#statusList");
+                let strNote = document.querySelector("#txtNotePos").value;
                 let status = select.options[select.selectedIndex].text;
+                if(select.value =="" || strNote ==""){
+                    Swal.fire("Error","Todos los campos con (*) son obligatorios","error");
+                    return false;
+                }
                 formData.append("status",status);
                 let btnAdd = document.querySelector("#btnAdd");
     
@@ -220,137 +229,6 @@ if(document.querySelector("#pedidos")){
         });
     }
 }
-if(document.querySelector("#btnRefund")){
-    let btn = document.querySelector("#btnRefund");
-    btn.addEventListener("click",function(){
-        refund(btn.getAttribute("data-id"));
-    });
-    function refund(id){
-        let btn = document.querySelector("#btnRefund");
-        btn.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-        btn.setAttribute("disabled","");
-    
-        request(base_url+"/pedidos/getTransaction/"+id,"","get").then(function(objData){
-            btn.removeAttribute("disabled");
-            btn.innerHTML=`<i class="fas fa-undo"></i> Reembolsar`;
-    
-            if(objData.status){
-                
-                let transaction = objData.data;
-                let idTransaction = transaction.purchase_units[0].payments.captures[0].id;
-                let payer = transaction.purchase_units[0].shipping.name.full_name+'<br>'+transaction.payer.email_address;
-                let grossAmount = transaction.purchase_units[0].payments.captures[0].seller_receivable_breakdown.gross_amount.value;
-                let feeAmount = transaction.purchase_units[0].payments.captures[0].seller_receivable_breakdown.paypal_fee.value;
-                let netAmount = transaction.purchase_units[0].payments.captures[0].seller_receivable_breakdown.net_amount.value;
-                let modalItem = document.querySelector("#modalItem");
-                let modal= `
-                <div class="modal fade" id="modalElement">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Reembolsar</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="formItem" name="formItem" class="mb-4">
-                                    <input type="hidden" id="idTransaction" name="idTransaction" value="${idTransaction}">
-                                    <table class="table align-middle text-break">
-                                        <tbody id="listItem">
-                                            <tr>
-                                                <td>Transaccion: </td>
-                                                <td>${idTransaction}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pagador: </td>
-                                                <td>${payer}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Reembolso bruto: </td>
-                                                <td>${grossAmount+" "+MD}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Comisión de paypal: </td>
-                                                <td>${feeAmount+" "+MD}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Reembolso neto: </td>
-                                                <td>${netAmount+" "+MD}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Observación: </td>
-                                                <td><textarea name="txtDescription" id="txtDescription" rows="3" class="w-100 form-control"></textarea></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-success text-white" id="btnRefundConfirm"><i class="fas fa-undo"></i> Reembolsar</a>
-                                        <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cerrar</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
-    
-                modalItem.innerHTML = modal;
-                let modalView = new bootstrap.Modal(document.querySelector("#modalElement"));
-                modalView.show();
-    
-                let form = document.querySelector("#formItem");
-                form.addEventListener("submit",function(e){
-                    e.preventDefault();
-                    
-                    let strDescription = document.querySelector("#txtDescription").value;
-                    let idTransaction = document.querySelector("#idTransaction").value;
-                    let btnRefundConfirm = document.querySelector("#btnRefundConfirm");
-                    
-                    if(idTransaction == "" || strDescription == ""){
-                        Swal.fire("Error","Por favor, rellene los campos ","error");
-                        return false;
-                    }
-                    btnRefundConfirm.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-                    btnRefundConfirm.setAttribute("disabled","");
-                    Swal.fire({
-                        title:"Está seguro de hacer el reembolso?",
-                        icon: 'warning',
-                        showCancelButton:true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText:"Sí, reembolsar",
-                        cancelButtonText:"No, cancelar"
-                    }).then(function(result){
-                        
-                        let formData = new FormData(form);
-                        if(result.isConfirmed){
-                            request(base_url+"/pedidos/setRefund",formData,"post").then(function(objData){
-                                btnRefundConfirm.innerHTML=`<i class="fas fa-undo"></i> Reembolsar`;
-                                btnRefundConfirm.removeAttribute("disabled");
-                                if(objData.status){
-                                    window.location.reload();
-                                }else{
-                                    Swal.fire("Error",objData.msg,"error");
-                                }
-                            });
-                        }else{
-                            btnRefundConfirm.innerHTML=`<i class="fas fa-undo"></i> Reembolsar`;
-                            btnRefundConfirm.removeAttribute("disabled");
-                        }
-                    });
-                });
-            }else{
-                Swal.fire("Error",objData.msg,"error");
-            }
-        });
-    }
-}
-/*
-if(document.querySelector("#btnPrint")){
-    let btn = document.querySelector("#btnPrint");
-    btn.addEventListener("click",function(){
-        printDiv(document.querySelector("#orderInfo"));
-    });
-}*/
 
 function addProduct(id=null, element){
     let formData = new FormData();

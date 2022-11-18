@@ -19,7 +19,7 @@
         /*************************Category methods*******************************/
 
         public function selectOrders(){
-            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata ORDER BY idorder DESC";       
+            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata ORDER BY date DESC";       
             $request = $this->select_all($sql);
             return $request;
         }
@@ -223,7 +223,7 @@
             return $request;
         }
         public function insertOrder(int $idUser, string $idTransaction, string $strName,string $strEmail,string $strPhone,string $strAddress,
-        string $strNote,string $cupon,int $envio,int $total,string $status, string $type){
+        string $strNote,string $strDate,string $cupon,int $envio,int $total,string $status, string $type){
 
             $this->strIdTransaction = $idTransaction;
             $this->intIdUser = $idUser;
@@ -231,22 +231,44 @@
             $this->strEmail = $strEmail;
             $this->strPhone = $strPhone;
             $this->strAddress = $strAddress;
-            
-            $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
-            $arrData = array(
-                $this->intIdUser, 
-                $this->strIdTransaction,
-                $this->strName,
-                $this->strEmail,
-                $this->strPhone,
-                $this->strAddress,
-                $strNote,
-                $total,
-                $status,
-                $cupon,
-                $envio,
-                $type);
-            $request = $this->insert($sql,$arrData);
+            if($strDate !=""){
+                $arrDate = explode("-",$strDate);
+                $dateCreated = date_create($arrDate[2]."-".$arrDate[1]."-".$arrDate[0]);
+                $dateFormat = date_format($dateCreated,"Y-m-d");
+                
+                $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,date,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $arrData = array(
+                    $this->intIdUser, 
+                    $this->strIdTransaction,
+                    $this->strName,
+                    $this->strEmail,
+                    $this->strPhone,
+                    $this->strAddress,
+                    $strNote,
+                    $total,
+                    $dateFormat,
+                    $status,
+                    $cupon,
+                    $envio,
+                    $type);
+                $request = $this->insert($sql,$arrData);
+            }else{
+                $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
+                $arrData = array(
+                    $this->intIdUser, 
+                    $this->strIdTransaction,
+                    $this->strName,
+                    $this->strEmail,
+                    $this->strPhone,
+                    $this->strAddress,
+                    $strNote,
+                    $total,
+                    $status,
+                    $cupon,
+                    $envio,
+                    $type);
+                $request = $this->insert($sql,$arrData);
+            }
             if($request > 0){
                 $sqlUpdate = "UPDATE orderdata SET idtransaction=? WHERE idorder = $request";
                 $arrUpdate = array("POS".$request);
@@ -306,17 +328,11 @@
             $request = $this->update($sql,$arrData);
             return $request;
         }
-        public function updateOrder($idOrder,$status){
+        public function updateOrder($idOrder,$strNote,$status){
             $this->intIdOrder = $idOrder;
-            if($status == "approved"){
-                $sql = "UPDATE orderdata SET status=? WHERE idorder = $this->intIdOrder";
-                $arrData = array($status);
-                $request = $this->update($sql,$arrData);
-            }else{
-                $sql = "UPDATE orderdata SET status=?, note=? WHERE idorder = $this->intIdOrder";
-                $arrData = array($status,"");
-                $request = $this->update($sql,$arrData);
-            }
+            $sql = "UPDATE orderdata SET note=?,status=? WHERE idorder = $this->intIdOrder";
+            $arrData = array($strNote,$status);
+            $request = $this->update($sql,$arrData);
             return $request;
         }
         /*************************Category methods*******************************/
