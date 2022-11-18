@@ -234,7 +234,7 @@
                         $request = $this->model->deleteOrder($id);
 
                         if($request=="ok"){
-                            $arrResponse = $this->getOrders();
+                            $arrResponse = array("status"=>true,"msg"=>"Se ha eliminado.","data"=>$this->getOrders()['data']);
                         }else{
                             $arrResponse = array("status"=>false,"msg"=>"No se ha podido eliminar, intenta de nuevo.");
                         }
