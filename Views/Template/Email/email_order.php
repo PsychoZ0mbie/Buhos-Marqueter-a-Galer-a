@@ -161,6 +161,7 @@ $subtotal = 0;
 				<ul>
 					<li><span class="fw-bold t-color-3">Referencia:</span> <?=$arrProducts['reference']?></li>
 					<li><span class="fw-bold t-color-3">Orientación:</span> <?=$arrProducts['orientation']?></li>
+					<li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts['style']?></li>
 					<li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
 				</ul>
 				<?php }else if($arrProducts['idType'] == 6){?>
@@ -198,7 +199,7 @@ $subtotal = 0;
 		  <tfoot>
 				<tr>
 					<th colspan="3" class="text-end">Subtotal:</th>
-					<td class="text-right"><?= formatNum($subtotal,false)?></td>
+					<td class="text-right"><?= formatNum(floor($subtotal),false)?></td>
 				</tr>
 				<?php
 					if(isset($order['cupon'])){
@@ -211,7 +212,7 @@ $subtotal = 0;
 				</tr>
 				<tr>
 					<th colspan="3" class="text-end">Subtotal:</th>
-					<td class="text-right"><?= formatNum($subtotal,false)?></td>
+					<td class="text-right"><?= formatNum(floor($subtotal),false)?></td>
 				</tr>
 				<?php }?>
 				<tr>

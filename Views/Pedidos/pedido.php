@@ -98,6 +98,7 @@ $subtotal = 0;
                             <ul>
                                 <li><span class="fw-bold t-color-3">Referencia:</span> <?=$arrProducts['reference']?></li>
                                 <li><span class="fw-bold t-color-3">Orientación:</span> <?=$arrProducts['orientation']?></li>
+                                <li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts['style']?></li>
                                 <li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
                             </ul>
                             <?php }else if($arrProducts['idType'] == 6){?>
@@ -123,9 +124,9 @@ $subtotal = 0;
                             <?php }?>
                             </td>
                         <?php }?>
-                        <td class="text-right"><?=formatNum($product['price'],false)?></td>
+                        <td class="text-right"><?=formatNum(floor($product['price']),false)?></td>
                         <td class="text-center"><?= $product['quantity'] ?></td>
-                        <td class="text-right"><?= formatNum($product['price']*$product['quantity'],false)?></td>
+                        <td class="text-right"><?= formatNum(floor($product['price']*$product['quantity']),false)?></td>
                         </tr>
                         <?php 		
                             }
