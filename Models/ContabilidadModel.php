@@ -11,20 +11,29 @@
             parent::__construct();
         }
 
-        public function insertCost(int $intStatus, string $strNit, string $strName, string $strDescription, int $intTotal){
+        public function insertCost(int $intStatus,string $strDate, string $strNit, string $strName, string $strDescription, int $intTotal){
 
 			$this->strName = $strName;
 			$this->strNit = $strNit;
             $this->intStatus = $intStatus;
             $this->strDescription = $strDescription;
             $this->intAmount = $intTotal;
+            if($strDate !=""){
+                $arrDate = explode("-",$strDate);
+                $dateCreated = date_create($arrDate[2]."-".$arrDate[1]."-".$arrDate[0]);
+                $dateFormat = date_format($dateCreated,"Y-m-d");
 
-			$query_insert  = "INSERT INTO accounting(type,nit,name,description,total) VALUES(?,?,?,?,?)";	  
-            $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount);
-            $request = $this->insert($query_insert,$arrData);
+                $query_insert  = "INSERT INTO accounting(type,nit,name,description,total,date) VALUES(?,?,?,?,?,?)";	  
+                $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount,$dateFormat);
+                $request = $this->insert($query_insert,$arrData);
+            }else{
+                $query_insert  = "INSERT INTO accounting(type,nit,name,description,total) VALUES(?,?,?,?,?)";	  
+                $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount);
+                $request = $this->insert($query_insert,$arrData);
+            }
 	        return $request;
 		}
-        public function updateCost(int $id,int $intStatus, string $strNit, string $strName, string $strDescription, int $intTotal){
+        public function updateCost(int $id,int $intStatus,string $strDate, string $strNit, string $strName, string $strDescription, int $intTotal){
             $this->strName = $strName;
 			$this->strNit = $strNit;
             $this->intStatus = $intStatus;
@@ -32,10 +41,19 @@
             $this->intAmount = $intTotal;
             $this->intId = $id;
             
-
-			$sql = "UPDATE accounting SET type=?,nit=?,name=?,description=?, total=? WHERE id = $this->intId";
-            $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount);
-            $request = $this->update($sql,$arrData);
+            if($strDate !=""){
+                $arrDate = explode("-",$strDate);
+                $dateCreated = date_create($arrDate[2]."-".$arrDate[1]."-".$arrDate[0]);
+                $dateFormat = date_format($dateCreated,"Y-m-d");
+ 
+                $sql = "UPDATE accounting SET type=?,nit=?,name=?,description=?, total=?,date=? WHERE id = $this->intId";
+                $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount,$dateFormat);
+                $request = $this->update($sql,$arrData);
+            }else{
+                $sql = "UPDATE accounting SET type=?,nit=?,name=?,description=?, total=? WHERE id = $this->intId";
+                $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount);
+                $request = $this->update($sql,$arrData);
+            }
 			return $request;
 		
 		}
@@ -46,7 +64,7 @@
             return $return;
         }
         public function selectCosts(){
-            $sql = "SELECT *,DATE_FORMAT(date, '%d/%m/%Y') as date FROM accounting ORDER BY id DESC";       
+            $sql = "SELECT *,DATE_FORMAT(date, '%d/%m/%Y') as date FROM accounting ORDER BY date DESC";       
             $request = $this->select_all($sql);
             return $request;
         }
@@ -73,7 +91,7 @@
             return $request;
         }
         public function selectOrders(){
-            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata ORDER BY idorder DESC";       
+            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata ORDER BY date DESC";       
             $request = $this->select_all($sql);
             return $request;
         }

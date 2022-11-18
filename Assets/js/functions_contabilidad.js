@@ -145,6 +145,10 @@ function addItem(){
                                     </select>
                                 </div>
                             </div>
+                            <div class="mt-3 mb-3">
+                                <label for="" class="form-label">Fecha</label>
+                                <input type="date" name="strDate" id="txtDate" class="form-control">
+                            </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="txtNit" class="form-label">NIT (opcional)</label>
@@ -294,7 +298,6 @@ function editItem(id){
     let formData = new FormData();
     formData.append("idContabilidad",id);
     request(url,formData,"post").then(function(objData){
-        
         let modalItem = document.querySelector("#modalItem");
         let modal= `
         <div class="modal fade" id="modalElement">
@@ -316,6 +319,10 @@ function editItem(id){
                                             <option value="2">Gasto</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="mt-3 mb-3">
+                                    <label for="" class="form-label">Fecha</label>
+                                    <input type="date" name="strDate" id="txtDate" class="form-control">
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
@@ -363,6 +370,9 @@ function editItem(id){
                 break;
             }
         }
+        let arrDate = new String(objData.data.date).split("/");
+
+        document.querySelector("#txtDate").valueAsDate = new Date(arrDate[2]+"-"+arrDate[1]+"-"+arrDate[0]);
         modalView.show();
 
         let form = document.querySelector("#formItem");

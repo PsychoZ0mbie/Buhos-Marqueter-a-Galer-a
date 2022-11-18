@@ -216,17 +216,17 @@
                         $intStatus = intval($_POST['typeList']);
                         $strNit = strClean($_POST['txtNit']);
                         $intTotal = intval($_POST['txtAmount']);
-
+                        $strDate = $_POST['strDate'];
                         if($id == 0){
                             if($_SESSION['permitsModule']['w']){
                                 $option = 1;
 
-                                $request= $this->model->insertCost($intStatus,$strNit,$strName,$strDescription,$intTotal);
+                                $request= $this->model->insertCost($intStatus,$strDate,$strNit,$strName,$strDescription,$intTotal);
                             }
                         }else{
                             if($_SESSION['permitsModule']['u']){
                                 $option = 2;
-                                $request = $this->model->updateCost($id,$intStatus,$strNit,$strName,$strDescription,$intTotal);
+                                $request = $this->model->updateCost($id,$intStatus,$strDate,$strNit,$strName,$strDescription,$intTotal);
                             }
                         }
                         if($request > 0 ){
