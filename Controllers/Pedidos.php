@@ -102,14 +102,15 @@
             if($_SESSION['permitsModule']['u']){
                 //dep($_POST);exit;
                 if($_POST){
-                    if(empty($_POST['strNote']) || empty($_POST['status']) || empty($_POST['strDate'])){
+                    if(empty($_POST['strNote']) || empty($_POST['status']) || empty($_POST['strDate']) || empty($_POST['txtTransaction'])){
                         $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }
                     $idOrder = intval($_POST['idOrder']);
                     $status = strtolower(strClean($_POST['status']));
                     $strNote = strClean($_POST['strNote']);
                     $strDate = $_POST['strDate'];
-                    $request = $this->model->updateOrder($idOrder,$strDate,$strNote,$status);
+                    $idTransaction = strClean($_POST['txtTransaction']);
+                    $request = $this->model->updateOrder($idOrder,$idTransaction,$strDate,$strNote,$status);
                     if($request>0){
                         $arrResponse = array("status"=>true,"msg"=>"Pedido actualizado","data"=>$this->getOrders()['data']);
                     }else{
@@ -691,7 +692,7 @@
         public function setOrder(){
             if($_SESSION['permitsModule']['w']){
                 if($_POST){
-                    if(empty($_POST['id']) || empty($_POST['received']) || empty($_POST['strNote'])){
+                    if(empty($_POST['id']) || empty($_POST['received']) || empty($_POST['strNote']) || empty($_POST['txtTransaction'])){
                         $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }else{
                         $total = 0;
@@ -710,7 +711,7 @@
                         $strPhone = $customInfo['phone'];
                         $strAddress = $customInfo['address'].", ".$customInfo['city']."/".$customInfo['state']."/".$customInfo['country'];
                         $cupon = "";
-                        $idTransaction ="POS";
+                        $idTransaction =strClean($_POST['txtTransaction']);
                         $type ="pos";
                         $envio = 0;
                         if($received < $total){

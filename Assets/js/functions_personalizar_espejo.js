@@ -266,8 +266,6 @@ addFrame.addEventListener("click",function(){
         addFrame.innerHTML=`Agregar`;
         addFrame.removeAttribute("disabled");
         if(objData.status){
-            document.querySelector("#qtyCart").innerHTML=objData.qty;
-            document.querySelector("#qtyCartbar").innerHTML=objData.qty;
             const toast = new bootstrap.Toast(toastLiveExample);
             toast.show();
             

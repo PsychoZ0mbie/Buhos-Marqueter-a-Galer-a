@@ -269,11 +269,6 @@
                     $type);
                 $request = $this->insert($sql,$arrData);
             }
-            if($request > 0){
-                $sqlUpdate = "UPDATE orderdata SET idtransaction=? WHERE idorder = $request";
-                $arrUpdate = array("POS".$request);
-                $requestUpdate = $this->update($sqlUpdate,$arrUpdate);
-            }
             return $request;
         }
         public function insertOrderDetail(array $arrOrder){
@@ -328,10 +323,11 @@
             $request = $this->update($sql,$arrData);
             return $request;
         }
-        public function updateOrder($idOrder,$strDate,$strNote,$status){
+        public function updateOrder($idOrder,$idTransaction,$strDate,$strNote,$status){
             $this->intIdOrder = $idOrder;
-            $sql = "UPDATE orderdata SET note=?,status=?, date=? WHERE idorder = $this->intIdOrder";
-            $arrData = array($strNote,$status,$strDate);
+            $this->strIdTransaction = $idTransaction;
+            $sql = "UPDATE orderdata SET idtransaction=?,note=?,status=?, date=? WHERE idorder = $this->intIdOrder";
+            $arrData = array($this->strIdTransaction,$strNote,$status,$strDate);
             $request = $this->update($sql,$arrData);
             return $request;
         }

@@ -39,6 +39,10 @@
                     </div>
                     <div id="selectedCustomer"></div>
                     <div class="mt-3 mb-3">
+                        <label for="" class="form-label">Nro factura <span class="text-danger">*</span></label>
+                        <input type="number" name="txtTransaction" id="txtTransaction" class="form-control">
+                    </div>
+                    <div class="mt-3 mb-3">
                         <label for="" class="form-label">Fecha</label>
                         <input type="date" name="" id="txtDate" class="form-control">
                     </div>

@@ -22,11 +22,12 @@ if(document.querySelector("#quickSale")){
         let received = moneyReceived.value;
         let strDate = document.querySelector("#txtDate").value;
         let strNote = document.querySelector("#txtNotePos").value;
+        let strTransaction = document.querySelector("#txtTransaction").value;
         if(id <= 0){
             Swal.fire("Error","Por favor, añada un cliente para establecer el pedido","error");
             return false;
         }
-        if(received =="" || strNote ==""){
+        if(received =="" || strNote =="" || strTransaction ==""){
             Swal.fire("Error","Los campos con (*) son obligatorios","error");
             return false;
         }
@@ -35,6 +36,7 @@ if(document.querySelector("#quickSale")){
         formData.append("received",received);
         formData.append("strDate",strDate);
         formData.append("strNote",strNote);
+        formData.append("txtTransaction",strTransaction);
         btnAddPos.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
         btnAddPos.setAttribute("disabled","");
         request(base_url+"/pedidos/setOrder",formData,"post").then(function(objData){
@@ -151,10 +153,6 @@ if(document.querySelector("#pedidos")){
                                         <td>${objData.data.idorder}</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Transacción: </strong></td>
-                                        <td>${objData.data.idtransaction}</td>
-                                    </tr>
-                                    <tr>
                                         <td><strong>Cliente: </strong></td>
                                         <td>${objData.data.name}</td>
                                     </tr>
@@ -174,6 +172,10 @@ if(document.querySelector("#pedidos")){
                             </table>
                             <form id="formOrder">
                                 <input type="hidden" id="idOrder" name="idOrder" value="${objData.data.idorder}">
+                                <div class="mt-3 mb-3">
+                                    <label for="" class="form-label">Transacción <span class="text-danger">*</span></label>
+                                    <input type="number" name="txtTransaction" id="txtTransaction" class="form-control" value="${objData.data.idtransaction}">
+                                </div>
                                 <div class="mt-3 mb-3">
                                     <label for="" class="form-label">Fecha <span class="text-danger">*</span></label>
                                     <input type="date" name="strDate" id="txtDate" class="form-control">
@@ -212,7 +214,8 @@ if(document.querySelector("#pedidos")){
                 let strNote = document.querySelector("#txtNotePos").value;
                 let status = select.options[select.selectedIndex].text;
                 let strDate = document.querySelector("#txtDate").value;
-                if(select.value =="" || strNote =="" || strDate ==""){
+                let strTransaction = document.querySelector("#txtTransaction").value;
+                if(select.value =="" || strNote =="" || strDate =="" || strTransaction==""){
                     Swal.fire("Error","Todos los campos con (*) son obligatorios","error");
                     return false;
                 }
