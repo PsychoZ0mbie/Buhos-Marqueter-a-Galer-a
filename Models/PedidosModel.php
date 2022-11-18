@@ -328,10 +328,10 @@
             $request = $this->update($sql,$arrData);
             return $request;
         }
-        public function updateOrder($idOrder,$strNote,$status){
+        public function updateOrder($idOrder,$strDate,$strNote,$status){
             $this->intIdOrder = $idOrder;
-            $sql = "UPDATE orderdata SET note=?,status=? WHERE idorder = $this->intIdOrder";
-            $arrData = array($strNote,$status);
+            $sql = "UPDATE orderdata SET note=?,status=?, date=? WHERE idorder = $this->intIdOrder";
+            $arrData = array($strNote,$status,$strDate);
             $request = $this->update($sql,$arrData);
             return $request;
         }

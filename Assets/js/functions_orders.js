@@ -175,6 +175,10 @@ if(document.querySelector("#pedidos")){
                             <form id="formOrder">
                                 <input type="hidden" id="idOrder" name="idOrder" value="${objData.data.idorder}">
                                 <div class="mt-3 mb-3">
+                                    <label for="" class="form-label">Fecha <span class="text-danger">*</span></label>
+                                    <input type="date" name="strDate" id="txtDate" class="form-control">
+                                </div>
+                                <div class="mt-3 mb-3">
                                     <label for="" class="form-label">Notas <span class="text-danger">*</span></label>
                                     <textarea rows="5" name="strNote" id="txtNotePos" class="form-control">${objData.data.note}</textarea>
                                 </div>
@@ -197,6 +201,8 @@ if(document.querySelector("#pedidos")){
     
             modalItem.innerHTML = modal;
             let modalView = new bootstrap.Modal(document.querySelector("#modalElement"));
+            let arrDate = new String(objData.data.date).split("/");
+            document.querySelector("#txtDate").valueAsDate = new Date(arrDate[2]+"-"+arrDate[1]+"-"+arrDate[0]);
             modalView.show();
             let formOrder = document.querySelector("#formOrder");
             formOrder.addEventListener("submit",function(e){
@@ -205,7 +211,8 @@ if(document.querySelector("#pedidos")){
                 let select = document.querySelector("#statusList");
                 let strNote = document.querySelector("#txtNotePos").value;
                 let status = select.options[select.selectedIndex].text;
-                if(select.value =="" || strNote ==""){
+                let strDate = document.querySelector("#txtDate").value;
+                if(select.value =="" || strNote =="" || strDate ==""){
                     Swal.fire("Error","Todos los campos con (*) son obligatorios","error");
                     return false;
                 }

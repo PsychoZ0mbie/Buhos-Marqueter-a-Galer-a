@@ -102,13 +102,14 @@
             if($_SESSION['permitsModule']['u']){
                 //dep($_POST);exit;
                 if($_POST){
-                    if(empty($_POST['strNote']) || empty($_POST['status'])){
+                    if(empty($_POST['strNote']) || empty($_POST['status']) || empty($_POST['strDate'])){
                         $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }
                     $idOrder = intval($_POST['idOrder']);
                     $status = strtolower(strClean($_POST['status']));
                     $strNote = strClean($_POST['strNote']);
-                    $request = $this->model->updateOrder($idOrder,$strNote,$status);
+                    $strDate = $_POST['strDate'];
+                    $request = $this->model->updateOrder($idOrder,$strDate,$strNote,$status);
                     if($request>0){
                         $arrResponse = array("status"=>true,"msg"=>"Pedido actualizado","data"=>$this->getOrders()['data']);
                     }else{
