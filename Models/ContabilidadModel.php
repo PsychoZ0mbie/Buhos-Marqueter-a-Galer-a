@@ -41,19 +41,14 @@
             $this->intAmount = $intTotal;
             $this->intId = $id;
             
-            if($strDate !=""){
-                $arrDate = explode("-",$strDate);
-                $dateCreated = date_create($arrDate[2]."-".$arrDate[1]."-".$arrDate[0]);
-                $dateFormat = date_format($dateCreated,"Y-m-d");
- 
-                $sql = "UPDATE accounting SET type=?,nit=?,name=?,description=?, total=?,date=? WHERE id = $this->intId";
-                $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount,$dateFormat);
-                $request = $this->update($sql,$arrData);
-            }else{
-                $sql = "UPDATE accounting SET type=?,nit=?,name=?,description=?, total=? WHERE id = $this->intId";
-                $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount);
-                $request = $this->update($sql,$arrData);
-            }
+            $arrDate = explode("-",$strDate);
+            $dateCreated = date_create($arrDate[2]."-".$arrDate[1]."-".$arrDate[0]);
+            $dateFormat = date_format($dateCreated,"Y-m-d");
+
+            $sql = "UPDATE accounting SET type=?,nit=?,name=?,description=?, total=?,date=? WHERE id = $this->intId";
+            $arrData = array($this->intStatus, $this->strNit,$this->strName, $this->strDescription,$this->intAmount,$dateFormat);
+            $request = $this->update($sql,$arrData);
+            
 			return $request;
 		
 		}

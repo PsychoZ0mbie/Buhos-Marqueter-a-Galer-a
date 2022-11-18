@@ -321,7 +321,7 @@ function editItem(id){
                                     </div>
                                 </div>
                                 <div class="mt-3 mb-3">
-                                    <label for="" class="form-label">Fecha</label>
+                                    <label for="" class="form-label">Fecha <span class="text-danger">*</span></label>
                                     <input type="date" name="strDate" id="txtDate" class="form-control">
                                 </div>
                                 <div class="col-md-12">
@@ -383,8 +383,8 @@ function editItem(id){
             let strDescription = document.querySelector("#txtDescription").value;
             let intStatus = document.querySelector("#typeList").value;
             let intAmount = document.querySelector("#txtAmount").value;
-    
-            if(strName == "" || strDescription == "" || intStatus=="" || intAmount==""){
+            let strDate = document.querySelector("#txtDate").value;
+            if(strName == "" || strDescription == "" || intStatus=="" || intAmount=="" || strDate==""){
                 Swal.fire("Error","Todos los campos marcados con (*) son obligatorios","error");
                 return false;
             }
