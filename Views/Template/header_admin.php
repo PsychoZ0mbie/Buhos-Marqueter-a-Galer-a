@@ -44,6 +44,9 @@
                             <img src="<?=media()."/images/uploads/".$companyData['logo']?>" alt="MediaStore Logo" width="50" height="46">
                         </div>
                     </a>
+                    <?php 
+                        if($_SESSION['permit'][5]['r']){
+                    ?>
                     <ul class="header-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="<?=base_url()?>/administracion/correo">
@@ -60,6 +63,7 @@
                             </a>
                         </li>
                     </ul>
+                    <?php }?>
                     <ul class="header-nav ms-3">
                         <li class="nav-item dropdown">
                             <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

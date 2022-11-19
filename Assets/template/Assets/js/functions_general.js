@@ -208,7 +208,9 @@ window.addEventListener("load",function(){
                             if(objData.status){
                                 window.clearTimeout(timer);
                                 modalView.hide();
-                                //modalPopup.innerHTML = "";
+                                modalPopup.innerHTML = "";
+                                let key =COMPANY+"popup"; 
+                                localStorage.setItem(key,false);
                             }else{
                                 alert.classList.remove("d-none");
                                 alert.innerHTML = objData.msg;
@@ -250,6 +252,8 @@ if(document.querySelector("#formSuscriber")){
         if(objData.status){
             alert.classList.add("d-none");
             formSuscribe.reset();
+            let key =COMPANY+"popup"; 
+            localStorage.setItem(key,false);
         }else{
             alert.classList.remove("d-none");
             alert.innerHTML = objData.msg;

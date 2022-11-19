@@ -84,7 +84,7 @@
 
 			if(empty($request)){
 				if($this->strPassword  != ""){
-					$sql = "UPDATE person SET image=?, firstname=?, lastname=?,email=?, phone=?,address=?,countryid=?,stateid=?,cityid=? password=?, status=?,roleid=? 
+					$sql = "UPDATE person SET image=?, firstname=?, lastname=?,email=?, phone=?,address=?,countryid=?,stateid=?,cityid=?, password=?, status=?,roleid=? 
 							WHERE idperson = $this->intIdUser";
 					$arrData = array(
                         $this->strPicture,
