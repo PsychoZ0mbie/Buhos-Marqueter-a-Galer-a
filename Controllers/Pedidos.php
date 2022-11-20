@@ -690,6 +690,7 @@
             }
         }
         public function setOrder(){
+            //dep($_POST);exit;
             if($_SESSION['permitsModule']['w']){
                 if($_POST){
                     if(empty($_POST['id']) || empty($_POST['received']) || empty($_POST['strNote']) || empty($_POST['txtTransaction'])){

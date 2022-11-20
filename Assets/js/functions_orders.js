@@ -1,5 +1,4 @@
 'use strict';
-
 if(document.querySelector("#quickSale")){
     window.addEventListener("load",function(){
         updateCart();
@@ -17,7 +16,11 @@ if(document.querySelector("#quickSale")){
         }
         document.querySelector("#moneyBack").innerHTML = "Dinero a devolver: "+MS+result;
     });
-    btnAddPos.addEventListener("click",function(){
+    
+    let formPOS = document.querySelector("#formSetOrder");
+    formPOS.addEventListener("submit",function(e){
+        
+        e.preventDefault();
         let id = document.querySelector("#idCustomer").value;
         let received = moneyReceived.value;
         let strDate = document.querySelector("#txtDate").value;
@@ -31,12 +34,11 @@ if(document.querySelector("#quickSale")){
             Swal.fire("Error","Los campos con (*) son obligatorios","error");
             return false;
         }
-        let formData = new FormData();
-        formData.append("id",id);
+        let formData = new FormData(formPOS);
+        /*formData.append("strDate",strDate);
         formData.append("received",received);
-        formData.append("strDate",strDate);
         formData.append("strNote",strNote);
-        formData.append("txtTransaction",strTransaction);
+        formData.append("txtTransaction",strTransaction);*/
         btnAddPos.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
         btnAddPos.setAttribute("disabled","");
         request(base_url+"/pedidos/setOrder",formData,"post").then(function(objData){
@@ -334,21 +336,19 @@ function updateCart(){
     for (let i = 0; i < increment.length; i++) {
         let minus = decrement[i];
         let plus = increment[i];
-        let id = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-id");
-        let topic = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-topic");
-
+        
         minus.addEventListener("click",function(){
-            let qty=parseInt(document.querySelectorAll(".qtyProduct")[i].innerHTML);
+            let productTotal = minus.parentElement.nextElementSibling;
+            let qtyProduct = minus.parentElement.parentElement.previousElementSibling.children[0].children[1].children[1].children[0];
+            let qty=parseInt(qtyProduct.innerHTML);
             if(qty <=1){
                 qty = 1;
             }else{
                 qty--;
             }
+            let id = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-id");
+            let topic = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-topic");
             let formData = new FormData();
-            formData.append("id",id);
-            formData.append("topic",topic);
-            formData.append("qty",qty);
-            
             if(topic == 1){
                 let height = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-h");
                 let width = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-w");
@@ -367,24 +367,30 @@ function updateCart(){
                 formData.append("idType",idType);
                 formData.append("reference",reference);
             }
+            
+            formData.append("id",id);
+            formData.append("topic",topic);
+            formData.append("qty",qty);
+
             document.querySelector("#total").innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-            document.querySelectorAll(".productTotal")[i].innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            productTotal.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
             request(base_url+"/pedidos/updateCart",formData,"post").then(function(objData){
                 if(objData.status){
-                    document.querySelectorAll(".qtyProduct")[i].innerHTML = objData.qty;
-                    document.querySelectorAll(".productTotal")[i].innerHTML = objData.totalprice;
+                    qtyProduct.innerHTML = objData.qty;
+                    productTotal.innerHTML = objData.totalprice;
                     document.querySelector("#total").innerHTML = objData.total;
                     document.querySelector("#total").setAttribute("data-value",objData.value);
                 }
             });
         });
         plus.addEventListener("click",function(){
-            let qty=parseInt(document.querySelectorAll(".qtyProduct")[i].innerHTML);
+            let productTotal = minus.parentElement.nextElementSibling;
+            let qtyProduct = minus.parentElement.parentElement.previousElementSibling.children[0].children[1].children[1].children[0];
+            let qty=parseInt(qtyProduct.innerHTML);
             let formData = new FormData();
-            formData.append("id",id);
-            formData.append("topic",topic);
-            formData.append("qty",++qty);
             
+            let id = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-id");
+            let topic = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-topic");
             if(topic == 1){
                 let height = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-h");
                 let width = minus.parentElement.parentElement.parentElement.parentElement.getAttribute("data-w");
@@ -404,12 +410,15 @@ function updateCart(){
                 formData.append("idType",idType);
                 formData.append("reference",reference);
             }
+            formData.append("id",id);
+            formData.append("topic",topic);
+            formData.append("qty",++qty);
             document.querySelector("#total").innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-            document.querySelectorAll(".productTotal")[i].innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+            productTotal.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
             request(base_url+"/pedidos/updateCart",formData,"post").then(function(objData){
                 if(objData.status){
-                    document.querySelectorAll(".qtyProduct")[i].innerHTML = objData.qty;
-                    document.querySelectorAll(".productTotal")[i].innerHTML = objData.totalprice;
+                    qtyProduct.innerHTML = objData.qty;
+                    productTotal.innerHTML = objData.totalprice;
                     document.querySelector("#total").innerHTML = objData.total;
                     document.querySelector("#total").setAttribute("data-value",objData.value);
                 }
