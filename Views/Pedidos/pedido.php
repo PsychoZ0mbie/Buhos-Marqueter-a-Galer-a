@@ -13,12 +13,19 @@ $subtotal = 0;
     <div class="container-lg">
         <div class="card">
             <div class="card-body">
-                <div id="orderInfo">
+                <div id="orderInfo" class="position-relative overflow-hidden">
+                    <?php if($order['status']=="approved"){?>
+                        <div class="stamp"><img src="<?=media()?>/images/uploads/sello_pagado.png" alt=""></div>
+                    <?php }else{?>   
+                        <div class="stamp"><img src="<?=media()?>/images/uploads/sello_pendiente.png" alt=""></div>
+                    <?php }?>  
                     <div class="d-flex justify-content-between flex-wrap mb-3">
                         <div class="mb-3 d-flex flex-wrap align-items-center">
-                            <img src="<?=media()."/images/uploads/".$company['logo']?>" class="me-2" style="width=100px;height:100px;" alt="">
+                            <img src="<?=media()."/images/uploads/".$company['logo']?>" class="me-2" style="width=170px;height:170px;" alt="">
                             <div>
                                 <p class="m-0 fw-bold"><?=$company['name']?></p>
+                                <p class="m-0">Oswaldo Parrado Clavijo</p>
+                                <p class="m-0">NIT 17.344.806-8 No responsable de IVA</p>
                                 <p class="m-0"><?=$company['addressfull']?></p>
                                 <p class="m-0">+<?=$company['phonecode']." ".$company['phone']?></p>
                                 <p class="m-0"><?=$company['email']?></p>
@@ -162,13 +169,22 @@ $subtotal = 0;
                             </tr>
                     </tfoot>
                     </table>
+                    <table class="table text-center">
+                        <tbody>
+                            <tr><td><p class="fw-bold">Después de 60 días no se responde por trabajos o pedidos finalizados</p></td></tr>
+                            <tr><td><p class="fw-bold">Esta factura de compra venta se asimila en todos sus efectos
+                                legales a la letra de cambio de acuerdo al ART.774 del código de comercio
+                            </p></td></tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="row">
                     <div class="col-6 text-start">
                         <a href="<?=base_url()?>/pedidos" class="btn btn-secondary text-white"><i class="fas fa-arrow-circle-left"></i> Regresar</a>
                     </div>
                     <div class="col-6 text-end">
-                        <button type="button" onclick="printJS({ printable: 'orderInfo', type: 'html', targetStyles: ['*'],documentTitle: '<?=$order['idtransaction']?>'})" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
+                        <!--<button type="button" onclick="printJS({ printable: 'orderInfo', type: 'html', targetStyles: ['*'],documentTitle: '<?=$order['idtransaction']?>'})" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>-->
+                        <button type="button" onclick="printDiv('orderInfo','<?=$order['idtransaction']?>')" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
                     </div>
                 </div>
             </div>

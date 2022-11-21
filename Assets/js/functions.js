@@ -1,14 +1,25 @@
 'use strict'
-function printDiv(div){
-    div.style.backgroundColor="#fff";
-    div.style.height="100%";
-    div.style.width="100%";
-    div.style.position="fixed";
-    div.style.top="0";
-    div.style.left="0";
-    div.style.zIndex="9999";
-    div.style.margin="0";
-    div.style.padding="15px";
+function printDiv(element,title=null){
+    
+    let div = document.querySelector("#"+element);
+    let style =`
+    background-color:#fff;
+    height:100vh;
+    width:100vw;
+    position:absolute !important;
+    top:0;
+    left:0;
+    z-index:9999;
+    margin:0;
+    padding:0;
+    page-break-after: always;
+    `;
+    
+    div.setAttribute("style",style);
+    document.querySelector("body").innerHTML = div.innerHTML;
+    if(title!=null){
+        document.querySelector("title").innerHTML = title;
+    }
     window.print();
     window.location.reload();
 }
