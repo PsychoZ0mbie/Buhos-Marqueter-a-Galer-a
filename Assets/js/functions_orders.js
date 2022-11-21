@@ -7,10 +7,27 @@ if(document.querySelector("#quickSale")){
     const btnAddPos = document.querySelector("#btnAddPos");
     let searchProducts = document.querySelector("#searchProducts");
     let searchCustomers = document.querySelector("#searchCustomers");
+    const cupon = document.querySelector("#discount");
+    cupon.addEventListener("input",function(){
+        if(cupon.value <= 0){
+            cupon.value = 0;
+        }else if(cupon.value >= 100){
+            cupon.value = 90;
+        }
+        let total = moneyReceived.value;
+        total = parseInt(total-(total*(cupon.value*0.01)));
+        
+        document.querySelector("#saleValue").innerHTML = "Valor de venta: "+MS+total;
+        
+    });
     moneyReceived.addEventListener("input",function(){
         let total = document.querySelector("#total").getAttribute("data-value");
         let result = 0;
-        result = moneyReceived.value - total ;
+        if(cupon.value > 0){
+            total  = parseInt(total-(total*(cupon.value*0.01)));
+            document.querySelector("#saleValue").innerHTML = "Valor de venta: "+MS+total;
+        }
+        result = moneyReceived.value - total;
         if(result < 0){
             result = 0;
         }

@@ -693,7 +693,7 @@
             //dep($_POST);exit;
             if($_SESSION['permitsModule']['w']){
                 if($_POST){
-                    if(empty($_POST['id']) || empty($_POST['received']) || empty($_POST['strNote']) || empty($_POST['txtTransaction'])){
+                    if(empty($_POST['id']) || empty($_POST['strNote']) || empty($_POST['txtTransaction'])){
                         $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }else{
                         $total = 0;
@@ -715,6 +715,12 @@
                         $idTransaction =strClean($_POST['txtTransaction']);
                         $type ="pos";
                         $envio = 0;
+                        if($_POST['discount'] > 0 && $_POST['discount'] <=90){
+                            
+                            $discount = intval($_POST['discount']);
+                            $strNote.="- Descuento del ".$discount."%";
+                            $total = $total -($total*($discount*0.01));
+                        }
                         if($received < $total){
                             $status = "pendent";
                             $strNote .= " - abona ".formatNum($received,false).", debe ".formatNum($total-$received,false);

@@ -69,7 +69,7 @@ $subtotal = 0;
                             <?php
                                 if($product['topic'] == 2 || $product['topic'] == 3){
                             ?>
-                        <td class="text-start">
+                        <td class="text-start text-break">
                             <?=$product['description']?><br>
                         </td>
                             <?php 

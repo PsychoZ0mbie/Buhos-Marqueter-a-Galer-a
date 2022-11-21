@@ -55,6 +55,10 @@
                             <label for="" class="form-label">Dinero recibido <span class="text-danger">*</span></label>
                             <input type="number" name="received" id="moneyReceived" class="form-control">
                         </div>
+                        <div class="mt-3 mb-3">
+                            <label for="" class="form-label">Descuento (opcional)</label>
+                            <input type="number" name="discount" id="discount" class="form-control">
+                        </div>
                         <p id="saleValue"></p>
                         <p id="moneyBack"></p>
                         <div class="modal-footer">
