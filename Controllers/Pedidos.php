@@ -140,7 +140,7 @@
                         $btnDelete ="";
                         $btnEdit ="";
 
-                        if($request[$i]['type'] != "pos"){
+                        if($request[$i]['type'] != "pos" && $request[$i]['type'] != "other"){
                             $btnPaypal = '<a href="'.base_url().'/pedidos/transaccion/'.$request[$i]['idtransaction'].'" class="btn btn-info m-1 text-white " type="button" title="Ver transacción" name="btnPaypal"><i class="fas fa-receipt"></i></a>';
                         }
 

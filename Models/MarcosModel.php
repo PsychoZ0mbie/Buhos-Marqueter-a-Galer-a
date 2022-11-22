@@ -97,9 +97,9 @@
             return $request;
         }
         public function sortT($sort,$dimensions = ""){
-            
+            $this->con = new Mysql();
             //dep($dimensions);
-            $option=" ORDER BY waste DESC";
+            $option="";
             if($sort == 2){
                 if($dimensions < 200){
                     $option=" AND type = 1 ORDER BY waste DESC";
@@ -116,14 +116,22 @@
                 }else if($dimensions >= 400){
                     $option = " AND waste > 49 AND type = 2 ORDER BY waste DESC";
                 }
+            }else{
+                if($dimensions < 200){
+                    $option=" ORDER BY waste DESC";
+                }else if($dimensions >= 200 && $dimensions < 400){
+                    $option = " AND waste > 33 ORDER BY waste DESC";
+                }else if($dimensions >= 400){
+                    $option = " AND waste > 49 ORDER BY waste DESC";
+                }
             }
             $sql = "SELECT * FROM molding WHERE status = 1 $option";
-            $request = $this->select_all($sql);
+            $request = $this->con->select_all($sql);
             if(count($request)> 0){
                 for ($i=0; $i < count($request); $i++) { 
                     $idProduct = $request[$i]['id'];
                     $sqlImg = "SELECT * FROM moldingimage WHERE moldingid = $idProduct";
-                    $requestImg = $this->select_all($sqlImg);
+                    $requestImg = $this->con->select_all($sqlImg);
                     if(count($requestImg)>0){
                         $request[$i]['image'] = media()."/images/uploads/".$requestImg[0]['name'];
                     }else{

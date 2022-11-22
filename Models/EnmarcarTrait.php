@@ -101,7 +101,7 @@
         public function sortT($sort,$dimensions = ""){
             $this->con = new Mysql();
             //dep($dimensions);
-            $option=" ORDER BY waste DESC";
+            $option="";
             if($sort == 2){
                 if($dimensions < 200){
                     $option=" AND type = 1 ORDER BY waste DESC";
@@ -117,6 +117,14 @@
                     $option = " AND waste > 33 AND type = 2 ORDER BY waste DESC";
                 }else if($dimensions >= 400){
                     $option = " AND waste > 49 AND type = 2 ORDER BY waste DESC";
+                }
+            }else{
+                if($dimensions < 200){
+                    $option=" ORDER BY waste DESC";
+                }else if($dimensions >= 200 && $dimensions < 400){
+                    $option = " AND waste > 33 ORDER BY waste DESC";
+                }else if($dimensions >= 400){
+                    $option = " AND waste > 49 ORDER BY waste DESC";
                 }
             }
             $sql = "SELECT * FROM molding WHERE status = 1 $option";

@@ -26,57 +26,6 @@
             $data['app'] = "functions_cart.js";
             $this->views->getView($this,"carrito",$data); 
         }
-        public function checkout(){
-            if(isset($_SESSION['login']) && isset($_SESSION['arrCart']) && !empty($_SESSION['arrCart'])){
-                $company=getCompanyInfo();
-                $data['page_tag'] = $company['name'];
-                $data['page_title'] ="Checkout | ".$company['name'];
-                $data['page_name'] = "checkout";
-                $data['credentials'] = getCredentials();
-                $data['company'] = getCompanyInfo();
-                $data['app'] = "checkout.js";
-                if(isset($_SESSION['arrShipping']) && $_SESSION['arrShipping']['id'] == 3 && empty($_SESSION['arrShipping']['city'])){
-                    header("location: ".base_url()."/shop/cart");
-                    die(); 
-                }else if(!isset($_SESSION['arrShipping'])){
-                    $_SESSION['arrShipping'] = $this->selectShippingMode();
-                    if($_SESSION['arrShipping']['id'] == 3 && empty($_SESSION['arrShipping']['city'])){
-                        header("location: ".base_url()."/shop/cart");
-                        die(); 
-                    }
-                }
-                if(isset($_SESSION['couponInfo'])){
-                    if(!$this->checkCoupon($_SESSION['idUser'],$_SESSION['couponInfo']['id'])){
-                        $_SESSION['couponInfo']['status'] = false;
-                    }
-                }
-                $data['arrShipping'] = $_SESSION['arrShipping'];
-
-                if(!empty($_SESSION['arrShipping']['city'])){
-                    $data['total'] = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping'],$_SESSION['arrShipping']['city']['id']);
-                }else{
-                    $data['total'] = $this->calculateTotal($_SESSION['arrCart'],$_SESSION['arrShipping']);
-                }
-                $this->views->getView($this,"checkout",$data); 
-            }else{
-                header("location: ".base_url());
-                die();
-            }
-        }
-        public function confirm(){
-            if(isset($_SESSION['orderData'])){
-                $company=getCompanyInfo();
-                $data['page_tag'] = $company['name'];
-                $data['page_title'] ="Confirmar pedido | ".$company['name'];
-                $data['page_name'] = "confirm";
-                $data['orderData'] = $_SESSION['orderData'];
-                unset($_SESSION['orderData']);
-                $this->views->getView($this,"confirm",$data); 
-            }else{
-                header("location: ".base_url());
-                die();
-            }
-        }
         /******************************Cart methods************************************/
         public function addCart(){
             //unset($_SESSION['arrCart']);exit;

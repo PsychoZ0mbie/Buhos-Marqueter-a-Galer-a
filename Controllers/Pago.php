@@ -169,6 +169,11 @@
                 $cupon ="";
             }
 
+            if($type==""){
+                $type="other";
+                $status = "approved";
+            }
+
             $arrShipping = $this->selectShippingMode();
             if($arrShipping['id']!=3){
                 $envio = $arrShipping['value'];

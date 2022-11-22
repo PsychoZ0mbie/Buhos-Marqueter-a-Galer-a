@@ -16,7 +16,6 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="text-decoration-none" href="<?=base_url()?>">Inicio</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Carrito</li>
-                    
                 </ol>
             </nav>
             <?php if(isset($_SESSION['arrCart']) && !empty($_SESSION['arrCart'])){ 
@@ -113,12 +112,14 @@
                                     </ul>
                                 <?php }else if($arrProducts[$i]['idType'] == 8){?>
                                     <ul>
+                                        <li><span class="fw-bold t-color-3">Referencia:</span> <?=$arrProducts[$i]['reference']?></li>
                                         <li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts[$i]['style']?></li>
                                         <li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
                                         <?=$colorBorder?>
                                     </ul>
                                 <?php }else if($arrProducts[$i]['idType'] == 9){?>
                                    <ul>
+                                        <li><span class="fw-bold t-color-3">Referencia:</span> <?=$arrProducts[$i]['reference']?></li>
                                         <li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts[$i]['style']?></li>
                                         <li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
                                    </ul>
