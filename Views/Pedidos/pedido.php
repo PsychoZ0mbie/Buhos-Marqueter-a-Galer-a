@@ -119,7 +119,6 @@ $subtotal = 0;
                                 </ul>
                             <?php }else if($arrProducts['idType'] == 8){?>
                                 <ul>
-                                    <li><span class="fw-bold t-color-3">Referencia:</span> <?=$arrProducts['reference']?></li>
                                     <li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts['style']?></li>
                                     <li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
                                     <?=$colorBorder?>
@@ -127,6 +126,7 @@ $subtotal = 0;
                             <?php }else if($arrProducts['idType'] == 9){?>
                             <ul>
                                 <li><span class="fw-bold t-color-3">Referencia:</span> <?=$arrProducts['reference']?></li>
+                                <li><span class="fw-bold t-color-3">Orientación:</span> <?=$arrProducts['orientation']?></li>
                                 <li><span class="fw-bold t-color-3">Estilo:</span> <?=$arrProducts['style']?></li>
                                 <li><span class="fw-bold t-color-3">Medidas:</span> <?=$medidas?></li>
                             </ul>

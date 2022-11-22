@@ -23,17 +23,30 @@
             </div>
             <div class="col-md-6 page mb-4">
                 <div class="mb-3">
-                    <span class="fw-bold ">1. Ingresa las dimensiones</span>
+                    <span class="fw-bold">1. Elige la orientación</span>
+                    <div class="d-flex flex-wrap justify-content-center align-items-center mt-3">
+                        <div class="orientation element--hover" data-name="horizontal" onclick="selectOrientation(this)">
+                            <span>Horizontal</span>
+                            <img src="<?=media()?>/images/uploads/horizontal.png" alt="Sentido horizontal">
+                        </div>
+                        <div class="orientation element--hover" data-name="vertical" onclick="selectOrientation(this)">
+                            <span>Vertical</span>
+                            <img src="<?=media()?>/images/uploads/vertical.png" alt="Sentido vertical">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span class="fw-bold ">2. Ingresa las dimensiones</span>
                     <div class="d-flex flex-wrap justify-content-center align-items-center flex-column">
                         <div class="measures--dimension">
                             <label for="">Ancho (cm)</label>
                             <div class="measures--limits"><span>min 10.0</span><span>max 500.0</span></div>
-                            <input type="number" class="measures--input" name="intWidth" id="intWidth">
+                            <input type="number" class="measures--input" name="intWidth" id="intWidth" disabled>
                         </div>
                         <div class="measures--dimension">
                             <label for="">Alto (cm)</label>
                             <div class="measures--limits"><span>min 10.0</span><span>max 500.0</span></div>
-                            <input type="number" class="measures--input" name="intHeight" id="intHeight">
+                            <input type="number" class="measures--input" name="intHeight" id="intHeight" disabled>
                         </div>
                     </div>
                 </div>

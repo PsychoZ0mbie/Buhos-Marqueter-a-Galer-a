@@ -225,7 +225,7 @@ addFrame.addEventListener("click",function(){
     let colorBorder = 0;
     let route = document.querySelector("#enmarcarTipo").getAttribute("data-route");
     let type = document.querySelector("#enmarcarTipo").getAttribute("data-name");
-    let orientation = "";
+    let orientation = document.querySelector(".orientation.element--active").getAttribute("data-name");
     let idType = document.querySelector("#enmarcarTipo").getAttribute("data-id");
     formData.append("height",height);
     formData.append("width",width);
@@ -257,6 +257,15 @@ addFrame.addEventListener("click",function(){
         }
     });
 }); 
+function selectOrientation(element){
+    let items = document.querySelectorAll(".orientation");
+    for (let i = 0; i < items.length; i++) {
+        items[i].classList.remove("element--active");
+    }
+    element.classList.add("element--active");
+    document.querySelectorAll(".measures--input")[0].removeAttribute("disabled");
+    document.querySelectorAll(".measures--input")[1].removeAttribute("disabled");
+}
 function selectActive(element =null,elements=null){
     let items = document.querySelectorAll(`${elements}`);
     for (let i = 0; i < items.length; i++) {
