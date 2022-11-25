@@ -70,7 +70,7 @@
             $request = $this->con->select($sql);
             return $request;
         }
-        public function searchT($search,$dimensions=""){
+        public function searchT($search,$sort,$dimensions=""){
             $this->con = new Mysql();
 
             $option = "";
@@ -81,8 +81,15 @@
             }else if($dimensions >= 400){
                 $option = " AND waste > 49";
             }
+            
+            $options = "";
+            if($sort == 2){
+                $options=" AND type = 1";
+            }else if($sort == 3){
+                $options = " AND type = 2";
+            }
 
-            $sql = "SELECT * FROM molding WHERE status = 1  $option AND reference LIKE '%$search%'";
+            $sql = "SELECT * FROM molding WHERE status = 1  $options $option AND reference LIKE '%$search%' ORDER BY waste DESC";
             $request = $this->con->select_all($sql);
             if(count($request)> 0){
                 for ($i=0; $i < count($request); $i++) { 
@@ -98,36 +105,36 @@
             }
             return $request;
         }
-        public function sortT($sort,$dimensions = ""){
+        public function sortT($search,$sort,$dimensions=""){
             $this->con = new Mysql();
             //dep($dimensions);
             $option="";
             if($sort == 2){
                 if($dimensions < 200){
-                    $option=" AND type = 1 ORDER BY waste DESC";
+                    $option=" AND type = 1";
                 }else if($dimensions >= 200 && $dimensions < 400){
-                    $option = " AND waste > 33 AND type = 1 ORDER BY waste DESC";
+                    $option = " AND waste > 33 AND type = 1";
                 }else if($dimensions >= 400){
-                    $option = " AND waste > 49 AND type = 1 ORDER BY waste DESC";
+                    $option = " AND waste > 49 AND type = 1";
                 }
             }else if( $sort == 3){
                 if($dimensions < 200){
-                    $option=" AND type = 2 ORDER BY waste DESC";
+                    $option=" AND type = 2";
                 }else if($dimensions >= 200 && $dimensions < 400){
-                    $option = " AND waste > 33 AND type = 2 ORDER BY waste DESC";
+                    $option = " AND waste > 33 AND type = 2";
                 }else if($dimensions >= 400){
-                    $option = " AND waste > 49 AND type = 2 ORDER BY waste DESC";
+                    $option = " AND waste > 49 AND type = 2";
                 }
             }else{
                 if($dimensions < 200){
                     $option=" ORDER BY waste DESC";
                 }else if($dimensions >= 200 && $dimensions < 400){
-                    $option = " AND waste > 33 ORDER BY waste DESC";
+                    $option = " AND waste > 33";
                 }else if($dimensions >= 400){
-                    $option = " AND waste > 49 ORDER BY waste DESC";
+                    $option = " AND waste > 49";
                 }
             }
-            $sql = "SELECT * FROM molding WHERE status = 1 $option";
+            $sql = "SELECT * FROM molding WHERE status = 1 AND reference LIKE '%$search%' $option ORDER BY waste DESC ";
             $request = $this->con->select_all($sql);
             if(count($request)> 0){
                 for ($i=0; $i < count($request); $i++) { 

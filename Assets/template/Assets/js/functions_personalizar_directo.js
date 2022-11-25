@@ -69,8 +69,6 @@ intHeight.addEventListener("change",function(){
     resizeFrame(intWidth.value, intHeight.value);
     if(intHeight.value !="" && intWidth.value!=""){
         btnNext.classList.remove("d-none");
-    }
-    if(intWidth.value !="" && intHeight.value!=""){
         let formData = new FormData();
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
@@ -91,8 +89,6 @@ intWidth.addEventListener("change",function(){
     resizeFrame(intWidth.value, intHeight.value);
     if(intHeight.value !="" && intWidth.value!=""){
         btnNext.classList.remove("d-none");
-    }
-    if(intWidth.value !="" && intHeight.value!=""){
         let formData = new FormData();
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
@@ -142,6 +138,7 @@ searchFrame.addEventListener('input',function() {
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
         formData.append("search",searchFrame.value);
+        formData.append("sort",sortFrame.value);
         containerFrames.innerHTML=`
             <div class="text-center p-5">
                 <div class="spinner-border" role="status">
@@ -164,6 +161,7 @@ sortFrame.addEventListener("change",function(){
         let formData = new FormData();
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
+        formData.append("search",searchFrame.value);
         formData.append("sort",sortFrame.value);
         containerFrames.innerHTML=`
             <div class="text-center p-5">
@@ -310,7 +308,7 @@ function calcularMarco(id=null){
     request(base_url+"/enmarcar/calcularMarcoTotal",formData,"post").then(function(objData){
         if(objData.status){
             let data = objData.data;
-            let borderImage = `url(${base_url}/assets/images/uploads/${data.frame}) 40% repeat`;
+            let borderImage = `url(${base_url}/Assets/images/uploads/${data.frame}) 40% repeat`;
             document.querySelector("#reference").innerHTML = "Ref: "+data.reference;
             document.querySelector(".totalFrame").innerHTML = data.total.format;
             layoutMargin.style.borderImage= borderImage;

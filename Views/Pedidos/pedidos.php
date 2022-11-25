@@ -184,13 +184,23 @@
                                     </div>
                                     <div class="tab-pane fade" id="navOtros">
                                         <div class="mt-3">
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Nombre del servicio</label>
-                                                <input type="text" class="form-control" id="txtService" name="txtService" placeholder="Pintar marco...">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="exampleFormControlInput1" class="form-label">Cantidad</label>
+                                                        <input type="number" class="form-control" id="intQty" name="intQty">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="exampleFormControlInput1" class="form-label">Precio</label>
+                                                        <input type="number" class="form-control" id="intPrice" name="intPrice">
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Precio</label>
-                                                <input type="number" class="form-control" id="intPrice" name="intPrice">
+                                                <label for="exampleFormControlInput1" class="form-label">Descripció del servicio</label>
+                                                <textarea rows="4" class="form-control" id="txtService" name="txtService" placeholder="Pintar marco..."></textarea>
                                             </div>
                                             <button type="button" class="btn btn-primary" onclick="addProduct(null,this)">Agregar</button>
                                         </div>

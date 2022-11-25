@@ -263,6 +263,7 @@ function addProduct(id=null, element){
     let formData = new FormData();
     const toastLiveExample = document.getElementById('liveToast');
     let topic = 0;
+    let intQty = 1;
     if(id!=null){
         topic = 2;
     }else{
@@ -270,11 +271,12 @@ function addProduct(id=null, element){
         topic = 3;
         let strService = document.querySelector("#txtService").value;
         let intPrice = document.querySelector("#intPrice").value;
+        intQty = document.querySelector("#intQty").value;
         formData.append("txtService",strService);
         formData.append("intPrice",intPrice);
     }
     let idProduct = id;
-    let intQty = 1;
+    
 
     formData.append("idProduct",idProduct);
     formData.append("topic",topic);

@@ -122,6 +122,7 @@ searchFrame.addEventListener('input',function() {
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
         formData.append("search",searchFrame.value);
+        formData.append("sort",sortFrame.value);
         containerFrames.innerHTML=`
             <div class="text-center p-5">
                 <div class="spinner-border" role="status">
@@ -144,6 +145,7 @@ sortFrame.addEventListener("change",function(){
         let formData = new FormData();
         formData.append("height",intHeight.value);
         formData.append("width",intWidth.value);
+        formData.append("search",searchFrame.value);
         formData.append("sort",sortFrame.value);
         containerFrames.innerHTML=`
             <div class="text-center p-5">
@@ -169,6 +171,10 @@ containerFrames.addEventListener("click",function(e){
 });
 //[Select style]
 selectStyle.addEventListener("change",function(){
+    if(!document.querySelector(".frame--item.element--active")){
+        Swal.fire("Error","Por favor, seleccione la moldura","error");
+        return false;
+    }
     calcularMarco();
 });
 
@@ -324,7 +330,7 @@ function calcularMarco(id=null){
     request(base_url+"/enmarcar/calcularMarcoTotal",formData,"post").then(function(objData){
         if(objData.status){
             let data = objData.data;
-            let borderImage = `url(${base_url}/assets/images/uploads/${data.frame}) 40% repeat`;
+            let borderImage = `url(${base_url}/Assets/images/uploads/${data.frame}) 40% repeat`;
             document.querySelector("#reference").innerHTML = "Ref: "+data.reference;
             document.querySelectorAll(".totalFrame")[0].innerHTML = data.total.format;
             document.querySelectorAll(".totalFrame")[1].innerHTML = data.total.format;

@@ -64,13 +64,13 @@
             }
             
         }
-        public function getProducts($option=null,$params=null,$perimetro=""){
+        public function getProducts($option=null,$search=null,$sort=null,$perimetro=""){
             $html="";
             $request="";
             if($option == 1){
-                $request = $this->searchT($params,$perimetro);
+                $request = $this->searchT($search,$sort,$perimetro);
             }else if($option == 2){
-                $request = $this->sortT($params,$perimetro);
+                $request = $this->sortT($search,$sort,$perimetro);
             }else{
                 $request = $this->selectProducts($perimetro);
             }
@@ -123,18 +123,22 @@
             die();
         }
         public function search(){
-            if($_POST){
-                $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
-                $arrResponse = $this->getProducts(1,strClean($_POST['search']),$perimetro);
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            if($_SESSION['permitsModule']['w']){
+                if($_POST){
+                    $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
+                    $arrResponse = $this->getProducts(1,strClean($_POST['search']),intval($_POST['sort']),$perimetro);
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
             }
             die();
         }
         public function sort(){
-            if($_POST){
-                $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
-                $arrResponse = $this->getProducts(2,intval($_POST['sort']),$perimetro);
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            if($_SESSION['permitsModule']['w']){
+                if($_POST){
+                    $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
+                    $arrResponse = $this->getProducts(2,strClean($_POST['search']),intval($_POST['sort']),$perimetro);
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
             }
             die();
         }
@@ -391,7 +395,7 @@
         public function filterProducts(){
             if($_POST){
                 $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
-                $arrResponse = $this->getProducts(null,null,$perimetro);
+                $arrResponse = $this->getProducts(null,null,null,$perimetro);
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
