@@ -115,7 +115,8 @@
                                         <th>Fecha</th>
                                         <th>Monto</th>
                                         <th>Tipo de pago</th>
-                                        <th>Estado</th>
+                                        <th>Estado de pago</th>
+                                        <th>Estado de pedido</th>
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
@@ -129,10 +130,10 @@
                     <div class="tab-pane fade" id="quickSale">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <button class="nav-link active" id="navTienda-tab" data-bs-toggle="tab" data-bs-target="#navTienda" type="button" role="tab" aria-controls="navTienda" aria-selected="true">Tienda</button>
+                                <button class="nav-link active" id="navEnmarcar-tab" data-bs-toggle="tab" data-bs-target="#navEnmarcar" type="button" role="tab" aria-controls="navEnmarcar" aria-selected="true">Enmarcar</button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" id="navEnmarcar-tab" data-bs-toggle="tab" data-bs-target="#navEnmarcar" type="button" role="tab" aria-controls="navEnmarcar" aria-selected="true">Enmarcar</button>
+                                <button class="nav-link " id="navTienda-tab" data-bs-toggle="tab" data-bs-target="#navTienda" type="button" role="tab" aria-controls="navTienda" aria-selected="true">Tienda</button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" id="navOtros-tab" data-bs-toggle="tab" data-bs-target="#navOtros" type="button" role="tab" aria-controls="navOtros" aria-selected="true">Otros</button>
@@ -141,26 +142,7 @@
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <div class="tab-content">
-                                    <div class="tab-pane fade show active" id="navTienda">
-                                        <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" id="searchProducts" name="searchProducts">
-                                        <div class="scroll-y">
-                                            <table class="table text-center items align-middle">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Portada</th>
-                                                        <th>Nombre</th>
-                                                        <th>Precio</th>
-                                                        <th>Descuento</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="listProducts">
-                                                    <?=$data['products']['data']?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="navEnmarcar">
+                                    <div class="tab-pane fade show active" id="navEnmarcar">
                                         <div class="row">
                                             <?php
                                             for ($i=0; $i < count($tipos); $i++) { 
@@ -182,8 +164,31 @@
                                             <?php }?>
                                         </div>
                                     </div>
+                                    <div class="tab-pane fade " id="navTienda">
+                                        <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" id="searchProducts" name="searchProducts">
+                                        <div class="scroll-y">
+                                            <table class="table text-center items align-middle">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Portada</th>
+                                                        <th>Nombre</th>
+                                                        <th>Precio</th>
+                                                        <th>Descuento</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="listProducts">
+                                                    <?=$data['products']['data']?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                     <div class="tab-pane fade" id="navOtros">
                                         <div class="mt-3">
+                                            <div class="mb-3">
+                                                <label for="exampleFormControlInput1" class="form-label">Descripción del servicio</label>
+                                                <textarea rows="4" class="form-control" id="txtService" name="txtService" placeholder="Pintar marco..."></textarea>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
@@ -197,10 +202,6 @@
                                                         <input type="number" class="form-control" id="intPrice" name="intPrice">
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleFormControlInput1" class="form-label">Descripció del servicio</label>
-                                                <textarea rows="4" class="form-control" id="txtService" name="txtService" placeholder="Pintar marco..."></textarea>
                                             </div>
                                             <button type="button" class="btn btn-primary" onclick="addProduct(null,this)">Agregar</button>
                                         </div>

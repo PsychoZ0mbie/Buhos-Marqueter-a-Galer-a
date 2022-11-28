@@ -80,6 +80,7 @@
                     $data = $this->model->selectOrder($idOrder,"");
                     $data['amount'] = formatNum($data['amount']);
                     $options ="";
+                    $statusOrder="";
                     if($data['status'] == "pendent"){
                         $options='
                         <option value="1">approved</option>
@@ -91,7 +92,15 @@
                         <option value="2">pendent</option>
                         ';
                     }
+                    for ($i=0; $i < count(STATUS) ; $i++) { 
+                        if($data['statusorder'] == STATUS[$i]){
+                            $statusOrder.='<option value="'.$i.'" selected>'.STATUS[$i].'</option>';
+                        }else{
+                            $statusOrder.='<option value="'.$i.'">'.STATUS[$i].'</option>';
+                        }
+                    }
                     $data['options'] = $options;
+                    $data['statusorder'] = $statusOrder;
                     $arrResponse = array("status"=>true,"data"=>$data);
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
@@ -102,15 +111,24 @@
             if($_SESSION['permitsModule']['u']){
                 //dep($_POST);exit;
                 if($_POST){
-                    if(empty($_POST['strNote']) || empty($_POST['status']) || empty($_POST['strDate']) || empty($_POST['txtTransaction'])){
+                    if(empty($_POST['strNote']) || empty($_POST['statusList']) || empty($_POST['strDate']) || 
+                    empty($_POST['txtTransaction']) || empty($_POST['statusOrder'])){
                         $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }
                     $idOrder = intval($_POST['idOrder']);
-                    $status = strtolower(strClean($_POST['status']));
+                    $status = intval($_POST['statusList']) == 1 ? "approved" : "pendent";
+                    $statusOrder = intval($_POST['statusOrder']);
                     $strNote = strClean($_POST['strNote']);
                     $strDate = $_POST['strDate'];
                     $idTransaction = strClean($_POST['txtTransaction']);
-                    $request = $this->model->updateOrder($idOrder,$idTransaction,$strDate,$strNote,$status);
+                    $statusO ="";
+                    for ($i=0; $i < count(STATUS) ; $i++) { 
+                        if($statusOrder == $i){
+                            $statusO = STATUS[$i];
+                            break;
+                        }
+                    }
+                    $request = $this->model->updateOrder($idOrder,$idTransaction,$strDate,$strNote,$status,$statusO);
                     if($request>0){
                         $arrResponse = array("status"=>true,"msg"=>"Pedido actualizado","data"=>$this->getOrders()['data']);
                     }else{
@@ -147,7 +165,7 @@
                         if($_SESSION['permitsModule']['d'] && $_SESSION['userData']['roleid'] == 1){
                             $btnDelete = '<button class="btn btn-danger text-white m-1" type="button" title="Delete" data-id="'.$request[$i]['idorder'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
                         }
-                        if($_SESSION['permitsModule']['u'] && $request[$i]['type'] == "pos"){
+                        if($_SESSION['permitsModule']['u']){
                             $btnEdit = '<button class="btn btn-success text-white m-1" type="button" title="Edit" data-id="'.$request[$i]['idorder'].'" name="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
                         }
                         if($_SESSION['userData']['roleid'] == 1 || $_SESSION['userData']['roleid'] == 3){
@@ -160,6 +178,7 @@
                                     <td>'.formatNum($request[$i]['amount']).'</td>
                                     <td>'.$request[$i]['type'].'</td>
                                     <td>'.$request[$i]['status'].'</td>
+                                    <td>'.$request[$i]['statusorder'].'</td>
                                     <td class="item-btn">'.$btnView.$btnPaypal.$btnEdit.$btnDelete.'</td>
                                 </tr>
                             ';
@@ -173,6 +192,7 @@
                                 <td>'.formatNum($request[$i]['amount']).'</td>
                                 <td>'.$request[$i]['type'].'</td>
                                 <td>'.$request[$i]['status'].'</td>
+                                <td>'.$request[$i]['statusorder'].'</td>
                                 <td class="item-btn">'.$btnView.$btnPaypal.$btnDelete.'</td>
                             </tr>
                         ';
@@ -197,28 +217,6 @@
                     $arrResponse = array("status"=>true,"data"=>$request);
                 }else{
                     $arrResponse = array("status"=>false,"msg"=>"Datos no encontrados.");
-                }
-                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-            }
-            die();
-        }
-        public function setRefund(){
-            if($_POST){
-                if(empty($_POST['idTransaction']) || empty($_POST['txtDescription'])){
-                    $arrResponse = array("status"=>false,"msg"=>"Error de datos.");
-                }else{
-                    if($_SESSION['permitsModule']['u'] && $_SESSION['userData']['roleid'] !=2){
-                        $idTransaction = strClean($_POST['idTransaction']);
-                        $strDescription = strClean($_POST['txtDescription']);
-                        $request = $this->model->insertRefund($idTransaction,$strDescription);
-                        if($request){
-                            $arrResponse = array("status"=>true,"msg"=>"El pedido ha sido reembolsado.");
-                        }else{
-                            $arrResponse = array("status"=>false,"msg"=>"El pedido no puede ser reembolsado.");
-                        }
-                    }else{
-                        $arrResponse = array("status"=>false,"msg"=>"No se puede reembolsar, por favor, póngase en contacto con su administrador.");
-                    }
                 }
                 echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
@@ -286,7 +284,6 @@
             }
             die();
         }
-
         
 
         /*************************POS methods*******************************/
@@ -704,6 +701,7 @@
                         $idUser = intval($_POST['id']);
                         $customInfo = $this->model->selectCustomer($idUser);
                         $status = "approved";
+                        $statusOrder = "confirmado";
                         $received = intval($_POST['received']);
                         $strNote = strClean($_POST['strNote']);
                         $strDate = $_POST['strDate'];
@@ -725,7 +723,7 @@
                             $status = "pendent";
                             $strNote .= " - abona ".formatNum($received,false).", debe ".formatNum($total-$received,false);
                         }
-                        $request = $this->model->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$strDate,$cupon,$envio,$total,$status,$type);          
+                        $request = $this->model->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$strDate,$cupon,$envio,$total,$status,$type,$statusOrder);          
                         if($request>0){
                             $arrOrder = array("idorder"=>$request,"iduser"=>$idUser,"products"=>$_SESSION['arrPOS']);
                             $requestDetail = $this->model->insertOrderDetail($arrOrder);

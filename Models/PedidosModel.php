@@ -19,7 +19,7 @@
         /*************************Category methods*******************************/
 
         public function selectOrders(){
-            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata ORDER BY date DESC";       
+            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata ORDER BY idorder DESC";       
             $request = $this->select_all($sql);
             return $request;
         }
@@ -74,7 +74,7 @@
         }
         public function search($search){
             $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata 
-                    WHERE idtransaction LIKE '%$search%' || idorder LIKE '%$search%'";
+                    WHERE idtransaction LIKE '%$search%' || idorder LIKE '%$search%' ORDER BY idorder DESC";
             $request = $this->select_all($sql);
             return $request;
         }
@@ -223,7 +223,7 @@
             return $request;
         }
         public function insertOrder(int $idUser, string $idTransaction, string $strName,string $strEmail,string $strPhone,string $strAddress,
-        string $strNote,string $strDate,string $cupon,int $envio,int $total,string $status, string $type){
+        string $strNote,string $strDate,string $cupon,int $envio,int $total,string $status, string $type,string $statusOrder){
 
             $this->strIdTransaction = $idTransaction;
             $this->intIdUser = $idUser;
@@ -236,7 +236,7 @@
                 $dateCreated = date_create($arrDate[2]."-".$arrDate[1]."-".$arrDate[0]);
                 $dateFormat = date_format($dateCreated,"Y-m-d");
                 
-                $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,date,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,date,status,coupon,shipping,type,statusorder) VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 $arrData = array(
                     $this->intIdUser, 
                     $this->strIdTransaction,
@@ -250,10 +250,12 @@
                     $status,
                     $cupon,
                     $envio,
-                    $type);
+                    $type,
+                    $statusOrder,
+                );
                 $request = $this->insert($sql,$arrData);
             }else{
-                $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
+                $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type,statusorder) VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 $arrData = array(
                     $this->intIdUser, 
                     $this->strIdTransaction,
@@ -266,7 +268,9 @@
                     $status,
                     $cupon,
                     $envio,
-                    $type);
+                    $type,
+                    $statusOrder
+                );
                 $request = $this->insert($sql,$arrData);
             }
             return $request;
@@ -323,11 +327,11 @@
             $request = $this->update($sql,$arrData);
             return $request;
         }
-        public function updateOrder($idOrder,$idTransaction,$strDate,$strNote,$status){
+        public function updateOrder($idOrder,$idTransaction,$strDate,$strNote,$status,$statusOrder){
             $this->intIdOrder = $idOrder;
             $this->strIdTransaction = $idTransaction;
-            $sql = "UPDATE orderdata SET idtransaction=?,note=?,status=?, date=? WHERE idorder = $this->intIdOrder";
-            $arrData = array($this->strIdTransaction,$strNote,$status,$strDate);
+            $sql = "UPDATE orderdata SET idtransaction=?,note=?,status=?, date=?,statusorder=? WHERE idorder = $this->intIdOrder";
+            $arrData = array($this->strIdTransaction,$strNote,$status,$strDate,$statusOrder);
             $request = $this->update($sql,$arrData);
             return $request;
         }

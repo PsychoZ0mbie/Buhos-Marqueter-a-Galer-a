@@ -180,10 +180,6 @@ if(document.querySelector("#pedidos")){
                                         <td>${objData.data.phone}</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Estado: </strong></td>
-                                        <td>${objData.data.status}</td>
-                                    </tr>
-                                    <tr>
                                         <td><strong>Total: </strong></td>
                                         <td>${objData.data.amount}</td>
                                     </tr>
@@ -191,24 +187,43 @@ if(document.querySelector("#pedidos")){
                             </table>
                             <form id="formOrder">
                                 <input type="hidden" id="idOrder" name="idOrder" value="${objData.data.idorder}">
-                                <div class="mt-3 mb-3">
-                                    <label for="" class="form-label">Transacción <span class="text-danger">*</span></label>
-                                    <input type="number" name="txtTransaction" id="txtTransaction" class="form-control" value="${objData.data.idtransaction}">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mt-3 mb-3">
+                                            <label for="" class="form-label">Transacción <span class="text-danger">*</span></label>
+                                            <input type="number" name="txtTransaction" id="txtTransaction" class="form-control" value="${objData.data.idtransaction}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mt-3 mb-3">
+                                            <label for="" class="form-label">Fecha <span class="text-danger">*</span></label>
+                                            <input type="date" name="strDate" id="txtDate" class="form-control">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="mt-3 mb-3">
-                                    <label for="" class="form-label">Fecha <span class="text-danger">*</span></label>
-                                    <input type="date" name="strDate" id="txtDate" class="form-control">
-                                </div>
-                                <div class="mt-3 mb-3">
-                                    <label for="" class="form-label">Notas <span class="text-danger">*</span></label>
+                                    <label for="" class="form-label">Notas</label>
                                     <textarea rows="5" name="strNote" id="txtNotePos" class="form-control">${objData.data.note}</textarea>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="typeList" class="form-label">Estado <span class="text-danger">*</span></label>
-                                    <select class="form-control" aria-label="Default select example" id="statusList" name="statusList" required>
-                                        ${objData.data.options}
-                                    </select>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="typeList" class="form-label">Estado de pago <span class="text-danger">*</span></label>
+                                            <select class="form-control" aria-label="Default select example" id="statusList" name="statusList" required>
+                                                ${objData.data.options}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="typeList" class="form-label">Estado de pedido <span class="text-danger">*</span></label>
+                                            <select class="form-control" aria-label="Default select example" id="statusOrder" name="statusOrder" required>
+                                                ${objData.data.statusorder}
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
+                                
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary" id="btnAdd">Actualizar</button>
                                     <button type="button" class="btn btn-secondary text-white" data-bs-dismiss="modal">Cerrar</button>
@@ -229,16 +244,14 @@ if(document.querySelector("#pedidos")){
             formOrder.addEventListener("submit",function(e){
                 e.preventDefault();
                 let formData = new FormData(formOrder);
-                let select = document.querySelector("#statusList");
-                let strNote = document.querySelector("#txtNotePos").value;
-                let status = select.options[select.selectedIndex].text;
+                let status = document.querySelector("#statusList").value;
                 let strDate = document.querySelector("#txtDate").value;
+                let statusOrder = document.querySelector("#statusOrder").value;
                 let strTransaction = document.querySelector("#txtTransaction").value;
-                if(select.value =="" || strNote =="" || strDate =="" || strTransaction==""){
+                if(status =="" || strDate =="" || strTransaction=="" || statusOrder ==""){
                     Swal.fire("Error","Todos los campos con (*) son obligatorios","error");
                     return false;
                 }
-                formData.append("status",status);
                 let btnAdd = document.querySelector("#btnAdd");
     
                 btnAdd.innerHTML=`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
@@ -274,10 +287,13 @@ function addProduct(id=null, element){
         intQty = document.querySelector("#intQty").value;
         formData.append("txtService",strService);
         formData.append("intPrice",intPrice);
+
+        if(strService=="" || intPrice =="" || intQty ==""){
+            Swal.fire("Error","Todos los campos son obligatorios","error");
+            return false;
+        }
     }
     let idProduct = id;
-    
-
     formData.append("idProduct",idProduct);
     formData.append("topic",topic);
     formData.append("txtQty",intQty);

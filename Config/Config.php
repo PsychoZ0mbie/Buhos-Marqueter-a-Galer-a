@@ -21,12 +21,12 @@
 
 	const DEC = ","; // Decimales;
 	const MIL = ".";//Millares;
-
-	const URLPAYPAL="https://api.sandbox.paypal.com";
 	
 	//Encriptado
 	const KEY = "ecommerce";
 	const METHOD = "AES-128-ECB";
+	//Estados
+	const STATUS = ["confirmado","en preparacion","preparado","entregado"];
 	
 	const COMISION = 1.04;
 	const TASA = 900;
