@@ -161,7 +161,7 @@
             $idTransaction =$arrData['transaction'];
             $type =$arrData['type'];
             $envio = 0;
-            
+            $statusOrder ="confirmado";
             $arrProducts = $_SESSION['arrCart'];
             $arrTotal = $this->calcTotalCart($arrProducts,$cupon);
             $total = $arrTotal['total'];
@@ -181,7 +181,7 @@
                 $envio = $_SESSION['shippingcity'];
                 $total +=$envio;
             }
-            $request = $this->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$total,$status,$type);          
+            $request = $this->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$total,$status,$type,$statusOrder);          
             if($request>0){
                 $arrOrder = array("idorder"=>$request,"iduser"=>$_SESSION['idUser'],"products"=>$_SESSION['arrCart']);
                 $requestDetail = $this->insertOrderDetail($arrOrder);

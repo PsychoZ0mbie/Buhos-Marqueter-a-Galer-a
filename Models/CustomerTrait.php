@@ -99,7 +99,7 @@
             return;
         }
         public function insertOrder(int $idUser, string $idTransaction, string $strName,string $strEmail,string $strPhone,string $strAddress,
-        string $strNote,string $cupon,int $envio,int $total,string $status, string $type){
+        string $strNote,string $cupon,int $envio,int $total,string $status, string $type,string $statusOrder){
 
             $this->con = new Mysql();
             $this->strIdTransaction = $idTransaction;
@@ -109,7 +109,7 @@
             $this->strPhone = $strPhone;
             $this->strAddress = $strAddress;
             
-            $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type) VALUE(?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql ="INSERT INTO orderdata(personid,idtransaction,name,email,phone,address,note,amount,status,coupon,shipping,type,statusorder) VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $arrData = array(
                 $this->intIdUser, 
                 $this->strIdTransaction,
@@ -122,7 +122,9 @@
                 $status,
                 $cupon,
                 $envio,
-                $type);
+                $type,
+                $statusOrder
+            );
             $request = $this->con->insert($sql,$arrData);
             return $request;
         }
