@@ -74,7 +74,7 @@
         }
         public function search($search){
             $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata 
-                    WHERE idtransaction LIKE '%$search%' || idorder LIKE '%$search%' ORDER BY idorder DESC";
+                    WHERE idtransaction LIKE '%$search%' || idorder LIKE '%$search%' || name LIKE '%$search%' || email LIKE '%$search%' || phone LIKE '%$search%' ORDER BY idorder DESC";
             $request = $this->select_all($sql);
             return $request;
         }
