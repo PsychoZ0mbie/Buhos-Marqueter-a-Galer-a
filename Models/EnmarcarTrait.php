@@ -92,7 +92,7 @@
                 }
             }else{
                 if($dimensions < 200){
-                    $option=" ORDER BY waste DESC";
+                    $option="";
                 }else if($dimensions >= 200 && $dimensions <= 380){
                     $option = " AND (waste > 20 AND type = 1) || (waste > 49 AND type = 2)";
                 }else if($dimensions > 380){
@@ -138,7 +138,7 @@
                 }
             }else{
                 if($dimensions < 200){
-                    $option=" ORDER BY waste DESC";
+                    $option="";
                 }else if($dimensions >= 200 && $dimensions <= 380){
                     $option = " AND (waste > 20 AND type = 1) || (waste > 49 AND type = 2)";
                 }else if($dimensions > 380){
