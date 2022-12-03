@@ -88,7 +88,7 @@ $subtotal = 0;
 		    	<td><?= $order['phone'] ?></td>
 		    </tr>
 		    <tr>
-		    	<td>Dirección de envio:</td>
+		    	<td>Dirección:</td>
 		    	<td><?= $order['address']?></td>
 		    </tr>
 			<tr>

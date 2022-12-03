@@ -22,6 +22,29 @@ window.addEventListener("load",function(){
             })
         }*/
     }
+    let urlSearch = window.location.search;
+    let params = new URLSearchParams(urlSearch);
+    let boolCheck = document.querySelector("#boolCheck");
+    let cupon = "";
+    let url="";
+    if(params.get("cupon")){
+        cupon = "cupon="+params.get("cupon");
+    }
+    if(params.get("situ")){
+        let situ = params.get("situ");
+        if(situ == "true"){
+            boolCheck.setAttribute("checked","");
+        }else{
+            boolCheck.removeAttribute("checked");
+        }
+    }
+    boolCheck.addEventListener("input",function(){
+        if(cupon!=""){
+            window.location.href=base_url+"/carrito?"+cupon+"&situ="+boolCheck.checked;
+        }else{
+            window.location.href=base_url+"/carrito?situ="+boolCheck.checked;
+        }
+    })
     
 });
 
@@ -67,7 +90,13 @@ if(document.querySelector("#btnCoupon")){
             btnCoupon.innerHTML=`+`;
             btnCoupon.removeAttribute("disabled");
             if(objData.status){
-                window.location.href = base_url+"/carrito?cupon="+objData.data.code;
+                let urlSearch = window.location.search;
+                let params = new URLSearchParams(urlSearch);
+                let situ ="";
+                if(params.get("situ")){
+                    situ="&situ="+params.get("situ");
+                }
+                window.location.href = base_url+"/carrito?cupon="+objData.data.code+situ;
             }else{
                 alertCoupon.innerHTML=objData.msg;
                 alertCoupon.classList.remove("d-none");
@@ -258,9 +287,7 @@ function delCart(elements){
             let urlSearch = window.location.search;
             let params = new URLSearchParams(urlSearch);
             let cupon = "";
-            if(params.get("cupon")){
-                cupon = params.get("cupon");
-            }
+            let situ="";
             let data = element.parentElement.parentElement.parentElement;
             let formData = new FormData();
             let topic = data.getAttribute("data-topic");
@@ -297,7 +324,15 @@ function delCart(elements){
                     document.querySelector("#subtotal").innerHTML = objData.subtotal;
                     document.querySelector("#totalProducts").innerHTML = objData.total;
                     data.remove();
-                    window.location.href=base_url+"/carrito?cupon="+cupon;
+                    if(params.get("cupon")){
+                        cupon = "?cupon="+params.get("cupon");
+                    }
+                    if(params.get("situ") && !params.get("cupon")){
+                        situ = "?situ="+params.get("situ");
+                    }else{
+                        situ = "&situ="+params.get("situ");
+                    }
+                    window.location.href=base_url+"/carrito"+cupon+situ;
                 }
             });
         });

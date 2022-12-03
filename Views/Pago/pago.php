@@ -12,6 +12,9 @@
     $cupon = 0;
     $subtotal = 0;
     $envio = 0;
+    $urlCupon="";
+    $situ = isset($_GET['situ']) ? "?situ=".$_GET['situ'] : "";
+
     for ($i=0; $i < count($arrProducts) ; $i++) { 
         $subtotal += $arrProducts[$i]['qty'] * $arrProducts[$i]['price'];
     }
@@ -22,15 +25,14 @@
     }else{
         $total = $subtotal;
     }
-
-    if($arrShipping['id'] != 3){
+    //dep($situ);
+    if($arrShipping['id'] < 3 || $arrShipping['id'] == 4){
         $envio = $arrShipping['value'];
         $total+=$envio;
-    }else if($arrShipping['id'] && isset($_SESSION['shippingcity'])){
+    }else if($arrShipping['id'] == 3 && isset($_SESSION['shippingcity'])){
         $envio = $_SESSION['shippingcity'];
         $total+= $envio;
     }
-
     $item->title = "productos";
     $item->quantity = 1;
     $item->unit_price = floor($total);
@@ -147,7 +149,7 @@
                             <p class="m-0"><?=$data['cupon']['code']?>:</p>
                             <p class="m-0"><?=$data['cupon']['discount']?>%</p>
                         </div>
-                        <a href="<?=base_url()?>/pago" class="mb-3">Remover cupón</a>
+                        <a href="<?=base_url()."/pago".$situ?>" class="mb-3">Remover cupón</a>
                         <div class="d-flex justify-content-between mb-3">
                             <p class="m-0 fw-bold">Subtotal:</p>
                             <p class="m-0" id="cuponTotal"><?=formatNum($cupon)?></p>

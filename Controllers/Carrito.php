@@ -22,6 +22,19 @@
             if(isset($_GET['cupon'])){
                 $cupon = strtoupper(strClean($_GET['cupon']));
                 $data['cupon'] = $this->selectCouponCode($cupon);
+                if(empty($data['cupon'])){
+                    header("location: ".base_url()."/carrito");
+                    die();
+                }
+            }
+            if(isset($_GET['situ'])){
+                $situ = strtolower(strClean($_GET['situ']));
+                if($situ != "true" && $situ != "false"){
+                    header("location: ".base_url()."/carrito");
+                    die();
+                }
+                //header("location: ".base_url()."/carrito");
+                //die();
             }
             $data['app'] = "functions_cart.js";
             $this->views->getView($this,"carrito",$data); 
@@ -154,7 +167,7 @@
                                 $totalPrice =$arrProducts[$i]['qty']*$arrProducts[$i]['price'];
                                 break;
                             }
-                        }else if($arrProducts[$i]['topic'] == 1 && $topic == 2){
+                        }else if($arrProducts[$i]['topic'] == 2 && $topic == 2){
                             if($arrProducts[$i]['id'] == $id){
                                 $idProduct = intval(openssl_decrypt($id,METHOD,KEY));
                                 $stock = $this->getProductT($idProduct)['stock'];

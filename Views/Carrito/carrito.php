@@ -6,8 +6,16 @@
     $subtotal = 0;
     $arrShipping = $data['shipping'];
     $urlCupon="";
+    $situ = isset($_GET['situ']) ? $_GET['situ'] : "";
+    $urlSitu = $situ !="" ? "?situ=".$situ : "";
     if(isset($_GET['cupon'])){
-        $urlCupon = "?cupon=".$_GET['cupon'];
+        if($situ !=""){
+            $urlCupon = "?cupon=".$_GET['cupon']."&situ=".$situ;
+        }else{
+            $urlCupon = "?cupon=".$_GET['cupon'];
+        }
+    }else{
+        $urlCupon = $urlSitu;
     }
 ?>
     <main id="cart">
@@ -165,32 +173,48 @@
                             <p class="m-0 fw-bold">Subtotal:</p>
                             <p class="m-0" id="subtotal"><?=formatNum($subtotal)?></p>
                         </div>
-                        <?php if(isset($data['cupon'])){?>
+                        <?php 
+                        if(isset($data['cupon'])){
+                          
+                        ?>
                         <p class="m-0 fw-bold">Cupón:</p>
                         <div class="d-flex justify-content-between">
                             <p class="m-0"><?=$data['cupon']['code']?>:</p>
                             <p class="m-0"><?=$data['cupon']['discount']?>%</p>
                         </div>
-                        <a href="<?=base_url()?>/carrito" class="mb-3">Remover cupón</a>
+                        <a href="<?=base_url()."/carrito".$urlSitu?>" class="mb-3">Remover cupón</a>
                         <div class="d-flex justify-content-between mb-3">
                             <p class="m-0 fw-bold">Subtotal:</p>
                             <p class="m-0" id="cuponTotal"><?=formatNum($cupon)?></p>
                         </div>
                         <?php }?>
-                        <?php if($arrShipping['id']!= 3){?>
-                        <div class="d-flex justify-content-between mb-3">
-                            <p class="m-0 fw-bold">Envio:</p>
-                            <p class="m-0"><?=formatNum($arrShipping['value'])?></p>
-                        </div>
+                        <?php if((isset($_GET['situ']) && $_GET['situ']=="false") || !isset($_GET['situ'])){?>
+                            <?php if($arrShipping['id']!= 3){?>
+                            <div class="d-flex justify-content-between mb-3">
+                                <p class="m-0 fw-bold">Envio:</p>
+                                <p class="m-0"><?=formatNum($arrShipping['value'])?></p>
+                            </div>
+                            <?php }else{?>
+                                <p class="m-0 fw-bold">Envio:</p>
+                                <select class="form-select" aria-label="Default select example" id="selectCity" name="selectCity">
+                                    <option value ="0" selected>Seleccionar ciudad</option>
+                                    <?php for ($i=0; $i < count($arrShipping['cities']); $i++) { ?>
+                                    <option value="<?=$arrShipping['cities'][$i]['id']?>"><?=$arrShipping['cities'][$i]['city']." - ".formatNum($arrShipping['cities'][$i]['value'],false)?></option>
+                                    <?php }?>
+                                </select>
+                            <?php }?>
                         <?php }else{?>
-                            <p class="m-0 fw-bold">Envio:</p>
-                            <select class="form-select" aria-label="Default select example" id="selectCity" name="selectCity">
-                                <option value ="0" selected>Seleccionar ciudad</option>
-                                <?php for ($i=0; $i < count($arrShipping['cities']); $i++) { ?>
-                                <option value="<?=$arrShipping['cities'][$i]['id']?>"><?=$arrShipping['cities'][$i]['city']." - ".formatNum($arrShipping['cities'][$i]['value'],false)?></option>
-                                <?php }?>
-                            </select>
+                            <div class="d-flex justify-content-between mb-3">
+                                <p class="m-0 fw-bold">Envio:</p>
+                                <p class="m-0"><?=formatNum(0)?></p>
+                            </div>
                         <?php }?>
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" value="" id="boolCheck" name="boolCheck">
+                            <label class="form-check-label" for="boolCheck">
+                                Recoger en local
+                            </label>
+                        </div>
                         <div class="d-flex justify-content-between mb-3 mt-3">
                             <p class="m-0 fw-bold">Total</p>
                             <p class="m-0 fw-bold" id="totalProducts"><?=formatNum($total)?></p>

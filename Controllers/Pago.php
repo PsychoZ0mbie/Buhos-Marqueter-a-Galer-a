@@ -23,9 +23,24 @@
                 $data['company'] = getCompanyInfo();
                 $data['shipping'] = $this->selectShippingMode();
                 $data['app'] = "functions_checkout.js";
-                if($data['shipping']['id'] == 3 && !isset($_SESSION['shippingcity'])){
+                if(isset($_GET['situ'])){
+                    $situ = strtolower(strClean($_GET['situ']));
+                    if($situ != "true" && $situ != "false"){
+                        header("location: ".base_url()."/pago");
+                        die();
+                    }else if($situ =="true"){
+                        $data['shipping'] = array("id"=>4,"value"=>0);
+                    }else if($situ =="false"){
+                        if($data['shipping']['id'] == 3 && !isset($_SESSION['shippingcity'])){
+                            header("location: ".base_url()."/carrito");
+                            die();
+                        }
+                    }
+                }else if($data['shipping']['id'] == 3 && !isset($_SESSION['shippingcity'])){
                     header("location: ".base_url()."/carrito");
+                     die();
                 }
+                
                 if(isset($_GET['cupon'])){
                     $cupon = strtoupper(strClean($_GET['cupon']));
                     $cuponData = $this->selectCouponCode($cupon);
@@ -34,8 +49,10 @@
                         $data['cupon']['check'] = $this->checkCoupon($_SESSION['idUser'],$data['cupon']['id']);
                     }else{
                         header("location: ".base_url()."/pago");
+                        die();
                     }
                 }
+                
                 $this->views->getView($this,"pago",$data); 
             }else{
                 header("location: ".base_url());
@@ -130,6 +147,7 @@
                     $cupon = strtoupper(strClean($_POST['cupon']));
                     $strPostal = strClean($_POST['txtPostCodeOrder']);
                     $strNote = strClean($_POST['txtNote']);
+                    $situ = strClean($_POST['situ']);
                     $strAddress = $strAddress.", ".$strCity."/".$strState."/".$strCountry." ".$strPostal;
                     $strName = $strName." ".$strLastName;
 
@@ -139,7 +157,8 @@
                         "phone"=>$strPhone,
                         "address"=>$strAddress,
                         "note"=>$strNote,
-                        "cupon"=>$cupon
+                        "cupon"=>$cupon,
+                        "situ"=>$situ
                     );
                     $arrResponse = array("status"=>true,"msg"=>"Datos guardados");
                 }
@@ -160,6 +179,7 @@
             $status = $arrData['status'];
             $idTransaction =$arrData['transaction'];
             $type =$arrData['type'];
+            $situ = $arrData['situ'];
             $envio = 0;
             $statusOrder ="confirmado";
             $arrProducts = $_SESSION['arrCart'];
@@ -175,11 +195,13 @@
             }
 
             $arrShipping = $this->selectShippingMode();
-            if($arrShipping['id']!=3){
-                $envio = $arrShipping['value'];
-            }else{
-                $envio = $_SESSION['shippingcity'];
-                $total +=$envio;
+            if($situ =="false" || $situ ==""){
+                if($arrShipping['id']<3){
+                    $envio = $arrShipping['value'];
+                }else if($arrShipping['id']==3){
+                    $envio = $_SESSION['shippingcity'];
+                    $total +=$envio;
+                }
             }
             $request = $this->insertOrder($idUser, $idTransaction,$strName,$strEmail,$strPhone,$strAddress,$strNote,$cupon,$envio,$total,$status,$type,$statusOrder);          
             if($request>0){
