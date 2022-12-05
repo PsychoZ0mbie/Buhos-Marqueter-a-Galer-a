@@ -24,7 +24,7 @@
                 <div class="carousel-item active">
                     <div class="main--show">
                         <div class="show--text">
-                            <h2>Enmarca tus obras y fotos sin salir de casa</h2>
+                            <h1 class="text-title">Marquetería en línea, marcos en madera para tus cuadros</h1>
                             <a href="<?=base_url()?>/enmarcar" class="btn btn-bg-1">Empieza ahora</a>
                         </div>
                         <div class="show--img">
@@ -35,7 +35,7 @@
                 <div class="carousel-item">
                     <div class="main--show">
                         <div class="show--text">
-                            <h2>Decora tus paredes con nuestros cuadros</h2>
+                            <h2 class="text-title">Cuadros decorativos para sala y mucho más</h2>
                             <a href="<?=base_url()?>/tienda" class="btn btn-bg-1">Ver tienda</a>
                         </div>
                         <div class="show--img">
@@ -56,7 +56,7 @@
     </main>
     <div class="container">
         <section class="mt-5">
-            <h2 class="section--title">Enmarca lo que quieras</h2>
+            <h2 class="section--title">Enmarcaciones modernas sin salir de casa</h2>
             <div id="carouselEnmarcar" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <?php
@@ -109,8 +109,8 @@
                 <div class="row">
                     <div class="col-md-6 d-flex align-items-center mb-3">
                         <div class="cta-info">
-                            <h4>Dale vida a tus obras</h4>
-                            <p>Enmarca tus pinturas, dale estilo y personalidad con nuestros mejores marcos</p>
+                            <h4>Marcos para cuadros</h4>
+                            <p>Elige el marco ideal para tu cuadro con nuestros mejores marcos en madera</p>
                             <a href="<?=base_url()."/enmarcar/personalizar/".$tipos[2]['route']?>" class="btn btn-bg-1 mt-3">Enmarcar ahora</a>
                         </div>
                     </div>
@@ -131,12 +131,12 @@
                 <div class="col-md-6 how-list mb-3 d-flex align-items-start flex-column">
                     <ol>
                         <li>
-                            <p>Elige lo que quieres enmarcar</p>
-                            <p>Escoge entre los tipos de enmarcación que más se adapte a ti</p>
+                            <p>Elige el marco ideal</p>
+                            <p>Escoge el marco y estilo de enmarcación que más se adapte</p>
                         </li>
                         <li>
                             <p>Personaliza tu marco</p>
-                            <p>Elige las molduras, colores y estilos de enmarcado</p>
+                            <p>Elige las molduras, colores y estilos de enmarcación</p>
                         </li>
                         <li>
                             <p>Recibelo en tu puerta</p>
@@ -173,8 +173,8 @@
                 <div class="row">
                     <div class="col-md-6 d-flex align-items-center mb-3">
                         <div class="cta-info">
-                            <h4>Decora tu alrededor</h4>
-                            <p>Decora tu sala, oficina o habitación con nuestros cuadros abstractos, paisajes y más</p>
+                            <h4>Cuadros decorativos modernos</h4>
+                            <p>Elige nuestros cuadros abstractos, cuadros para sala, cuadros para oficina y mucho más!</p>
                             <a href="<?=base_url()?>/tienda" class="btn btn-bg-1 mt-3">Ver tienda</a>
                         </div>
                     </div>

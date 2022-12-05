@@ -3,7 +3,7 @@
 .card--enmarcar{
     width: 300px;
     height: 350px;
-    padding: 15px;
+    padding: 5px;
     border-radius: 10px;
     position: relative;
     transition: all 0.3s ease;
@@ -29,8 +29,8 @@
 }
 .enmarcar--title{
     font-size: 1.2rem;
-        font-weight: bold;
-        padding-bottom: 30px;
+    font-weight: bold;
+    padding-bottom: 10px;
 }
 .card--plus{
     padding: 30px;
