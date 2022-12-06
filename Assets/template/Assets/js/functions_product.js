@@ -27,7 +27,7 @@ if(document.querySelector("#btnPqty")){
     let btnPPlus = document.querySelector("#btnPIncrement");
     let btnPMinus = document.querySelector("#btnPDecrement");
     let intPQty = document.querySelector("#txtQty");
-    let maxStock = intPQty.getAttribute("max");
+    let maxStock = parseInt(intPQty.getAttribute("max"));
 
     btnPPlus.addEventListener("click",function(){
         if(intPQty.value >=maxStock){

@@ -551,8 +551,9 @@ function quickModal(element){
                 let intQQty = document.querySelector("#txtQQty");
     
                 btnQPlus.addEventListener("click",function(){
-                    if(intQQty.value >=data.stock){
-                        intQQty.value = data.stock;
+                    let stock = parseInt(data.stock);
+                    if(intQQty.value >= stock){
+                        intQQty.value = stock;
                     }else{
                         ++intQQty.value; 
                     }
@@ -565,8 +566,9 @@ function quickModal(element){
                     }
                 });
                 intQQty.addEventListener("input",function(){
-                    if(intQQty.value >= data.stock){
-                        intQQty.value= data.stock;
+                    let stock = parseInt(data.stock);
+                    if(intQQty.value >= stock){
+                        intQQty.value = stock;
                     }else if(intQQty.value <= 1){
                         intQQty.value= 1;
                     }

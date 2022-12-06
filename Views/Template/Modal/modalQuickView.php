@@ -45,7 +45,7 @@
                     <p class="mb-3"><?=$data['description']?></p>
                     <!--<p class="m-0">SKU: <strong></strong></p>-->
                     <a href="<?=base_url()."/tienda/categoria/".$data['routec']?>" class="m-0">Categoría:<strong> <?=$data['category']?></strong></a><br>
-                    <a href="<?=base_url()."/tienda/categoria/".$data['routec']."/".$data['routes']?>" class="m-0">Subcategoría:<strong> <?=$data['subcategory']?></strong></a>
+                    <a href="<?=base_url()."/tienda/categoria/".$data['routes']?>" class="m-0">Subcategoría:<strong> <?=$data['subcategory']?></strong></a>
                     <?php if($data['stock']> 0){?>
                     <div class="mt-4 mb-4 d-flex align-items-center">
                         <div class="d-flex justify-content-center align-items-center flex-wrap mt-3">
