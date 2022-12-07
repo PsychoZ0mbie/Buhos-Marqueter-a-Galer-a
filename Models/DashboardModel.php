@@ -112,7 +112,7 @@
             $total =0;
             $costos=0;
             $gastos=0;
-            for ($i=1; $i < 12 ; $i++) { 
+            for ($i=1; $i <=12 ; $i++) { 
                 $arrData = array("year"=>"","month"=>"","nmonth"=>"","sale"=>"","costos"=>"","gastos"=>"");
                 //Ingresos
                 $sql = "SELECT $year as year, 
