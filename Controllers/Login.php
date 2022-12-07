@@ -37,6 +37,10 @@
 	
 							$arrData = $this->model->sessionLogin($_SESSION['idUser']);
 							sessionUser($_SESSION['idUser']);
+							setcookie("usercookie",$strUser,time()+365*24*60*60,'/');
+							setcookie("passwordcookie",$strPassword,time()+365*24*60*60,'/');
+							$_COOKIE['usercookie'] = $strUser;
+							$_COOKIE['passwordcookie'] = $strPassword;
 							$arrResponse = array('status'=>true);
 						}else{
 							$arrResponse = array('status'=>false, 'msg'=> "El usuario no está activo.");

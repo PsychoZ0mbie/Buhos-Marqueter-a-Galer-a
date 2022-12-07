@@ -111,6 +111,29 @@
         $request = $objLogin ->sessionLogin($idpersona);
         return $request;
     }
+    function sessionCookie(){
+        if((isset($_COOKIE['usercookie'])&&isset($_COOKIE['passwordcookie'])) && !isset($_SESSION['login'])){
+            require_once("Models/LoginModel.php");
+            $objLogin = new LoginModel();
+            $strUser = strtolower(strClean($_COOKIE['usercookie']));
+            $strPassword = strClean($_COOKIE['passwordcookie']);
+            $request = $objLogin->loginUser($strUser, $strPassword);
+            if(!empty($request)){
+                if($request['status'] == 1){
+                    $_SESSION['idUser'] = $request['idperson'];
+                    $_SESSION['login'] = true;
+                    $arrData = $this->model->sessionLogin($_SESSION['idUser']);
+					sessionUser($_SESSION['idUser']);
+                }else{
+                    setcookie("usercookie",$_COOKIE['usercookie'],time()-60); 
+                    setcookie("passwordcookie",$_COOKIE['passwordcookie'],time()-60); 
+                }
+            }else{
+                setcookie("usercookie",$_COOKIE['usercookie'],time()-60);
+                setcookie("passwordcookie",$_COOKIE['passwordcookie'],time()-60); 
+            }
+        }
+    }
     //Genera un token
     function token(){
         $r1 = bin2hex(random_bytes(10));
