@@ -5,6 +5,7 @@
         public function __construct(){
             session_start();
             parent::__construct();
+            sessionCookie();
         }
         public function privacidad(){
             $company=getCompanyInfo();

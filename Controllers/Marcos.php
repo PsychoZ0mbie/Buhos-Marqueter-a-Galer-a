@@ -7,6 +7,7 @@
                 die();
             }
             parent::__construct();
+            sessionCookie();
             getPermits(6);
         }
         public function personalizar($params){

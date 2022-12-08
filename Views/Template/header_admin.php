@@ -1,5 +1,5 @@
 <?php 
-    sessionCookie();
+    //sessionCookie();
     $notification = emailNotification();
     $companyData = getCompanyInfo();
 ?>

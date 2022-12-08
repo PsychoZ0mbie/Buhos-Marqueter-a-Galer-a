@@ -1,5 +1,4 @@
 <?php
-    sessionCookie();
     $company = getCompanyInfo();
     $qtyCart = 0;
     $total = 0;

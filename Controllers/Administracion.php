@@ -2,11 +2,13 @@
     class Administracion extends Controllers{
         public function __construct(){
             session_start();
+            
             if(empty($_SESSION['login'])){
                 header("location: ".base_url());
                 die();
             }
             parent::__construct();
+            sessionCookie();
             getPermits(5);
         }
 

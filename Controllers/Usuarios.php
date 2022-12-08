@@ -8,6 +8,7 @@
                 die();
             }
             parent::__construct();
+            sessionCookie();
             getPermits(2);
         }
         public function usuarios(){

@@ -8,6 +8,7 @@
                 die();
             }
             parent::__construct();
+            sessionCookie();
             getPermits(3);
         }
         public function clientes(){

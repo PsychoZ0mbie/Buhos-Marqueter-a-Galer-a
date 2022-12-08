@@ -7,6 +7,7 @@
                 die();
             }
             parent::__construct();
+            sessionCookie();
             getPermits(1);
         }
 
