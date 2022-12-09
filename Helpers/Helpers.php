@@ -122,7 +122,7 @@
                 if($request['status'] == 1){
                     $_SESSION['idUser'] = $request['idperson'];
                     $_SESSION['login'] = true;
-                    $arrData = $this->model->sessionLogin($_SESSION['idUser']);
+                    $arrData = $objLogin->sessionLogin($_SESSION['idUser']);
 					sessionUser($_SESSION['idUser']);
                 }else{
                     setcookie("usercookie",$_COOKIE['usercookie'],time()-60); 
