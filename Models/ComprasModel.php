@@ -1,0 +1,99 @@
+<?php 
+    class ComprasModel extends Mysql{
+        private $intId;
+        private $strNit;
+        private $strName;
+        private $strPhone;
+        private $strEmail;
+        private $strAddress;
+
+        public function __construct(){
+            parent::__construct();
+        }
+
+        public function insertSupplier(string $strNit,string $strName, string $strEmail,string $strPhone,string $strAddress){
+			$this->strName = $strName;
+			$this->strNit = $strNit;
+            $this->strEmail = $strEmail;
+            $this->strPhone = $strPhone;
+            $this->strAddress = $strAddress;
+
+            $sql = "SELECT * FROM suppliers WHERE email = '$this->strEmail' OR phone = '$this->strPhone'";
+            $request = $this->select($sql);
+            $return ="";
+            if(empty($request)){
+                $query_insert  = "INSERT INTO suppliers(nit,name,email,phone,address) VALUES(?,?,?,?,?)";	  
+                $arrData = array(
+                    $this->strNit,
+                    $this->strName, 
+                    $this->strEmail,
+                    $this->strPhone,
+                    $this->strAddress);
+                $return = $this->insert($query_insert,$arrData);
+            }else{
+                $return ="exists";
+            }
+	        return $return;
+		}
+        public function updateSupplier(int $id,string $strNit,string $strName, string $strEmail,string $strPhone,string $strAddress){
+            $this->strName = $strName;
+			$this->strNit = $strNit;
+            $this->strEmail = $strEmail;
+            $this->strPhone = $strPhone;
+            $this->strAddress = $strAddress;
+            $this->intId = $id;
+
+            $sql = "SELECT * FROM suppliers WHERE (email = '$this->strEmail' OR phone = '$this->strPhone') AND idsupplier != $this->intId";
+            $request = $this->select($sql);
+            $return ="";
+            if(empty($request)){
+                $query  = "UPDATE suppliers SET nit =?,name=?,email=?,phone=?,address=? WHERE idsupplier = $this->intId";	  
+                $arrData = array(
+                    $this->strNit,
+                    $this->strName, 
+                    $this->strEmail,
+                    $this->strPhone,
+                    $this->strAddress);
+                $return = $this->update($query,$arrData);
+            }else{
+                $return ="exists";
+            }
+	        return $return;
+		}
+        public function deleteSupplier($id){
+            $this->intId = $id;
+            $sql = "DELETE FROM suppliers WHERE idsupplier = $this->intId";
+            $return = $this->delete($sql);
+            return $return;
+        }
+        public function selectSuppliers(){
+            $sql = "SELECT * FROM suppliers ORDER BY idsupplier DESC";       
+            $request = $this->select_all($sql);
+            return $request;
+        }
+        public function selectSupplier($id){ 
+            $this->intId = $id;
+            $sql = "SELECT * FROM suppliers WHERE idsupplier = $this->intId";
+            $request = $this->select($sql);
+            return $request;
+        }
+        public function search($search){
+            $sql = "SELECT * FROM suppliers 
+            WHERE name LIKE '%$search%' || nit LIKE '%$search%' || phone LIKE '%$search%' || email LIKE '%$search%'
+            ORDER BY idsupplier DESC";
+            $request = $this->select_all($sql);
+            return $request;
+        }
+        public function sort($sort){
+            $option=" ORDER BY idsupplier DESC";
+            if($sort == 2){
+                $option = " ORDER BY idsupplier ASC"; 
+            }else if( $sort == 3){
+                $option = " ORDER BY name ASC"; 
+            }
+            $sql = "SELECT * FROM suppliers $option";
+            $request = $this->select_all($sql);
+            return $request;
+        }
+    }
+?>

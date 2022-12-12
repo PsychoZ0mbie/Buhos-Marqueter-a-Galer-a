@@ -77,9 +77,11 @@
                                     Contabilidad<span class="badge badge-sm bg-info ms-auto"></span>
                                 </a>
                             </li>
+                            
                             <?php 
                                 }
                             ?>
+                            
                             <?php 
                                 if($_SESSION['permit'][4]['r']){
                             ?>
@@ -126,12 +128,29 @@
                                 }
                             ?>
                             <?php 
-                                if($_SESSION['permit'][5]['r']){
+                                if($_SESSION['permit'][8]['r']){
                             ?>
                             <li class="nav-group">
                                 <a class="nav-link nav-group-toggle" href="#">
                                     <svg class="nav-icon">
                                         <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-cart"></use>
+                                    </svg> Compras
+                                </a>
+                                <ul class="nav-group-items">
+                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/compras/proveedores"><span class="nav-icon"></span> Proveedores</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="<?=base_url()?>/compras/compras"><span class="nav-icon"></span> Compras</a></li>
+                                </ul>
+                            </li>
+                            <?php 
+                                }
+                            ?>
+                            <?php 
+                                if($_SESSION['permit'][5]['r']){
+                            ?>
+                            <li class="nav-group">
+                                <a class="nav-link nav-group-toggle" href="#">
+                                    <svg class="nav-icon">
+                                        <use xlink:href="<?=media()?>/coreui/coreui-free-bootstrap-admin-template/dist/vendors/@coreui/icons/svg/free.svg#cil-screen-desktop"></use>
                                     </svg> Administración
                                 </a>
                                 <ul class="nav-group-items">
