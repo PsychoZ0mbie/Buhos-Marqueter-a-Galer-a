@@ -124,22 +124,18 @@
             die();
         }
         public function search(){
-            if($_SESSION['permitsModule']['w']){
-                if($_POST){
-                    $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
-                    $arrResponse = $this->getProducts(1,strClean($_POST['search']),intval($_POST['sort']),$perimetro);
-                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-                }
+            if($_POST){
+                $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
+                $arrResponse = $this->getProducts(1,strClean($_POST['search']),intval($_POST['sort']),$perimetro);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }
         public function sort(){
-            if($_SESSION['permitsModule']['w']){
-                if($_POST){
-                    $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
-                    $arrResponse = $this->getProducts(2,strClean($_POST['search']),intval($_POST['sort']),$perimetro);
-                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
-                }
+            if($_POST){
+                $perimetro = (floatval($_POST['height'])+floatval($_POST['width']))*2;
+                $arrResponse = $this->getProducts(2,strClean($_POST['search']),intval($_POST['sort']),$perimetro);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
             }
             die();
         }

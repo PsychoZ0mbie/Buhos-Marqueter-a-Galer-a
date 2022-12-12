@@ -147,8 +147,8 @@
                         $strEmail = strtolower(strClean($_POST['txtEmail']));
                         $strAddress = strClean($_POST['txtAddress']);
                         $intCountry = intval($_POST['listCountry']) != 0 ? intval($_POST['listCountry']) : 99999;
-                        $intState = intval($_POST['listState']) != 0 ? intval($_POST['listState']) : 99999;
-                        $intCity = intval($_POST['listCity']) != 0 ? intval($_POST['listCity']) : 99999;
+                        $intState = isset($_POST['listState']) && intval($_POST['listState']) != 0   ? intval($_POST['listState']) : 99999;
+                        $intCity = isset($_POST['listState']) && intval($_POST['listCity']) != 0 ? intval($_POST['listCity']) : 99999;
                         $strPassword = strClean($_POST['txtPassword']);
                         $intRolId = 2;
                         $intStatus = intval($_POST['statusList']);
