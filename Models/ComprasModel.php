@@ -6,11 +6,13 @@
         private $strPhone;
         private $strEmail;
         private $strAddress;
+        private $arrProducts;
+        private $intTotal;
 
         public function __construct(){
             parent::__construct();
         }
-
+        /*******************Suppliers**************************** */
         public function insertSupplier(string $strNit,string $strName, string $strEmail,string $strPhone,string $strAddress){
 			$this->strName = $strName;
 			$this->strNit = $strNit;
@@ -92,6 +94,79 @@
                 $option = " ORDER BY name ASC"; 
             }
             $sql = "SELECT * FROM suppliers $option";
+            $request = $this->select_all($sql);
+            return $request;
+        }
+        /*******************Purchases**************************** */
+        public function insertPurchase(int $id,string $arrProducts,int $total){
+            $this->intId = $id;
+            $this->arrProducts = $arrProducts;
+            $this->intTotal = $total;
+
+            $sql = "INSERT INTO purchase(supplierid,products,total) VALUE(?,?,?)";
+            $arrData = array($this->intId,$this->arrProducts,$this->intTotal);
+            $request = $this->insert($sql,$arrData);
+            return $request;
+        }
+        public function deletePurchase($id){
+            $this->intId = $id;
+            $sql = "DELETE FROM purchase WHERE idpurchase = $this->intId";
+            $return = $this->delete($sql);
+            return $return;
+        }
+        public function selectPurchases(){
+            $sql = "SELECT 
+                    p.idpurchase,
+                    p.supplierid,
+                    p.total,
+                    DATE_FORMAT(p.date, '%d/%m/%Y') as date,
+                    s.idsupplier,
+                    s.name
+                    FROM purchase p
+                    INNER JOIN suppliers s
+                    WHERE p.supplierid = s.idsupplier
+                    ORDER BY p.idpurchase DESC
+            ";
+            $request = $this->select_all($sql);
+            return $request;
+        }
+        public function selectPurchase($id){
+            $this->intId = $id;
+            $sql = "SELECT 
+                    p.idpurchase,
+                    p.supplierid,
+                    p.products,
+                    p.total,
+                    DATE_FORMAT(p.date, '%d/%m/%Y') as date,
+                    s.idsupplier,
+                    s.name,
+                    s.phone,
+                    s.email,
+                    s.nit,
+                    s.address
+                    FROM purchase p
+                    INNER JOIN suppliers s
+                    WHERE p.supplierid = s.idsupplier AND p.idpurchase = $this->intId
+                    ORDER BY p.idpurchase DESC
+            ";
+            $request = $this->select($sql);
+            return $request;
+        }
+        public function searchP($search){
+            $sql = "SELECT 
+            p.idpurchase,
+            p.supplierid,
+            p.total,
+            DATE_FORMAT(p.date, '%d/%m/%Y') as date,
+            s.idsupplier,
+            s.name,
+            s.phone,
+            s.email
+            FROM purchase p
+            INNER JOIN suppliers s
+            WHERE p.supplierid = s.idsupplier 
+            AND (s.name LIKE '%$search%' || s.phone LIKE '%$search%' || s.email LIKE '%$search%')
+            ORDER BY p.idpurchase DESC";
             $request = $this->select_all($sql);
             return $request;
         }

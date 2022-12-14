@@ -13,8 +13,31 @@
                 $data['page_tag'] = "compras";
                 $data['page_title'] = "Compras";
                 $data['page_name'] = "compras";
+                $data['proveedores'] = $this->getSelectSuppliers();
+                $data['data'] = $this->getPurchases();
                 $data['app'] = "functions_compras.js";
                 $this->views->getView($this,"compras",$data);
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+        }
+        public function compra($params){
+            if($_SESSION['permitsModule']['r']){
+                $id = strClean(intval($params));
+                $purchase = $this->getPurchase($id);
+                if(!empty($purchase)){
+                    $data['page_tag'] = "compra";
+                    $data['page_title'] = "Compra";
+                    $data['page_name'] = "compra";
+                    $data['data'] = $purchase;
+                    $data['company'] = getCompanyInfo();
+                    //$data['app'] = "functions_compras.js";
+                    $this->views->getView($this,"compra",$data);
+                }else{
+                    header("location: ".base_url()."/compras/compras");
+                    die();
+                }
             }else{
                 header("location: ".base_url());
                 die();
@@ -33,6 +56,7 @@
                 die();
             }
         }
+        /*******************Suppliers**************************** */
         public function getSuppliers($option=null,$params=null){
             if($_SESSION['permitsModule']['r']){
                 $html="";
@@ -170,6 +194,19 @@
             }
             die();
         }
+        public function getSelectSuppliers(){
+            if($_SESSION['permitsModule']['r']){
+                $html ='<option value ="0">Seleccione</option>';
+                $request = $this->model->selectSuppliers();
+                if(!empty($request)){
+                    for ($i=0; $i < count($request); $i++) { 
+                        $html.='<option value="'.$request[$i]['idsupplier'].'">'.$request[$i]['name'].'</option>';
+                    }
+                }
+                return $html;
+            } 
+            die();
+        }
         public function search($params){
             if($_SESSION['permitsModule']['r']){
                 $search = strClean($params);
@@ -186,7 +223,99 @@
             }
             die();
         }
+        /*******************Purchases**************************** */
+        public function setPurchase(){
+            if($_SESSION['permitsModule']['w']){
+                if($_POST){
+                    $idSupplier = intval($_POST['idSupplier']);
+                    $arrProducts = $_POST['arrProducts'];
+                    $total = intval($_POST['total']);
+                    $request = $this->model->insertPurchase($idSupplier,$arrProducts,$total);
+                    if($request > 0){
+                        $arrResponse = array("status"=>true,"msg"=>"La compra se ha registrado con éxito","data"=>$this->getPurchases()['data']);
+                    }else{
+                        $arrResponse = array("status"=>false,"msg"=>"Ha ocurrido un error, inténtelo de nuevo");
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }
+            die();
+        }
+        public function getPurchases($option=null,$params=null){
+            if($_SESSION['permitsModule']['r']){
+                $html="";
+                $request="";
+                if($option == 1){
+                    $request = $this->model->searchP($params);
+                }else{
+                    $request = $this->model->selectPurchases();
+                }
+                if(count($request)>0){
+                    for ($i=0; $i < count($request); $i++) { 
 
+                        $btnView = '<a href="'.base_url().'/compras/compra/'.$request[$i]['idpurchase'].'"class="btn btn-info m-1 text-white" type="button" title="Watch" name="btnView"><i class="fas fa-eye"></i></a>';
+                        $btnDelete="";
+                        if($_SESSION['permitsModule']['d']){
+                            $btnDelete = '<button class="btn btn-danger m-1 text-white" type="button" title="Delete" data-id="'.$request[$i]['idpurchase'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
+                        }
+                        $html.='
+                            <tr class="item"">
+                                <td><strong>ID:</strong>'.$request[$i]['idpurchase'].'</td>
+                                <td><strong>Proveedor:</strong>'.$request[$i]['name'].'</td>
+                                <td><strong>Total:</strong>'.formatNum($request[$i]['total'],false).'</td>
+                                <td><strong>Fecha:</strong>'.$request[$i]['date'].'</td>
+                                <td class="item-btn">'.$btnView.$btnDelete.'</td>
+                            </tr>
+                        ';
+                    }
+                    $arrResponse = array("status"=>true,"data"=>$html);
+                }else{
+                    $html = '<tr><td colspan="20">No hay datos</td></tr>';
+                    $arrResponse = array("status"=>false,"data"=>$html);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            
+            return $arrResponse;
+        }
+        public function getPurchase($id){
+            if($_SESSION['permitsModule']['r']){
+                $request = $this->model->selectPurchase($id);
+                return $request;
+            }
+            die();
+        }
+        public function searchPurchase($params){
+            if($_SESSION['permitsModule']['r']){
+                $search = strClean($params);
+                $arrResponse = $this->getPurchases(1,$params);
+                echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+            }
+        }
+        public function delPurchase(){
+            if($_SESSION['permitsModule']['d']){
+                if($_POST){
+                    if(empty($_POST['idPurchase'])){
+                        $arrResponse=array("status"=>false,"msg"=>"Error de datos");
+                    }else{
+                        $id = intval($_POST['idPurchase']);
+                        $request = $this->model->deletePurchase($id);
+                        if($request=="ok"){
+                            $arrResponse = array("status"=>true,"msg"=>"Se ha eliminado.","data"=>$this->getPurchases()['data']);
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"No es posible eliminar, intenta de nuevo.");
+                        }
+                    }
+                    echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                header("location: ".base_url());
+                die();
+            }
+            die();
+        }
 
     }
 ?>
