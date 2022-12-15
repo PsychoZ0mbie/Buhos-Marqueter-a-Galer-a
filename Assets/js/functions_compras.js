@@ -76,9 +76,13 @@ btnPurchase.addEventListener("click",function(){
     let products = document.querySelectorAll(".product-item");
     let arrProducts = [];
     let totalValue = 0;
-    
+    let strDate = document.querySelector("#txtDate").value;
     if(products.length == 0){
         Swal.fire("Error","No hay productos para procesar la compra.","error");
+        return false;
+    }
+    if(strDate ==""){
+        Swal.fire("Error","Por favor, ingresa la fecha de compra.","error");
         return false;
     }
     for (let i = 0; i < products.length; i++) {
@@ -91,6 +95,7 @@ btnPurchase.addEventListener("click",function(){
         arrProducts.push(arr);
     }
     let formData = new FormData();
+    formData.append("date",strDate);
     formData.append("idSupplier",selectSupplier.value);
     formData.append("arrProducts",JSON.stringify(arrProducts));
     formData.append("total",totalValue);
@@ -99,6 +104,7 @@ btnPurchase.addEventListener("click",function(){
             document.querySelector("#txtProduct").value ="";
             document.querySelector("#intQty").value ="";
             document.querySelector("#intPrice").value="";
+            document.querySelector("#txtDate").value="";
             selectSupplier.value = 0;
             total.innerHTML = "$0";
             listProducts.innerHTML="";

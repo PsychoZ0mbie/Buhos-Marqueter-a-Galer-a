@@ -125,7 +125,6 @@
             die();
         }
         public function setSupplier(){
-            //dep($_POST);exit;
             if($_SESSION['permitsModule']['r']){
                 if($_POST){
                     if(empty($_POST['txtName']) || empty($_POST['txtEmail']) || empty($_POST['txtPhone'])){
@@ -227,14 +226,19 @@
         public function setPurchase(){
             if($_SESSION['permitsModule']['w']){
                 if($_POST){
-                    $idSupplier = intval($_POST['idSupplier']);
-                    $arrProducts = $_POST['arrProducts'];
-                    $total = intval($_POST['total']);
-                    $request = $this->model->insertPurchase($idSupplier,$arrProducts,$total);
-                    if($request > 0){
-                        $arrResponse = array("status"=>true,"msg"=>"La compra se ha registrado con éxito","data"=>$this->getPurchases()['data']);
+                    if(empty($_POST['arrProducts']) || empty($_POST['total']) || empty($_POST['date'])){
+                        $arrResponse = array("status"=>false,"msg"=>"Error de datos");
                     }else{
-                        $arrResponse = array("status"=>false,"msg"=>"Ha ocurrido un error, inténtelo de nuevo");
+                        $idSupplier = intval($_POST['idSupplier']);
+                        $arrProducts = $_POST['arrProducts'];
+                        $total = intval($_POST['total']);
+                        $strDate = strClean($_POST['date']);
+                        $request = $this->model->insertPurchase($idSupplier,$arrProducts,$total,$strDate);
+                        if($request > 0){
+                            $arrResponse = array("status"=>true,"msg"=>"La compra se ha registrado con éxito","data"=>$this->getPurchases()['data']);
+                        }else{
+                            $arrResponse = array("status"=>false,"msg"=>"Ha ocurrido un error, inténtelo de nuevo");
+                        }
                     }
                     echo json_encode($arrResponse,JSON_UNESCAPED_UNICODE);
                 }

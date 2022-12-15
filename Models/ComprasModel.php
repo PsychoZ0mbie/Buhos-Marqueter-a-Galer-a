@@ -98,13 +98,15 @@
             return $request;
         }
         /*******************Purchases**************************** */
-        public function insertPurchase(int $id,string $arrProducts,int $total){
+        public function insertPurchase(int $id,string $arrProducts,int $total, string $strDate){
             $this->intId = $id;
             $this->arrProducts = $arrProducts;
             $this->intTotal = $total;
-
-            $sql = "INSERT INTO purchase(supplierid,products,total) VALUE(?,?,?)";
-            $arrData = array($this->intId,$this->arrProducts,$this->intTotal);
+            $arrDate = explode("-",$strDate);
+            $dateCreated = date_create($arrDate[2]."-".$arrDate[1]."-".$arrDate[0]);
+            $dateFormat = date_format($dateCreated,"Y-m-d");
+            $sql = "INSERT INTO purchase(supplierid,products,total,date) VALUE(?,?,?,?)";
+            $arrData = array($this->intId,$this->arrProducts,$this->intTotal,$dateFormat);
             $request = $this->insert($sql,$arrData);
             return $request;
         }

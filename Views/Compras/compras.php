@@ -1,5 +1,6 @@
 <?php headerAdmin($data)?>
 <div id="modalItem"></div>
+
 <div class="body flex-grow-1 px-3" id="<?=$data['page_name']?>">
     <div class="container-lg">
         <div class="card">
@@ -50,6 +51,10 @@
                                 <button type="button" class="btn btn-primary" id="btnAddProduct">Agregar</button>
                             </div>
                             <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Fecha de compra <span class="text-danger">*</span></label>
+                                    <input type="date" name="txtDate" id="txtDate" class="form-control">
+                                </div>
                                 <div class="scroll-y container mb-3 mt-3" id="buyProducts"></div>
                                 <p class="fw-bold text-center fs-5">Total: <span id="total"><?=formatNum(0,false)?></span></p>
                                 <button type="button" class="btn btn-primary w-100" id="btnPurchase">Procesar</button>
