@@ -45,6 +45,23 @@
         );
         return $arrSocial;
     }
+    function navSubLinks(){
+        require_once("Models/EnmarcarTrait.php");
+        require_once("Models/PaginaTrait.php");
+        require_once("Models/CategoryTrait.php");
+        class SubLink{
+            use EnmarcarTrait,PaginaTrait,CategoryTrait;
+            public function getInfo(){
+                $services = $this->selectServices();
+                $categories = $this->getCategoriesT();
+                $framing = $this->selectTipos();
+                
+                return array("services"=>$services,"categories"=>$categories,"framing"=>$framing);
+            }
+        }
+        $obj = new SubLink();
+        return $arrData = $obj->getInfo();
+    }
     function base_url(){
         return BASE_URL;
     }

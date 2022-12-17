@@ -1,4 +1,5 @@
 <?php
+    $subLinks = navSubLinks();
     $company = getCompanyInfo();
     $qtyCart = 0;
     $total = 0;
@@ -97,10 +98,58 @@
             </div>
             <ul class="nav--links">
                 <li class="nav-link"><a href="<?=base_url()?>">Inicio</a></li>
-                <li class="nav-link"><a href="<?=base_url()?>/enmarcar">Enmarca aquí</a></li>
-                <li class="nav-link"><a href="<?=base_url()?>/tienda">Tienda</a></li>
+                <div class="nav-link dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Enmarcar aquí
+                        <i class="fas fa-angle-down dropdown-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <?php 
+                            for ($i=0; $i < count($subLinks['framing']); $i++) { 
+                                $link = $subLinks['framing'][$i];
+                                if($i <= 8){
+                        ?>
+                        <li><a class="dropdown-item" href="<?=base_url()."/enmarcar/personalizar/".$link['route']?>"><?=$link['name']?></a></li>
+                        <?php } }?>
+                        <hr>
+                        <li><a class="dropdown-item" href="<?=base_url()?>/enmarcar">Ver todo</a></li>
+                    </ul>
+                </div>
+                <div class="nav-link dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Tienda
+                        <i class="fas fa-angle-down dropdown-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <?php 
+                            for ($i=0; $i < count($subLinks['categories']); $i++) { 
+                                $link = $subLinks['categories'][$i];
+                                if($i <= 8){
+                        ?>
+                        <li><a class="dropdown-item" href="<?=base_url()."/tienda/categoria/".$link['route']?>"><?=$link['name']?></a></li>
+                        <?php } }?>
+                        <hr>
+                        <li><a class="dropdown-item" href="<?=base_url()?>/tienda">Ver todo</a></li>
+                    </ul>
+                </div>
                 <li class="nav-link"><a href="<?=base_url()?>/nosotros">¿Quienes somos?</a></li>
-                <li class="nav-link"><a href="<?=base_url()?>/servicios">Servicios</a></li>
+                <div class="nav-link dropdown">
+                    <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Servicios
+                        <i class="fas fa-angle-down dropdown-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <?php 
+                            for ($i=0; $i < count($subLinks['services']); $i++) { 
+                                $link = $subLinks['services'][$i];
+                                if($i <= 8){
+                        ?>
+                        <li><a class="dropdown-item" href="<?=base_url()."/servicios/servicio/".$link['route']?>"><?=$link['name']?></a></li>
+                        <?php } }?>
+                        <hr>
+                        <li><a class="dropdown-item" href="<?=base_url()?>/servicios">Ver todo</a></li>
+                    </ul>
+                </div>
                 <li class="nav-link"><a href="<?=base_url()?>/contacto">Contacto</a></li>
             </ul>
             <ul class="nav--links">
@@ -112,9 +161,10 @@
                 <?php
                         if(isset($_SESSION['login'])){
                     ?>
-                    <div class="dropdown">
+                    <div class="nav-link dropdown">
                         <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user"></i>
+                            <i class="fas fa-angle-down dropdown-icon"></i>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item " href="<?=base_url()?>/usuarios/perfil" target="__blank">Perfil</a></li>
@@ -168,19 +218,102 @@
                 </div>
                 <span id="closeNav"><i class="fas fa-times"></i></span>
             </div>
-            <ul>
-                <li><a href="<?=base_url()?>">Inicio</a></li>
-                <li><a href="<?=base_url()?>/enmarcar">Enmarca aquí</a></li>
-                <li><a href="<?=base_url()?>/tienda">Tienda</a></li>
-                <li><a href="<?=base_url()?>/nosotros">¿Quienes somos?</a></li>
-                <li><a href="<?=base_url()?>/servicios">Servicios</a></li>
-                <li><a href="<?=base_url()?>/contacto">Contacto</a></li>
+            <ul class="navmobile-links">
+                <li class="navmobile-link"><a href="<?=base_url()?>">Inicio</a></li>
+                <div class="navmobile-link accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFraming">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFraming" aria-expanded="true" aria-controls="collapseFraming">
+                            Enmarcar aquí
+                        </button>
+                        </h2>
+                        <div id="collapseFraming" class="accordion-collapse collapse" aria-labelledby="headingFraming" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul>
+                                    <?php 
+                                    for ($i=0; $i < count($subLinks['framing']); $i++) { 
+                                        $link = $subLinks['framing'][$i];
+                                        if($i <= 8){
+                                    ?>
+                                    <li class="navmobile-link"><a href="<?=base_url()."/enmarcar/personalizar/".$link['route']?>"><?=$link['name']?></a></li>
+                                    <?php } }?>
+                                    <li class="navmobile-link"><a href="<?=base_url()?>/enmarcar">Ver todo</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="navmobile-link accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingCategory">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">
+                            Tienda
+                        </button>
+                        </h2>
+                        <div id="collapseCategory" class="accordion-collapse collapse" aria-labelledby="headingCategory" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul>
+                                    <?php 
+                                    for ($i=0; $i < count($subLinks['categories']); $i++) { 
+                                        $link = $subLinks['categories'][$i];
+                                        if($i <= 8){
+                                    ?>
+                                    <li class="navmobile-link"><a href="<?=base_url()."/tienda/categoria/".$link['route']?>"><?=$link['name']?></a></li>
+                                    <?php } }?>
+                                    <li class="navmobile-link"><a href="<?=base_url()?>/tienda">Ver todo</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <li class="navmobile-link"><a href="<?=base_url()?>/nosotros">¿Quienes somos?</a></li>
+                <div class="navmobile-link accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Servicios
+                        </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul>
+                                    <?php 
+                                    for ($i=0; $i < count($subLinks['services']); $i++) { 
+                                        $link = $subLinks['services'][$i];
+                                        if($i <= 8){
+                                    ?>
+                                    <li class="navmobile-link"><a href="<?=base_url()."/servicios/servicio/".$link['route']?>"><?=$link['name']?></a></li>
+                                    <?php } }?>
+                                    <li class="navmobile-link"><a href="<?=base_url()?>/servicios">Ver todo</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <li class="navmobile-link"><a href="<?=base_url()?>/contacto">Contacto</a></li>
+                
                 <?php
                     if(isset($_SESSION['login'])){
                 ?>
-                <li><a href="<?=base_url()?>/usuarios/perfil">Mi perfil</a></li>
+                <div class="navmobile-link accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingPerfil">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePerfil" aria-expanded="true" aria-controls="collapsePerfil">
+                            Mi cuenta
+                        </button>
+                        </h2>
+                        <div id="collapsePerfil" class="accordion-collapse collapse" aria-labelledby="headingPerfil" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul>
+                                    <li class="navmobile-link"><a href="<?=base_url()?>/usuarios/perfil">Perfil</a></li>
+                                    <li class="navmobile-link"><a href="<?=base_url()?>/login/logout">Cerrar sesión</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <?php }else{ ?>
-                <li onclick="openLoginModal();"><a href="#">Iniciar sesión</a></li>
+                <li class="navmobile-link" onclick="openLoginModal();"><a href="#">Iniciar sesión</a></li>
                 <?php }?>
             </ul>
         </div>

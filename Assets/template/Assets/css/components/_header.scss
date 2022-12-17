@@ -36,12 +36,13 @@ nav{
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     li:not(.btn){
         padding: 0 0.5rem;
     }
 }
 .nav-link{
+    padding: 0;
     a{
         &:hover{
             color:$color1;
@@ -153,41 +154,98 @@ nav{
     position: fixed;
     width: 400px;
     height: 100%;
+    overflow-y: auto;
     background-color: $color2;
     z-index: 55;
     top: 0;
     right: -100vw;
     transition: all 0.5s ease;
-    ul{
-        padding: 0 30px 30px;
-        list-style: none;
-        li{
+}
+.navmobile-links{
+    padding: 0 30px 30px;
+    list-style: none;
+}
+.navmobile-link{
+    width: 100%;
+    padding: 1rem 0.5rem;
+    position: relative;
+    a{
+        color:$color4;
+        display: block;
+    }
+    &::before{
+        position: absolute;
+        content:" ";
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 100%;
+        background-color: $color1;
+        transition: all 0.5s ease;
+        z-index: -1;
+    }
+    &:hover{
+        a{
+            color:$color4;
+        }
+        &::before{
             width: 100%;
-            padding: 1rem 0.5rem;
-            position: relative;
+            transition: all 0.5s ease;
+        }
+    }
+}
+.navmobile-link.accordion{
+    width: 100%;
+    padding: 0;
+    border-width: 0;
+    .accordion-item{
+        background-color: transparent;
+    }
+    .accordion-body a, .accordion-body a:hover, .accordion-body a:focus, .accordion-body a:active {
+        color:$color4;
+    }
+    .accordion-body{
+        background-color: $color2;
+        color:$color4;
+        border: none !important;
+        ul{
+            padding: 0;
+            list-style: none;
+        }
+    }
+    .accordion-button{
+        background-color: $color2;
+        padding: 0;
+        color:$color4;
+        padding: 1rem 0.5rem;
+        position: relative;
+        border: none !important;
+        &::after{
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        }
+        &:not(.collapsed){
+            &::after{
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+            }
+        }
+        &::before{
+            position: absolute;
+            content:" ";
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background-color: $color1;
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        &:hover{
             a{
                 color:$color4;
-                display: block;
             }
             &::before{
-                position: absolute;
-                content:" ";
-                left: 0;
-                top: 0;
-                width: 0;
-                height: 100%;
-                background-color: $color1;
+                width: 100%;
                 transition: all 0.5s ease;
-                z-index: -1;
-            }
-            &:hover{
-                a{
-                    color:$color4;
-                }
-                &::before{
-                    width: 100%;
-                    transition: all 0.5s ease;
-                }
             }
         }
     }
