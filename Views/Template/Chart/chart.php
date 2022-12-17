@@ -3,9 +3,8 @@
     if($data['chart']=="month"){
     $ingresos = $data['dataingresos'];
     $costos = $data['datacostos'];
-    $gastos = $data['datagastos'];
 
-    $resultadoMensual = $ingresos['total'] -($costos['total']+$gastos['total']);
+    $resultadoMensual = $ingresos['total'] -$costos['total'];
 ?>
 <script>
     Highcharts.chart('monthChart', {
@@ -62,16 +61,6 @@
                     }
                 ?>
             ]
-        },{
-            name: 'Gastos',
-            data: [
-                <?php
-                    
-                    for ($i=0; $i < count($gastos['gastos']) ; $i++) { 
-                        echo $gastos['gastos'][$i]['total'].",";
-                    }
-                ?>
-            ]
         }]
     });
 </script>
@@ -79,8 +68,7 @@
     $dataAnual = $data['data'];
     $ingresosAnual = $data['total'];
     $costosAnual = $data['costos'];
-    $gastosAnual = $data['gastos'];
-    $resultadoAnual = $ingresosAnual-($costosAnual+$gastosAnual);
+    $resultadoAnual = $ingresosAnual-$costosAnual;
 ?>
 <script>
     Highcharts.chart('yearChart', {
@@ -155,15 +143,6 @@
                 <?php
                     for ($i=0; $i < count($dataAnual) ; $i++) { 
                         echo '["'.$dataAnual[$i]['month'].'"'.",".''.$dataAnual[$i]['costos'].'],';
-                    }    
-                ?>
-            ],
-        }, {
-            name: 'Gastos',
-            data: [
-                <?php
-                    for ($i=0; $i < count($dataAnual) ; $i++) { 
-                        echo '["'.$dataAnual[$i]['month'].'"'.",".''.$dataAnual[$i]['gastos'].'],';
                     }    
                 ?>
             ],

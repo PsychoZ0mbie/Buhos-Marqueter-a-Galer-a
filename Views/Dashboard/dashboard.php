@@ -4,14 +4,12 @@
     $orders = $data['orders'];
     $products = $data['products'];
     $costos=$data['resumenMensual']['costos']['total'];
-    $gastos=$data['resumenMensual']['gastos']['total'];
     $ingresos = $data['resumenMensual']['ingresos']['total'];
 
     $ingresosAnual = $data['resumenAnual']['total'];
     $costosAnual = $data['resumenAnual']['costos'];
-    $gastosAnual = $data['resumenAnual']['gastos'];
-    $resultadoAnual = $ingresosAnual-($costosAnual+$gastosAnual);
-    $resultadoMensual = $ingresos -($costos+$gastos);
+    $resultadoAnual = $ingresosAnual-$costosAnual;
+    $resultadoMensual = $ingresos -$costos;
 
     $dataAnual = $data['resumenAnual']['data'];
 ?>
@@ -250,17 +248,6 @@
                     }
                 ?>
             ]
-        },
-        {
-            name: 'Gastos',
-            data: [
-                <?php
-                    
-                    for ($i=0; $i < count($data['resumenMensual']['gastos']['gastos']) ; $i++) { 
-                        echo $data['resumenMensual']['gastos']['gastos'][$i]['total'].",";
-                    }
-                ?>
-            ]
         }]
         
     });
@@ -336,15 +323,6 @@
                 <?php
                     for ($i=0; $i < count($dataAnual) ; $i++) { 
                         echo '["'.$dataAnual[$i]['month'].'"'.",".''.$dataAnual[$i]['costos'].'],';
-                    }    
-                ?>
-            ],
-        }, {
-            name: 'Gastos',
-            data: [
-                <?php
-                    for ($i=0; $i < count($dataAnual) ; $i++) { 
-                        echo '["'.$dataAnual[$i]['month'].'"'.",".''.$dataAnual[$i]['gastos'].'],';
                     }    
                 ?>
             ],

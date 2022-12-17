@@ -48,11 +48,9 @@
         public function selectAccountMonth(int $year, int $month){
             $totalPerMonth = 0;
             $totalCostos = 0;
-            $totalGastos = 0;
             //$month = 7;
             $arrSalesDay = array();
             $arrCostos = array();
-            $arrGastos = array();
             $days = cal_days_in_month(CAL_GREGORIAN,$month,$year);
             $day = 1;
             for ($i=0; $i < $days ; $i++) { 
@@ -72,37 +70,23 @@
                 //Costos
                 $sqlCostos ="SELECT 
                     DAY(date) AS day, 
-                    COUNT(id) AS quantity, 
-                    SUM(total) AS total FROM accounting 
-                    WHERE DATE(date) = '$date_format' AND type = 1";
+                    COUNT(idpurchase) AS quantity, 
+                    SUM(total) AS total FROM purchase 
+                    WHERE DATE(date) = '$date_format'";
                 $requestCostos = $this->select($sqlCostos);
                 $requestCostos['day'] = $day;
                 $requestCostos['total'] = $requestCostos['total'] =="" ? 0 : $requestCostos['total'];
                 $totalCostos+=$requestCostos['total'];
-                
-
-                //Gastos
-                $sqlGastos ="SELECT 
-                    DAY(date) AS day, 
-                    COUNT(id) AS quantity, 
-                    SUM(total) AS total FROM accounting 
-                    WHERE DATE(date) = '$date_format' AND type = 2";
-                $requestGastos = $this->select($sqlGastos);
-                $requestGastos['day'] = $day;
-                $requestGastos['total'] = $requestGastos['total'] =="" ? 0 : $requestGastos['total'];
-                $totalGastos+=$requestGastos['total'];
 
                 array_push($arrSalesDay,$request);
                 array_push($arrCostos,$requestCostos);
-                array_push($arrGastos,$requestGastos);
 
                 $day++;
             }
             $months = months();
             $arrData = array(
                 "ingresos"=>array("year"=>$year,"month"=>$months[$month-1],"total"=>$totalPerMonth,"sales"=>$arrSalesDay),
-                "costos"=>array("total"=>$totalCostos,"costos"=>$arrCostos),
-                "gastos"=>array("total"=>$totalGastos,"gastos"=>$arrGastos),
+                "costos"=>array("total"=>$totalCostos,"costos"=>$arrCostos)
             );
             return $arrData;
         }
@@ -111,9 +95,8 @@
             $months = months();
             $total =0;
             $costos=0;
-            $gastos=0;
             for ($i=1; $i <=12 ; $i++) { 
-                $arrData = array("year"=>"","month"=>"","nmonth"=>"","sale"=>"","costos"=>"","gastos"=>"");
+                $arrData = array("year"=>"","month"=>"","nmonth"=>"","sale"=>"","costos"=>"");
                 //Ingresos
                 $sql = "SELECT $year as year, 
                         $i as month, 
@@ -126,19 +109,10 @@
                 $sqlCostos = "SELECT $year as year, 
                         $i as month, 
                         sum(total) as total 
-                        FROM accounting
-                        WHERE MONTH(date) = $i AND YEAR(date) = $year AND type = 1 
+                        FROM purchase
+                        WHERE MONTH(date) = $i AND YEAR(date) = $year 
                         GROUP BY MONTH(date)";
                 $requestCostos = $this->select($sqlCostos);
-                //Gastos
-                $sqlGastos = "SELECT $year as year, 
-                        $i as month, 
-                        sum(total) as total 
-                        FROM accounting
-                        WHERE MONTH(date) = $i AND YEAR(date) = $year AND type = 2 
-                        GROUP BY MONTH(date)";
-                $requestGastos = $this->select($sqlGastos);
-
                 $arrData['month'] = $months[$i-1];
                 if(empty($request)){
                     $arrData['year'] = $year;
@@ -154,18 +128,12 @@
                 }else{
                     $arrData['costos'] = $requestCostos['total'];
                 }
-                if(empty($requestGastos)){
-                    $arrData['gastos'] = 0;
-                }else{
-                    $arrData['gastos'] = $requestGastos['total'];
-                }
                 $total+=$arrData['sale'];
                 $costos+=$arrData['costos'];
-                $gastos+=$arrData['gastos'];
                 array_push($arrSalesMonth,$arrData);
                 
             }
-            $arrData = array("data"=>$arrSalesMonth,"total"=>$total,"costos"=>$costos,"gastos"=>$gastos);
+            $arrData = array("data"=>$arrSalesMonth,"total"=>$total,"costos"=>$costos);
             //dep($arrData);exit;
             return $arrData;
         }
