@@ -132,7 +132,8 @@
                                 <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nombres</th>
-                                <th scope="col">Estado</th>
+                                <th scope="col">Estado de pago</th>
+                                <th scope="col">Estado de pedido</th>
                                 <th scope="col">Monto</th>
                                 <th scope="col"></th>
                                 </tr>
@@ -141,13 +142,30 @@
                                 <?php
                                     if(count($orders)){
                                         foreach ($orders as $order) {
+                                            $status="";
+                                            $statusOrder="";
+                                            if($order['status'] =="pendent"){
+                                                $status = '<span class="badge bg-warning text-white">pendiente</span>';
+                                            }else{
+                                                $status = '<span class="badge bg-success text-white">aprobado</span>';
+                                            }
+                                            if($order['statusorder'] =="confirmado"){
+                                                $statusOrder = '<span class="badge bg-dark text-white">confirmado</span>';
+                                            }else if($order['statusorder'] =="en preparacion"){
+                                                $statusOrder = '<span class="badge bg-warning text-white">en preparacion</span>';
+                                            }else if($order['statusorder'] =="preparado"){
+                                                $statusOrder = '<span class="badge bg-info text-white">preparado</span>';
+                                            }else if($order['statusorder'] =="entregado"){
+                                                $statusOrder = '<span class="badge bg-success text-white">entregado</span>';
+                                            }
                                 ?>
                                 <tr>
-                                    <td><?=$order['idorder']?></td>
-                                    <td><?=$order['name']?></td>
-                                    <td><?=$order['status']?></td>
-                                    <td><?=formatNum($order['amount'])?></td>
-                                    <td><a href="<?=base_url()."/pedidos/pedido/".$order['idorder']?>" class="text-dark"><i class="fas fa-eye"></i></a></td>
+                                    <td data-label="#"><?=$order['idorder']?></td>
+                                    <td data-label="Nombres:"><?=$order['name']?></td>
+                                    <td data-label="Estado de pago:"><?=$status?></td>
+                                    <td data-label="Estado de pedido:"><?=$statusOrder?></td>
+                                    <td data-label="Monto:"><?=formatNum($order['amount'],false)?></td>
+                                    <td data-label="Ver pedido:"><a href="<?=base_url()."/pedidos/pedido/".$order['idorder']?>" class="text-dark"><i class="fas fa-eye"></i></a></td>
                                 </tr>
                                 <?php } }else{?>
                                 <tr>
@@ -174,10 +192,10 @@
                                         foreach ($products as $product) {
                                 ?>
                                 <tr>
-                                    <td><?=$product['name']?></td>
-                                    <td><?=formatNum($product['price'])?></td>
-                                    <td><?=$product['discount']?>%</td>
-                                    <td><a href="<?=base_url()."/tienda/producto/".$product['route']?>" target="_blank" class="text-dark"><i class="fas fa-eye"></i></a></td>
+                                    <td data-label=""><?=$product['name']?></td>
+                                    <td data-label="Precio:"><?=formatNum($product['price'],false)?></td>
+                                    <td data-label="Descuento:"><?=$product['discount']?>%</td>
+                                    <td data-label="Ver producto:"><a href="<?=base_url()."/tienda/producto/".$product['route']?>" target="_blank" class="text-dark"><i class="fas fa-eye"></i></a></td>
                                 </tr>
                                 <?php } }else{?>
                                 <tr>

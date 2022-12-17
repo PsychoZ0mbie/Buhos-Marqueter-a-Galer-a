@@ -5,17 +5,20 @@
 
 }
 @media screen and (max-width: 576px){
-    .items{
-        thead{
-            display: none;
-        }
+    thead{
+        display: none;
     }
-    .item{
-        td{
-            display: block;
-            strong{
-                display:block;
-            }
+    td{
+        text-align: end;
+        display: block;
+        position: relative;
+        &::after{
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translate(0,-50%);
+            content:attr(data-label);
+            color: #000;
         }
     }
 }
