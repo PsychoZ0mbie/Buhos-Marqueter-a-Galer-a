@@ -158,11 +158,25 @@
                         $btnPaypal='';
                         $btnDelete ="";
                         $btnEdit ="";
-
+                        $status="";
+                        $statusOrder="";
                         if($request[$i]['type'] != "pos" && $request[$i]['type'] != "other"){
                             $btnPaypal = '<a href="'.base_url().'/pedidos/transaccion/'.$request[$i]['idtransaction'].'" class="btn btn-info m-1 text-white " type="button" title="Ver transacción" name="btnPaypal"><i class="fas fa-receipt"></i></a>';
                         }
-
+                        if($request[$i]['status'] =="pendent"){
+                            $status = '<span class="badge bg-warning text-white">pendiente</span>';
+                        }else{
+                            $status = '<span class="badge bg-success text-white">aprobado</span>';
+                        }
+                        if($request[$i]['statusorder'] =="confirmado"){
+                            $statusOrder = '<span class="badge bg-dark text-white">confirmado</span>';
+                        }else if($request[$i]['statusorder'] =="en preparacion"){
+                            $statusOrder = '<span class="badge bg-warning text-white">en preparacion</span>';
+                        }else if($request[$i]['statusorder'] =="preparado"){
+                            $statusOrder = '<span class="badge bg-info text-white">preparado</span>';
+                        }else if($request[$i]['statusorder'] =="entregado"){
+                            $statusOrder = '<span class="badge bg-success text-white">entregado</span>';
+                        }
                         if($_SESSION['permitsModule']['d'] && $_SESSION['userData']['roleid'] == 1){
                             $btnDelete = '<button class="btn btn-danger text-white m-1" type="button" title="Delete" data-id="'.$request[$i]['idorder'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
                         }
@@ -178,8 +192,8 @@
                                     <td>'.$request[$i]['date'].'</td>
                                     <td>'.formatNum($request[$i]['amount']).'</td>
                                     <td>'.$request[$i]['type'].'</td>
-                                    <td>'.$request[$i]['status'].'</td>
-                                    <td>'.$request[$i]['statusorder'].'</td>
+                                    <td>'.$status.'</td>
+                                    <td>'.$statusOrder.'</td>
                                     <td class="item-btn">'.$btnView.$btnPaypal.$btnEdit.$btnDelete.'</td>
                                 </tr>
                             ';

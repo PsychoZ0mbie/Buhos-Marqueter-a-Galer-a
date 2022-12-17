@@ -100,7 +100,10 @@
                                     <div class="col-md-9">
                                         <select class="form-control" aria-label="Default select example" id="sortBy" name="sortBy" required>
                                             <option value="1">Más reciente</option>
-                                            <option value="2">Más antiguo</option>
+                                            <option value="2">Estados de pago desc</option>
+                                            <option value="3">Estados de pago asc</option>
+                                            <option value="4">Estados de pedido desc</option>
+                                            <option value="5">Estados de pedido asc</option>
                                         </select>
                                     </div>
                                 </div>

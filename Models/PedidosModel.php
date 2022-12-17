@@ -74,16 +74,30 @@
         }
         public function search($search){
             $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata 
-                    WHERE idtransaction LIKE '%$search%' || idorder LIKE '%$search%' || name LIKE '%$search%' || email LIKE '%$search%' || phone LIKE '%$search%' ORDER BY idorder DESC";
+                    WHERE idtransaction 
+                    LIKE '%$search%' || idorder 
+                    LIKE '%$search%' || name 
+                    LIKE '%$search%' || email 
+                    LIKE '%$search%' || phone 
+                    LIKE '%$search%' || status 
+                    LIKE '%$search%' || statusorder 
+                    LIKE '%$search%'
+                    ORDER BY idorder DESC";
             $request = $this->select_all($sql);
             return $request;
         }
         public function sort($sort){
-            $option="DESC";
+            $option="ORDER BY idorder DESC";
             if($sort == 2){
-                $option = " ASC"; 
+                $option = " ORDER BY status DESC"; 
+            }else if($sort == 3){
+                $option = " ORDER BY status ASC"; 
+            }else if($sort == 4){
+                $option = " ORDER BY statusorder DESC"; 
+            }else if($sort == 5){
+                $option = " ORDER BY statusorder ASC"; 
             }
-            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata ORDER BY idorder $option ";
+            $sql = "SELECT * ,DATE_FORMAT(date, '%d/%m/%Y') as date FROM orderdata $option ";
             $request = $this->select_all($sql);
             return $request;
         }
