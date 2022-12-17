@@ -306,7 +306,7 @@
                             <div class="accordion-body">
                                 <ul>
                                     <li class="navmobile-link"><a href="<?=base_url()?>/usuarios/perfil">Perfil</a></li>
-                                    <li class="navmobile-link"><a href="<?=base_url()?>/login/logout">Cerrar sesión</a></li>
+                                    <li class="navmobile-link"><a href="<?=base_url()?>/logout">Cerrar sesión</a></li>
                                 </ul>
                             </div>
                         </div>
