@@ -5,7 +5,12 @@ $detail = $data['orderdetail'];
 $total=0;
 $company = $data['company'];
 $subtotal = 0;
-
+$status = "";
+if($order['status'] == "approved"){
+    $status = '<span class="badge bg-success text-white">aprobado</span>';
+}else{
+    $status = '<span class="badge bg-warning text-white">pendiente</span>';
+}
 ?>
 
 <div class="body flex-grow-1 px-3" id="<?=$data['page_name']?>">
@@ -13,12 +18,7 @@ $subtotal = 0;
     <div class="container-lg">
         <div class="card">
             <div class="card-body">
-                <div id="orderInfo" class="position-relative overflow-hidden">
-                    <?php if($order['status']=="approved"){?>
-                        <div class="stamp"><img src="<?=media()?>/images/uploads/sello_pagado.png" alt=""></div>
-                    <?php }else{?>   
-                        <div class="stamp"><img src="<?=media()?>/images/uploads/sello_pendiente.png" alt=""></div>
-                    <?php }?>  
+                <div id="orderInfo" class="position-relative overflow-hidden"> 
                     <div class="d-flex justify-content-between flex-wrap mb-3">
                         <div class="mb-3 d-flex flex-wrap align-items-center">
                             <img src="<?=media()."/images/uploads/".$company['logo']?>" class="me-2" style="width=170px;height:170px;" alt="">
@@ -36,7 +36,7 @@ $subtotal = 0;
                             <p class="m-0"><span class="fw-bold">Fecha: </span><?=$order['date']?></p>
                             <p class="m-0"><span class="fw-bold">Pedido: </span>#<?=$order['idorder']?></p>
                             <p class="m-0"><span class="fw-bold">Transaccion: </span><?=$order['idtransaction']?></p>
-                            <p class="m-0"><span class="fw-bold">Estado: </span><?=$order['status']?></p>
+                            <p class="m-0"><span class="fw-bold">Estado: </span><?=$status?></p>
                         </div>
                     </div>
                     <div class="row mb-3">
