@@ -232,7 +232,7 @@
             die();
         }
         public function getSelectCategories(){
-            $html='<option value="0" selected>Select</option>';
+            $html='<option value="0" selected>Seleccione</option>';
             $request = $this->model->selectCategories();
             if(count($request)>0){
                 for ($i=0; $i < count($request); $i++) { 
@@ -248,8 +248,8 @@
         public function getSelectSubcategories(){
             if($_POST){
                 $idCategory = intval(strClean($_POST['idCategory']));
-                $html='<option value="0" selected>Select</option>';
-                $request = $this->model->selectSubcategories($idCategory);
+                $html='<option value="0" selected>Seleccione</option>';
+                $request = $this->model->getSelectSubcategories($idCategory);
                 if(count($request)>0){
                     for ($i=0; $i < count($request); $i++) { 
                         $html.='<option value="'.$request[$i]['idsubcategory'].'">'.$request[$i]['name'].'</option>';

@@ -342,6 +342,22 @@
             }
             return $request;
         }
+        public function getSelectSubcategories(int $intIdCategory){
+            $this->intIdCategory = $intIdCategory;
+            $sql = "SELECT  
+                    s.idsubcategory,
+                    s.name,
+                    s.categoryid,
+                    c.idcategory,
+                    c.name as category
+                    FROM subcategory s
+                    INNER JOIN category c
+                    ON c.idcategory = s.categoryid
+                    WHERE s.categoryid = $this->intIdCategory
+                    ORDER BY s.idsubcategory ASC";       
+            $request = $this->select_all($sql);
+            return $request;
+        }
         /*************************Category methods*******************************/
         public function insertCategory(string $photo,string $strName, string $strDescription, string $strRoute){
 
