@@ -78,7 +78,7 @@ function uploadMultipleImg(img,parent){
             value ="";
         }else{
             let div = document.createElement("div");
-            div.classList.add("col-md-3","upload-image","mb-3");
+            div.classList.add("col-6","col-lg-3","upload-image","mb-3");
             div.setAttribute("data-name",files[i].name);
             div.innerHTML = `
                     <img>

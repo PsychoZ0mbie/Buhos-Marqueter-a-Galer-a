@@ -62,7 +62,7 @@ function addItem(){
                 <div class="modal-body">
                     <form id="formFile" name="formFile">
                         <div class="row scrolly" id="upload-multiple">
-                            <div class="col-md-3">
+                            <div class="col-6 col-lg-3">
                                 <div class="mb-3 upload-images">
                                     <label for="txtImg" class="text-primary text-center d-flex justify-content-center align-items-center">
                                         <div>
@@ -247,7 +247,7 @@ function viewItem(id){
             let status = objData.data.status;
             for (let i = 0; i < images.length; i++) {
                 html+=`
-                    <div class="col-md-3 upload-image mb-3">
+                    <div class="col-6 col-lg-3 upload-image mb-3">
                         <img src="${images[i]['url']}">
                     </div>
                 `;
@@ -343,7 +343,7 @@ function editItem(id){
                 <div class="modal-body">
                     <form id="formFile" name="formFile">
                         <div class="row scrolly" id="upload-multiple">
-                            <div class="col-md-3">
+                            <div class="col-6 col-md-3">
                                 <div class="mb-3 upload-images">
                                     <label for="txtImg" class="text-primary text-center d-flex justify-content-center align-items-center">
                                         <div>
@@ -460,7 +460,7 @@ function editItem(id){
         if(images[0]!=""){
             for (let i = 0; i < images.length; i++) {
                 let div = document.createElement("div");
-                div.classList.add("col-md-3","upload-image","mb-3");
+                div.classList.add("col-6","col-lg-3","upload-image","mb-3");
                 div.setAttribute("data-name",images[i]['name']);
                 div.innerHTML = `
                         <img>
