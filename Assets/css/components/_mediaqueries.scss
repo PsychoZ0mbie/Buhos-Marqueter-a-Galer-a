@@ -32,9 +32,10 @@
                 content:attr(data-label);
                 color: #000;
             }
-            &:nth-last-of-type(1){
-                text-align: center;
-            }
+            
+        }
+        td.item-btn{
+            text-align: center;
         }
     }
 }
