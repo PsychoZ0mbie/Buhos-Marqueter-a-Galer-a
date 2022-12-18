@@ -131,7 +131,7 @@
             return $request;
         }
         public function selectCustomers(){
-            $sql = "SELECT * FROM person  WHERE roleid = 2 ORDER BY idperson DESC";
+            $sql = "SELECT *,DATE_FORMAT(date, '%d/%m/%Y') as date FROM person  WHERE roleid = 2 ORDER BY idperson DESC";
             $request = $this->select_all($sql);
             if(count($request)>0){
                 for ($i=0; $i < count($request) ; $i++) { 
