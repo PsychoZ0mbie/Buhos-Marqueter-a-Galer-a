@@ -92,8 +92,8 @@
                             $delete='';
                         }
                         $html.='
-                            <tr class="item" data-name="'.$request[$i]['name'].'">
-                                <td>'.$request[$i]['name'].'</td>
+                            <tr class="item"">
+                                <td data-label="Rol: ">'.$request[$i]['name'].'</td>
                                 <td class="item-btn">
                                     <button class="btn btn-secondary" type="button" title="Permits" data-id="'.$request[$i]['idrole'].'" name="btnPermit"><i class="fas fa-key"></i></button>
                                     <button class="btn btn-success" type="button" title="Edit" data-id="'.$request[$i]['idrole'].'" name="btnEdit"><i class="fas fa-pencil-alt"></i></button>

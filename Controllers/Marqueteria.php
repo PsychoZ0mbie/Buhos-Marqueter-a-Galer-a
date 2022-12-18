@@ -107,15 +107,15 @@
                         }
                         $html.='
                             <tr class="item">
-                                <td>
+                                <td class="text-center">
                                     <img src="'.$request[$i]['image'].'" class="rounded">
                                 </td>
-                                <td><strong>Referencia:</strong>'.$request[$i]['reference'].'</td>
-                                <td><strong>Tipo:</strong>'.$type.'</td>
-                                <td><strong>Desperdicio:</strong>'.$request[$i]['waste'].' cm</td>
-                                <td><strong>Precio:</strong>'.$price.' x cm</td>
-                                <td><strong>Descuento:</strong>'.$discount.'</td>
-                                <td><strong>Estado:</strong>'.$status.'</td>
+                                <td data-label="Referencia: ">'.$request[$i]['reference'].'</td>
+                                <td data-label="Tipo: ">'.$type.'</td>
+                                <td data-label="Desperdicio: ">'.$request[$i]['waste'].' cm</td>
+                                <td data-label="Costo: ">'.$price.' x cm</td>
+                                <td data-label="Descuento: ">'.$discount.'</td>
+                                <td data-label="Estado: ">'.$status.'</td>
                                 <td class="item-btn">'.$btnView.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';
@@ -335,9 +335,9 @@
                         $html.='
                             <tr class="item" data-name="'.$request[$i]['name'].'">
                                 <td class="d-flex justify-content-center"><div style="height: 50px;width: 50px; border:1px solid #000;background-color:#'.$request[$i]['color'].'"></div></td>
-                                <td><strong>Nombre: </strong>'.$request[$i]['name'].'</td>
-                                <td><strong>Código hexadecimal:</strong>#'.$request[$i]['color'].'</td>
-                                <td><strong>Estado: </strong>'.$status.'</td>
+                                <td data-label="Nombre: ">'.$request[$i]['name'].'</td>
+                                <td data-label="Código hexadecimal: ">#'.$request[$i]['color'].'</td>
+                                <td data-label="Estado: ">'.$status.'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';
@@ -486,8 +486,8 @@
                         }
                         $html.='
                             <tr class="item" data-name="'.$request[$i]['name'].'">
-                                <td><strong>Nombre: </strong>'.$request[$i]['name'].'</td>
-                                <td><strong>Costo:</strong>'.formatNum($request[$i]['price']).' X '.$request[$i]['unit'].'</td>
+                                <td data-label="Nombre: ">'.$request[$i]['name'].'</td>
+                                <td data-label="Costo: ">'.formatNum($request[$i]['price']).' X '.$request[$i]['unit'].'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';
@@ -636,11 +636,11 @@
                         }
                         $html.='
                             <tr class="item" data-name="'.$request[$i]['name'].'">
-                                <td>
+                                <td class="text-center">
                                     <img src="'.$image.'" class="rounded">
                                 </td>
-                                <td>'.$request[$i]['name'].'</td>
-                                <td>'.$status.'</td>
+                                <td data-label="Nombre: ">'.$request[$i]['name'].'</td>
+                                <td data-label="Estado: ">'.$status.'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';

@@ -81,11 +81,11 @@
                         }
                         $html.='
                             <tr class="item"">
-                                <td><strong>NIT:</strong>'.$request[$i]['nit'].'</td>
-                                <td><strong>Nombre:</strong>'.$request[$i]['name'].'</td>
-                                <td><strong>Correo:</strong>'.$request[$i]['email'].'</td>
-                                <td><strong>Teléfono:</strong>'.$request[$i]['phone'].'</td>
-                                <td><strong>Dirección: </strong>'.$request[$i]['address'].'</td>
+                                <td data-label="NIT: ">'.$request[$i]['nit'].'</td>
+                                <td data-label="Nombre: ">'.$request[$i]['name'].'</td>
+                                <td data-label="Correo: ">'.$request[$i]['email'].'</td>
+                                <td data-label="Teléfono: ">'.$request[$i]['phone'].'</td>
+                                <td data-label="Dirección: ">'.$request[$i]['address'].'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';
@@ -264,10 +264,10 @@
                         }
                         $html.='
                             <tr class="item"">
-                                <td><strong>ID:</strong>'.$request[$i]['idpurchase'].'</td>
-                                <td><strong>Proveedor:</strong>'.$request[$i]['name'].'</td>
-                                <td><strong>Total:</strong>'.formatNum($request[$i]['total'],false).'</td>
-                                <td><strong>Fecha:</strong>'.$request[$i]['date'].'</td>
+                                <td data-label="Id: ">'.$request[$i]['idpurchase'].'</td>
+                                <td data-label="Proveedor: ">'.$request[$i]['name'].'</td>
+                                <td data-label="Total: ">'.formatNum($request[$i]['total'],false).'</td>
+                                <td data-label="Fecha: ">'.$request[$i]['date'].'</td>
                                 <td class="item-btn">'.$btnView.$btnDelete.'</td>
                             </tr>
                         ';

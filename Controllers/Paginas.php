@@ -83,12 +83,12 @@
                         }
                         $html.='
                             <tr class="item">
-                                <td><strong>ID</strong>'.$request[$i]['id'].'</td>
-                                <td><strong>Página</strong>'.$request[$i]['name'].'</td>
-                                <td><strong>Tipo</strong>'.$pagina.'</td>
-                                <td><strong>Estado</strong>'.$status.'</td>
-                                <td><strong>Fecha de creación</strong>'.$request[$i]['date'].'</td>
-                                <td><strong>Fecha de actualización</strong>'.$request[$i]['dateupdated'].'</td>
+                                <td data-label="Id: ">'.$request[$i]['id'].'</td>
+                                <td class="text-center">'.$request[$i]['name'].'</td>
+                                <td data-label="Tipo: ">'.$pagina.'</td>
+                                <td data-label="Estado: ">'.$status.'</td>
+                                <td data-label="Fecha de creación: ">'.$request[$i]['date'].'</td>
+                                <td data-label="Fecha de actualización: ">'.$request[$i]['dateupdated'].'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';

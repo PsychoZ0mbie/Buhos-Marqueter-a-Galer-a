@@ -128,11 +128,11 @@
                         }
                         $html.='
                             <tr class="item" data-name="'.$request[$i]['code'].'">
-                                <td>'.$request[$i]['code'].'</td>
-                                <td>'.$request[$i]['discount'].'%</td>
-                                <td>'.$status.'</td>
-                                <td>'.$request[$i]['date'].'</td>
-                                <td>'.$request[$i]['dateupdate'].'</td>
+                                <td data-label="Código: ">'.$request[$i]['code'].'</td>
+                                <td data-label="Descuento: ">'.$request[$i]['discount'].'%</td>
+                                <td data-label="Estado: ">'.$status.'</td>
+                                <td data-label="Fecha de creación: ">'.$request[$i]['date'].'</td>
+                                <td data-label="Fecha de actualización: ">'.$request[$i]['dateupdate'].'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';

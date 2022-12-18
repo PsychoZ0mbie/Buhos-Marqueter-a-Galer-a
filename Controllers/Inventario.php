@@ -91,17 +91,17 @@
                         }
                         $html.='
                             <tr class="item">
-                                <td>
+                                <td class="text-center">
                                     <img src="'.$request[$i]['image'].'" class="rounded">
                                 </td>
-                                <td>'.$request[$i]['name'].'</td>
-                                <td>'.$request[$i]['category'].'</td>
-                                <td>'.$request[$i]['subcategory'].'</td>
-                                <td>'.$price.'</td>
-                                <td>'.$discount.'</td>
-                                <td>'.$request[$i]['stock'].'</td>
-                                <td>'.$request[$i]['date'].'</td>
-                                <td>'.$status.'</td>
+                                <td class="text-center">'.$request[$i]['name'].'</td>
+                                <td data-label="Categoría: ">'.$request[$i]['category'].'</td>
+                                <td data-label="Subcategoría: ">'.$request[$i]['subcategory'].'</td>
+                                <td data-label="Precio: ">'.$price.'</td>
+                                <td data-label="Descuento: ">'.$discount.'</td>
+                                <td data-label="Cantidad: ">'.$request[$i]['stock'].'</td>
+                                <td data-label="Fecha: ">'.$request[$i]['date'].'</td>
+                                <td data-label="Estado: ">'.$status.'</td>
                                 <td class="item-btn">'.$btnGlobe.$btnView.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';
@@ -326,8 +326,8 @@
                             $btnDelete = '<button class="btn btn-danger m-1" type="button" title="Delete" data-id="'.$request[$i]['idcategory'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
                         }
                         $html.='
-                            <tr class="item" data-name="'.$request[$i]['name'].'">
-                                <td>'.$request[$i]['name'].'</td>
+                            <tr class="item">
+                                <td data-label="Nombre: ">'.$request[$i]['name'].'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';
@@ -522,9 +522,9 @@
                             $btnDelete = '<button class="btn btn-danger m-1" type="button" title="Delete" data-id="'.$request[$i]['idsubcategory'].'" name="btnDelete"><i class="fas fa-trash-alt"></i></button>';
                         }
                         $html.='
-                            <tr class="item" data-name="'.$request[$i]['name'].'" data-category="'.$request[$i]['category'].'">
-                                <td>'.$request[$i]['name'].'</td>
-                                <td>'.$request[$i]['category'].'</td>
+                            <tr class="item">
+                                <td data-label="Nombre: ">'.$request[$i]['name'].'</td>
+                                <td data-label="Categoría: ">'.$request[$i]['category'].'</td>
                                 <td class="item-btn">'.$btnEdit.$btnDelete.'</td>
                             </tr>
                         ';

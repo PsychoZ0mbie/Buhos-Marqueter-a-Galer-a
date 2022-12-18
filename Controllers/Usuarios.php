@@ -55,17 +55,17 @@
                         }
                         if($request[$i]['idperson'] != 1 && $request[$i]['roleid'] != 2){
                             $html.='
-                                <tr class="item" data-name="'.$request[$i]['firstname'].'" data-lastname="'.$request[$i]['lastname'].'" data-email="'.$request[$i]['email'].'" data-phone="'.$request[$i]['phone'].'">
-                                    <td>
+                                <tr class="item">
+                                    <td class="text-center">
                                         <img src="'.$request[$i]['image'].'">
                                     </td>
-                                    <td>'.$request[$i]['firstname'].'</td>
-                                    <td>'.$request[$i]['lastname'].'</td>
-                                    <td>'.$request[$i]['email'].'</td>
-                                    <td>'.$request[$i]['phone'].'</td>
-                                    <td>'.$request[$i]['date'].'</td>
-                                    <td>'.$request[$i]['role'].'</td>
-                                    <td>'.$status.'</td>
+                                    <td data-label="Nombres: ">'.$request[$i]['firstname'].'</td>
+                                    <td data-label="Apellidos: ">'.$request[$i]['lastname'].'</td>
+                                    <td data-label="Correo: ">'.$request[$i]['email'].'</td>
+                                    <td data-label="Teléfono: ">'.$request[$i]['phone'].'</td>
+                                    <td data-label="Fecha: ">'.$request[$i]['date'].'</td>
+                                    <td data-label="Rol: ">'.$request[$i]['role'].'</td>
+                                    <td data-label="Estado: ">'.$status.'</td>
                                     <td class="item-btn">'.$btnView.$btnEdit.$btnDelete.'</td>
                                 </tr>
                             ';

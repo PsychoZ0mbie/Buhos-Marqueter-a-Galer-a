@@ -187,13 +187,13 @@
 
                             $html.='
                                 <tr class="item">
-                                    <td>'.$request[$i]['idorder'].'</td>
-                                    <td>'.$request[$i]['idtransaction'].'</td>
-                                    <td>'.$request[$i]['date'].'</td>
-                                    <td>'.formatNum($request[$i]['amount']).'</td>
-                                    <td>'.$request[$i]['type'].'</td>
-                                    <td>'.$status.'</td>
-                                    <td>'.$statusOrder.'</td>
+                                    <td data-label="Id: ">'.$request[$i]['idorder'].'</td>
+                                    <td data-label="Transacción: ">'.$request[$i]['idtransaction'].'</td>
+                                    <td data-label="Fecha: ">'.$request[$i]['date'].'</td>
+                                    <td data-label="Monto: ">'.formatNum($request[$i]['amount'],false).'</td>
+                                    <td data-label="Tipo de pago: ">'.$request[$i]['type'].'</td>
+                                    <td data-label="Estado de pago: ">'.$status.'</td>
+                                    <td data-label="Estado de pedido: ">'.$statusOrder.'</td>
                                     <td class="item-btn">'.$btnView.$btnPaypal.$btnEdit.$btnDelete.'</td>
                                 </tr>
                             ';
@@ -201,13 +201,13 @@
                         }elseif($_SESSION['idUser'] == $request[$i]['personid']){
                             $html.='
                             <tr class="item">
-                                <td>'.$request[$i]['idorder'].'</td>
-                                <td>'.$request[$i]['idtransaction'].'</td>
-                                <td>'.$request[$i]['date'].'</td>
-                                <td>'.formatNum($request[$i]['amount']).'</td>
-                                <td>'.$request[$i]['type'].'</td>
-                                <td>'.$request[$i]['status'].'</td>
-                                <td>'.$request[$i]['statusorder'].'</td>
+                                <td data-label="Id: ">'.$request[$i]['idorder'].'</td>
+                                <td data-label="Transacción: ">'.$request[$i]['idtransaction'].'</td>
+                                <td data-label="Fecha: ">'.$request[$i]['date'].'</td>
+                                <td data-label="Monto: ">'.formatNum($request[$i]['amount'],false).'</td>
+                                <td data-label="Tipo de pago: ">'.$request[$i]['type'].'</td>
+                                <td data-label="Estado de pago: ">'.$status.'</td>
+                                <td data-label="Estado de pedido: ">'.$statusOrder.'</td>
                                 <td class="item-btn">'.$btnView.$btnPaypal.$btnDelete.'</td>
                             </tr>
                         ';
@@ -321,13 +321,13 @@
                         }
                         $html.='
                             <tr class="item">
-                                <td>
+                                <td class="text-center">
                                     <img src="'.$request[$i]['image'].'" class="rounded">
                                 </td>
-                                <td>'.$request[$i]['name'].'</td>
-                                <td>'.$price.'</td>
-                                <td>'.$discount.'</td>
-                                <td><button type="button" class="btn btn-primary" onclick="addProduct('.$request[$i]['idproduct'].',this)">Agregar</button></td>
+                                <td class="text-center">'.$request[$i]['name'].'</td>
+                                <td data-label="Precio: ">'.$price.'</td>
+                                <td data-label="Descuento: ">'.$discount.'</td>
+                                <td class="text-center"><button type="button" class="btn btn-primary" onclick="addProduct('.$request[$i]['idproduct'].',this)">Agregar</button></td>
                             </tr>
                         ';
                     }
