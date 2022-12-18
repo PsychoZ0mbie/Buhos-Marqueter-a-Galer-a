@@ -43,7 +43,7 @@ $company = $data['company'];
                         </div>
                     </div>
                     <table class="table items align-middle">
-                        <thead class="text-center">
+                        <thead>
                             <tr>
                                 <th>Descripcion</th>
                                 <th>Precio</th>
@@ -51,7 +51,7 @@ $company = $data['company'];
                                 <th>Total</th>
                             </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody>
                         <?php 
                             if(count($products) > 0){
                                 foreach ($products as $product) {
@@ -59,28 +59,34 @@ $company = $data['company'];
                                     $totalPrice = $product['qty']*$product['price'];
                         ?>
                         <tr>
-                            <td class="text-center text-break">
+                            <td class="text-start text-break">
                                 <?=$product['name']?>
                             </td>
-                            <td class="text-center text-break">
+                            <td data-label="Precio: " class="text-break">
                                 <?=formatNum($product['price'],false)?>
                             </td>
-                            <td class="text-center text-break">
+                            <td data-label="Cantidad: " class="text-break">
                                 <?=$product['qty']?>
                             </td>
-                            <td class="text-center text-break">
+                            <td data-label="Total" class="text-break">
                                 <?=formatNum($totalPrice,false)?>
                             </td>
                         </tr>   
                         <?php } }?>        
                     </tbody>
-                    <tfoot>
+                    <tfoot class="tdeskfoot">
                         <tr>
                             <th colspan="3" class="text-end">Total:</th>
-                            <td class="text-center"><?= formatNum($total,false)?></td>
+                            <td class="text-start"><?= formatNum($total,false)?></td>
                         </tr>
                     </tfoot>
                     </table>
+                    <div class="row tmobilefoot mb-4">
+                        <div class="col-12 mt-3 d-flex justify-content-between">
+                            <div class="fw-bold">Total:</div>
+                            <div><?= formatNum($total,false)?></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6 text-start">

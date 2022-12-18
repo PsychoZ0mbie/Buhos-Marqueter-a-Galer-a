@@ -51,7 +51,7 @@ if($order['status'] == "approved"){
                         </div>
                     </div>
                     <table class="table items align-middle">
-                        <thead class="text-center">
+                        <thead class="text-start">
                             <tr>
                                 <th>Descripcion</th>
                                 <th>Precio</th>
@@ -69,7 +69,7 @@ if($order['status'] == "approved"){
                             <?php
                                 if($product['topic'] == 2 || $product['topic'] == 3){
                             ?>
-                        <td class="text-start text-break">
+                        <td class="text-break text-start">
                             <?=$product['description']?><br>
                         </td>
                             <?php 
@@ -80,7 +80,7 @@ if($order['status'] == "approved"){
                                         $photo = '<img src="'.media()."/images/uploads/".$arrProducts['photo'].'" width="70" height="70"><br>';
                                     }
                             ?>
-                            <td class="text-start">
+                            <td class="text-start text-break">
                                 <?=$photo?>
                                 <?=$arrProducts['name']?>
                             <?php
@@ -133,44 +133,72 @@ if($order['status'] == "approved"){
                             <?php }?>
                             </td>
                         <?php }?>
-                        <td class="text-right"><?=formatNum(floor($product['price']),false)?></td>
-                        <td class="text-center"><?= $product['quantity'] ?></td>
-                        <td class="text-right"><?= formatNum(floor($product['price']*$product['quantity']),false)?></td>
+                        <td data-label="Precio: "><?=formatNum(floor($product['price']),false)?></td>
+                        <td data-label="Cantidad: "><?= $product['quantity'] ?></td>
+                        <td data-label="Total: "><?= formatNum(floor($product['price']*$product['quantity']),false)?></td>
                         </tr>
                         <?php 		
                             }
                         } 
                         ?>
                     </tbody>
-                    <tfoot>
+                    <tfoot class="tdeskfoot">
                             <tr>
                                 <th colspan="3" class="text-end">Subtotal:</th>
-                                <td class="text-right"><?= formatNum($subtotal,false)?></td>
+                                <td class="text-start"><?= formatNum($subtotal,false)?></td>
                             </tr>
                             <?php
                                 if(isset($data['cupon'])){
                                     $cupon = $data['cupon'];
-                                    $subtotal = $subtotal - ($subtotal*($cupon['discount']/100));
+                                    $subDesk = $subtotal - ($subtotal*($cupon['discount']/100));
                             ?>
                             <tr>
                                 <th colspan="3" class="text-end">Cupon:</th>
-                                <td class="text-right"><?= $cupon['code']." - ".$cupon['discount']?>%</td>
+                                <td class="text-start"><?= $cupon['code']." - ".$cupon['discount']?>%</td>
                             </tr>
                             <tr>
                                 <th colspan="3" class="text-end">Subtotal:</th>
-                                <td class="text-right"><?= formatNum($subtotal,false)?></td>
+                                <td class="text-start"><?= formatNum($subDesk,false)?></td>
                             </tr>
                             <?php }?>
                             <tr>
                                 <th colspan="3" class="text-end">Envio:</th>
-                                <td class="text-right"><?= formatNum($order['shipping'],false)?></td>
+                                <td class="text-start"><?= formatNum($order['shipping'],false)?></td>
                             </tr>
                             <tr>
                                 <th colspan="3" class="text-end">Total:</th>
-                                <td class="text-right"><?= formatNum($order['amount'],false)?></td>
+                                <td class="text-start"><?= formatNum($order['amount'],false)?></td>
                             </tr>
                     </tfoot>
                     </table>
+                    <div class="row tmobilefoot mb-4">
+                        <div class="col-12 mt-3 d-flex justify-content-between">
+                            <div class="fw-bold">Subtotal:</div>
+                            <div><?= formatNum($subtotal,false)?></div>
+                        </div>
+                        <?php
+                            if(isset($data['cupon'])){
+                                $cupon = $data['cupon'];
+                                $subMobile = $subtotal - ($subtotal*($cupon['discount']/100));
+                        ?>
+                        <div class="col-12 mt-3 d-flex justify-content-between">
+                            <div class="fw-bold">Cupón:</div>
+                            <div><?= $cupon['code']." - ".$cupon['discount']?>%</div>
+                        </div>
+                        <div class="col-12 mt-3 d-flex justify-content-between">
+                            <div class="fw-bold">Subtotal:</div>
+                            <div><?= formatNum($subMobile,false)?></div>
+                        </div>
+                        <?php }?>
+                        <div class="col-12 mt-3 d-flex justify-content-between">
+                            <div class="fw-bold">Envio:</div>
+                            <div><?= formatNum($order['shipping'],false)?></div>
+                        </div>
+                        <div class="col-12 mt-3 d-flex justify-content-between">
+                            <div class="fw-bold">Total:</div>
+                            <div><?= formatNum($order['amount'],false)?></div>
+                        </div>
+                    </div>
                     <table class="table text-center">
                         <tbody>
                             <tr><td><p class="fw-bold">Después de 60 días no se responde por trabajos o pedidos finalizados</p></td></tr>
