@@ -24,8 +24,8 @@
                                 for ($i=0; $i < count($subscribers); $i++) { 
                             ?>
                                 <tr class="item">
-                                    <td><?=$subscribers[$i]['email']?></td>
-                                    <td><?=$subscribers[$i]['date']?></td>
+                                    <td data-label="Correo: "><?=$subscribers[$i]['email']?></td>
+                                    <td data-label="Fecha: "><?=$subscribers[$i]['date']?></td>
                                 </tr>
                             <?php } }else{?>
                                 <tr>

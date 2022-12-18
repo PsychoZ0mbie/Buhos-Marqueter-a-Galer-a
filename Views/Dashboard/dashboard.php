@@ -127,7 +127,7 @@
                 <div class="row">
                     <div class="col-lg-6 mb-4">
                         <h4 class="mb-4">Últimos pedidos</h4>
-                        <table class="table">
+                        <table class="table items">
                             <thead>
                                 <tr>
                                 <th scope="col">#</th>
@@ -165,7 +165,7 @@
                                     <td data-label="Estado de pago:"><?=$status?></td>
                                     <td data-label="Estado de pedido:"><?=$statusOrder?></td>
                                     <td data-label="Monto:"><?=formatNum($order['amount'],false)?></td>
-                                    <td data-label="Ver pedido:"><a href="<?=base_url()."/pedidos/pedido/".$order['idorder']?>" class="text-dark"><i class="fas fa-eye"></i></a></td>
+                                    <td class="text-center"><a href="<?=base_url()."/pedidos/pedido/".$order['idorder']?>" class="text-dark"><i class="fas fa-eye"></i></a></td>
                                 </tr>
                                 <?php } }else{?>
                                 <tr>
@@ -177,7 +177,7 @@
                     </div>
                     <div class="col-lg-6 mb-4">
                         <h4 class="mb-4">Últimos productos</h4>
-                        <table class="table">
+                        <table class="table items">
                             <thead>
                                 <tr>
                                     <th scope="col">Producto</th>
@@ -192,10 +192,10 @@
                                         foreach ($products as $product) {
                                 ?>
                                 <tr>
-                                    <td data-label=""><?=$product['name']?></td>
+                                    <td class="text-center"><?=$product['name']?></td>
                                     <td data-label="Precio:"><?=formatNum($product['price'],false)?></td>
                                     <td data-label="Descuento:"><?=$product['discount']?>%</td>
-                                    <td data-label="Ver producto:"><a href="<?=base_url()."/tienda/producto/".$product['route']?>" target="_blank" class="text-dark"><i class="fas fa-eye"></i></a></td>
+                                    <td class="text-center"><a href="<?=base_url()."/tienda/producto/".$product['route']?>" target="_blank" class="text-dark"><i class="fas fa-eye"></i></a></td>
                                 </tr>
                                 <?php } }else{?>
                                 <tr>

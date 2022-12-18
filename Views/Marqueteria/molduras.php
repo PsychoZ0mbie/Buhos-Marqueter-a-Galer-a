@@ -28,14 +28,14 @@
                     </div>
                 </div>
                 <div class="scroll-y">
-                    <table class="table text-center items align-middle" id="table<?=$data['page_title']?>">
+                    <table class="table items align-middle" id="table<?=$data['page_title']?>">
                         <thead>
                             <tr>
                                 <th>Portada</th>
                                 <th>Referencia</th>
                                 <th>Tipo</th>
                                 <th>Desperdicio</th>
-                                <th>Precio</th>
+                                <th>Costo</th>
                                 <th>Descuento</th>
                                 <th>Estado</th>
                                 <th>Opciones</th>

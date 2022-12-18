@@ -110,7 +110,7 @@
                             </div>
                         </div>
                         <div class="scroll-y">
-                            <table class="table text-center items align-middle" id="table<?=$data['page_title']?>">
+                            <table class="table items align-middle" id="table<?=$data['page_title']?>">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
@@ -170,7 +170,7 @@
                                     <div class="tab-pane fade " id="navTienda">
                                         <input class="form-control" type="search" placeholder="Buscar" aria-label="Search" id="searchProducts" name="searchProducts">
                                         <div class="scroll-y">
-                                            <table class="table text-center items align-middle">
+                                            <table class="table items align-middle">
                                                 <thead>
                                                     <tr>
                                                         <th>Portada</th>

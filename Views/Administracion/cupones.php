@@ -7,7 +7,7 @@
                 <h2 class="text-center"><?=$data['page_title']?></h2>
                 <button type="button" class="btn btn-success text-white" id="exportExcel" data-name="table<?=$data['page_title']?>" title="Export to excel" ><i class="fas fa-file-excel"></i></button>
                 <div class="scroll-y">
-                    <table class="table text-center items align-middle">
+                    <table class="table items align-middle">
                         <thead>
                             <tr>
                                 <th>Codigo</th>
