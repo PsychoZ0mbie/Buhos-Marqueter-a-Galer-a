@@ -4,7 +4,7 @@
 ?>
 <div id="modalPoup"></div>
 <main class="container mb-3">
-    <h1 class="section--title" id="enmarcarTipo" data-route="<?=$data['tipo']['route']?>" data-name="<?=$data['tipo']['name']?>" data-id="<?=$data['tipo']['id']?>"><?=$data['tipo']['name']?></h1>
+<h1 class="section--title" id="enmarcarTipo" data-route="<?=$data['tipo']['route']?>" data-name="<?=$data['tipo']['name']?>" data-id="<?=$data['tipo']['id']?>"><?=$data['tipo']['name']?></h1>
     <div class="custom--frame mt-3" id="frame">
         <div class="row">
             <div class="col-md-6 mb-4">
