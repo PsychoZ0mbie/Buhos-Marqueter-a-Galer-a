@@ -56,12 +56,14 @@ function setTinymce(selectorId,height=null){
         remove_script_host: false,
         selector: selectorId,
         height: height,
+        images_upload_url: base_url+'/UploadImages/UploadImages',
+        images_upload_handler:image_upload_handler_callback,
         plugins: [
             'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
             'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            'insertdatetime', 'media', 'table', 'help', 'wordcount', 'code image'
         ],
-        toolbar: 'undo redo | blocks | ' +
+        toolbar: 'undo redo | image code | blocks | ' +
         'bold italic backcolor | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | ' +
         'removeformat | help',
@@ -69,6 +71,45 @@ function setTinymce(selectorId,height=null){
     });
     
 }
+const image_upload_handler_callback = (blobInfo, progress) => new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.withCredentials = false;
+    xhr.open('POST', base_url+'/UploadImages/UploadImages');
+    
+    xhr.upload.onprogress = (e) => {
+        progress(e.loaded / e.total * 100);
+    };
+    
+    xhr.onload = () => {
+        if (xhr.status === 403) {
+            reject({ message: 'HTTP Error: ' + xhr.status, remove: true });
+            return;
+        }
+      
+        if (xhr.status < 200 || xhr.status >= 300) {
+            reject('HTTP Error: ' + xhr.status);
+            return;
+        }
+      
+        const json = JSON.parse(xhr.responseText);
+      
+        if (!json || typeof json.location != 'string') {
+            reject('Invalid JSON: ' + xhr.responseText);
+            return;
+        }
+      
+        resolve(json.location);
+    };
+    
+    xhr.onerror = () => {
+      reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+    };
+    
+    const formData = new FormData();
+    formData.append('file', blobInfo.blob(), blobInfo.filename());
+    
+    xhr.send(formData);
+});
 function uploadMultipleImg(img,parent){
     let value = img.value;
     let files = img.files;
