@@ -45,12 +45,12 @@
                         <div class="measures--dimension">
                             <label for="">Ancho (cm)</label>
                             <div class="measures--limits"><span>min 10.0</span><span>max 300.0</span></div>
-                            <input type="number" class="measures--input" name="intWidth" id="intWidth">
+                            <input type="number" class="measures--input" name="intWidth" id="intWidth" value="10">
                         </div>
                         <div class="measures--dimension">
                             <label for="">Alto (cm)</label>
                             <div class="measures--limits"><span>min 10.0</span><span>max 300.0</span></div>
-                            <input type="number" class="measures--input" name="intHeight" id="intHeight">
+                            <input type="number" class="measures--input" name="intHeight" id="intHeight" value="10">
                         </div>
                     </div>
                 </div>

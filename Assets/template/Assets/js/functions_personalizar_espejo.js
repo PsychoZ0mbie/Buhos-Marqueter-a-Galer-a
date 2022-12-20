@@ -289,6 +289,8 @@ function selectOrientation(element){
     element.classList.add("element--active");
     document.querySelectorAll(".measures--input")[0].removeAttribute("disabled");
     document.querySelectorAll(".measures--input")[1].removeAttribute("disabled");
+    btnNext.classList.remove("d-none");
+    resizeFrame(intWidth.value, intHeight.value);
 }
 function selectActive(element =null,elements=null){
     let items = document.querySelectorAll(`${elements}`);
