@@ -103,7 +103,7 @@ function addItem(){
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="txtPrice" class="form-label">Precio x cm <span class="text-danger">*</span></label>
+                                    <label for="txtPrice" class="form-label">Costo x cm <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" min ="1" id="txtPrice" name="txtPrice">
                                 </div>
                             </div>
@@ -184,7 +184,7 @@ function addItem(){
             return false;
         }
         if(intPrice <= 0){
-            Swal.fire("Error","El precio no puede ser menor o igual que 0 ","error");
+            Swal.fire("Error","El costo no puede ser menor o igual que 0 ","error");
             return false;
         }
         if(intWaste <= 0){
@@ -295,7 +295,7 @@ function viewItem(id){
                                         <td>${objData.data.waste} cm</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Precio: </strong></td>
+                                        <td><strong>Costo: </strong></td>
                                         <td>${objData.data.priceFormat} x cm</td>
                                     </tr>
                                     <tr>
@@ -384,7 +384,7 @@ function editItem(id){
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label for="txtPrice" class="form-label">Precio x cm <span class="text-danger">*</span></label>
+                                    <label for="txtPrice" class="form-label">Costo x cm <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" min ="1" id="txtPrice" name="txtPrice">
                                 </div>
                             </div>
@@ -498,7 +498,7 @@ function editItem(id){
             return false;
         }
         if(intPrice <= 0){
-            Swal.fire("Error","El precio no puede ser menor o igual que 0 ","error");
+            Swal.fire("Error","El costo no puede ser menor o igual que 0 ","error");
             return false;
         }
         if(intWaste <= 0){

@@ -83,7 +83,7 @@
                         $btnView = '<button class="btn btn-info m-1" type="button" title="Watch" data-id="'.$request[$i]['id'].'" name="btnView"><i class="fas fa-eye"></i></button>';
                         $btnEdit="";
                         $btnDelete="";
-                        $price = formatNum($request[$i]['price']);
+                        $price = formatNum($request[$i]['price'],false);
                         if($request[$i]['discount']>0){
                             $discount = '<span class="text-success">'.$request[$i]['discount'].'% OFF</span>';
                         }else{
@@ -143,7 +143,7 @@
                         $request = $this->model->selectProduct($id);
                         $this->model->deleteTmpImage();
                         if(!empty($request)){
-                            $request['priceFormat'] = formatNum($request['price']);
+                            $request['priceFormat'] = formatNum($request['price'],false);
                             $arrImages = $this->model->selectImages($id);
                             for ($i=0; $i < count($arrImages) ; $i++) { 
                                 $this->model->insertTmpImage($arrImages[$i]['name'],$arrImages[$i]['rename']);
