@@ -13,8 +13,7 @@
 
         public function dashboard(){
             if($_SESSION['permitsModule']['r']){
-                $idUser = $_SESSION['userData']['roleid'] != 1 ? $_SESSION['idUser'] : "";
-
+                $idUser =  $_SESSION['userData']['roleid'] == 2 ? $_SESSION['idUser'] : "";
                 $data['totalUsers'] = $this->model->getTotalUsers();
                 $data['totalCustomers'] = $this->model->getTotalCustomers();
                 $data['totalOrders'] = $this->model->getTotalOrders($idUser);
