@@ -10,7 +10,9 @@
                 <button type="button" class="btn btn-success text-white" id="exportExcel" data-name="table<?=$data['page_title']?>" title="Export to excel" ><i class="fas fa-file-excel"></i></button>
                 <div class="row mb-3">
                     <div class="col-md-6 mt-3">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
+                        <form autocomplete="off">
+                            <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="search" name="search">
+                        </form>
                     </div>
                     <div class="col-md-6 mt-3">
                         <div class="row">
